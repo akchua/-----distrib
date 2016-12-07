@@ -1,0 +1,49 @@
+package com.chua.distributions.beans;
+
+/**
+ * @author  Adrian Jasper K. Chua
+ * @version 1.0
+ * @since   Dec 3, 2016
+ */
+public class CompanyFormBean extends FormBean {
+
+	private String name;
+	
+	private String contactPerson;
+	
+	private String contactNumber;
+	
+	private String emailAddress;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getContactPerson() {
+		return contactPerson;
+	}
+
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+}

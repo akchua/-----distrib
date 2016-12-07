@@ -1,0 +1,41 @@
+<div class="modal-content modal-lg">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 data-bind="text: title" align="center"></h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Purchase Order Information</h3>
+					</div>
+					
+					<div class="panel-body">
+						<div data-bind="if: title == 'Create Purchase Order'" class="control-group">
+							<label class="control-label" for="company">Select Company</label>
+							<div class="controls">
+								<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- Select Company --', value: purchaseOrderFormModel.companyId" class="form-control select-lg autofocus" id="company"></select>
+								<p class="help-block">Select the company to create purchase order for</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="area">Select General Area</label>
+							<div class="controls">
+								<select data-bind="options: areaList, optionsValue: 'name', optionsText: 'displayName', optionsCaption: '-- Select General Area --', value: purchaseOrderFormModel.area" class="form-control select-lg" id="area"></select>
+								<p class="help-block">Select general area to deliver at</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" data-bind="click: save">Save</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+  	</form>
+</div>

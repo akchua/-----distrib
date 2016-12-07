@@ -1,0 +1,36 @@
+<div class="modal-content">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 align="center">View Product</h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong data-bind="text: productViewModel.displayName"></strong></h3>
+						<p data-bind="text: productViewModel.description"></p>
+					</div>
+					
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>Company:</dt>
+							<dd data-bind="text: productViewModel.companyName"></dd>
+							<dt>Category:</dt>
+							<dd data-bind="text: productViewModel.categoryName"></dd>
+							<dt>Code:</dt>
+							<dd data-bind="text: productViewModel.productCode"></dd>
+							<dt>Selling Price:</dt>
+							<dd data-bind="text: productViewModel.formattedPackageSellingPrice"></dd>
+				    	</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-warning" type="submit" data-bind="click: cancel">Done</button>
+		</div>
+  	</form>
+</div>

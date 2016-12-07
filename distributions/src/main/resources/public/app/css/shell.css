@@ -1,0 +1,39 @@
+/*  ----------------------  SPACING  ----------------------  */
+.margin-top-ten-px { margin-top: 10px; }
+.margin-bottom-ten-px { margin-bottom: 10px; }
+.full-width-button {
+  width: 100%;
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+ 
+/*  ----------------------  NAVBAR RENDERING  ---------------------- */
+.login-dropdown {
+    width: 220px; /*ADJUST IT AS NEEDED*/
+    border-top: solid 5px #6cbc42;
+    border-left: solid 1px #6cbc42;
+    border-right: solid 1px #6cbc42;
+    border-bottom: solid 2px #6cbc42;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.two-column-navbar {
+    width: 50em; height: auto; margin: 4px 8px; float: right;
+    border-top: solid 5px #6cbc42;
+    border-left: solid 1px #6cbc42;
+    border-right: solid 1px #6cbc42;
+    border-bottom: solid 2px #6cbc42;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.three-column-navbar {
+    width: 46em; height: auto; margin: 4px 8px; float: right;
+    border-top: solid 5px #6cbc42;
+    border-left: solid 1px #6cbc42;
+    border-right: solid 1px #6cbc42;
+    border-bottom: solid 2px #6cbc42;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

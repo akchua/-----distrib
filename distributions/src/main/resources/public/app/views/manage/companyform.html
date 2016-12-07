@@ -1,0 +1,67 @@
+<div class="modal-content modal-lg">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 data-bind="text: title" align="center"></h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Company Information</h3>
+					</div>
+					
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="name">Name</label>
+							<div class="controls">
+								<input data-bind="textInput: companyFormModel.name" type="text" id="name" name="name" placeholder="" class="form-control input-lg autofocus">
+								<p class="help-block">Name of the Company</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="container-fluid">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">Contact Information</h3>
+					</div>
+					
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="contactPerson">Contact Person</label>
+							<div class="controls">
+								<input data-bind="textInput: companyFormModel.contactPerson" type="text" id="contactPerson" name="contactPerson" placeholder="" class="form-control input-lg">
+								<p class="help-block">Name of the contact person in the company</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="contactNumber">Contact Number</label>
+							<div class="controls">
+								<input data-bind="textInput: companyFormModel.contactNumber" type="text" id="contactNumber" name="contactNumber" placeholder="" class="form-control input-lg">
+								<p class="help-block">Mobile[09xx-xxx-xxxx] / Landline[(xx)xxx-xx-xx]</p>
+							</div>
+						</div>
+		
+						<div class="control-group">
+							<label class="control-label" for="email">E-mail</label>
+							<div class="controls">
+								<input data-bind="textInput: companyFormModel.emailAddress" type="email" id="email" name="email" placeholder="" class="form-control input-lg">
+								<p class="help-block">Official e-mail address of the company</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" data-bind="click: save">Save</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+  	</form>
+</div>

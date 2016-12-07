@@ -1,0 +1,78 @@
+<div class="container">
+    <nav class="navbar navbar-default" role="navigation" style="padding: 0px; margin: 0px;">
+        <div class="container-fluid">
+        
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand active" href="#"><i class="fa fa-home"></i>PrimePad</a>
+            </div>
+            
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+				<div data-bind="foreach: router.navigationModel">
+					<ul class="nav navbar-nav">
+						<!-- ko if: $data.childRoutes === undefined && $data.parent === undefined -->
+						<li data-bind="css: { active: isActive }">
+		                    <a data-bind="attr: { href: hash }, html: title"></a>
+		                </li>
+						<!-- /ko -->
+						<!-- ko if: $data.childRoutes !== undefined -->
+						<li class="dropdown">
+		        			<a data-toggle="dropdown" class="dropdown-toggle" href="#"><span data-bind="text: title"></span><b class="caret"></b></a>
+		        			<ul data-bind="foreach: childRoutes" role="menu" class="dropdown-menu">
+		        				<li data-bind="css: { active: isActive }">
+		        					<a data-bind="attr: { href: hash }, html: title"></a>
+		        				</li>
+		        			</ul>
+		        		</li>
+			        	<!-- /ko -->
+		        	</ul>
+	        	</div>
+	        	
+	        	<!-- ko ifnot: userDetails.id -->
+	        	<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-sign-in"></i> Login <span class="caret"></span></a>
+                        <ul class="dropdown-menu login-dropdown" role="menu">
+                            <form class="form-group-lg" style="padding: 3px 10px;">
+                            	<li data-bind="if: errorMessage"><div data-bind="text: errorMessage" style="color:red"></div></li>
+                                <li><input data-bind="value: loginForm.username" class="form-control margin-bottom-ten-px" autofocus placeholder="Username" type="text"></li>
+                                <li><input data-bind="value: loginForm.password" class="form-control margin-bottom-ten-px" placeholder="Password" type="password"></li>
+                                
+                                <li><button data-bind="click: login" type="submit" class="btn btn-success full-width-button float-right">Submit</button></li>
+                                <li><a data-bind="click: register" href="#"><span class="pull-left">Register</span></a><a data-bind="click: forgotPassword" href="#"><span class="pull-right">Forgot Password</span></a></li>
+                            </form>
+                        </ul>
+                    </li>		
+		        </ul>
+		        <!-- /ko -->
+		        
+		        <!-- ko if: userDetails.id -->
+	        	<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <span data-bind="text: userDetails.fullName"></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                        	
+                        	<li><a data-bind="click: profile" href="#"><i class="fa fa-user"></i><span> Profile</span></a></li>
+						    <li><a data-bind="click: changePassword" href="#"><i class="fa fa-lock"></i><span> Change Password</span></a></li>
+						    <li><a data-bind="click: changeSettings" href="#"><i class="fa fa-gear"></i><span> Advance Settings</span></a></li>
+                        	
+                        	<li class="divider"></li>
+                        	
+                            <li><a data-bind="click: logout" href="javascript:void(0)"><i class="fa fa-sign-out"></i><span> Logout</span></a></li>
+                        </ul>
+                    </li>		
+		        </ul>
+		        <!-- /ko -->
+			        
+	        </div>
+		</div>
+    </nav>
+    
+    <div class="container-fluid page-host" data-bind="router: { cacheViews: false }"></div>
+</div>
