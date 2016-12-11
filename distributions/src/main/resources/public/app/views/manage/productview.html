@@ -23,6 +23,12 @@
 							<dd data-bind="text: productViewModel.productCode"></dd>
 							<dt>Selling Price:</dt>
 							<dd data-bind="text: productViewModel.formattedPackageSellingPrice"></dd>
+							<!-- ko if: productViewModel.stockCountCurrent -->
+							<dt>Stock Here:</dt>
+							<dd data-bind="text: productViewModel.stockCountCurrent"></dd>
+							<!-- /ko -->
+							<dt>All Stock:</dt>
+							<dd data-bind="text: productViewModel.stockCountAll"></dd>
 				    	</dl>
 					</div>
 				</div>

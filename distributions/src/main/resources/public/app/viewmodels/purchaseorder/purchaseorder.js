@@ -1,12 +1,14 @@
-define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform'],
-		function (app, ko, purchaseOrderService, companyService, PurchaseOrderForm) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform'],
+		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm) {
     var PurchaseOrder = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
-    	this.areaList = ko.observable();
+    	this.warehouseList = ko.observable();
     	
     	this.companyId = ko.observable();
-    	this.area = ko.observable();
+    	this.warehouse = ko.observable();
+    	
+    	this.showPaid = ko.observable(false);
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -22,8 +24,8 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/com
 			self.refreshPurchaseOrderList();
 		});
 		
-		purchaseOrderService.getAreaList().done(function(areaList) {
-			self.areaList(areaList);
+		purchaseOrderService.getWarehouseList().done(function(warehouseList) {
+			self.warehouseList(warehouseList);
 		});
     	
     	companyService.getCompanyListByName().done(function(companyList) {
@@ -36,7 +38,7 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/com
     PurchaseOrder.prototype.refreshPurchaseOrderList = function() {
     	var self = this;
     	
-    	purchaseOrderService.getPurchaseOrderList(self.currentPage(), self.companyId(), self.area()).done(function(data) {
+    	purchaseOrderService.getPurchaseOrderList(self.currentPage(), self.companyId(), self.warehouse(), self.showPaid()).done(function(data) {
     		self.purchaseOrderList(data.list);
     		self.totalItems(data.total);
     	});
@@ -48,6 +50,42 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/com
     	PurchaseOrderForm.show(new Object(), 'Create Purchase Order').done(function() {
     		self.refreshPurchaseOrderList();
     	});
+    };
+    
+    PurchaseOrder.prototype.send = function(purchaseOrderId, companyName, emailAddress) {
+    	var self = this;
+    	
+    	app.showMessage('<p>Are you sure you want to send Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '</span> to <span class="text-primary">' + emailAddress + "</span> ?</p>",
+				'<p>Send Order Email to <span class="text-primary">' + companyName + '</span></p>',
+				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
+		.then(function(confirm) {
+			if(confirm) {
+				purchaseOrderService.sendPurchaseOrder(purchaseOrderId).done(function(result) {
+					self.refreshPurchaseOrderList();
+					app.showMessage(result.message);
+				});
+			}
+		})
+    };
+    
+    PurchaseOrder.prototype.pay = function(purchaseOrderId, formattedNetTotal) {
+    	var self = this;
+    	
+    	app.showMessage('<p>Finalize and pay Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '</span> with total amount of <span class="text-success">' + formattedNetTotal + '</span>?</p>',
+				'<p>Confirm and Pay Purchase Order</p>',
+				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
+		.then(function(confirm) {
+			if(confirm) {
+				purchaseOrderService.payPurchaseOrder(purchaseOrderId).done(function(result) {
+					self.refreshPurchaseOrderList();
+					app.showMessage(result.message);
+				});
+			}
+		})
+    };
+    
+    PurchaseOrder.prototype.open = function(purchaseOrderId) {
+    	router.navigate('#purchaseorderpage/' + purchaseOrderId);
     };
     
     PurchaseOrder.prototype.edit = function(purchaseOrderId) {

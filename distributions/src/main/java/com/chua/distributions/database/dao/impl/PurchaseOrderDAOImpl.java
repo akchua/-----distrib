@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.PurchaseOrderDAO;
 import com.chua.distributions.database.entity.PurchaseOrder;
-import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.Status;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -21,13 +22,13 @@ public class PurchaseOrderDAOImpl
 		implements PurchaseOrderDAO {
 
 	@Override
-	public ObjectList<PurchaseOrder> findAllWithPaging(int pageNumber, int resultsPerPage, Long companyId, Area area) {
-		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, area, null);
+	public ObjectList<PurchaseOrder> findAllWithPaging(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid) {
+		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, showPaid, null);
 	}
 
 	@Override
 	public ObjectList<PurchaseOrder> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId,
-			Area area, Order[] orders) {
+			Warehouse warehouse, boolean showPaid, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
@@ -35,8 +36,12 @@ public class PurchaseOrderDAOImpl
 			conjunction.add(Restrictions.eq("company.id", companyId));
 		}
 		
-		if(area != null) {
-			conjunction.add(Restrictions.eq("area", area));
+		if(warehouse != null) {
+			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		}
+		
+		if(!showPaid) {
+			conjunction.add(Restrictions.ne("status", Status.PAID));
 		}
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);

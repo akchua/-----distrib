@@ -15,5 +15,7 @@ public interface UserDAO extends DAO<User, Long>, UserPrototype {
 
 	ObjectList<User> findAllWithPaging(int pageNumber, int resultsPerPage, String searchKey);
 	
+	ObjectList<User> findAllClientsWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Order[] orders);
+	
 	ObjectList<User> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Order[] orders);
 }

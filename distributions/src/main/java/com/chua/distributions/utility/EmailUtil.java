@@ -10,7 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.chua.distributions.constants.ApplicationConstants;
+import com.chua.distributions.constants.MailConstants;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -31,7 +31,7 @@ public class EmailUtil {
 		try {
 			Message message = new MimeMessage(session);
 			
-			message.setFrom(new InternetAddress(ApplicationConstants.SMTP_FROM_ADDRESS));
+			message.setFrom(new InternetAddress(MailConstants.SMTP_FROM_ADDRESS));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			if(cc != null) message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
 			if(bcc != null) message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcc));
@@ -50,15 +50,15 @@ public class EmailUtil {
 	public static void connect() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.socketFactory.port", ApplicationConstants.SMTP_PORT);
+		props.put("mail.smtp.socketFactory.port", MailConstants.SMTP_PORT);
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.host", ApplicationConstants.SMTP_HOST);
-		props.put("mail.smtp.port", ApplicationConstants.SMTP_PORT);
+		props.put("mail.smtp.host", MailConstants.SMTP_HOST);
+		props.put("mail.smtp.port", MailConstants.SMTP_PORT);
 		
 		session = Session.getInstance(props,
 			new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(ApplicationConstants.SMTP_USERNAME, ApplicationConstants.SMTP_PASSWORD);
+					return new PasswordAuthentication(MailConstants.SMTP_USERNAME, MailConstants.SMTP_PASSWORD);
 				}
 			});
 	}

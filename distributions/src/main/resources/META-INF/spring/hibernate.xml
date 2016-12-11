@@ -52,6 +52,9 @@
 				<value>com.chua.distributions.database.entity.Product</value>
 				
 				<value>com.chua.distributions.database.entity.PurchaseOrder</value>
+				<value>com.chua.distributions.database.entity.PurchaseOrderItem</value>
+				
+				<value>com.chua.distributions.database.entity.WarehouseItem</value>
 			</list>
 		</property>
 	</bean>

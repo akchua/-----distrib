@@ -1,8 +1,27 @@
 define(['jquery'], function ($) {
 	return {
+		getUser: function(userId) {
+			return $.ajax({
+				url: '/services/user/get',
+				data: {
+					userId: userId
+				}
+			});
+		},
+		
 		getUserList: function(currentPage, searchKey) {
 			return $.ajax({
 				url: '/services/user/list',
+				data: {
+					pageNumber: currentPage - 1,
+					searchKey: searchKey
+				}
+			});
+		},
+		
+		getClientList: function(currentPage, searchKey) {
+			return $.ajax({
+				url: '/services/user/clientlist',
 				data: {
 					pageNumber: currentPage - 1,
 					searchKey: searchKey
@@ -65,6 +84,16 @@ define(['jquery'], function ($) {
     			method: 'POST',
     			data: {
     				settingsFormData: settingsFormData
+    			} 
+    		});
+    	},
+    	
+    	changeClientSettings: function(clientSettingsFormData) {
+    		return $.ajax({
+    			url: '/services/user/changeclientsettings',
+    			method: 'POST',
+    			data: {
+    				clientSettingsFormData: clientSettingsFormData
     			} 
     		});
     	},

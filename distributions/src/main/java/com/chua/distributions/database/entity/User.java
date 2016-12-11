@@ -48,6 +48,8 @@ public class User extends BaseObject {
 	private String businessContactNumber;
 	
 	private Area businessArea;
+	
+	private Float discount;
 
 	@Basic
 	@Column(name = "first_name")
@@ -172,5 +174,20 @@ public class User extends BaseObject {
 
 	public void setBusinessArea(Area businessArea) {
 		this.businessArea = businessArea;
+	}
+
+	@Basic
+	@Column(name = "discount")
+	public Float getDiscount() {
+		return discount;
+	}
+	
+	@Transient
+	public String getFormattedDiscount() {
+		return discount + "%";
+	}
+
+	public void setDiscount(Float discount) {
+		this.discount = discount;
 	}
 }

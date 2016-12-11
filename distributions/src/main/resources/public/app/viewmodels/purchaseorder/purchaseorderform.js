@@ -5,13 +5,13 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	this.title = title;
     	
     	this.companyList = ko.observable();
-    	this.areaList = ko.observable();
+    	this.warehouseList = ko.observable();
     	
     	this.purchaseOrderFormModel = {
     		id: ko.observable(),
     		
     		companyId: ko.observable(),
-    		area: ko.observable()
+    		warehouse: ko.observable()
 	    };
     };
     
@@ -19,16 +19,16 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	var self = this;
     	
     	self.purchaseOrderFormModel.id(self.purchaseOrder.id);
-    	self.purchaseOrderFormModel.area(self.purchaseOrder.area);
+    	self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse);
     	
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
     		self.purchaseOrderFormModel.companyId(self.purchaseOrder.company.id);
     	});
     	
-    	purchaseOrderService.getAreaList().done(function(areaList) {
-    		self.areaList(areaList);
-    		self.purchaseOrderFormModel.area(self.purchaseOrder.area);
+    	purchaseOrderService.getWarehouseList().done(function(warehouseList) {
+    		self.warehouseList(warehouseList);
+    		self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse);
     	});
     };
     

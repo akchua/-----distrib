@@ -27,7 +27,7 @@ public class Company extends BaseObject {
 	private String contactNumber;
 	
 	private String emailAddress;
-
+	
 	@Basic
 	@Column(name = "name")
 	public String getName() {

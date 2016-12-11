@@ -14,4 +14,6 @@ public interface UserService extends Service<User, Long>, UserPrototype {
 	boolean isExistByUsername(String username);
 	
 	ObjectList<User> findAllWithPagingOrderByNameAndUserType(int pageNumber, int resultsPerPage, String searchKey);
+	
+	ObjectList<User> findAllClientsWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey);
 }

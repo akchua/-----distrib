@@ -3,6 +3,7 @@ package com.chua.distributions.rest.handler;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -12,9 +13,9 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface ProductHandler {
 
-	Product getProduct(Long productId);
+	Product getProduct(Long productId, Warehouse warehouse);
 
-	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId);
+	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
 	
 	ResultBean createProduct(ProductFormBean productForm);
 	

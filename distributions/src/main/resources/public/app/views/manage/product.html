@@ -27,8 +27,8 @@
 						<th class = "text-center">Code</th>
 						<th>Name</th>
 						<th>Category</th>
-						<th>Selling Price</th>
-						<th class = "text-center">Stock Count</th>
+						<th class = "text-center">Selling Price</th>
+						<th class = "text-center">All Stock</th>
 					</tr>
 				</thead>
 				
@@ -37,8 +37,8 @@
 						<td data-bind="text: product.productCode" class = "text-center"></td>
 						<td data-bind="text: product.displayName"></td>
 						<td data-bind="text: product.category.name"></td>
-						<td data-bind="text: product.formattedPackageSellingPrice"></td>
-						<td data-bind="text: product.formattedStockCount" class = "text-center"></td>
+						<td data-bind="text: product.formattedPackageSellingPrice" class = "text-center"></td>
+						<td data-bind="text: product.formattedStockCountAll" class = "text-center"></td>
 						
 						<td>
 							<div class="btn-group pull-right">

@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.beans.ClientSettingsFormBean;
 import com.chua.distributions.beans.PasswordFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
 import com.chua.distributions.beans.UserFormBean;
-import com.chua.distributions.constants.ApplicationConstants;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Area;
@@ -39,8 +40,18 @@ public class UserHandlerImpl implements UserHandler {
 	private UserService userService;
 
 	@Override
+	public User getUser(Long userId) {
+		return userService.find(userId);
+	}
+	
+	@Override
 	public ObjectList<User> getUserObjectList(Integer pageNumber, String searchKey) {
 		return userService.findAllWithPagingOrderByNameAndUserType(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
+	}
+	
+	@Override
+	public ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey) {
+		return userService.findAllClientsWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
 	
 	@Override
@@ -63,7 +74,6 @@ public class UserHandlerImpl implements UserHandler {
 					
 					user.setPassword(EncryptionUtil.getMd5(userForm.getPassword()));
 					setUser(user, userForm);
-					setSettings(user, userForm);
 					
 					result = new ResultBean();
 					result.setSuccess(userService.insert(user) != null);
@@ -97,7 +107,6 @@ public class UserHandlerImpl implements UserHandler {
 					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Username already exists.") + " Please choose another username."));
 				} else {
 					setUser(user, userForm);
-					setSettings(user, userForm);
 					
 					result = new ResultBean();
 					result.setSuccess(userService.update(user));
@@ -194,7 +203,7 @@ public class UserHandlerImpl implements UserHandler {
 			result.setSuccess(userService.update(user) &&
 					EmailUtil.send(user.getEmailAddress()
 					, null
-					, ApplicationConstants.DEFAULT_EMAIL
+					, MailConstants.DEFAULT_EMAIL
 					, "Prime Pad Reset Password"
 					, "Hi, " + user.getFirstName() + " " + user.getLastName()
 						+ "\n\n\nUsername - " + user.getUsername()
@@ -204,7 +213,7 @@ public class UserHandlerImpl implements UserHandler {
 			if(result.getSuccess()) {
 				UserContextHolder.refreshUser(user);
 				result.setMessage(Html.line(Color.GREEN, "Password successfully reset.") 
-						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "and " + Html.text(Color.BLUE, ApplicationConstants.DEFAULT_EMAIL) + "."));
+						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "and " + Html.text(Color.BLUE, MailConstants.DEFAULT_EMAIL) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}
@@ -239,6 +248,29 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	public ResultBean changeClientSettings(ClientSettingsFormBean clientSettingsForm) {
+		final ResultBean result;
+		final User user = userService.find(clientSettingsForm.getId());
+		
+		if(user != null) {
+			result = new ResultBean();
+			setClientSettings(user, clientSettingsForm);
+			
+			result.setSuccess(userService.update(user));
+			if(result.getSuccess()) {
+				UserContextHolder.refreshUser(user);
+				result.setMessage(Html.line(Color.GREEN, "Client settings successfully updated."));
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load user. Please re-log your account."));
+		}
+		
+		return result;
+	}
+	
+	@Override
 	public List<UserType> getUserTypeList() {
 		return Stream.of(UserType.values())
 					.collect(Collectors.toList());
@@ -261,14 +293,16 @@ public class UserHandlerImpl implements UserHandler {
 		user.setBusinessContactNumber(userForm.getBusinessContactNumber() != null ? userForm.getBusinessContactNumber().trim() : null);
 		user.setBusinessArea(userForm.getBusinessArea());
 		user.setUserType(userForm.getUserType() != null ? userForm.getUserType() : UserType.CLIENT);
-	}
-	
-	private void setSettings(User user, UserFormBean userFormBean) {
-		setSettings(user, new SettingsFormBean(userFormBean.getItemsPerPage()));
+		if(user.getItemsPerPage() == null) user.setItemsPerPage(10);
+		if(user.getDiscount() == null) user.setDiscount(0.0f);
 	}
 	
 	private void setSettings(User user, SettingsFormBean settingsForm) {
 		user.setItemsPerPage(settingsForm.getItemsPerPage() != null ? settingsForm.getItemsPerPage() : 10);
+	}
+	
+	private void setClientSettings(User user, ClientSettingsFormBean clientSettingsForm) {
+		user.setDiscount(clientSettingsForm.getDiscount() != null ? clientSettingsForm.getDiscount() : 0.0f);
 	}
 	
 	private ResultBean validateUserForm(UserFormBean userForm) {

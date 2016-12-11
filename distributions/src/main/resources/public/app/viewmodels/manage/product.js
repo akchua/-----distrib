@@ -38,7 +38,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     Product.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId()).done(function(data) {
+    	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId(), null, true).done(function(data) {
     		self.productList(data.list);
     		self.totalItems(data.total);
     	});
@@ -55,7 +55,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     Product.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId).done(function(product) {
+    	productService.getProduct(productId, null).done(function(product) {
     		ProductView.show(product)
     	});
     };
@@ -63,7 +63,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     Product.prototype.edit = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId).done(function(product) {
+    	productService.getProduct(productId, null).done(function(product) {
     		ProductForm.show(product, 'Edit Product').done(function() {
     			self.refreshProductList();
     		});

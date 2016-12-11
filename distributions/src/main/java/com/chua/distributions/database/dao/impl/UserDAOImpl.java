@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.UserDAO;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.enums.UserType;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -31,6 +32,23 @@ public class UserDAOImpl
 			Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(StringUtils.isNotBlank(searchKey))
+		{
+			conjunction.add(Restrictions.disjunction()
+					.add(Restrictions.ilike("firstName", searchKey, MatchMode.ANYWHERE))
+					.add(Restrictions.ilike("lastName", searchKey, MatchMode.ANYWHERE)));
+		}
+		
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
+	
+	@Override
+	public ObjectList<User> findAllClientsWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey,
+			Order[] orders) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("userType", UserType.CLIENT));
 		
 		if(StringUtils.isNotBlank(searchKey))
 		{

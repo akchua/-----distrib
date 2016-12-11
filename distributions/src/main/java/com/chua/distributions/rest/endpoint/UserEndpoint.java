@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.chua.distributions.beans.ClientSettingsFormBean;
 import com.chua.distributions.beans.PasswordFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
@@ -36,10 +37,24 @@ public class UserEndpoint {
 	private UserHandler userHandler;
 	
 	@GET
+	@Path("/get")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public User getUser(@QueryParam("userId") Long userId) {
+		return userHandler.getUser(userId);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<User> getUserObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("searchKey") String searchKey) {
 		return userHandler.getUserObjectList(pageNumber, searchKey);
+	}
+	
+	@GET
+	@Path("/clientlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<User> getClientObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("searchKey") String searchKey) {
+		return userHandler.getClientObjectList(pageNumber, searchKey);
 	}
 	
 	@GET
@@ -93,6 +108,14 @@ public class UserEndpoint {
 	public ResultBean changeSettings(@FormParam("settingsFormData") String settingsFormData) throws IOException {
 		final SettingsFormBean settingsForm = new ObjectMapper().readValue(settingsFormData, SettingsFormBean.class);
 		return userHandler.changeSettings(settingsForm);
+	}
+	
+	@POST
+	@Path("/changeclientsettings")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean changeClientSettings(@FormParam("clientSettingsFormData") String clientSettingsFormData) throws IOException {
+		final ClientSettingsFormBean clientSettingsForm = new ObjectMapper().readValue(clientSettingsFormData, ClientSettingsFormBean.class);
+		return userHandler.changeClientSettings(clientSettingsForm);
 	}
 	
 	@GET

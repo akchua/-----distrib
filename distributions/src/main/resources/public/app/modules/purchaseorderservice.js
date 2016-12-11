@@ -9,13 +9,14 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getPurchaseOrderList: function(currentPage, companyId, area) {
+		getPurchaseOrderList: function(currentPage, companyId, warehouse, showPaid) {
 			return $.ajax({
 				url: '/services/purchaseorder/list',
 				data: {
 					pageNumber: currentPage - 1,
 					companyId: companyId,
-					area: area
+					warehouse: warehouse,
+					showPaid: showPaid
 				}
 			});
 		},
@@ -30,6 +31,36 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	submitPurchaseOrder: function(purchaseOrderId) {
+    		return $.ajax({
+    			url: '/services/purchaseorder/submit',
+    			method: 'POST',
+    			data: {
+    				purchaseOrderId: purchaseOrderId
+    			}
+    		});
+    	},
+    	
+    	sendPurchaseOrder: function(purchaseOrderId) {
+    		return $.ajax({
+    			url: '/services/purchaseorder/send',
+    			method: 'POST',
+    			data: {
+    				purchaseOrderId: purchaseOrderId
+    			}
+    		});
+    	},
+    	
+    	payPurchaseOrder: function(purchaseOrderId) {
+    		return $.ajax({
+    			url: '/services/purchaseorder/pay',
+    			method: 'POST',
+    			data: {
+    				purchaseOrderId: purchaseOrderId
+    			}
+    		});
+    	},
+    	
     	removePurchaseOrder: function(purchaseOrderId) {
     		return $.ajax({
     			url: '/services/purchaseorder/remove',
@@ -40,9 +71,9 @@ define(['jquery'], function ($) {
     		});
     	},
     	
-    	getAreaList: function() {
+    	getWarehouseList: function() {
     		return $.ajax({
-    			url: '/services/purchaseorder/area'
+    			url: '/services/purchaseorder/warehouse'
     		});
     	}
 	};

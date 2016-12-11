@@ -35,7 +35,7 @@ public class UserFormBean extends FormBean {
 	private String businessContactNumber;
 	
 	private Area businessArea;
-
+	
 	public String getFirstName() {
 		return firstName;
 	}

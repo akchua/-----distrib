@@ -1,22 +1,25 @@
 define(['jquery'], function ($) {
 	return {
-		getProduct: function(productId) {
+		getProduct: function(productId, warehouse) {
 			return $.ajax({
 				url: '/services/product/get',
 				data: {
-					productId: productId
+					productId: productId,
+					warehouse: warehouse
 				}
 			});
 		},
 		
-		getProductList: function(currentPage, searchKey, companyId, categoryId) {
+		getProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/list',
+				async: async,
 				data: {
 					pageNumber: currentPage - 1,
 					searchKey: searchKey,
 					companyId: companyId,
-					categoryId: categoryId
+					categoryId: categoryId,
+					warehouse, warehouse
 				}
 			});
 		},

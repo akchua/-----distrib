@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
-import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,8 +44,9 @@ public class PurchaseOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("companyId") Long companyId,
-					@QueryParam("area") Area area) {
-		return purchaseOrderHandler.getPurchaseOrderObjectList(pageNumber, companyId, area);
+					@QueryParam("warehouse") Warehouse warehouse,
+					@QueryParam("showPaid") Boolean showPaid) {
+		return purchaseOrderHandler.getPurchaseOrderObjectList(pageNumber, companyId, warehouse, showPaid);
 	}
 	
 	@POST
@@ -65,6 +66,27 @@ public class PurchaseOrderEndpoint {
 	}
 	
 	@POST
+	@Path("/submit")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean submitPurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
+		return purchaseOrderHandler.submitPurchaseOrder(purchaseOrderId);
+	}
+	
+	@POST
+	@Path("/send")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean sendPurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
+		return purchaseOrderHandler.sendPurchaseOrder(purchaseOrderId);
+	}
+	
+	@POST
+	@Path("/pay")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean payPurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
+		return purchaseOrderHandler.payPurchaseOrder(purchaseOrderId);
+	}
+	
+	@POST
 	@Path("/remove")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removePurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
@@ -72,9 +94,9 @@ public class PurchaseOrderEndpoint {
 	}
 	
 	@GET
-	@Path("/area")
+	@Path("/warehouse")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Area> getAreaList() {
-		return purchaseOrderHandler.getAreaList();
+	public List<Warehouse> getWarehouseList() {
+		return purchaseOrderHandler.getWarehouseList();
 	}
 }

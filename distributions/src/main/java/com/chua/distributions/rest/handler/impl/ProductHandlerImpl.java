@@ -1,5 +1,7 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,10 +10,13 @@ import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CategoryService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.ProductService;
+import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.Html;
@@ -34,14 +39,21 @@ public class ProductHandlerImpl implements ProductHandler {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private WarehouseItemService warehouseItemService;
+	
 	@Override
-	public Product getProduct(Long productId) {
-		return productService.find(productId);
+	public Product getProduct(Long productId, Warehouse warehouse) {
+		final Product product = productService.find(productId);
+		if(product != null) setProductStock(product, warehouse);
+		return product;
 	}
-
+	
 	@Override
-	public ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId) {
-		return productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
+	public ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse) {
+		ObjectList<Product> objProducts = productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
+		for(Product product : objProducts.getList()) setProductStock(product, warehouse);
+		return objProducts;
 	}
 
 	@Override
@@ -55,9 +67,7 @@ public class ProductHandlerImpl implements ProductHandler {
 				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Product name already exists.")));
 			} else {
 				final Product product = new Product();
-				
 				product.setDisplayName(displayName);
-				product.setStockCount(0);
 				setProduct(product, productForm);
 				
 				result = new ResultBean();
@@ -140,9 +150,22 @@ public class ProductHandlerImpl implements ProductHandler {
 		product.setDescription(productForm.getDescription().trim());
 		product.setGrossPrice(productForm.getPackageGrossPrice() / productForm.getPackaging());
 		product.setDiscount(productForm.getDiscount());
-		product.setNetPrice(productForm.getPackageNetPrice() / productForm.getPackaging());
 		product.setSellingPrice(productForm.getPackageSellingPrice() / productForm.getPackaging());
 		product.setPercentProfit(productForm.getPercentProfit());
+	}
+	
+	private void setProductStock(Product product, Warehouse warehouse) {
+		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByProduct(product.getId());
+		Integer stockCountAll = 0;
+		Integer stockCountCurrent = 0;
+		for(WarehouseItem warehouseItem : warehouseItems) {
+			stockCountAll += warehouseItem.getStockCount();
+			if(warehouse != null && warehouseItem.getWarehouse().equals(warehouse)) {
+				stockCountCurrent = warehouseItem.getStockCount();
+			}
+		}
+		if(warehouse != null) product.setStockCountCurrent(stockCountCurrent);
+		product.setStockCountAll(stockCountAll);
 	}
 	
 	private String getDisplayName(ProductFormBean productForm) {
@@ -169,6 +192,8 @@ public class ProductHandlerImpl implements ProductHandler {
 				productForm.getPackageSellingPrice() == null || productForm.getPackageSellingPrice() <= 0||
 				productForm.getPercentProfit() == null || productForm.getPercentProfit() <= 0) {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters or must have a value greater than 0."));
+		} else if(productForm.getPackaging() > 999) {
+			result = new ResultBean(Boolean.FALSE, Html.line("Packaging " + Html.text(Color.RED, "cannot exceed") + " the value of 999."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");
 		}

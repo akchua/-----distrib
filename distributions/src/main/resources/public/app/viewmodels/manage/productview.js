@@ -12,6 +12,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     		categoryName: ko.observable(),
     		productCode: ko.observable(),
     		description: ko.observable(),
+    		stockCountCurrent: ko.observable(),
+    		stockCountAll: ko.observable(),
     		
     		formattedPackageSellingPrice: ko.observable()
 	    };
@@ -25,6 +27,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	self.productViewModel.productCode(self.product.productCode);
     	self.productViewModel.displayName(self.product.displayName);
     	self.productViewModel.description(self.product.description);
+    	self.productViewModel.stockCountCurrent(self.product.formattedStockCountCurrent);
+    	self.productViewModel.stockCountAll(self.product.formattedStockCountAll);
     	
     	self.productViewModel.formattedPackageSellingPrice(self.product.formattedPackageSellingPrice);
     	

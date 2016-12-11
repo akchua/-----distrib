@@ -55,13 +55,13 @@ public class Product extends BaseObject {
 	
 	private Float discount;
 	
-	private Float netPrice;
-	
 	private Float sellingPrice;
 	
 	private Float percentProfit;
 	
-	private Integer stockCount;
+	private Integer stockCountCurrent;
+	
+	private Integer stockCountAll;
 	
 	@ManyToOne(targetEntity = Company.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "company_id")
@@ -176,27 +176,22 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public Float getDiscountAmount() {
-		return Math.round(netPrice * discount) / 100.0f;
+		return Math.round(grossPrice * discount) / 100.0f;
 	}
 	
 	@Transient
 	public Float getPackageDiscountAmount() {
 		return Math.round(getPackageGrossPrice() * discount) / 100.0f;
 	}
-
-	public void setDiscount(Float discount) {
-		this.discount = discount;
-	}
-
-	@Basic
-	@Column(name = "net_price")
+	
+	@Transient
 	public Float getNetPrice() {
-		return netPrice;
+		return getGrossPrice() - getDiscountAmount();
 	}
 	
 	@Transient
 	public Float getPackageNetPrice() {
-		return Math.round(netPrice * packaging * 100.0f) / 100.0f;
+		return Math.round(getNetPrice() * packaging * 100.0f) / 100.0f;
 	}
 	
 	@Transient
@@ -205,8 +200,8 @@ public class Product extends BaseObject {
 		return "Php " + df.format(getPackageNetPrice());
 	}
 
-	public void setNetPrice(Float netPrice) {
-		this.netPrice = netPrice;
+	public void setDiscount(Float discount) {
+		this.discount = discount;
 	}
 
 	@Basic
@@ -238,7 +233,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public Float getProfitAmount() {
-		return Math.round((netPrice - grossPrice) * 100.0f) / 100.0f;
+		return Math.round((getNetPrice() - grossPrice) * 100.0f) / 100.0f;
 	}
 	
 	@Transient
@@ -250,26 +245,51 @@ public class Product extends BaseObject {
 		this.percentProfit = percentProfit;
 	}
 
-	@Basic
-	@Column(name = "stock_count")
-	public Integer getStockCount() {
-		return stockCount;
+	@Transient
+	public Integer getStockCountCurrent() {
+		return stockCountCurrent;
 	}
 	
 	@Transient
-	public String getFormattedStockCount() {
+	public String getFormattedStockCountCurrent() {
 		String formattedStockCount = "";
 		
-		int wholeCount = stockCount / packaging;
-		int innerCount = stockCount % packaging;
-		if(wholeCount > 0) formattedStockCount += wholeCount + " ";
-		if(innerCount > 0) formattedStockCount += innerCount + "/" + packaging;
-		if(formattedStockCount.equals("")) formattedStockCount += "0";
+		if(stockCountCurrent != null) {
+			int packageCount = stockCountCurrent / packaging;
+			int pieceCount = stockCountCurrent % packaging;
+			if(packageCount > 0) formattedStockCount += packageCount + "";
+			if(pieceCount > 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
+			if(formattedStockCount.equals("")) formattedStockCount += "0";
+		}
 		
 		return formattedStockCount;
 	}
 
-	public void setStockCount(Integer stockCount) {
-		this.stockCount = stockCount;
+	public void setStockCountCurrent(Integer stockCountCurrent) {
+		this.stockCountCurrent = stockCountCurrent;
+	}
+
+	@Transient
+	public Integer getStockCountAll() {
+		return stockCountAll;
+	}
+	
+	@Transient
+	public String getFormattedStockCountAll() {
+		String formattedStockCount = "";
+		
+		if(stockCountAll != null) {
+			int packageCount = stockCountAll / packaging;
+			int pieceCount = stockCountAll % packaging;
+			if(packageCount > 0) formattedStockCount += packageCount + "";
+			if(pieceCount > 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
+			if(formattedStockCount.equals("")) formattedStockCount += "0";
+		}
+		
+		return formattedStockCount;
+	}
+
+	public void setStockCountAll(Integer stockCountAll) {
+		this.stockCountAll = stockCountAll;
 	}
 }

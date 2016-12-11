@@ -1,6 +1,6 @@
 package com.chua.distributions.beans;
 
-import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.Warehouse;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -9,16 +9,16 @@ import com.chua.distributions.enums.Area;
  */
 public class PurchaseOrderFormBean extends FormBean {
 
-	private Area area;
+	private Warehouse warehouse;
 	
 	private Long companyId;
 
-	public Area getArea() {
-		return area;
+	public Warehouse getWarehouse() {
+		return warehouse;
 	}
 
-	public void setArea(Area area) {
-		this.area = area;
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
 	}
 
 	public Long getCompanyId() {

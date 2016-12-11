@@ -10,15 +10,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Area {
 
-	PAMPANGA("Pampanga", "");
+	PAMPANGA("Pampanga", VatType.VAT);
 	
 	private final String displayName;
 	
-	private final String warehouseAddress;
+	private final VatType vatType;
 	
-	private Area(final String displayName, final String warehouseAddress) {
+	private Area(final String displayName, final VatType vatType) {
 		this.displayName = displayName;
-		this.warehouseAddress = warehouseAddress;
+		this.vatType = vatType;
 	}
 	
 	public String getName() {
@@ -29,7 +29,7 @@ public enum Area {
 		return displayName;
 	}
 	
-	public String getWarehouseAddress() {
-		return warehouseAddress;
+	public VatType getVatType() {
+		return vatType;
 	}
 }

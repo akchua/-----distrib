@@ -12,6 +12,7 @@
    	  	{ route: 'manage', moduleRootId: 'viewmodels/manage', title: '', nav: true, hash: '#manage',
    	  		childRoutes: [
    	  		    { route: 'category', moduleId: 'category', title: 'Categories', nav: true, hash: 'category' },
+   	  		    { route: 'client', moduleId: 'client', title: 'Clients', nav: true, hash: 'client' },
    	  		    { route: 'company', moduleId: 'company', title: 'Companies', nav: true, hash: 'company' },
    	  		    { route: 'product', moduleId: 'product', title: 'Products', nav: true, hash: 'product' }
    	  		]
@@ -19,7 +20,8 @@
    	];
 	
 	var purchaseorderroute = [
-	    { route: 'purchaseorder', moduleId: 'viewmodels/purchaseorder/purchaseorder', title: 'Purchase Order', nav: true, hash: '#purchaseorder' }
+	    { route: 'purchaseorder', moduleId: 'viewmodels/purchaseorder/purchaseorder', title: 'Purchase Order', nav: true, hash: '#purchaseorder' },
+	    { route: 'purchaseorderpage/:id', moduleId: 'viewmodels/purchaseorder/purchaseorderpage', title: '', nav: false, hash: '#purchaseorderpage' }
 	];
 	
 	
@@ -56,6 +58,7 @@
 	    			self.routes = self.routes.concat(userroute);
 	    		case 'MANAGER':
 	    			self.routes = self.routes.concat(manageroute);
+	    		case 'SECRETARY':
 	    			self.routes = self.routes.concat(purchaseorderroute);
 	    			break;
     		}

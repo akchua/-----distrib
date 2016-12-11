@@ -10,16 +10,21 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
 
-	ADMINISTRATOR("Administrator"),
+	ADMINISTRATOR("Administrator", Integer.valueOf(1)),
 	
-	MANAGER("Manager"),
+	MANAGER("Manager", Integer.valueOf(2)),
 	
-	CLIENT("Client");
+	SECRETARY("Secretary", Integer.valueOf(3)),
+	
+	CLIENT("Client", Integer.valueOf(10));
 	
 	private final String displayName;
 	
-	UserType(final String displayName) {
+	private final Integer authority;
+	
+	UserType(final String displayName, final Integer authority) {
 		this.displayName = displayName;
+		this.authority = authority;
 	}
 	
 	public String getName() {
@@ -28,5 +33,9 @@ public enum UserType {
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	public Integer getAuthority() {
+		return authority;
 	}
 }

@@ -11,12 +11,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrder;
+import com.chua.distributions.database.entity.PurchaseOrderItem;
+import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CompanyService;
+import com.chua.distributions.database.service.ProductService;
+import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.database.service.PurchaseOrderService;
-import com.chua.distributions.enums.Area;
+import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.chua.distributions.utility.Html;
@@ -31,19 +37,29 @@ import com.chua.distributions.utility.Html;
 public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 
 	@Autowired
+	private WarehouseItemService warehouseItemService;
+	
+	@Autowired
 	private PurchaseOrderService purchaseOrderService;
+	
+	@Autowired
+	private PurchaseOrderItemService purchaseOrderItemService;
+	
+	@Autowired
+	private ProductService productService;
 	
 	@Autowired
 	private CompanyService companyService;
 
 	@Override
 	public PurchaseOrder getPurchaseOrder(Long purchaseOrderId) {
+		refreshPurchaseOrder(purchaseOrderId);
 		return purchaseOrderService.find(purchaseOrderId);
 	}
 
 	@Override
-	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Area area) {
-		return purchaseOrderService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), companyId, area);
+	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid) {
+		return purchaseOrderService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse, showPaid);
 	}
 
 	@Override
@@ -78,19 +94,116 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderForm.getId());
 		
 		if(purchaseOrder != null) {
-			final ResultBean validateForm = validatePurchaseOrderForm(purchaseOrderForm);
-			if(validateForm.getSuccess()) {
-				setPurchaseOrder(purchaseOrder, purchaseOrderForm);
+			if(purchaseOrder.getStatus().equals(Status.CREATING)) {
+				final ResultBean validateForm = validatePurchaseOrderForm(purchaseOrderForm);
+				if(validateForm.getSuccess()) {
+					setPurchaseOrder(purchaseOrder, purchaseOrderForm);
+					
+					result = new ResultBean();
+					result.setSuccess(purchaseOrderService.update(purchaseOrder));
+					if(result.getSuccess()) {
+						result.setMessage(Html.line("Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " has been successfully " + Html.text(Color.GREEN, "updated") + "."));
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
+				} else {
+					result = validateForm;
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to change purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean submitPurchaseOrder(Long purchaseOrderId) {
+		final ResultBean result;
+		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
+		
+		if(purchaseOrder != null) {
+			if(purchaseOrder.getStatus().equals(Status.CREATING)) {
+				if(!purchaseOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
+					purchaseOrder.setStatus(Status.SUBMITTED);
+					
+					result = new ResultBean();
+					result.setSuccess(purchaseOrderService.update(purchaseOrder));
+					if(result.getSuccess()) {
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " submitted Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Submit Failed.") + " Please submit a non-empty form."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to submit purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean sendPurchaseOrder(Long purchaseOrderId) {
+		final ResultBean result;
+		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
+		
+		if(purchaseOrder != null) {
+			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
+				System.out.println("Sending Email......");
+				boolean tempEmailSuccess = true;
+				
+				purchaseOrder.setStatus(Status.ACCEPTED);
 				
 				result = new ResultBean();
-				result.setSuccess(purchaseOrderService.update(purchaseOrder));
+				result.setSuccess(purchaseOrderService.update(purchaseOrder) && tempEmailSuccess);
 				if(result.getSuccess()) {
-					result.setMessage(Html.line("Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " has been successfully " + Html.text(Color.GREEN, "updated") + "."));
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " sent email of Purchase Order with " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " to " + Html.text(Color.TURQUOISE, purchaseOrder.getCompany().getEmailAddress()) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = validateForm;
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to send purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean payPurchaseOrder(Long purchaseOrderId) {
+		final ResultBean result;
+		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
+		
+		if(purchaseOrder != null) {
+			if(purchaseOrder.getStatus().equals(Status.ACCEPTED)) {
+				if(addToWarehouse(purchaseOrder)) {
+					purchaseOrder.setStatus(Status.PAID);
+					
+					result = new ResultBean();
+					result.setSuccess(purchaseOrderService.update(purchaseOrder));
+					if(result.getSuccess()) {
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " added Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " to stock."));
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to pay purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
@@ -105,13 +218,21 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 		
 		if(purchaseOrder != null) {
-			result = new ResultBean();
-			
-			result.setSuccess(purchaseOrderService.delete(purchaseOrder));
-			if(result.getSuccess()) {
-				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " removed Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
+			if((purchaseOrder.getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
+					&& !purchaseOrder.getStatus().equals(Status.PAID)) {
+				result = new ResultBean();
+				
+				purchaseOrder.setStatus(Status.CANCELLED);
+				
+				result.setSuccess(purchaseOrderService.delete(purchaseOrder));
+				if(result.getSuccess()) {
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " removed Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
 			} else {
-				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to remove purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
@@ -121,23 +242,64 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 
 	@Override
-	public List<Area> getAreaList() {
-		return Stream.of(Area.values())
+	public List<Warehouse> getWarehouseList() {
+		return Stream.of(Warehouse.values())
 				.collect(Collectors.toList());
 	}
 	
+	private void refreshPurchaseOrder(Long purchaseOrderId) {
+		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
+		
+		if(purchaseOrder != null) {
+			Float grossTotal = 0.0f;
+			Float discountTotal = 0.0f;
+			List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrderId);
+			
+			for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
+				grossTotal += purchaseOrderItem.getGrossPrice();
+				discountTotal += purchaseOrderItem.getDiscountAmount();
+			}
+			
+			purchaseOrder.setGrossTotal(grossTotal);
+			purchaseOrder.setDiscountTotal(discountTotal);
+			purchaseOrderService.update(purchaseOrder);
+		}
+	}
+	
+	private boolean addToWarehouse(PurchaseOrder purchaseOrder) {
+		List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId());
+		for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
+			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse());
+			if(warehouseItem == null) {
+				final Product product = productService.find(purchaseOrderItem.getProductId());
+				final WarehouseItem warehouzeItem = new WarehouseItem();
+				
+				warehouzeItem.setProduct(product);
+				warehouzeItem.setWarehouse(purchaseOrder.getWarehouse());
+				warehouzeItem.setStockCount(purchaseOrderItem.getQuantity());
+				
+				if(warehouseItemService.insert(warehouzeItem) == null) return false;
+			} else {
+				warehouseItem.setStockCount(warehouseItem.getStockCount() + purchaseOrderItem.getQuantity());
+				
+				if(!warehouseItemService.update(warehouseItem)) return false;;
+			}
+		}
+		
+		return true;
+	}
+	
 	private void setPurchaseOrder(PurchaseOrder purchaseOrder, PurchaseOrderFormBean purchaseOrderForm) {
-		purchaseOrder.setArea(purchaseOrderForm.getArea());
+		purchaseOrder.setWarehouse(purchaseOrderForm.getWarehouse());
 		purchaseOrder.setCompany(companyService.find(purchaseOrderForm.getCompanyId()));
 		if(purchaseOrder.getGrossTotal() == null) purchaseOrder.setGrossTotal(0.0f);
 		if(purchaseOrder.getDiscountTotal() == null) purchaseOrder.setDiscountTotal(0.0f);
-		if(purchaseOrder.getNetTotal() == null) purchaseOrder.setNetTotal(0.0f);
 	}
 	
 	private ResultBean validatePurchaseOrderForm(PurchaseOrderFormBean purchaseOrderForm) {
 		final ResultBean result;
 		
-		if(purchaseOrderForm.getCompanyId() == null || purchaseOrderForm.getArea() == null) {
+		if(purchaseOrderForm.getCompanyId() == null || purchaseOrderForm.getWarehouse() == null) {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + "."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");
