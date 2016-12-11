@@ -7,5 +7,7 @@ package com.chua.distributions.constants;
  */
 public class BusinessConstants {
 
+	public static final String BUSINESS_NAME = "Prime Pad Industrial Corporation";
+	
 	public static final Float REGULAR_VAT = 12.0f;
 }

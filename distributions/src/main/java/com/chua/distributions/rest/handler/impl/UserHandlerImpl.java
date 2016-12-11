@@ -201,14 +201,15 @@ public class UserHandlerImpl implements UserHandler {
 			
 			user.setPassword(EncryptionUtil.getMd5(randomPassword));
 			result.setSuccess(userService.update(user) &&
-					EmailUtil.send(user.getEmailAddress()
-					, null
-					, MailConstants.DEFAULT_EMAIL
-					, "Prime Pad Reset Password"
-					, "Hi, " + user.getFirstName() + " " + user.getLastName()
+					EmailUtil.send(user.getEmailAddress(),
+					null,
+					MailConstants.DEFAULT_EMAIL,
+					"Prime Pad Reset Password",
+					"Hi, " + user.getFirstName() + " " + user.getLastName()
 						+ "\n\n\nUsername - " + user.getUsername()
 						+ "\nPasswrod - " + randomPassword
-						+ "\nPlease login and change your password as soon as possible."));
+						+ "\nPlease login and change your password as soon as possible.",
+					null));
 			
 			if(result.getSuccess()) {
 				UserContextHolder.refreshUser(user);

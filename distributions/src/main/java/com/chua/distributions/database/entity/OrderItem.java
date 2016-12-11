@@ -135,6 +135,12 @@ public class OrderItem extends BaseObject {
 	public Float getGrossPrice() {
 		return unitPrice * quantity;
 	}
+	
+	@Transient
+	public String getFormattedGrossPrice() {
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		return "Php " + df.format(getGrossPrice());
+	}
 
 	public void setUnitPrice(Float unitPrice) {
 		this.unitPrice = unitPrice;

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
@@ -25,7 +26,10 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
+import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.TextWriter;
+import com.chua.distributions.utility.format.PurchaseOrderFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -158,13 +162,20 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
-				System.out.println("Sending Email......");
-				boolean tempEmailSuccess = true;
+				PurchaseOrderFormatter pof = new PurchaseOrderFormatter(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()));
+				final String filePath = "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".txt";
+				TextWriter.write(pof.getFormat(), filePath);
+				boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
+						null,
+						MailConstants.DEFAULT_EMAIL,
+						"Purchase Order",
+						"Purchase Order #" + purchaseOrder.getId(),
+						new String[] { filePath });
 				
 				purchaseOrder.setStatus(Status.ACCEPTED);
 				
 				result = new ResultBean();
-				result.setSuccess(purchaseOrderService.update(purchaseOrder) && tempEmailSuccess);
+				result.setSuccess(flag && purchaseOrderService.update(purchaseOrder));
 				if(result.getSuccess()) {
 					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " sent email of Purchase Order with " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " to " + Html.text(Color.TURQUOISE, purchaseOrder.getCompany().getEmailAddress()) + "."));
 				} else {

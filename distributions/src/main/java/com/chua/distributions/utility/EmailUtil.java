@@ -1,14 +1,18 @@
 package com.chua.distributions.utility;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.chua.distributions.constants.MailConstants;
 
@@ -22,22 +26,44 @@ public class EmailUtil {
 	private static Session session = null;
 	
 	public static boolean send(String to, String subject, String content) {
-		return send(to, null, null, subject, content);
+		return send(to, subject, content, null);
 	}
 	
-	public static boolean send(String to, String cc, String bcc, String subject, String content) {
+	public static boolean send(String to, String subject, String content, String[] attachments) {
+		return send(to, null, null, subject, content, attachments);
+	}
+	
+	public static boolean send(String to, String cc, String bcc, String subject, String content, String[] attachments) {
 		boolean success = true;
 		
 		try {
 			Message message = new MimeMessage(session);
+			Multipart multipart = new MimeMultipart();
 			
 			message.setFrom(new InternetAddress(MailConstants.SMTP_FROM_ADDRESS));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 			if(cc != null) message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
 			if(bcc != null) message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcc));
 			message.setSubject(subject);
-			message.setText(content);
+			
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setContent(message, "text/html");
+			messageBodyPart.setText(content);
+			multipart.addBodyPart(messageBodyPart);
+			
+			if(attachments != null && attachments.length > 0) {
+				for(String filePath : attachments) {
+					MimeBodyPart attachPart = new MimeBodyPart();
+					try {
+						attachPart.attachFile(filePath);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					multipart.addBodyPart(attachPart);
+				}
+			}
 
+			message.setContent(multipart);
 			Transport.send(message);
 		} catch (MessagingException e) {
 			success = false;

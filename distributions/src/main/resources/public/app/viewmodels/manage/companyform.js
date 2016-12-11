@@ -3,8 +3,6 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     	this.company = company;
     	this.title = title;
     	
-    	this.areaList = ko.observable();
-    	
     	this.companyFormModel = {
     		id: ko.observable(),
     		
@@ -12,8 +10,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     		
     		contactPerson: ko.observable(),
     		contactNumber: ko.observable(),
-    		emailAddress: ko.observable(),
-    		areas: ko.observableArray()
+    		emailAddress: ko.observable()
 	    };
     };
     
