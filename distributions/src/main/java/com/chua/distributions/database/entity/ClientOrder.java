@@ -15,6 +15,10 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import com.chua.distributions.serializer.json.UserSerializer;
+
 /**
  * @author  Adrian Jasper K. Chua
  * @version 1.0
@@ -32,6 +36,7 @@ public class ClientOrder extends Order {
 	
 	private Float additionalDiscount;
 	
+	@JsonSerialize(using = UserSerializer.class)
 	private User dispatcher;
 
 	@Basic

@@ -44,6 +44,11 @@ public class ClientOrderServiceImpl
 			Warehouse warehouse) {
 		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.PAID }, new Order[] { Order.desc("id") });
 	}
+	
+	@Override
+	public ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse) {
+		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.ACCEPTED }, null);
+	}
 
 	@Override
 	public List<ClientOrder> findAllByClientWithStatusCreating(Long clientId) {

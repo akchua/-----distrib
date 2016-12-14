@@ -1,9 +1,11 @@
-define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispatchservice', 'viewmodels/clientorder/saleview'],
-		function (app, ko, clientOrderService, dispatchService, SaleView) {
+define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispatchservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/dispatch/addorder', 'viewmodels/user/userview'],
+		function (app, ko, clientOrderService, dispatchService, userService, SaleView, AddOrder, UserView) {
     var DispatchPage = function() {
     	this.dispatchItemList = ko.observable();
     	
     	this.showDispatchButton = ko.observable(false);
+    	
+    	this.warehouseEntity = null;
     	
     	this.dispatch = {
 			id: ko.observable(),
@@ -44,6 +46,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     		
     		if(dispatch.status.name == 'CREATING') self.showDispatchButton(true);
     		else self.showDispatchButton(false);
+    		self.warehouseEntity = dispatch.warehouse.name;
     	});
     	
     	dispatchService.getDispatchItemList(self.currentPage(), self.dispatch.id()).done(function(data) {
@@ -55,11 +58,9 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     DispatchPage.prototype.add = function() {
     	var self = this;
     	
-    	/*AddOrder.show(self.dispatch.id()).done(function() {
+    	AddOrder.show(self.dispatch.id(), self.warehouseEntity).done(function() {
     		self.refreshDispatchItemList();
-    	});*/
-    	
-    	alert('add');
+    	});
     };
     
     DispatchPage.prototype.dispatchNow = function() {
@@ -71,6 +72,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
+				app.showMessage('Sending printable dispatch. Please wait a while....')
 				dispatchService.dispatch(self.dispatch.id()).done(function(result) {
 					self.refreshDispatchItemList();
 					app.showMessage(result.message);
@@ -80,8 +82,18 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     };
     
     DispatchPage.prototype.view = function(clientOrderId) {
+    	var self = this;
+    	
     	clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
     		SaleView.show(clientOrder)
+    	});
+    };
+    
+    DispatchPage.prototype.viewClient = function(clientId) {
+    	var self = this;
+    	
+    	userService.getUser(clientId).done(function(client) {
+    		UserView.show(client);
     	});
     };
     

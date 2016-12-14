@@ -45,6 +45,14 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/acceptedlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
+			@QueryParam("warehouse") Warehouse warehouse) {
+		return clientOrderHandler.getAcceptedClientOrderObjectList(pageNumber, warehouse);
+	}
+	
+	@GET
 	@Path("/paidlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,

@@ -11,9 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.Dispatch;
 import com.chua.distributions.database.entity.DispatchItem;
+import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.DispatchItemService;
 import com.chua.distributions.database.service.DispatchService;
@@ -22,7 +25,10 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
+import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.TextWriter;
+import com.chua.distributions.utility.format.ClientOrderFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -41,6 +47,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	
 	@Autowired
 	private ClientOrderService clientOrderService;
+	
+	@Autowired
+	private ClientOrderItemService clientOrderItemService;
 
 	@Override
 	public Dispatch getDispatch(Long dispatchId) {
@@ -93,21 +102,46 @@ public class DispatchHandlerImpl implements DispatchHandler {
 				
 				if(dispatchItems != null && dispatchItems.size() > 0) {
 					boolean flag = true;
+					String printableDispatch = "";
 					
 					for(DispatchItem dispatchItem : dispatchItems) {
 						final ClientOrder clientOrder = dispatchItem.getClientOrder();
 						clientOrder.setStatus(Status.DISPATCHED);
+						
+						// GENERATING PRINTABLE CLIENT ORDER
+						final List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
+						ClientOrderFormatter cof = new ClientOrderFormatter(clientOrder, clientOrderItems);
+						printableDispatch += cof.getFormat() + "\n";
+						//
+						
 						if(!clientOrderService.update(clientOrder)) {
 							flag = false;
 							break;
 						}
 					}
 					
+					// CREATING PRINTABLE DISPATCH FILE
+					final String filePath = "files/dispatch/Dispatch_#" + dispatch.getId() + ".txt";
+					TextWriter.write(printableDispatch, filePath);
+					//
+					
+					// SENDING PRINTABLE DISPATCH TO THIS USER
+					if(flag) {
+						flag = EmailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
+								null,
+								MailConstants.DEFAULT_EMAIL,
+								"Dispatch",
+								"Dispatch #" + dispatch.getId(),
+								new String[] { filePath });
+					}
+					//
+					
 					dispatch.setStatus(Status.DISPATCHED);
 					result = new ResultBean();
 					result.setSuccess(flag && dispatchService.update(dispatch));
 					if(result.getSuccess()) {
-						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " dispatched " + Html.text(Color.BLUE, "ID #" + dispatch.getId()) + "."));
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " dispatched " + Html.text(Color.BLUE, "ID #" + dispatch.getId()) + ".")
+								+ Html.line("A printable copy of this dispatch has been sent to your email " + Html.text(Color.BLUE, UserContextHolder.getUser().getEmailAddress()) + "."));
 					} else {
 						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 					}
@@ -226,7 +260,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 							result.setSuccess(dispatchItemService.insert(dispatchItemm) != null &&
 									clientOrderService.update(clientOrder));
 							if(result.getSuccess()) {
-								result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " added Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + " to dispatch of " + Html.text(Color.BLUE, "ID #" + dispatch.getId()) + "."));
+								result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " added Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
 							} else {
 								result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 							}

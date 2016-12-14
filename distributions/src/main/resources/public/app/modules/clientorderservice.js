@@ -29,6 +29,17 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getAcceptedClientOrderList: function(currentPage, warehouse, async) {
+			return $.ajax({
+				url: '/services/clientorder/acceptedlist',
+				async: async,
+				data: {
+					pageNumber: currentPage - 1,
+					warehouse: warehouse
+				}
+			});
+		},
+		
 		getPaidClientOrderList: function(currentPage, warehouse) {
 			return $.ajax({
 				url: '/services/clientorder/paidlist',

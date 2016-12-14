@@ -42,7 +42,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/dispatchservice',
     Dispatch.prototype.complete = function(dispatchId) {
     	var self = this;
     	
-    	app.showMessage('<p>Please make sure that all of the orders within Dispatch of <span class="text-primary">ID #' + dispatchId + '</span> are all received by the designated client.</p>',
+    	app.showMessage('<p>Please make sure that all of the orders within Dispatch of <span class="text-primary">ID #' + dispatchId + '</span> are all received by their designated client.</p>',
 				'<p class="text-warning">Complete Dispatch</p>',
 				[{ text: 'Continue', value: true }, { text: 'Cancel', value: false }])
 		.then(function(confirm) {

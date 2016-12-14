@@ -65,6 +65,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 	
 	@Override
+	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
+		return clientOrderService.findAllAcceptedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	}
+	
+	@Override
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
@@ -140,7 +145,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
-		if(clientOrder != null && warehouse != null && !clientOrder.getWarehouse().equals(warehouse)) {
+		if(clientOrder != null && warehouse != null && (clientOrder.getWarehouse() == null || !clientOrder.getWarehouse().equals(warehouse))) {
 			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrderId);
 			
 			result = new ResultBean();

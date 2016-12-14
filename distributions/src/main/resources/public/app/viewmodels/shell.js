@@ -24,7 +24,7 @@
 	
 	var purchaseorderroute = [
 	    { route: 'purchaseorder', moduleId: 'viewmodels/purchaseorder/purchaseorder', title: 'Purchase Order', nav: true, hash: '#purchaseorder' },
-	    { route: 'purchaseorderpage/:id', moduleId: 'viewmodels/purchaseorder/purchaseorderpage', title: '', nav: false, hash: '#purchaseorderpage' }
+	    { route: 'purchaseorderpage/:id', moduleId: 'viewmodels/purchaseorder/purchaseorderpage', title: 'Purchase Order', nav: false, hash: '#purchaseorderpage' }
 	];
 	
 	var requestroute = [
@@ -33,12 +33,12 @@
 	
 	var dispatchroute = [
 	    { route: 'dispatch', moduleId: 'viewmodels/dispatch/dispatch', title: 'Dispatch', nav: true, hash: '#dispatch' },
-	    { route: 'dispatchpage/:id', moduleId: 'viewmodels/dispatch/dispatchpage', title: '', nav: false, hash: '#dispatchpage' }
+	    { route: 'dispatchpage/:id', moduleId: 'viewmodels/dispatch/dispatchpage', title: 'Dispatch', nav: false, hash: '#dispatchpage' }
 	]; 
 	
 	var clientorderroute = [
 	    { route: 'clientorder', moduleId: 'viewmodels/clientorder/clientorder', title: 'Order', nav: true, hash: '#clientorder' },
-	    { route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: '', nav: false, hash: '#clientorderpage' }
+	    { route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: 'Order', nav: false, hash: '#clientorderpage' }
 	];
 	
 	
