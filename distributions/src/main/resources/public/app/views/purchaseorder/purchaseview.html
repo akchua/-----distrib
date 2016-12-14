@@ -1,0 +1,83 @@
+<div class="modal-content modal-lg">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 align="center">View Purchase Order</h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-info col-lg-6">
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>Purchase ID:</dt>
+							<dd data-bind="text: purchaseViewModel.id"></dd>
+							<dt>Company:</dt>
+							<dd data-bind="text: purchaseViewModel.companyName"></dd>
+							<dt>Warehouse:</dt>
+							<dd data-bind="text: purchaseViewModel.warehouse"></dd>
+							<dt>Creator:</dt>
+							<dd data-bind="text: purchaseViewModel.creatorName"></dd>
+							<dt>Status:</dt>
+							<dd data-bind="text: purchaseViewModel.status"></dd>
+				    	</dl>
+					</div>
+				</div>
+				<div class="panel panel-success col-lg-6">
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>Gross Total:</dt>
+							<dd data-bind="text: purchaseViewModel.formattedGrossTotal"></dd>
+							<dt>Total Discount:</dt>
+							<dd data-bind="text: purchaseViewModel.formattedDiscountTotal"></dd>
+							<dt class="h3">Net Total:</dt>
+							<dd data-bind="text: purchaseViewModel.formattedNetTotal" class="h3"></dd>
+				    	</dl>
+					</div>
+				</div>
+			</div>
+			
+			<div class="container-fluid">
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<div class="container-fluid">
+					      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
+				      	</div>
+				      	
+				      	<div class="container-fluid">
+							<div class="table-responsive">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<th class = "text-center">Quantity</th>
+											<th class = "text-center">Code</th>
+											<th>Name</th>
+											<th class = "text-center">Unit Price</th>
+											<th class = "text-center">Discount</th>
+											<th class = "text-center">Net Price</th>
+										</tr>
+									</thead>
+									
+									<tbody data-bind="foreach: { data: purchaseOrderItemList, as: 'purchaseOrderItem' }">
+										<tr>
+											<td data-bind="text: purchaseOrderItem.formattedQuantity" class = "text-center"></td>
+											<td data-bind="text: purchaseOrderItem.productCode" class = "text-center"></td>
+											<td data-bind="text: purchaseOrderItem.displayName"></td>
+											<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-center"></td>
+											<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-center"></td>
+											<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-center"></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-warning" type="submit" data-bind="click: cancel">Done</button>
+		</div>
+  	</form>
+</div>

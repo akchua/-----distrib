@@ -18,6 +18,7 @@ import org.hibernate.annotations.Where;
 
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.serializer.json.UserSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -39,6 +40,8 @@ public class Order extends BaseObject {
 	private Float discountTotal;
 	
 	private Status status;
+	
+	private Warehouse warehouse;
 	
 	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator_id")
@@ -103,5 +106,15 @@ public class Order extends BaseObject {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "warehouse", length = 50)
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
 	}
 }

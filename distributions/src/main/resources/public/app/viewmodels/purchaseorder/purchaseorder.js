@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform'],
-		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform', 'viewmodels/purchaseorder/purchaseview'],
+		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm, PurchaseView) {
     var PurchaseOrder = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
@@ -60,6 +60,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
+				app.showMessage('Sending Order. Please wait a while....');
 				purchaseOrderService.sendPurchaseOrder(purchaseOrderId).done(function(result) {
 					self.refreshPurchaseOrderList();
 					app.showMessage(result.message);
@@ -95,6 +96,14 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     		PurchaseOrderForm.show(purchaseOrder, 'Edit Purchase Order').done(function() {
     			self.refreshPurchaseOrderList();
     		});
+    	});
+    };
+    
+    PurchaseOrder.prototype.view = function(purchaseOrderId) {
+    	var self = this;
+    	
+    	purchaseOrderService.getPurchaseOrder(purchaseOrderId).done(function(purchaseOrder) {
+    		PurchaseView.show(purchaseOrder)
     	});
     };
     

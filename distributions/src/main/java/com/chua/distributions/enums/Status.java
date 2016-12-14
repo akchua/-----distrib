@@ -10,15 +10,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Status {
 	
-	CANCELLED("Cancelled", Integer.valueOf("10")),
+	CANCELLED("Cancelled", Integer.valueOf(10)),
 
-	CREATING("Creating", Integer.valueOf("1")),
+	CREATING("Creating", Integer.valueOf(1)),
 	
-	SUBMITTED("Submitted", Integer.valueOf("2")),
+	SUBMITTED("Submitted", Integer.valueOf(2)),
 	
-	ACCEPTED("Accepted", Integer.valueOf("3")),
+	ACCEPTED("Accepted", Integer.valueOf(3)),
 	
-	PAID("Paid", Integer.valueOf("4"));
+	DISPATCHED("Dispatched", Integer.valueOf(4)),
+	
+	RECEIVED("Received", Integer.valueOf(5)),
+	
+	PAID("Paid", Integer.valueOf(6));
 	
 	private final String displayName;
 	

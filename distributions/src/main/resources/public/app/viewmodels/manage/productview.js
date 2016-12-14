@@ -1,7 +1,8 @@
 define(['plugins/dialog', 'durandal/app', 'knockout'], 
 		function (dialog, app, ko) {
-    var ProductView = function(product) {
+    var ProductView = function(product, showStock) {
     	this.product = product;
+    	this.showStock = showStock;
     	
     	this.productViewModel = {
     		id: ko.observable(),
@@ -36,8 +37,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	self.productViewModel.categoryName(self.product.category.name);
     };
     
-    ProductView.show = function(product) {
-    	return dialog.show(new ProductView(product));
+    ProductView.show = function(product, showStock) {
+    	return dialog.show(new ProductView(product, showStock));
     };
     
     ProductView.prototype.cancel = function() {

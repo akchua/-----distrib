@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
 
 /**
@@ -73,5 +74,13 @@ public class UserBean extends org.springframework.security.core.userdetails.User
 	
 	public String getBusinessContactNumber() {
 		return user.getBusinessContactNumber();
+	}
+	
+	public Area getBusinessArea() {
+		return user.getBusinessArea();
+	}
+	
+	public Float getDiscount() {
+		return user.getDiscount();
 	}
 }

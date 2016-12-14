@@ -44,7 +44,7 @@ public class PurchaseOrderFormatter {
 		format += " "; for(int i = 0; i < 106; i++) format += "-"; format += "\n";
 		for(PurchaseOrderItem orderItem : orderItems) {
 			format += "|";
-			format += StringHelper.center(orderItem.getQuantity() + "", 14) + "|";
+			format += StringHelper.center(orderItem.getFormattedQuantity() + "", 14) + "|";
 			format += StringHelper.center(orderItem.getDisplayName(), 49) + "|";
 			format += StringHelper.center(orderItem.getFormattedPackageUnitPrice(), 19) + "|";
 			format += StringHelper.center(orderItem.getFormattedGrossPrice(), 20);

@@ -49,6 +49,15 @@ public class PurchaseOrderEndpoint {
 		return purchaseOrderHandler.getPurchaseOrderObjectList(pageNumber, companyId, warehouse, showPaid);
 	}
 	
+	@GET
+	@Path("/paidlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("companyId") Long companyId,
+					@QueryParam("warehouse") Warehouse warehouse) {
+		return purchaseOrderHandler.getPaidPurchaseOrderObjectList(pageNumber, companyId, warehouse);
+	}
+	
 	@POST
 	@Path("/save")
 	@Produces({ MediaType.APPLICATION_JSON })

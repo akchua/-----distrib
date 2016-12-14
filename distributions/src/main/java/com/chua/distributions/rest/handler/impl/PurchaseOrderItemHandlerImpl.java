@@ -50,8 +50,10 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		if(product != null) {
 			final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 			if(purchaseOrder != null) {
-				if(purchaseOrder.getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-						&& !purchaseOrder.getStatus().equals(Status.PAID)) {
+				if(purchaseOrder.getStatus().equals(Status.CREATING) 
+						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+							&& !purchaseOrder.getStatus().equals(Status.PAID)
+							&& !purchaseOrder.getStatus().equals(Status.CANCELLED))) {
 					final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByNameAndPurchaseOrder(product.getDisplayName(), purchaseOrder.getId());
 					
 					if(purchaseOrderItem == null) {
@@ -91,8 +93,10 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
 		
 		if(purchaseOrderItem != null) {
-			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-					&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)) {
+			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) 
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CANCELLED))) {
 				result = removeItem(purchaseOrderItem);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -125,8 +129,10 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
 		
 		if(purchaseOrderItem != null) {
-			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-					&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)) {
+			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) 
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CANCELLED))) {
 				result = changeQuantity(purchaseOrderItem, (purchaseOrderItem.getPackageQuantity() * purchaseOrderItem.getPackaging()) + pieceQuantity);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -145,8 +151,10 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
 		
 		if(purchaseOrderItem != null) {
-			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-					&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)) {
+			if(purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CREATING) 
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.PAID)
+						&& !purchaseOrderItem.getPurchaseOrder().getStatus().equals(Status.CANCELLED))) {
 				result = changeQuantity(purchaseOrderItem, (packageQuantity * purchaseOrderItem.getPackaging()) + purchaseOrderItem.getPieceQuantity());
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +

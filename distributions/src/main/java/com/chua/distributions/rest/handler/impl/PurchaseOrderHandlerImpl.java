@@ -65,6 +65,12 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid) {
 		return purchaseOrderService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse, showPaid);
 	}
+	
+	@Override
+	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId,
+			Warehouse warehouse) {
+		return purchaseOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse);
+	}
 
 	@Override
 	public ResultBean createPurchaseOrder(PurchaseOrderFormBean purchaseOrderForm) {
@@ -81,7 +87,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			result = new ResultBean();
 			result.setSuccess(purchaseOrderService.insert(purchaseOrder) != null);
 			if(result.getSuccess()) {
-				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created PurchaseOrder of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}
@@ -229,8 +235,10 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 		
 		if(purchaseOrder != null) {
-			if((purchaseOrder.getStatus().equals(Status.CREATING) || UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
-					&& !purchaseOrder.getStatus().equals(Status.PAID)) {
+			if(purchaseOrder.getStatus().equals(Status.CREATING) || purchaseOrder.getStatus().equals(Status.SUBMITTED)
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
+						&& !purchaseOrder.getStatus().equals(Status.PAID)
+						&& !purchaseOrder.getStatus().equals(Status.CANCELLED)) {
 				result = new ResultBean();
 				
 				purchaseOrder.setStatus(Status.CANCELLED);

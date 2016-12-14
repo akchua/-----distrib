@@ -21,6 +21,17 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPaidPurchaseOrderList: function(currentPage, companyId, warehouse) {
+			return $.ajax({
+				url: '/services/purchaseorder/paidlist',
+				data: {
+					pageNumber: currentPage - 1,
+					companyId: companyId,
+					warehouse: warehouse
+				}
+			});
+		},
+		
 		savePurchaseOrder: function(purchaseOrderFormData) {
     		return $.ajax({
     			url: '/services/purchaseorder/save',

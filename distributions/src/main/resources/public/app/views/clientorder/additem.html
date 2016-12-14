@@ -1,0 +1,58 @@
+<div class="modal-content modal-lg">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+		<h3 align="center">Add Item</h3>
+	</div>
+  
+	<div class="modal-body">
+		<div class="container-fluid">
+			<form role="search" class="form-inline col-md-7 col-xs-7">
+		        <div class="input-group" >
+		          	<input data-bind="value: searchKey" type="text" class="form-control" placeholder="Search">
+			        <span class="input-group-btn">
+			        	<button data-bind="click: search" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+			        </span>
+		        </div>
+	      	</form>
+	      	
+	      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-5 col-xs-5"></div>
+      	</div>
+      	
+      	<div class="container-fluid">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th class = "text-center">Company</th>
+							<th class = "text-center">Price</th>
+						</tr>
+					</thead>
+					
+					<tbody data-bind="foreach: { data: productList, as: 'product' }">
+						<tr>
+							<td data-bind="text: product.displayName"></td>
+							<td data-bind="text: product.company.name" class = "text-center"></td>
+							<td data-bind="text: product.formattedPackageSellingPrice" class = "text-center"></td>
+							
+							<td>
+								<div class="btn-group pull-right">
+									<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+									<button data-bind="click: function() { $parent.addItem(product.id) }" type="button" class="btn btn-success btn-sm"><i class="fa fa-cart-plus"></i></button>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<span data-bind="html: log" class="text-center"></span>
+		</div>
+	</div>
+ 
+	<div class="modal-footer">
+        <button class="btn btn-primary" data-bind="click: cancel">Done</button>
+	</div>
+</div>

@@ -1,0 +1,50 @@
+<div class="container-fluid">
+	<br/>
+	<div class="container-fluid">
+		<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Dispatch</button>
+	</div>
+	<br/>
+	<div class="container-fluid">
+		<label class="checkbox-inline col-xs-offset-1 col-xs-2">
+			<input data-bind="checked: showReceived, event: { change: refreshDispatchList }" type="checkbox" name="receivedcheckbox">Show Received
+		</label>
+		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-9"></div>
+	</div>
+	<div class="container-fluid">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class = "text-center">ID</th>
+						<th class = "text-center">Last Update</th>
+						<th>Warehouse</th>
+						<th class = "text-center">Order Count</th>
+						<th class = "text-center">Total Amount</th>
+						<th class = "text-center">Status</th>
+					</tr>
+				</thead>
+				
+				<tbody data-bind="foreach: { data: dispatchList, as: 'dispatch' }">
+					<tr>
+						<td data-bind="text: dispatch.id" class = "text-center"></td>
+						<td data-bind="text: dispatch.formattedUpdatedOn" class = "text-center"></td>
+						<td data-bind="text: dispatch.warehouse.displayName + ' - ' + dispatch.warehouse.address"></td>
+						<td data-bind="text: dispatch.orderCount" class = "text-center"></td>
+						<td data-bind="text: dispatch.formattedTotalAmount" class = "text-center"></td>
+						<td data-bind="text: dispatch.status.displayName" class = "text-center"></td>
+						
+						<td>
+							<div class="btn-group pull-right">
+								<!-- ko if: dispatch.status.name == 'DISPATCHED' -->
+								<button data-bind="click: function() { $parent.complete(dispatch.id) }" type="button" class="btn btn-success btn-sm"><i class="fa fa-check"></i></button>
+								<!-- /ko -->
+								<button data-bind="click: function() { $parent.open(dispatch.id) } "type="button" class="btn btn-primary btn-sm"><i class="fa fa-folder-open"></i></button>
+								<button data-bind="click: function() { $parent.remove(dispatch.id) }" type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

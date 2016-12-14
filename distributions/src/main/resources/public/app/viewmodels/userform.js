@@ -38,15 +38,15 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/userservice'], fu
     	self.userFormModel.businessName(self.user.businessName);
     	self.userFormModel.businessAddress(self.user.businessAddress);
     	self.userFormModel.businessContactNumber(self.user.businessContactNumber);
-    	self.userFormModel.businessArea(self.user.businessArea);
+    	if(self.user.businessArea) self.userFormModel.businessArea(self.user.businessArea.name);
     	self.userFormModel.username(self.user.username);
     	self.userFormModel.emailAddress(self.user.emailAddress);
     	self.userFormModel.itemsPerPage(self.user.itemsPerPage);
-    	self.userFormModel.userType(self.user.userType);
+    	if(self.user.userType) self.userFormModel.userType(self.user.userType.name);
     	
     	userService.getUserTypeList().done(function(userTypeList) {
     		self.userTypeList(userTypeList);
-    		self.userFormModel.userType(self.user.userType);
+    		if(self.user.userType) self.userFormModel.userType(self.user.userType.name);
     		
     		if(!self.userFormModel.userType() || self.userFormModel.userType() == 'CLIENT') {
         		self.showBusinessInformation(true);
@@ -55,7 +55,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/userservice'], fu
     	
     	userService.getAreaList().done(function(areaList) {
     		self.areaList(areaList);
-    		self.userFormModel.businessArea(self.user.businessArea);
+    		if(self.user.businessArea) self.userFormModel.businessArea(self.user.businessArea.name);
     	});
     };
     

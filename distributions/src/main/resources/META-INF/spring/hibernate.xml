@@ -51,8 +51,13 @@
 				<value>com.chua.distributions.database.entity.Company</value>
 				<value>com.chua.distributions.database.entity.Product</value>
 				
+				<value>com.chua.distributions.database.entity.Dispatch</value>
+				<value>com.chua.distributions.database.entity.DispatchItem</value>
+				
 				<value>com.chua.distributions.database.entity.PurchaseOrder</value>
 				<value>com.chua.distributions.database.entity.PurchaseOrderItem</value>
+				<value>com.chua.distributions.database.entity.ClientOrder</value>
+				<value>com.chua.distributions.database.entity.ClientOrderItem</value>
 				
 				<value>com.chua.distributions.database.entity.WarehouseItem</value>
 			</list>

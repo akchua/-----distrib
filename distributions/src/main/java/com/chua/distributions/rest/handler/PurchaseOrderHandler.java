@@ -19,6 +19,8 @@ public interface PurchaseOrderHandler {
 
 	ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid);
 	
+	ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse);
+	
 	ResultBean createPurchaseOrder(PurchaseOrderFormBean purchaseOrderForm);
 	
 	ResultBean updatePurchaseOrder(PurchaseOrderFormBean purchaseOrderForm);

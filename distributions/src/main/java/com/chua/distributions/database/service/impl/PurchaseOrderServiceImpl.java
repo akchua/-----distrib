@@ -29,4 +29,10 @@ public class PurchaseOrderServiceImpl
 	public ObjectList<PurchaseOrder> findAllWithPagingOrderByStatus(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid) {
 		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, showPaid, new Order[] { Order.asc("status") });
 	}
+
+	@Override
+	public ObjectList<PurchaseOrder> findAllPaidWithPagingOrderByLatest(int pageNumber, int resultsPerPage,
+			Long companyId, Warehouse warehouse) {
+		return dao.findAllPaidWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, new Order[] { Order.desc("id") });
+	}
 }

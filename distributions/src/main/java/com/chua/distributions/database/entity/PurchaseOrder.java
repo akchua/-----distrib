@@ -1,9 +1,6 @@
 package com.chua.distributions.database.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,7 +10,6 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.serializer.json.CompanySerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -33,8 +29,6 @@ public class PurchaseOrder extends Order {
 	@JsonSerialize(using = CompanySerializer.class)
 	private Company company;
 	
-	private Warehouse warehouse;
-
 	@ManyToOne(targetEntity = Company.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "company_id")
 	@Where(clause = "valid = 1")
@@ -45,15 +39,5 @@ public class PurchaseOrder extends Order {
 
 	public void setCompany(Company company) {
 		this.company = company;
-	}
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "warehouse", length = 50)
-	public Warehouse getWarehouse() {
-		return warehouse;
-	}
-
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
 	}
 }

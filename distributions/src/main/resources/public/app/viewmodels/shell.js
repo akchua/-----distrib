@@ -11,8 +11,11 @@
 	var manageroute = [
    	  	{ route: 'manage', moduleRootId: 'viewmodels/manage', title: '', nav: true, hash: '#manage',
    	  		childRoutes: [
-   	  		    { route: 'category', moduleId: 'category', title: 'Categories', nav: true, hash: 'category' },
    	  		    { route: 'client', moduleId: 'client', title: 'Clients', nav: true, hash: 'client' },
+   	  		    { route: 'purchase', moduleId: 'purchase', title: 'Purchases', nav: true, hash: 'purchase' },
+   	  		    { route: 'sale', moduleId: 'sale', title: 'Sales', nav: true, hash: 'sale' },
+   	  		    { route: 'warehouse', moduleId: 'warehouse', title: 'Warehouse', nav: true, hash: 'warehouse' },
+   	  		    { route: 'category', moduleId: 'category', title: 'Categories', nav: true, hash: 'category' },
    	  		    { route: 'company', moduleId: 'company', title: 'Companies', nav: true, hash: 'company' },
    	  		    { route: 'product', moduleId: 'product', title: 'Products', nav: true, hash: 'product' }
    	  		]
@@ -22,6 +25,20 @@
 	var purchaseorderroute = [
 	    { route: 'purchaseorder', moduleId: 'viewmodels/purchaseorder/purchaseorder', title: 'Purchase Order', nav: true, hash: '#purchaseorder' },
 	    { route: 'purchaseorderpage/:id', moduleId: 'viewmodels/purchaseorder/purchaseorderpage', title: '', nav: false, hash: '#purchaseorderpage' }
+	];
+	
+	var requestroute = [
+		{ route: 'request', moduleId: 'viewmodels/request/request', title: 'Requests', nav: true, hash: '#request' }
+	];
+	
+	var dispatchroute = [
+	    { route: 'dispatch', moduleId: 'viewmodels/dispatch/dispatch', title: 'Dispatch', nav: true, hash: '#dispatch' },
+	    { route: 'dispatchpage/:id', moduleId: 'viewmodels/dispatch/dispatchpage', title: '', nav: false, hash: '#dispatchpage' }
+	]; 
+	
+	var clientorderroute = [
+	    { route: 'clientorder', moduleId: 'viewmodels/clientorder/clientorder', title: 'Order', nav: true, hash: '#clientorder' },
+	    { route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: '', nav: false, hash: '#clientorderpage' }
 	];
 	
 	
@@ -60,6 +77,11 @@
 	    			self.routes = self.routes.concat(manageroute);
 	    		case 'SECRETARY':
 	    			self.routes = self.routes.concat(purchaseorderroute);
+	    			self.routes = self.routes.concat(requestroute);
+	    			self.routes = self.routes.concat(dispatchroute);
+	    			break;
+	    		case 'CLIENT':
+	    			self.routes = self.routes.concat(clientorderroute);
 	    			break;
     		}
 		}

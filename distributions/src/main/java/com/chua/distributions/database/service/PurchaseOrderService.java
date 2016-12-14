@@ -13,4 +13,6 @@ import com.chua.distributions.objects.ObjectList;
 public interface PurchaseOrderService extends Service<PurchaseOrder, Long>, PurchaseOrderPrototype {
 
 	ObjectList<PurchaseOrder> findAllWithPagingOrderByStatus(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid);
+	
+	ObjectList<PurchaseOrder> findAllPaidWithPagingOrderByLatest(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse);
 }

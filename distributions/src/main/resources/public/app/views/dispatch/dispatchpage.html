@@ -1,0 +1,64 @@
+<div class="container-fluid">
+	<br/>
+	<div class="container-fluid">
+		<div class="panel panel-info col-lg-9">
+			<div class="panel-body">
+				<dl class="dl-horizontal">
+					<dt>Dispatch ID:</dt>
+					<dd data-bind="text: dispatch.id"></dd>
+					<dt>Source Warehouse:</dt>
+					<dd data-bind="text: dispatch.warehouse"></dd>
+					<dt>Order Count:</dt>
+					<dd data-bind="text: dispatch.orderCount"></dd>
+					<dt>Total Amount:</dt>
+					<dd data-bind="text: dispatch.totalAmount"></dd>
+					<dt>Status:</dt>
+					<dd data-bind="text: dispatch.status"></dd>
+		    	</dl>
+			</div>
+		</div>
+	</div>
+	<br/>
+	<div class="container-fluid">
+		<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Order</button>
+		<!-- ko if: showDispatchButton -->
+		<button data-bind="click: dispatchNow" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-reply"> Dispatch</i></button>
+		<!-- /ko -->
+		<!-- ko ifnot: showDispatchButton -->
+		<div class="col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"></div>
+		<!-- /ko -->
+		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
+	</div>
+	<div class="container-fluid">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class = "text-center">ID</th>
+						<th class = "text-center">Created On</th>
+						<th class = "text-center">Last Update</th>
+						<th class = "text-center">Total Amount</th>
+						<th class = "text-center">Status</th>
+					</tr>
+				</thead>
+				
+				<tbody data-bind="foreach: { data: dispatchItemList, as: 'dispatchItem' }">
+					<tr>
+						<td data-bind="text: dispatchItem.clientOrder.id" class = "text-center"></td>
+						<td data-bind="text: dispatchItem.clientOrder.formattedCreatedOn" class = "text-center"></td>
+						<td data-bind="text: dispatchItem.clientOrder.formattedUpdatedOn" class = "text-center"></td>
+						<td data-bind="text: dispatchItem.clientOrder.formattedNetTotal" class = "text-center"></td>
+						<td data-bind="text: dispatchItem.clientOrder.status.displayName" class = "text-center"></td>
+						
+						<td>
+							<div class="btn-group pull-right">
+								<button data-bind="click: function() { $parent.view(dispatchItem.clientOrder.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+								<button data-bind="click: function() { $parent.remove(dispatchItem.clientOrder.id, dispatchItem.id) }" type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -9,4 +9,5 @@ import com.chua.distributions.database.entity.PurchaseOrder;
  */
 public interface PurchaseOrderPrototype extends Prototype<PurchaseOrder, Long> {
 
+	
 }

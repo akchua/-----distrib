@@ -56,7 +56,7 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     		self.warehouseEntity = purchaseOrder.warehouse.name;
     	});
     	
-    	purchaseOrderItemService.getPurchaseOrderItemList(self.currentPage(), self.purchaseOrder.id()).done(function(data) {
+    	purchaseOrderItemService.getPurchaseOrderItemList(self.currentPage(), self.purchaseOrder.id(), true).done(function(data) {
     		self.purchaseOrderItemList(data.list);
     		self.totalItems(data.total);
     	});
@@ -74,7 +74,7 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     	var self = this;
     	
     	app.showMessage('<p>Are you sure you want to submit Purchase Order of <span class="text-primary">ID #' + self.purchaseOrder.id + '</span>?</p>'
-    			+ '<p class="text-danger">Once submitted editing will be DISABLED.</p>',
+    			+ '<p class="text-danger">Once submitted only the manager can edit the order.</p>',
 				'<p class="text-primary">Submit for Evaluation</p>',
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {

@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/manage/clientsettings'],
-		function (app, ko, userService, ClientSettings) {
+define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/manage/clientsettings', 'viewmodels/user/userview'],
+		function (app, ko, userService, ClientSettings, UserView) {
     var Client = function() {
     	this.clientList = ko.observable();
     	
@@ -28,6 +28,14 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/manage/cl
     	userService.getClientList(self.currentPage(), self.searchKey()).done(function(data) {
     		self.clientList(data.list);
     		self.totalItems(data.total);
+    	});
+    };
+    
+    Client.prototype.view = function(clientId) {
+    	var self = this;
+    	
+    	userService.getUser(clientId).done(function(client) {
+    		UserView.show(client);
     	});
     };
     

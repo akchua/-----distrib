@@ -56,7 +56,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     	var self = this;
     	
     	productService.getProduct(productId, null).done(function(product) {
-    		ProductView.show(product)
+    		ProductView.show(product, true)
     	});
     };
     

@@ -46,4 +46,22 @@ public class PurchaseOrderDAOImpl
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
 	}
+
+	@Override
+	public ObjectList<PurchaseOrder> findAllPaidWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId,
+			Warehouse warehouse, Order[] orders) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("status", Status.PAID));
+		
+		if(companyId != null) {
+			conjunction.add(Restrictions.eq("company.id", companyId));
+		}
+		
+		if(warehouse != null) {
+			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		}
+		
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
 }

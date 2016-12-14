@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'],
-		function (app, ko, userService, UserForm) {
+define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform', 'viewmodels/user/userview'],
+		function (app, ko, userService, UserForm, UserView) {
     var User = function() {
     	this.userList = ko.observable();
     	
@@ -36,6 +36,14 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
     	
     	UserForm.show(new Object(),  'Create User').done(function() {
     		self.refreshUserList();
+    	});
+    };
+    
+    User.prototype.view = function(userId) {
+    	var self = this;
+    	
+    	userService.getUser(userId).done(function(user) {
+    		UserView.show(user);
     	});
     };
     

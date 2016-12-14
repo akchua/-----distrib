@@ -36,8 +36,8 @@
 		<!-- ko if: showCheckButton -->
 		<button data-bind="click: submit" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-check"> Submit</i></button>
 		<!-- /ko -->
-		<div class="col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"></div>
 		<!-- ko ifnot: showCheckButton -->
+		<div class="col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"></div>
 		<!-- /ko -->
 		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
 	</div>

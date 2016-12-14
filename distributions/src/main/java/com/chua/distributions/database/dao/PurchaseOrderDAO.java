@@ -17,4 +17,6 @@ public interface PurchaseOrderDAO extends DAO<PurchaseOrder, Long>, PurchaseOrde
 	ObjectList<PurchaseOrder> findAllWithPaging(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid);
 	
 	ObjectList<PurchaseOrder> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid, Order[] orders);
+	
+	ObjectList<PurchaseOrder> findAllPaidWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, Order[] orders);
 }

@@ -1,8 +1,9 @@
 define(['jquery'], function ($) {
 	return {
-		getPurchaseOrderItemList: function(currentPage, purchaseOrderId) {
+		getPurchaseOrderItemList: function(currentPage, purchaseOrderId, async) {
 			return $.ajax({
 				url: '/services/purchaseorderitem/list',
+				async: async,
 				data: {
 					pageNumber: currentPage - 1,
 					purchaseOrderId: purchaseOrderId
