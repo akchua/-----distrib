@@ -28,7 +28,7 @@
 						<td data-bind="text: clientOrder.creator.businessArea.displayName"></td>
 						<td>
 						<!-- ko if: clientOrder.warehouse -->
-						<span data-bind="text: clientOrder.warehouse.displayName"></span>
+						<span data-bind="text: clientOrder.warehouse.displayName + ' - ' + clientOrder.warehouse.address"></span>
 						<!-- /ko -->
 						</td>
 						<td data-bind="text: clientOrder.formattedNetTotal" class = "text-center"></td>

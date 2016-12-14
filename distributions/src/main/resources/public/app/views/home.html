@@ -1,139 +1,68 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="item">
-			<div class="panel panel-primary">
-			  	<div class="panel-heading">
-			  		<form role="search" class="form-inline">
-				        <div class="input-group pull-right col-md-6 col-xs-6">
-				          	<input type="text" class="form-control" placeholder="Search">
-					        <span class="input-group-btn">
-					        	<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-					        </span>
-				        </div>
-			      	</form>
-			      	<br>
-			      	<h3 class="panel-title col-xs-4">PRODUCTS</h3>
-			      	<br>
-			  	</div>
-			  	
-			  	<div class="panel-body">
-			  		<table>
-			  			<thead>
-			  				<tr>
-			  					<th>Name</th>
-			  					<th>Name</th>
-			  				</tr>
-			  			</thead>
-			  			
-			  			<tbody>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  			</tbody>
-			  		</table>
-			  	</div>
+	<br/>
+	<!-- ko if: user -->
+	<div class="panel panel-primary">
+	  	<div class="panel-heading">
+	  		<form role="search" class="form-inline">
+		        <div class="input-group pull-right col-md-6 col-xs-6">
+		          	<input data-bind="value: searchKey" type="text" class="form-control" placeholder="Search">
+			        <span class="input-group-btn">
+			        	<button data-bind="click: search" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+			        </span>
+		        </div>
+	      	</form>
+	      	<br>
+	      	<h3 class="panel-title col-xs-4">OUR PRODUCTS</h3>
+	      	<br>
+	  	</div>
+	  	
+	  	<div class="panel-body">
+	  		<div class="container-fluid">
+				<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12"></div>
 			</div>
-		</div>
-		
-		<div class="item">
-			<div class="panel panel-info">
-			  	<div class="panel-heading">
-			      	<h3 class="panel-title">EXTRAS</h3>
-			  	</div>
-			  	
-			  	<div class="panel-body">
-			  		<table>
-			  			<thead>
-			  				<tr>
-			  					<th>Name</th>
-			  					<th>Name</th>
-			  				</tr>
-			  			</thead>
-			  			
-			  			<tbody>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  			</tbody>
-			  		</table>
-			  	</div>
+	  		<div class="container-fluid">
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th class = "text-center">Code</th>
+								<th>Name</th>
+								<th>Company</th>
+								<th>Category</th>
+								<th class = "text-center">Selling Price</th>
+							</tr>
+						</thead>
+						
+						<tbody data-bind="foreach: { data: productList, as: 'product' }">
+							<tr>
+								<td data-bind="text: product.productCode" class = "text-center"></td>
+								<td data-bind="text: product.displayName"></td>
+								<td data-bind="text: product.company.name"></td>
+								<td data-bind="text: product.category.name"></td>
+								<td data-bind="text: product.formattedPackageSellingPrice" class = "text-center"></td>
+								
+								<td>
+									<div class="btn-group pull-right">
+										<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
-		</div>
-		
-		<div class="item">
-			<div class="panel panel-danger">
-			  	<div class="panel-heading">
-			  		<form role="search" class="form-inline">
-				        <div class="input-group pull-right col-md-6 col-xs-6">
-				          	<input type="text" class="form-control" placeholder="Search">
-					        <span class="input-group-btn">
-					        	<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-					        </span>
-				        </div>
-			      	</form>
-			      	<br>
-			      	<h3 class="panel-title col-xs-4">PROMOS</h3>
-			      	<br>
-			  	</div>
-			  	
-			  	<div class="panel-body">
-			  		<table>
-			  			<thead>
-			  				<tr>
-			  					<th>Name</th>
-			  					<th>Name</th>
-			  				</tr>
-			  			</thead>
-			  			
-			  			<tbody>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  			</tbody>
-			  		</table>
-			  	</div>
-			</div>
-		</div>
-		
-	  	<div class="item">
-			<div class="panel panel-success">
-			  	<div class="panel-heading">
-			  		<h3 class="panel-title">ABOUT US</h3>
-			  	</div>
-			  	
-			  	<div class="panel-body">
-			  		<table>
-			  			<thead>
-			  				<tr>
-			  					<th>Name</th>
-			  					<th>Name</th>
-			  				</tr>
-			  			</thead>
-			  			
-			  			<tbody>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  				<tr><th>Test</th><th>Test</th></tr>
-			  			</tbody>
-			  		</table>
-			  	</div>
-			</div>
-		</div>
+	  	</div>
+	</div>
+	<!-- /ko -->
+	
+	<div class="panel panel-success">
+	  	<div class="panel-heading">
+	  		<h3 class="panel-title">ABOUT US</h3>
+	  	</div>
+	  	
+	  	<div class="panel-body">
+	  		<p>About Prime Pad Industrial Corporation</p>
+	  	</div>
 	</div>
 </div>
 

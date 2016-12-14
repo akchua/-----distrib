@@ -22,6 +22,8 @@ public interface ClientOrderHandler {
 	
 	ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	
+	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
+	
 	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	
 	ResultBean addClientOrder();
@@ -33,6 +35,8 @@ public interface ClientOrderHandler {
 	ResultBean acceptClientOrder(Long clientOrderId, Warehouse warehouse);
 	
 	ResultBean adjustAndAcceptClientOrder(Long clientOrderId, Warehouse warehouse);
+	
+	ResultBean payClientOrder(Long clientOrderId);
 	
 	ResultBean removeClientOrder(Long clientOrderId);
 	

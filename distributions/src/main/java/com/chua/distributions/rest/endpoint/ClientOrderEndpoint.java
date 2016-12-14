@@ -53,6 +53,14 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/receivedlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
+			@QueryParam("warehouse") Warehouse warehouse) {
+		return clientOrderHandler.getReceivedClientOrderObjectList(pageNumber, warehouse);
+	}
+	
+	@GET
 	@Path("/paidlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
@@ -104,6 +112,13 @@ public class ClientOrderEndpoint {
 	public ResultBean adjustAndAcceptClientOrder(@FormParam("clientOrderId") Long clientOrderId,
 			@FormParam("warehouse") Warehouse warehouse) {
 		return clientOrderHandler.adjustAndAcceptClientOrder(clientOrderId, warehouse);
+	}
+	
+	@POST
+	@Path("/pay")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean payClientOrder(@FormParam("clientOrderId") Long clientOrderId) {
+		return clientOrderHandler.payClientOrder(clientOrderId);
 	}
 	
 	@POST

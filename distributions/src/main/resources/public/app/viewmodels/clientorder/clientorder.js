@@ -35,8 +35,11 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	var self = this;
     	
     	clientOrderService.addClientOrder().done(function(result) {
-    		app.showMessage(result.message);
-    		self.refreshClientOrderList();
+    		if(result.success) {
+    			router.navigate('#clientorderpage/' + result.message);
+    		} else {
+    			app.showMessage(result.message);
+    		}
     	});
     };
     

@@ -70,6 +70,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 	
 	@Override
+	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
+		return clientOrderService.findAllReceivedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	}
+	
+	@Override
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
@@ -95,7 +100,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.insert(clientOrder) != null);
 				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+					result.setMessage(clientOrder.getId() + "");
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
@@ -241,6 +246,33 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		
 		return result;
 	}
+	
+	@Override
+	public ResultBean payClientOrder(Long clientOrderId) {
+		final ResultBean result;
+		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
+		
+		if(clientOrder != null) {
+			if(clientOrder.getStatus().equals(Status.RECEIVED)) {
+				clientOrder.setStatus(Status.PAID);
+				
+				result = new ResultBean();
+				result.setSuccess(clientOrderService.update(clientOrder));
+				if(result.getSuccess()) {
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " finalized and received payment of Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to accept payment of order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+		}
+		
+		return result;
+	}
 
 	@Override
 	public ResultBean removeClientOrder(Long clientOrderId) {
@@ -269,7 +301,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 						Html.line(" You are not authorized to remove order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 		}
 		
 		return result;

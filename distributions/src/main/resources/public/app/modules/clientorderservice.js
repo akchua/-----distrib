@@ -40,6 +40,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getReceivedClientOrderList: function(currentPage, warehouse) {
+			return $.ajax({
+				url: '/services/clientorder/receivedlist',
+				data: {
+					pageNumber: currentPage - 1,
+					warehouse: warehouse
+				}
+			});
+		},
+		
 		getPaidClientOrderList: function(currentPage, warehouse) {
 			return $.ajax({
 				url: '/services/clientorder/paidlist',
@@ -96,6 +106,16 @@ define(['jquery'], function ($) {
     			data: {
     				clientOrderId: clientOrderId,
     				warehouse: warehouse
+    			}
+    		});
+    	},
+    	
+    	payClientOrder: function(clientOrderId) {
+    		return $.ajax({
+    			url: '/services/clientorder/pay',
+    			method: 'POST',
+    			data: {
+    				clientOrderId: clientOrderId
     			}
     		});
     	},

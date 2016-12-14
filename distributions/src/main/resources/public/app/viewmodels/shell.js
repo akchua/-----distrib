@@ -22,6 +22,10 @@
    	  	}
    	];
 	
+	var paymentroute = [
+  	    { route: 'payment', moduleId: 'viewmodels/payment/payment', title: 'Payments', nav: true, hash: '#payment' }
+  	];
+	
 	var purchaseorderroute = [
 	    { route: 'purchaseorder', moduleId: 'viewmodels/purchaseorder/purchaseorder', title: 'Purchase Order', nav: true, hash: '#purchaseorder' },
 	    { route: 'purchaseorderpage/:id', moduleId: 'viewmodels/purchaseorder/purchaseorderpage', title: 'Purchase Order', nav: false, hash: '#purchaseorderpage' }
@@ -75,6 +79,7 @@
 	    			self.routes = self.routes.concat(userroute);
 	    		case 'MANAGER':
 	    			self.routes = self.routes.concat(manageroute);
+	    			self.routes = self.routes.concat(paymentroute);
 	    		case 'SECRETARY':
 	    			self.routes = self.routes.concat(purchaseorderroute);
 	    			self.routes = self.routes.concat(requestroute);
