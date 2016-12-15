@@ -10,9 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Warehouse {
 
-	MAIN("Main", "Temp Address"),
-	
-	TEST("Test", "Test Address");
+	MAIN("Main", "P01, B06, L28 Beverly Place Sabanilla, Mexico, Pampanga");
 	
 	private String displayName;
 	
