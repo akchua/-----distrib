@@ -35,6 +35,11 @@ public class ProductServiceImpl
 	}
 	
 	@Override
+	public boolean isExistsByProductCode(String productCode) {
+		return dao.findByProductCode(productCode) != null;
+	}
+	
+	@Override
 	public Product findByDisplayName(String displayName) {
 		return dao.findByDisplayName(displayName);
 	}

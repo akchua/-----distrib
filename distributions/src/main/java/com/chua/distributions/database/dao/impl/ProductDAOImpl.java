@@ -57,4 +57,13 @@ public class ProductDAOImpl
 		
 		return findUniqueResult(null, null, null, conjunction);
 	}
+
+	@Override
+	public Product findByProductCode(String productCode) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("productCode", productCode));
+		
+		return findUniqueResult(null, null, null, conjunction);
+	}
 }

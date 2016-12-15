@@ -65,6 +65,8 @@ public class ProductHandlerImpl implements ProductHandler {
 			final String displayName = getDisplayName(productForm);
 			if(productService.isExistsByDisplayName(displayName)) {
 				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Product name already exists.")));
+			} else if(productService.isExistsByProductCode(productForm.getProductCode())) {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Product code already exists.")));
 			} else {
 				final Product product = new Product();
 				product.setDisplayName(displayName);
