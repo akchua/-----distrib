@@ -38,7 +38,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 
 	@Override
 	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemObjectList(Integer pageNumber, Long purchaseOrderId) {
-		return purchaseOrderItemService.findAllWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), purchaseOrderId);
+		return purchaseOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseOrderId);
 	}
 
 	@Override

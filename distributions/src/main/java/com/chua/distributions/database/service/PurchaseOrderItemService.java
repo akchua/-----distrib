@@ -11,5 +11,5 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface PurchaseOrderItemService extends Service<PurchaseOrderItem, Long>, PurchaseOrderItemPrototype {
 
-	ObjectList<PurchaseOrderItem> findAllWithPagingOrderByLastUpdate(int pageNumber, int resultsPerPage, Long purchaseOrderId);
+	ObjectList<PurchaseOrderItem> findAllWithPaging(int pageNumber, int resultsPerPage, Long purchaseOrderId);
 }

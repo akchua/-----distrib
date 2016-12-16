@@ -38,7 +38,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 
 	@Override
 	public ObjectList<ClientOrderItem> getClientOrderItemObjectList(Integer pageNumber, Long clientOrderId) {
-		return clientOrderItemService.findAllWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), clientOrderId);
+		return clientOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), clientOrderId);
 	}
 
 	@Override

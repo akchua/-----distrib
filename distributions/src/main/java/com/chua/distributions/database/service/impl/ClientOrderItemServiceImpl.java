@@ -2,7 +2,6 @@ package com.chua.distributions.database.service.impl;
 
 import java.util.List;
 
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +26,9 @@ public class ClientOrderItemServiceImpl
 	}
 
 	@Override
-	public ObjectList<ClientOrderItem> findAllWithPagingOrderByLastUpdate(int pageNumber, int resultsPerPage,
+	public ObjectList<ClientOrderItem> findAllWithPaging(int pageNumber, int resultsPerPage,
 			Long clientOrderId) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, clientOrderId, new Order[] { Order.desc("updatedOn") });
+		return dao.findAllWithPaging(pageNumber, resultsPerPage, clientOrderId);
 	}
 
 	@Override
