@@ -78,7 +78,7 @@ public class UserHandlerImpl implements UserHandler {
 					result = new ResultBean();
 					result.setSuccess(userService.insert(user) != null);
 					if(result.getSuccess()) {
-						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created account of Mr./Ms. " + Html.text(Color.BLUE, user.getFirstName() + " " + user.getLastName()) + ". Thank you."));
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created account of " + Html.text(Color.BLUE, user.getFormattedName()) + ". Thank you."));
 					} else {
 						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 					}
@@ -206,7 +206,7 @@ public class UserHandlerImpl implements UserHandler {
 					MailConstants.DEFAULT_EMAIL,
 					"Prime Pad Reset Password",
 					"Hi, " + user.getFirstName() + " " + user.getLastName()
-						+ "\n\n\nUsername - " + user.getUsername()
+						+ "\n\nUsername - " + user.getUsername()
 						+ "\nPasswrod - " + randomPassword
 						+ "\nPlease login and change your password as soon as possible.",
 					null));
@@ -214,7 +214,7 @@ public class UserHandlerImpl implements UserHandler {
 			if(result.getSuccess()) {
 				UserContextHolder.refreshUser(user);
 				result.setMessage(Html.line(Color.GREEN, "Password successfully reset.") 
-						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "and " + Html.text(Color.BLUE, MailConstants.DEFAULT_EMAIL) + "."));
+						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "and " + Html.text(Color.BLUE, MailConstants.SMTP_FROM_ADDRESS) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}

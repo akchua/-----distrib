@@ -17,5 +17,5 @@ public class MailConstants {
 	
 	public static final String SMTP_PASSWORD = "Pr1m3pad@official";
 	
-	public static final String DEFAULT_EMAIL = "pat_great@yahoo.com";
+	public static final String DEFAULT_EMAIL = "pat_great@yahoo.com, firecrash@gmail.com, jchua3508@gmail.com";
 }
