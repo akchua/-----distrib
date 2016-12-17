@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrder;
@@ -169,7 +170,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
 				PurchaseOrderFormatter pof = new PurchaseOrderFormatter(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()));
-				final String filePath = "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".txt";
+				final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".txt";
 				TextWriter.write(pof.getFormat(), filePath);
 				boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 						null,

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -121,7 +122,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					}
 					
 					// CREATING PRINTABLE DISPATCH FILE
-					final String filePath = "files/dispatch/Dispatch_#" + dispatch.getId() + ".txt";
+					final String filePath = FileConstants.FILE_HOME + "files/dispatch/Dispatch_#" + dispatch.getId() + ".txt";
 					TextWriter.write(printableDispatch, filePath);
 					//
 					
