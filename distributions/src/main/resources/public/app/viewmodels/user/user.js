@@ -56,6 +56,7 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
+				app.showMessage('Resetting password. Please wait a while....');
 				userService.resetPassword(userId).done(function(result) {
 					self.refreshUserList();
 					app.showMessage(result.message);

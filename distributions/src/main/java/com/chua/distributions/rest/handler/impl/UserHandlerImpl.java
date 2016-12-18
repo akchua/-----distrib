@@ -214,7 +214,7 @@ public class UserHandlerImpl implements UserHandler {
 			if(result.getSuccess()) {
 				UserContextHolder.refreshUser(user);
 				result.setMessage(Html.line(Color.GREEN, "Password successfully reset.") 
-						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "and " + Html.text(Color.BLUE, MailConstants.SMTP_FROM_ADDRESS) + "."));
+						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}

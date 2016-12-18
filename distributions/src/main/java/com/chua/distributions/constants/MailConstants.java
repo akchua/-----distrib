@@ -11,9 +11,9 @@ public class MailConstants {
 	
 	public static final String SMTP_PORT = "465";
 	
-	public static final String SMTP_FROM_ADDRESS = "primepad.official@gmail.com";
+	public static final String SMTP_FROM_ADDRESS = "primepad.pampanga@gmail.com";
 	
-	public static final String SMTP_USERNAME = "primepad.official@gmail.com";
+	public static final String SMTP_USERNAME = "primepad.pampanga@gmail.com";
 	
 	public static final String SMTP_PASSWORD = "Pr1m3pad@official";
 	
