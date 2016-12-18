@@ -73,7 +73,7 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     PurchaseOrderPage.prototype.submit = function() {
     	var self = this;
     	
-    	app.showMessage('<p>Are you sure you want to submit Purchase Order of <span class="text-primary">ID #' + self.purchaseOrder.id + '</span>?</p>'
+    	app.showMessage('<p>Are you sure you want to submit Purchase Order of <span class="text-primary">ID #' + self.purchaseOrder.id() + '</span>?</p>'
     			+ '<p class="text-danger">Once submitted only the manager can edit the order.</p>',
 				'<p class="text-primary">Submit for Evaluation</p>',
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])

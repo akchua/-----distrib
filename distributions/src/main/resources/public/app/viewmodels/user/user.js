@@ -51,7 +51,7 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
     	var self = this;
     	
     	app.showMessage('<p>Are you sure you want to reset password of User <span class="text-primary">' + firstName + ' ' + lastName + '</span>?</p>'
-    				+ '<p>The new password will be sent to the user\'s email and a copy will be sent to <span class="text-primary">jchua3508@gmail.com</span>.</p>',
+    				+ '<p>The new password will be sent to the user\'s email.</p>',
 				'<p class="text-danger">Confirm Reset Password</p>',
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
