@@ -30,10 +30,10 @@ public class PurchaseOrderFormatter {
 		
 		format += StringHelper.center("PURCHASE ORDER", 105) + "\n";
 		format += "\n";
-		format += String.format("%20s", "SUPPLIER: ") + purchaseOrder.getCompany().getName() + "\n";
-		format += String.format("%20s", "DELIVER TO: ") + BusinessConstants.BUSINESS_NAME + "\n";
-		format += String.format("%20s", "ADDRESS: ") + purchaseOrder.getWarehouse().getAddress() + "\n";
-		format += String.format("%20s", "Date: ") + new SimpleDateFormat("MM/dd/yyyy hh:mm aa").format(new Date()) + "\n";
+		format += String.format("%15s", "SUPPLIER: ") + purchaseOrder.getCompany().getName() + "\n";
+		format += String.format("%15s", "DELIVER TO: ") + BusinessConstants.BUSINESS_NAME + "\n";
+		format += String.format("%15s", "ADDRESS: ") + purchaseOrder.getWarehouse().getAddress() + "\n";
+		format += String.format("%15s", "Date: ") + new SimpleDateFormat("MM/dd/yyyy hh:mm aa").format(new Date()) + "\n";
 		format += "\n";
 		format += " Purchase Order #" + purchaseOrder.getId() + "\n";
 		format += " "; for(int i = 0; i < 106; i++) format += "-"; format += "\n";
@@ -55,6 +55,8 @@ public class PurchaseOrderFormatter {
 		format += String.format("%85s", "Total:") + StringHelper.center(purchaseOrder.getFormattedGrossTotal(), 20) + "\n";
 		format += "\n";
 		format += String.format("%20s", "Prepared By: ") + purchaseOrder.getCreator().getFormattedName();
+		format += "\n";
+		format += String.format("%20s", "Approved By: ") + BusinessConstants.BUSINESS_CHIEF_OFFICER;
 		
 		return format;
 	}

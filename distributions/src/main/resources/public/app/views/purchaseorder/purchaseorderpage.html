@@ -46,7 +46,7 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th class = "text-center col-lg-3 col-md-3 col-xs-4">Quantity</th>
+						<th class = "text-center col-lg-1 col-md-1 col-xs-2">Quantity</th>
 						<th class = "text-center">Code</th>
 						<th>Name</th>
 						<th class = "text-center">Unit Price</th>
@@ -60,9 +60,9 @@
 						<td>
 							<div class="input-group">
 								<input data-bind="value: purchaseOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(purchaseOrderItem.id, purchaseOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">&amp</span>
+								<!-- <span class="input-group-addon">&amp</span>
 								<input data-bind="value: purchaseOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(purchaseOrderItem.id, purchaseOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">of <span data-bind="text: purchaseOrderItem.packaging"></span></span>
+								<span class="input-group-addon">of <span data-bind="text: purchaseOrderItem.packaging"></span></span> -->
 							</div>
 						</td>
 						<td data-bind="text: purchaseOrderItem.productCode" class = "text-center"></td>

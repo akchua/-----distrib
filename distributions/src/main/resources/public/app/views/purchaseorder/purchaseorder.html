@@ -46,7 +46,7 @@
 								<button data-bind="click: function() { $parent.edit(purchaseOrder.id) } " type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
 								<!-- /ko -->
 								<!-- ko if: purchaseOrder.status.name == 'SUBMITTED' -->
-								<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) } " type="button" class="btn btn-success btn-sm"><i class="fa fa-send"></i></button>
+								<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) }, enable: $parent.enableSend " type="button" class="btn btn-success btn-sm"><i class="fa fa-send"></i></button>
 								<!-- /ko -->
 								<!-- ko if: purchaseOrder.status.name == 'ACCEPTED' -->
 								<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm"><i class="fa fa-money"></i></button>

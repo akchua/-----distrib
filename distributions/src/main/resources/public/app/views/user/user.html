@@ -37,7 +37,7 @@
 						<td>
 							<div class="btn-group pull-right">
 								<button data-bind="click: function() { $parent.view(user.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
-								<button data-bind="click: function() { $parent.resetPassword(user.id, user.lastName, user.firstName) } " type="button" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i></button>
+								<button data-bind="click: function() { $parent.resetPassword(user.id, user.lastName, user.firstName) }, enable: $parent.enableReset " type="button" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i></button>
 								<button data-bind="click: function() { $parent.remove(user.id, user.lastName, user.firstName) }" type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
 							</div>
 						</td>

@@ -5,6 +5,8 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
     	
     	this.searchKey = ko.observable();
     	
+    	this.enableReset = ko.observable(true);
+    	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
 		this.currentPage = ko.observable(1);
@@ -56,10 +58,11 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
-				app.showMessage('Resetting password. Please wait a while....');
+				self.enableReset(false);
 				userService.resetPassword(userId).done(function(result) {
 					self.refreshUserList();
 					app.showMessage(result.message);
+					self.enableReset(true);
 				});
 			}
 		})

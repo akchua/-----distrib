@@ -4,6 +4,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.clientOrderList = ko.observable();
     	
     	this.showAccepted = ko.observable(false);
+    	this.enableAccept = ko.observable(true);
 
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -75,9 +76,11 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
+				self.enableAccept(false);
 				clientOrderService.removeClientOrder(clientOrderId).done(function(result) {
 					self.refreshClientOrderList();
 					app.showMessage(result.message);
+					self.enableAccept(true);
 				});
 			}
 		})

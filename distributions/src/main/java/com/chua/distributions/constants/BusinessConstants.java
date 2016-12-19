@@ -9,5 +9,7 @@ public class BusinessConstants {
 
 	public static final String BUSINESS_NAME = "Prime Pad Industrial Corporation";
 	
+	public static final String BUSINESS_CHIEF_OFFICER = "Ms. Noemi Pineda";
+	
 	public static final Float REGULAR_VAT = 12.0f;
 }

@@ -8,6 +8,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	this.companyId = ko.observable();
     	this.warehouse = ko.observable();
     	
+    	this.enableSend = ko.observable(true);
+    	
     	this.showPaid = ko.observable(false);
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
@@ -60,10 +62,11 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
-				app.showMessage('Sending Order. Please wait a while....');
+				self.enableSend(false);
 				purchaseOrderService.sendPurchaseOrder(purchaseOrderId).done(function(result) {
 					self.refreshPurchaseOrderList();
 					app.showMessage(result.message);
+					self.enableSend(true);
 				});
 			}
 		})

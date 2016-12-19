@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.Product;
@@ -24,6 +25,7 @@ import com.chua.distributions.enums.UserType;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
+import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.format.QuantityFormatter;
 
@@ -234,7 +236,14 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			clientOrder.setWarehouse(warehouse);
 			
 			result = new ResultBean();
-			result.setSuccess(clientOrderService.update(clientOrder));
+			result.setSuccess(clientOrderService.update(clientOrder) &&
+					EmailUtil.send(clientOrder.getCreator().getEmailAddress(), 
+							null,
+							MailConstants.DEFAULT_EMAIL,
+							"Order Accepted",
+							"Thank you for ordering at Prime Pad."
+							+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
+							null));
 			if(result.getSuccess()) {
 				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted and removed Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + " from stock."));
 			} else {

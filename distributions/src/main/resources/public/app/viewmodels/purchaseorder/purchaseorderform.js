@@ -19,7 +19,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	var self = this;
     	
     	self.purchaseOrderFormModel.id(self.purchaseOrder.id);
-    	self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse);
+    	if(self.purchaseOrder.warehouse) self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse.name);
     	
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
@@ -28,7 +28,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	
     	purchaseOrderService.getWarehouseList().done(function(warehouseList) {
     		self.warehouseList(warehouseList);
-    		self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse);
+    		if(self.purchaseOrder.warehouse) self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse.name);
     	});
     };
     
