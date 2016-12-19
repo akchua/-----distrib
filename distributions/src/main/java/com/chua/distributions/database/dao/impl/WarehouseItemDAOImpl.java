@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.WarehouseItemDAO;
@@ -38,7 +39,7 @@ public class WarehouseItemDAOImpl
 			conjunction.add(Restrictions.eq("warehouse", warehouse));
 		}
 		
-		return findAllByCriterion(pageNumber, resultsPerPage, new String[] { "product" }, new String[] { "prod" }, new int[] { 0 }, orders, conjunction);
+		return findAllByCriterion(pageNumber, resultsPerPage, new String[] { "product" }, new String[] { "prod" }, new JoinType[] { JoinType.INNER_JOIN }, orders, conjunction);
 	}
 	
 	@Override
