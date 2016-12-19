@@ -2,7 +2,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 		function (dialog, app, ko, productService, ProductView) {
     var WarehouseView = function(warehouse) {
     	this.warehouse = warehouse;
-    	this.productList = ko.observable();
+    	this.warehouseItemList = ko.observable();
     	
     	this.searchKey = ko.observable();
     	
@@ -17,21 +17,21 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	
     	self.currentPage(1);
 		self.currentPageSubscription = self.currentPage.subscribe(function() {
-			self.refreshProductList();
+			self.refreshWarehouseItemList();
 		});
 		
-		self.refreshProductList();
+		self.refreshWarehouseItemList();
     };
     
     WarehouseView.show = function(warehouse) {
     	return dialog.show(new WarehouseView(warehouse));
     };
     
-    WarehouseView.prototype.refreshProductList = function() {
+    WarehouseView.prototype.refreshWarehouseItemList = function() {
     	var self = this;
     	
-    	productService.getProductList(self.currentPage(), self.searchKey(), null, null, self.warehouse, false).done(function(data) {
-    		self.productList(data.list);
+    	productService.getWarehouseItemList(self.currentPage(), self.warehouse, false).done(function(data) {
+    		self.warehouseItemList(data.list);
     		self.totalItems(data.total);
     	});
     };
@@ -48,7 +48,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	var self = this;
     	
     	self.currentPage(1);
-    	self.refreshProductList();
+    	self.refreshWarehouseItemList();
     };
     
     WarehouseView.prototype.cancel = function() {

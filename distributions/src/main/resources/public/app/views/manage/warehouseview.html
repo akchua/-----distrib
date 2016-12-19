@@ -26,20 +26,18 @@
 							<th>Name</th>
 							<th class = "text-center">Net Price</th>
 							<th class = "text-center">Stock Here</th>
-							<th class = "text-center">All Stock</th>
 						</tr>
 					</thead>
 					
-					<tbody data-bind="foreach: { data: productList, as: 'product' }">
+					<tbody data-bind="foreach: { data: warehouseItemList, as: 'warehouseItem' }">
 						<tr>
-							<td data-bind="text: product.displayName"></td>
-							<td data-bind="text: product.formattedPackageNetPrice" class = "text-center"></td>
-							<td data-bind="text: product.formattedStockCountCurrent" class = "text-center"></td>
-							<td data-bind="text: product.formattedStockCountAll" class = "text-center"></td>
+							<td data-bind="text: warehouseItem.product.displayName"></td>
+							<td data-bind="text: warehouseItem.product.formattedPackageNetPrice" class = "text-center"></td>
+							<td data-bind="text: warehouseItem.formattedStockCount" class = "text-center"></td>
 							
 							<td>
 								<div class="btn-group pull-right">
-									<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
+									<button data-bind="click: function() { $parent.view(warehouseItem.product.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
 								</div>
 							</td>
 						</tr>

@@ -55,6 +55,11 @@ public class ProductHandlerImpl implements ProductHandler {
 		for(Product product : objProducts.getList()) setProductStock(product, warehouse);
 		return objProducts;
 	}
+	
+	@Override
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, Warehouse warehouse) {
+		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	}
 
 	@Override
 	public ResultBean createProduct(ProductFormBean productForm) {

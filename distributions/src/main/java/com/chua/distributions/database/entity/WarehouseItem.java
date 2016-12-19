@@ -17,6 +17,8 @@ import org.hibernate.annotations.Where;
 
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.serializer.json.ProductSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -33,6 +35,7 @@ public class WarehouseItem extends BaseObject {
 	
 	private Warehouse warehouse;
 	
+	@JsonSerialize(using = ProductSerializer.class)
 	private Product product;
 	
 	private Integer stockCount;

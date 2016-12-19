@@ -24,6 +24,17 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getWarehouseItemList: function(currentPage, warehouse, async) {
+			return $.ajax({
+				url: '/services/product/warehouseitemlist',
+				async: async,
+				data: {
+					pageNumber: currentPage - 1,
+					warehouse, warehouse
+				}
+			});
+		},
+		
 		saveProduct: function(productFormData) {
     		return $.ajax({
     			url: '/services/product/save',

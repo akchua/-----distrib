@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
@@ -47,6 +48,14 @@ public class ProductEndpoint {
 				@QueryParam("categoryId") Long categoryId,
 				@QueryParam("warehouse") Warehouse warehouse) {
 		return productHandler.getProductObjectList(pageNumber, searchKey, companyId, categoryId, warehouse);
+	}
+	
+	@GET
+	@Path("/warehouseitemlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(@QueryParam("pageNumber") Integer pageNumber, 
+				@QueryParam("warehouse") Warehouse warehouse) {
+		return productHandler.getWarehouseItemObjectList(pageNumber, warehouse);
 	}
 	
 	@POST
