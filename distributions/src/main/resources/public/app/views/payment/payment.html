@@ -18,6 +18,7 @@
 					<tr>
 						<th class = "text-center">ID</th>
 						<th class = "text-center">Last Update</th>
+						<th>Client</th>
 						<th>Dispatcher</th>
 						<th>Warehouse</th>
 						<th class = "text-center">Total Amount</th>
@@ -29,6 +30,7 @@
 					<tr>
 						<td data-bind="text: clientOrder.id" class = "text-center"></td>
 						<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
+						<td data-bind="text: clientOrder.creator.businessName"></td>
 						<td data-bind="text: clientOrder.dispatcher.formattedName"></td>
 						<td data-bind="text: clientOrder.warehouse.displayName + ' - ' + clientOrder.warehouse.address"></td>
 						<td data-bind="text: clientOrder.formattedNetTotal" class = "text-center"></td>
