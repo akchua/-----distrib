@@ -10,7 +10,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Area {
 
-	PAMPANGA("Pampanga", VatType.VAT);
+	PAMPANGA("Pampanga", VatType.VAT),
+	
+	SUBIC("Subic", VatType.NON_VAT),
+	
+	BATAAN("Bataan", VatType.VAT);
 	
 	private final String displayName;
 	
