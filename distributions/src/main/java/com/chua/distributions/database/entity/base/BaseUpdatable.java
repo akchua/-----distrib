@@ -64,7 +64,7 @@ public class BaseUpdatable extends BaseEntity
 	
 	@Transient
 	public String getFormattedUpdatedOn() {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		return dateFormat.format(updatedOn);
 	}
 
@@ -82,7 +82,7 @@ public class BaseUpdatable extends BaseEntity
 	
 	@Transient
 	public String getFormattedCreatedOn() {
-		DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy hh:mm aa");
+		DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
 		return createdOn.toString(dtf);
 	}
 
