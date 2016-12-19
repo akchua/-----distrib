@@ -18,7 +18,7 @@ public interface ProductHandler {
 
 	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
 	
-	ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, Warehouse warehouse);
+	ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse);
 	
 	ResultBean createProduct(ProductFormBean productForm);
 	

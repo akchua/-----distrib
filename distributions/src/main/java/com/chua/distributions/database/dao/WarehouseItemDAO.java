@@ -14,7 +14,7 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface WarehouseItemDAO extends DAO<WarehouseItem, Long>, WarehouseItemPrototype {
 
-	ObjectList<WarehouseItem> findAllWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse);
+	ObjectList<WarehouseItem> findAllWithPaging(int pageNumber, int resultsPerPage, String searchKey, Warehouse warehouse);
 	
-	ObjectList<WarehouseItem> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Warehouse warehouse, Order[] orders);
+	ObjectList<WarehouseItem> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Warehouse warehouse, Order[] orders);
 }

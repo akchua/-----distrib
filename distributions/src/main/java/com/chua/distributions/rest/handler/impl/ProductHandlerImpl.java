@@ -57,8 +57,8 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
-	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, Warehouse warehouse) {
-		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse) {
+		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, warehouse);
 	}
 
 	@Override

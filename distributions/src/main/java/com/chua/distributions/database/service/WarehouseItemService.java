@@ -12,5 +12,5 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface WarehouseItemService extends Service<WarehouseItem, Long>, WarehouseItemPrototype {
 
-	ObjectList<WarehouseItem> findAllWithPagingOrderByProductName(int pageNumber, int resultsPerPage, Warehouse warehouse);
+	ObjectList<WarehouseItem> findAllWithPagingOrderByProductName(int pageNumber, int resultsPerPage, String searchKey, Warehouse warehouse);
 }

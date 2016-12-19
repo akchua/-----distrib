@@ -24,12 +24,13 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getWarehouseItemList: function(currentPage, warehouse, async) {
+		getWarehouseItemList: function(currentPage, searchKey, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/warehouseitemlist',
 				async: async,
 				data: {
 					pageNumber: currentPage - 1,
+					searchKey: searchKey,
 					warehouse, warehouse
 				}
 			});

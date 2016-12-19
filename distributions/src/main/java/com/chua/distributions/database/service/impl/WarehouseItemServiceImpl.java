@@ -29,8 +29,8 @@ public class WarehouseItemServiceImpl
 	
 	@Override
 	public ObjectList<WarehouseItem> findAllWithPagingOrderByProductName(int pageNumber, int resultsPerPage,
-			Warehouse warehouse) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, warehouse, new Order[] { Order.asc("prod.displayName") });
+			String searchKey, Warehouse warehouse) {
+		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, warehouse, new Order[] { Order.asc("prod.displayName") });
 	}
 	
 	@Override

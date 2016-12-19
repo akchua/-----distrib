@@ -54,8 +54,9 @@ public class ProductEndpoint {
 	@Path("/warehouseitemlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<WarehouseItem> getWarehouseItemObjectList(@QueryParam("pageNumber") Integer pageNumber, 
+				@QueryParam("searchKey") String searchKey,
 				@QueryParam("warehouse") Warehouse warehouse) {
-		return productHandler.getWarehouseItemObjectList(pageNumber, warehouse);
+		return productHandler.getWarehouseItemObjectList(pageNumber, searchKey, warehouse);
 	}
 	
 	@POST
