@@ -11,9 +11,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum VatType {
 
-	VAT("VAT", 0.0f),
+	VAT("VAT (" + BusinessConstants.REGULAR_VAT + "%)", 0.0f),
 	
-	NON_VAT("Non-VAT", BusinessConstants.REGULAR_VAT);
+	NON_VAT("Non-VAT (0%)", BusinessConstants.REGULAR_VAT);
 	
 	private final String displayName;
 	

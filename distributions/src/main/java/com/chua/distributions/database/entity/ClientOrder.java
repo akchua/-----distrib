@@ -15,9 +15,8 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import com.chua.distributions.serializer.json.UserSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -32,12 +31,29 @@ public class ClientOrder extends Order {
 
 	public static final String TABLE_NAME = "client_order";
 	
-	private Float lessVat;
-	
 	private Float additionalDiscount;
+	
+	private Float lessVat;
 	
 	@JsonSerialize(using = UserSerializer.class)
 	private User dispatcher;
+	
+	@Basic
+	@Column(name = "additional_discount")
+	public Float getAdditionalDiscount() {
+		return additionalDiscount;
+	}
+	
+	@Transient
+	public Float getAdditionalDiscountAmount() {
+		return super.getNetTotal() * super.getCreator().getDiscount() / 100.0f;
+	}
+	
+	@Transient
+	public String getFormattedAdditionalDiscountAmount() {
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		return "Php " + df.format(getAdditionalDiscountAmount());
+	}
 
 	@Basic
 	@Column(name = "less_vat")
@@ -47,7 +63,7 @@ public class ClientOrder extends Order {
 	
 	@Transient
 	public Float getLessVatAmount() {
-		return super.getNetTotal() * lessVat / 100.0f;
+		return (super.getNetTotal() - getAdditionalDiscountAmount()) * lessVat / (100.0f + lessVat);
 	}
 	
 	@Transient
@@ -60,27 +76,10 @@ public class ClientOrder extends Order {
 		this.lessVat = lessVat;
 	}
 
-	@Basic
-	@Column(name = "additional_discount")
-	public Float getAdditionalDiscount() {
-		return additionalDiscount;
-	}
-	
-	@Transient
-	public Float getAdditionalDiscountAmount() {
-		return (super.getNetTotal() - getLessVatAmount()) * super.getCreator().getDiscount() / 100.0f;
-	}
-	
-	@Transient
-	public String getFormattedAdditionalDiscountAmount() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getAdditionalDiscountAmount());
-	}
-	
 	@Transient
 	@Override
 	public Float getNetTotal() {
-		return super.getNetTotal() - getLessVatAmount() - getAdditionalDiscountAmount();
+		return super.getNetTotal() - getAdditionalDiscountAmount() - getLessVatAmount();
 	}
 	
 	@Transient

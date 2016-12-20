@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
+import com.chua.distributions.enums.VatType;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -50,6 +51,8 @@ public class User extends BaseObject {
 	private Area businessArea;
 	
 	private Float discount;
+	
+	private VatType vatType;
 
 	@Basic
 	@Column(name = "first_name")
@@ -189,5 +192,15 @@ public class User extends BaseObject {
 
 	public void setDiscount(Float discount) {
 		this.discount = discount;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "vat_type", length = 50)
+	public VatType getVatType() {
+		return vatType;
+	}
+
+	public void setVatType(VatType vatType) {
+		this.vatType = vatType;
 	}
 }

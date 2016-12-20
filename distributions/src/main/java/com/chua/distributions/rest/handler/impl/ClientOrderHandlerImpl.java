@@ -96,8 +96,8 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				clientOrder.setDiscountTotal(0.0f);
 				clientOrder.setStatus(Status.CREATING);
 				clientOrder.setWarehouse(null);
-				clientOrder.setLessVat(UserContextHolder.getUser().getBusinessArea().getVatType().getLessVat());
 				clientOrder.setAdditionalDiscount(UserContextHolder.getUser().getDiscount());
+				clientOrder.setLessVat(UserContextHolder.getUser().getVatType().getLessVat());
 				
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.insert(clientOrder) != null);

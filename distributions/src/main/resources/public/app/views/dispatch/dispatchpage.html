@@ -22,7 +22,7 @@
 	<div class="container-fluid">
 		<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Order</button>
 		<!-- ko if: showDispatchButton -->
-		<button data-bind="click: dispatchNow" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-reply"> Dispatch</i></button>
+		<button data-bind="click: dispatchNow, enable: enableDispatch" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-reply"> Dispatch</i></button>
 		<!-- /ko -->
 		<!-- ko ifnot: showDispatchButton -->
 		<div class="col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"></div>

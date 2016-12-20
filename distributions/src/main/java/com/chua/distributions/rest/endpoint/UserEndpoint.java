@@ -21,6 +21,7 @@ import com.chua.distributions.beans.UserFormBean;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
+import com.chua.distributions.enums.VatType;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.UserHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -130,5 +131,12 @@ public class UserEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Area> getAreaList() {
 		return userHandler.getAreaList();
+	}
+	
+	@GET
+	@Path("/vattype")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<VatType> getVatTypeList() {
+		return userHandler.getVatTypeList();
 	}
 }

@@ -20,6 +20,14 @@
 								<p class="help-block">Additional Discount given to this customer.</p>
 							</div>
 						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="vatType">Select Vat Type</label>
+							<div class="controls">
+								<select data-bind="options: vatTypeList, optionsValue: 'name', optionsText: 'displayName', optionsCaption: '-- Select Vat Type --', value: clientSettingsFormModel.vatType" class="form-control select-lg" id="vatType"></select>
+								<p class="help-block">VAT amount charged for this customer.</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

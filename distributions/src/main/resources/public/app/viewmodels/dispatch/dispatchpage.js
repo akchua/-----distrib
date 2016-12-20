@@ -4,6 +4,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     	this.dispatchItemList = ko.observable();
     	
     	this.showDispatchButton = ko.observable(false);
+    	this.enableDispatch = ko.observable(true);
     	
     	this.warehouseEntity = null;
     	
@@ -72,10 +73,11 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
-				app.showMessage('Sending printable dispatch. Please wait a while....')
+				self.enableDispatch(false);
 				dispatchService.dispatch(self.dispatch.id()).done(function(result) {
 					self.refreshDispatchItemList();
 					app.showMessage(result.message);
+					self.enableDispatch(true);
 				});
 			}
 		})

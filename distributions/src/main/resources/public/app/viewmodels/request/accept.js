@@ -6,6 +6,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	this.warehouseList = ko.observable();
     	
+    	this.enableAccept = ko.observable(true);
+    	
     	this.acceptFormModel = {
     		id: ko.observable(),
     		
@@ -34,11 +36,13 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
         clientOrderService.testAcceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(test) {
         	if(test.success) {
+        		self.enableAccept(false);
         		clientOrderService.acceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
         			if(result.success) {
                 		dialog.close(self);	
                 	} 
                 	app.showMessage(result.message);
+                	self.enableAccept(true);
         		});
         	} else if(test.message) {
         		app.showMessage(test.message + '<br/><p>Adjust order to available stocks or Continue as it is?</p>',
@@ -47,19 +51,23 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
         		.then(function(reply) {
         			switch(reply) {
         			case 1:
+        				self.enableAccept(false);
         				clientOrderService.adjustAndAcceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
                 			if(result.success) {
                         		dialog.close(self);	
                         	} 
                         	app.showMessage(result.message);
+                        	self.enableAccept(true);
                 		});
         				break;
         			case 2:
+        				self.enableAccept(false);
         				clientOrderService.acceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
                 			if(result.success) {
-                        		dialog.close(self);	
+                        		dialog.close(self);
                         	} 
                         	app.showMessage(result.message);
+                        	self.enableAccept(true);
                 		});
         				break;
         			case 3:

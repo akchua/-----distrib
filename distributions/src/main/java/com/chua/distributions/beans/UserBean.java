@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
+import com.chua.distributions.enums.VatType;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -82,5 +83,9 @@ public class UserBean extends org.springframework.security.core.userdetails.User
 	
 	public Float getDiscount() {
 		return user.getDiscount();
+	}
+	
+	public VatType getVatType() {
+		return user.getVatType();
 	}
 }

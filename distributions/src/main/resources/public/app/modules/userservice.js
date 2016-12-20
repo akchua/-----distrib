@@ -108,6 +108,12 @@ define(['jquery'], function ($) {
     		return $.ajax({
     			url: '/services/user/area'
     		});
+    	},
+    	
+    	getVatTypeList: function() {
+    		return $.ajax({
+    			url: '/services/user/vattype'
+    		});
     	}
 	};
 });

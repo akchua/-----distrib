@@ -10,6 +10,7 @@ import com.chua.distributions.beans.UserFormBean;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
+import com.chua.distributions.enums.VatType;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -44,4 +45,6 @@ public interface UserHandler {
 	List<UserType> getUserTypeList();
 	
 	List<Area> getAreaList();
+	
+	List<VatType> getVatTypeList();
 }

@@ -20,6 +20,7 @@ import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.UserType;
+import com.chua.distributions.enums.VatType;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.utility.EmailUtil;
@@ -283,6 +284,12 @@ public class UserHandlerImpl implements UserHandler {
 					.collect(Collectors.toList());
 	}
 	
+	@Override
+	public List<VatType> getVatTypeList() {
+		return Stream.of(VatType.values())
+					.collect(Collectors.toList());
+	}
+	
 	private void setUser(User user, UserFormBean userForm) {
 		user.setUsername(userForm.getUsername().trim());
 		user.setFirstName(userForm.getFirstName().trim());
@@ -296,6 +303,7 @@ public class UserHandlerImpl implements UserHandler {
 		user.setUserType(userForm.getUserType() != null ? userForm.getUserType() : UserType.CLIENT);
 		if(user.getItemsPerPage() == null) user.setItemsPerPage(10);
 		if(user.getDiscount() == null) user.setDiscount(0.0f);
+		if(userForm.getBusinessArea() != null && user.getVatType() == null) user.setVatType(userForm.getBusinessArea().getVatType());
 	}
 	
 	private void setSettings(User user, SettingsFormBean settingsForm) {
@@ -304,6 +312,7 @@ public class UserHandlerImpl implements UserHandler {
 	
 	private void setClientSettings(User user, ClientSettingsFormBean clientSettingsForm) {
 		user.setDiscount(clientSettingsForm.getDiscount() != null ? clientSettingsForm.getDiscount() : 0.0f);
+		user.setVatType(clientSettingsForm.getVatType() != null ? clientSettingsForm.getVatType() : VatType.VAT);
 	}
 	
 	private ResultBean validateUserForm(UserFormBean userForm) {
@@ -321,7 +330,7 @@ public class UserHandlerImpl implements UserHandler {
 				userForm.getBusinessArea() == null))) {
 			
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters."));
-		} else if(!userForm.getUsername().trim().matches("^[A-Za-z_]\\w{3,30}$")) {
+		} else if(!userForm.getUsername().trim().matches("^[A-Za-z_]\\w{2,31}$")) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Username!")
 												+ Html.line("Username must be at least 3 to 30 characters and cannot contain white spaces and/or special characters."));
 		} else if(!EmailUtil.validateEmail(userForm.getEmailAddress().trim())) {
@@ -345,7 +354,7 @@ public class UserHandlerImpl implements UserHandler {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters."));
 		} else if(!passwordForm.getPassword().equals(passwordForm.getConfirmPassword())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Confirm password does not match."));
-		} else if(!passwordForm.getPassword().matches("((?=.*\\d)(?=.*[a-zA-Z])\\S{6,20})")) {
+		} else if(!passwordForm.getPassword().matches("((?=.*\\d)(?=.*[a-zA-Z])\\S{5,21})")) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Password!")
 												+ Html.line("Password must be at least 6 to 20 characters and cannot contain white spaces and must be a combination of letters and digits."));
 		} else {
