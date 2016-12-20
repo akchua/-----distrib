@@ -52,6 +52,8 @@ public class User extends BaseObject {
 	
 	private Float discount;
 	
+	private Float markup;
+	
 	private VatType vatType;
 
 	@Basic
@@ -192,6 +194,21 @@ public class User extends BaseObject {
 
 	public void setDiscount(Float discount) {
 		this.discount = discount;
+	}
+
+	@Basic
+	@Column(name = "markup")
+	public Float getMarkup() {
+		return markup;
+	}
+	
+	@Transient
+	public String getFormattedMarkup() {
+		return markup + "%";
+	}
+
+	public void setMarkup(Float markup) {
+		this.markup = markup;
 	}
 
 	@Enumerated(EnumType.STRING)

@@ -303,6 +303,7 @@ public class UserHandlerImpl implements UserHandler {
 		user.setUserType(userForm.getUserType() != null ? userForm.getUserType() : UserType.CLIENT);
 		if(user.getItemsPerPage() == null) user.setItemsPerPage(10);
 		if(user.getDiscount() == null) user.setDiscount(0.0f);
+		if(user.getMarkup() == null) user.setMarkup(0.0f);
 		if(userForm.getBusinessArea() != null && user.getVatType() == null) user.setVatType(userForm.getBusinessArea().getVatType());
 	}
 	
@@ -312,6 +313,7 @@ public class UserHandlerImpl implements UserHandler {
 	
 	private void setClientSettings(User user, ClientSettingsFormBean clientSettingsForm) {
 		user.setDiscount(clientSettingsForm.getDiscount() != null ? clientSettingsForm.getDiscount() : 0.0f);
+		user.setMarkup(clientSettingsForm.getMarkup() != null ? clientSettingsForm.getMarkup() : 0.0f);
 		user.setVatType(clientSettingsForm.getVatType() != null ? clientSettingsForm.getVatType() : VatType.VAT);
 	}
 	

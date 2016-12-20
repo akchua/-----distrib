@@ -85,6 +85,10 @@ public class UserBean extends org.springframework.security.core.userdetails.User
 		return user.getDiscount();
 	}
 	
+	public Float getMarkup() {
+		return user.getMarkup();
+	}
+	
 	public VatType getVatType() {
 		return user.getVatType();
 	}
