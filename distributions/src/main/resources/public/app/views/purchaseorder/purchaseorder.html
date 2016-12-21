@@ -43,17 +43,17 @@
 						<td>
 							<div class="btn-group pull-right">
 								<!-- ko if: purchaseOrder.status.name == 'CREATING' -->
-								<button data-bind="click: function() { $parent.edit(purchaseOrder.id) } " type="button" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button>
+								<button data-bind="click: function() { $parent.edit(purchaseOrder.id) } " type="button" class="btn btn-warning btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
 								<!-- /ko -->
 								<!-- ko if: purchaseOrder.status.name == 'SUBMITTED' -->
-								<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) }, enable: $parent.enableSend " type="button" class="btn btn-success btn-sm"><i class="fa fa-send"></i></button>
+								<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) }, enable: $parent.enableSend " type="button" class="btn btn-success btn-sm" title="Send"><i class="fa fa-send"></i></button>
 								<!-- /ko -->
 								<!-- ko if: purchaseOrder.status.name == 'ACCEPTED' -->
-								<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm"><i class="fa fa-money"></i></button>
+								<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm" title="Pay"><i class="fa fa-money"></i></button>
 								<!-- /ko -->
-								<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm"><i class="fa fa-folder-open"></i></button>
-								<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
-								<button data-bind="click: function() { $parent.remove(purchaseOrder.id) }" type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
+								<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm" title="Open"><i class="fa fa-folder-open"></i></button>
+								<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+								<button data-bind="click: function() { $parent.remove(purchaseOrder.id) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
 							</div>
 						</td>
 					</tr>

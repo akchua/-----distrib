@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.chua</groupId>
   <artifactId>distributions</artifactId>
-  <version>0.2.4.TESTING</version>
+  <version>0.2.5.TESTING</version>
   <packaging>jar</packaging>
   
   <properties>
