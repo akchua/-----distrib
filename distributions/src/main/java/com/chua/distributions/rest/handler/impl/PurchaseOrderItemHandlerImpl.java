@@ -40,6 +40,11 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemObjectList(Integer pageNumber, Long purchaseOrderId) {
 		return purchaseOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseOrderId);
 	}
+	
+	@Override
+	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemByProductObjectList(Integer pageNumber, Long productId) {
+		return purchaseOrderItemService.findByProductWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), productId);
+	}
 
 	@Override
 	public ResultBean addItem(Long productId, Long purchaseOrderId) {

@@ -13,6 +13,8 @@ public interface PurchaseOrderItemHandler {
 
 	ObjectList<PurchaseOrderItem> getPurchaseOrderItemObjectList(Integer pageNumber, Long purchaseOrderId);
 	
+	ObjectList<PurchaseOrderItem> getPurchaseOrderItemByProductObjectList(Integer pageNumber, Long productId);
+	
 	ResultBean addItem(Long productId, Long purchaseOrderId);
 	
 	ResultBean removeItem(Long purchaseOrderItemId);

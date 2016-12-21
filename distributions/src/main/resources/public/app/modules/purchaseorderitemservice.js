@@ -11,6 +11,17 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPurchaseOrderItemByProductList: function(currentPage, productId, async) {
+			return $.ajax({
+				url: '/services/purchaseorderitem/listbyproduct',
+				async: async,
+				data: {
+					pageNumber: currentPage - 1,
+					productId: productId
+				}
+			});
+		},
+		
 		addItem: function(productId, purchaseOrderId) {
 			return $.ajax({
 				url: '/services/purchaseorderitem/additem',

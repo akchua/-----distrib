@@ -10,6 +10,9 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
+import com.chua.distributions.serializer.json.PurchaseOrderSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author  Adrian Jasper K. Chua
  * @version 1.0
@@ -23,6 +26,7 @@ public class PurchaseOrderItem extends OrderItem {
 
 	public static final String TABLE_NAME = "purchase_order_item";
 	
+	@JsonSerialize(using = PurchaseOrderSerializer.class)
 	private PurchaseOrder purchaseOrder;
 
 	@ManyToOne(targetEntity = PurchaseOrder.class, fetch = FetchType.LAZY)

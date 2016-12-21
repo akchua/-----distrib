@@ -1,5 +1,5 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'viewmodels/manage/productview'],
-		function (dialog, app, ko, productService, ProductView) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
+		function (dialog, app, ko, productService, ProductView, ProductHistory) {
     var WarehouseView = function(warehouse) {
     	this.warehouse = warehouse;
     	this.warehouseItemList = ko.observable();
@@ -33,6 +33,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	productService.getWarehouseItemList(self.currentPage(), self.searchKey(), self.warehouse, false).done(function(data) {
     		self.warehouseItemList(data.list);
     		self.totalItems(data.total);
+    	});
+    };
+    
+    WarehouseView.prototype.history = function(productId) {
+    	var self = this;
+    	
+    	productService.getProduct(productId, null).done(function(product) {
+    		ProductHistory.show(product)
     	});
     };
     

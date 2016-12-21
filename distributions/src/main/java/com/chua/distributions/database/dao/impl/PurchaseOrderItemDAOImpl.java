@@ -5,10 +5,12 @@ import java.util.List;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.PurchaseOrderItemDAO;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
+import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -34,6 +36,21 @@ public class PurchaseOrderItemDAOImpl
 		conjunction.add(Restrictions.eq("purchaseOrder.id", purchaseOrderId));
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
+	
+	@Override
+	public ObjectList<PurchaseOrderItem> findByProductWithPagingAndOrder(int pageNumber, int resultsPerPage,
+			Long productId, Order[] orders) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("productId", productId));
+		conjunction.add(Restrictions.eq("purchase.status", Status.PAID));
+		
+		String[] associatedPaths = { "purchaseOrder" };
+		String[] aliasNames = { "purchase" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterion(pageNumber, resultsPerPage, associatedPaths, aliasNames, joinTypes, orders, conjunction);
 	}
 
 	@Override

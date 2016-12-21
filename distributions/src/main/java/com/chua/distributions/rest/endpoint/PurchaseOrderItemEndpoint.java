@@ -33,6 +33,14 @@ public class PurchaseOrderItemEndpoint {
 		return purchaseOrderItemHandler.getPurchaseOrderItemObjectList(pageNumber, purchaseOrderId);
 	}
 	
+	@GET
+	@Path("/listbyproduct")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemByProductObjectList(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("productId") Long productId) {
+		return purchaseOrderItemHandler.getPurchaseOrderItemByProductObjectList(pageNumber, productId);
+	}
+	
 	@POST
 	@Path("/additem")
 	@Produces({ MediaType.APPLICATION_JSON })

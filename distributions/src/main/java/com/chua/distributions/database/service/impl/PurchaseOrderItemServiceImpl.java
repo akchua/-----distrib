@@ -2,6 +2,7 @@ package com.chua.distributions.database.service.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,12 @@ public class PurchaseOrderItemServiceImpl
 	public ObjectList<PurchaseOrderItem> findAllWithPaging(int pageNumber, int resultsPerPage,
 			Long purchaseOrderId) {
 		return dao.findAllWithPaging(pageNumber, resultsPerPage, purchaseOrderId);
+	}
+	
+	@Override
+	public ObjectList<PurchaseOrderItem> findByProductWithPagingOrderByLastUpdate(int pageNumber, int resultsPerPage,
+			Long productId) {
+		return dao.findByProductWithPagingAndOrder(pageNumber, resultsPerPage, productId, new Order[] { Order.desc("updatedOn") });
 	}
 
 	@Override
