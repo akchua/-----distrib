@@ -24,6 +24,8 @@
 						<th>Email Address</th>
 						<th>Contact Number</th>
 						<th class = "text-center">Discount</th>
+						<th class = "text-center">Markup</th>
+						<th class = "text-center">Vat Type</th>
 					</tr>
 				</thead>
 				
@@ -34,6 +36,8 @@
 						<td data-bind="text: client.emailAddress"></td>
 						<td data-bind="text: client.contactNumber"></td>
 						<td data-bind="text: client.formattedDiscount" class = "text-center"></td>
+						<td data-bind="text: client.formattedMarkup" class = "text-center"></td>
+						<td data-bind="text: client.vatType.displayName" class = "text-center"></td>
 						
 						<td>
 							<div class="btn-group pull-right">

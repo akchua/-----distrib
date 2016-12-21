@@ -20,7 +20,7 @@ public enum Status {
 	
 	DISPATCHED("Dispatched", Integer.valueOf(4)),
 	
-	RECEIVED("Received", Integer.valueOf(5)),
+	RECEIVED("Delivered", Integer.valueOf(5)),
 	
 	PAID("Paid", Integer.valueOf(6));
 	

@@ -257,8 +257,8 @@ public class Product extends BaseObject {
 		if(stockCountCurrent != null) {
 			int packageCount = stockCountCurrent / packaging;
 			int pieceCount = stockCountCurrent % packaging;
-			if(packageCount > 0) formattedStockCount += packageCount + "";
-			if(pieceCount > 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
+			if(packageCount != 0) formattedStockCount += packageCount + "";
+			if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
 			if(formattedStockCount.equals("")) formattedStockCount += "0";
 		}
 		
@@ -281,8 +281,8 @@ public class Product extends BaseObject {
 		if(stockCountAll != null) {
 			int packageCount = stockCountAll / packaging;
 			int pieceCount = stockCountAll % packaging;
-			if(packageCount > 0) formattedStockCount += packageCount + "";
-			if(pieceCount > 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
+			if(packageCount != 0) formattedStockCount += packageCount + "";
+			if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
 			if(formattedStockCount.equals("")) formattedStockCount += "0";
 		}
 		

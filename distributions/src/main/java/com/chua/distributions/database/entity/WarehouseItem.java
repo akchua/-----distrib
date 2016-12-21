@@ -74,8 +74,8 @@ public class WarehouseItem extends BaseObject {
 		
 		int packageCount = stockCount / product.getPackaging();
 		int pieceCount = stockCount % product.getPackaging();
-		if(packageCount > 0) formattedStockCount += packageCount + "";
-		if(pieceCount > 0) formattedStockCount += " & " + pieceCount + "/" + product.getPackaging();
+		if(packageCount != 0) formattedStockCount += packageCount + "";
+		if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + product.getPackaging();
 		if(formattedStockCount.equals("")) formattedStockCount += "0";
 		
 		return formattedStockCount;

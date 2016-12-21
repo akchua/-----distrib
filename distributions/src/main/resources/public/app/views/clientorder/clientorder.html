@@ -33,7 +33,9 @@
 						
 						<td>
 							<div class="btn-group pull-right">
+								<!-- ko if: (clientOrder.status.name == 'CREATING' || clientOrder.status.name == 'SUBMITTED' ) -->
 								<button data-bind="click: function() { $parent.open(clientOrder.id) } "type="button" class="btn btn-primary btn-sm"><i class="fa fa-folder-open"></i></button>
+								<!-- /ko -->
 								<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></button>
 								<button data-bind="click: function() { $parent.remove(clientOrder.id) }" type="button" class="btn btn-danger btn-sm"><i class="fa fa-times"></i></button>
 							</div>
