@@ -241,7 +241,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 							null,
 							MailConstants.DEFAULT_EMAIL,
 							"Order Accepted",
-							"Thank you for ordering at Prime Pad."
+							"Thank you " + clientOrder.getCreator().getFormattedName() + "(" + clientOrder.getCreator().getBusinessName() + ") for ordering at Prime Pad."
 							+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
 							null));
 			if(result.getSuccess()) {
