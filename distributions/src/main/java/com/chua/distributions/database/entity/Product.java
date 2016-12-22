@@ -15,6 +15,8 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
+import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.serializer.json.CategorySerializer;
 import com.chua.distributions.serializer.json.CompanySerializer;
@@ -211,14 +213,21 @@ public class Product extends BaseObject {
 	}
 	
 	@Transient
-	public Float getPackageSellingPrice() {
-		return Math.round(sellingPrice * packaging * 100.0f) / 100.0f;
+	public Float getNetSellingPrice() {
+		final UserBean currentUser = UserContextHolder.getUser();
+		if(currentUser.getMarkup() != null && currentUser.getMarkup() != 0) return sellingPrice * (100.0f + currentUser.getMarkup()) / 100.0f;
+		else return sellingPrice;
 	}
 	
 	@Transient
-	public String getFormattedPackageSellingPrice() {
+	public Float getPackageNetSellingPrice() {
+		return Math.round(getNetSellingPrice() * packaging * 100.0f) / 100.0f;
+	}
+	
+	@Transient
+	public String getFormattedPackageNetSellingPrice() {
 		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getPackageSellingPrice());
+		return "Php " + df.format(getPackageNetSellingPrice());
 	}
 
 	public void setSellingPrice(Float sellingPrice) {
@@ -233,12 +242,12 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public Float getProfitAmount() {
-		return Math.round((getNetPrice() - grossPrice) * 100.0f) / 100.0f;
+		return Math.round((getNetSellingPrice() - getNetPrice()) * 100.0f) / 100.0f;
 	}
 	
 	@Transient
 	public Float getPackageProfitAmount() {
-		return Math.round((getPackageSellingPrice() - getPackageNetPrice()) * 100.0f) / 100.0f;
+		return Math.round(getProfitAmount() * packaging * 100.0f) / 100.0f;
 	}
 
 	public void setPercentProfit(Float percentProfit) {

@@ -12,7 +12,12 @@
 				<thead>
 					<tr>
 						<th class = "text-center">ID</th>
+						<!-- ko ifnot: showAccepted -->
 						<th class = "text-center">Request Date</th>
+						<!-- /ko -->
+						<!-- ko if: showAccepted -->
+						<th class = "text-center">Req/Accept Date</th>
+						<!-- /ko -->
 						<th>Client</th>
 						<th>Area</th>
 						<th>Warehouse</th>
@@ -24,7 +29,7 @@
 					<tr>
 						<td data-bind="text: clientOrder.id" class = "text-center"></td>
 						<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
-						<td><a data-bind="text: clientOrder.creator.formattedName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
+						<td><a data-bind="text: clientOrder.creator.businessName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
 						<td data-bind="text: clientOrder.creator.businessArea.displayName"></td>
 						<td>
 						<!-- ko if: clientOrder.warehouse -->

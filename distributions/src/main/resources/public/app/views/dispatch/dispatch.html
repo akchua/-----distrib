@@ -16,7 +16,12 @@
 				<thead>
 					<tr>
 						<th class = "text-center">ID</th>
+						<!-- ko ifnot: showReceived -->
 						<th class = "text-center">Accept Date</th>
+						<!-- /ko -->
+						<!-- ko if: showReceived -->
+						<th class = "text-center">Accept/Deliver Date</th>
+						<!-- /ko -->
 						<th>Warehouse</th>
 						<th class = "text-center">Order Count</th>
 						<th class = "text-center">Total Amount</th>

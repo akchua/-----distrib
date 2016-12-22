@@ -25,7 +25,7 @@
 					<tbody data-bind="foreach: { data: clientOrderList, as: 'clientOrder' }">
 						<tr>
 							<td data-bind="text: clientOrder.id" class = "text-center"></td>
-							<td><a data-bind="text: clientOrder.creator.formattedName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
+							<td><a data-bind="text: clientOrder.creator.businessName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
 							<td data-bind="text: clientOrder.creator.businessArea.displayName"></td>
 							<td data-bind="text: clientOrder.formattedNetTotal" class = "text-center"></td>
 							<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>

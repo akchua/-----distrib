@@ -16,7 +16,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     		stockCountCurrent: ko.observable(),
     		stockCountAll: ko.observable(),
     		
-    		formattedPackageSellingPrice: ko.observable()
+    		formattedPackageNetSellingPrice: ko.observable()
 	    };
     };
     
@@ -31,7 +31,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	self.productViewModel.stockCountCurrent(self.product.formattedStockCountCurrent);
     	self.productViewModel.stockCountAll(self.product.formattedStockCountAll);
     	
-    	self.productViewModel.formattedPackageSellingPrice(self.product.formattedPackageSellingPrice);
+    	self.productViewModel.formattedPackageNetSellingPrice(self.product.formattedPackageNetSellingPrice);
     	
     	self.productViewModel.companyName(self.product.company.name);
     	self.productViewModel.categoryName(self.product.category.name);
