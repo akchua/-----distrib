@@ -16,4 +16,6 @@ public interface ClientOrderItemDAO extends DAO<ClientOrderItem, Long>, ClientOr
 	ObjectList<ClientOrderItem> findAllWithPaging(int pageNumber, int resultsPerPage, Long clientOrderId);
 	
 	ObjectList<ClientOrderItem> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Long clientOrderId, Order[] orders);
+	
+	ObjectList<ClientOrderItem> findByProductWithPagingAndOrder(int pageNumber, int resultsPerPage, Long productId, Order[] orders);
 }

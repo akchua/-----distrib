@@ -1,6 +1,7 @@
 package com.chua.distributions.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -17,7 +18,10 @@ public class TextWriter {
 
 	public static void write(String message, String path) {
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(path, false));
+			File file = new File(path);
+			if(file.getParentFile() != null) file.getParentFile().mkdirs();
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file, false));
 			
 			String[] tokens = message.split("\n");
 			for(String s : tokens) {

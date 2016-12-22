@@ -10,6 +10,9 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
+import com.chua.distributions.serializer.json.ClientOrderSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 /**
  * @author  Adrian Jasper K. Chua
  * @version 1.0
@@ -23,6 +26,7 @@ public class ClientOrderItem extends OrderItem {
 
 	public static final String TABLE_NAME = "client_order_item";
 	
+	@JsonSerialize(using = ClientOrderSerializer.class)
 	private ClientOrder clientOrder;
 
 	@ManyToOne(targetEntity = ClientOrder.class, fetch = FetchType.LAZY)

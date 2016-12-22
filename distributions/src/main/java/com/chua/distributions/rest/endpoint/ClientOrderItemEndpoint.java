@@ -33,6 +33,14 @@ public class ClientOrderItemEndpoint {
 		return clientOrderItemHandler.getClientOrderItemObjectList(pageNumber, clientOrderId);
 	}
 	
+	@GET
+	@Path("/listbyproduct")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<ClientOrderItem> getClientOrderItemByProductObjectList(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("productId") Long productId) {
+		return clientOrderItemHandler.getClientOrderItemByProductObjectList(pageNumber, productId);
+	}
+	
 	@POST
 	@Path("/additem")
 	@Produces({ MediaType.APPLICATION_JSON })

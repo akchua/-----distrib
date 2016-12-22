@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -175,6 +176,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					final ClientOrder clientOrder = dispatchItem.getClientOrder();
 					clientOrder.setStatus(Status.RECEIVED);
 					clientOrder.setDispatcher(UserContextHolder.getUser().getUserEntity());
+					clientOrder.setDeliveredOn(new DateTime());
 					if(!clientOrderService.update(clientOrder)) {
 						flag = false;
 						break;

@@ -13,7 +13,11 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.chua.distributions.serializer.json.UserSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -37,6 +41,8 @@ public class ClientOrder extends Order {
 	
 	@JsonSerialize(using = UserSerializer.class)
 	private User dispatcher;
+	
+	private DateTime deliveredOn;
 	
 	@Basic
 	@Column(name = "additional_discount")
@@ -103,5 +109,21 @@ public class ClientOrder extends Order {
 
 	public void setDispatcher(User dispatcher) {
 		this.dispatcher = dispatcher;
+	}
+
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@Column(name = "delivered_on")
+	public DateTime getDeliveredOn() {
+		return deliveredOn;
+	}
+	
+	@Transient
+	public String getFormattedDeliveredOn() {
+		DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
+		return deliveredOn.toString(dtf);
+	}
+
+	public void setDeliveredOn(DateTime deliveredOn) {
+		this.deliveredOn = deliveredOn;
 	}
 }

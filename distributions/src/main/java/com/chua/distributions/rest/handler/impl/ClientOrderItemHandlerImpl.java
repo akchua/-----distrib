@@ -40,6 +40,11 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 	public ObjectList<ClientOrderItem> getClientOrderItemObjectList(Integer pageNumber, Long clientOrderId) {
 		return clientOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), clientOrderId);
 	}
+	
+	@Override
+	public ObjectList<ClientOrderItem> getClientOrderItemByProductObjectList(Integer pageNumber, Long productId) {
+		return clientOrderItemService.findByProductWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), productId);
+	}
 
 	@Override
 	public ResultBean addItem(Long productId, Long clientOrderId) {

@@ -13,6 +13,8 @@ public interface ClientOrderItemHandler {
 
 	ObjectList<ClientOrderItem> getClientOrderItemObjectList(Integer pageNumber, Long clientOrderId);
 	
+	ObjectList<ClientOrderItem> getClientOrderItemByProductObjectList(Integer pageNumber, Long productId);
+	
 	ResultBean addItem(Long productId, Long clientOrderId);
 	
 	ResultBean removeItem(Long clientOrderItemId);
