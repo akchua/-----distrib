@@ -90,4 +90,20 @@ public class ClientOrderDAOImpl
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
+
+	@Override
+	public List<ClientOrder> findAllByStatus(Status[] status) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(status != null && status.length > 0) {
+			final Junction disjunction = Restrictions.disjunction();
+			for(Status stat : status) {
+				disjunction.add(Restrictions.eq("status", stat));
+			}
+			conjunction.add(disjunction);
+		}
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
 }

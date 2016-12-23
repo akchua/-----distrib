@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -74,6 +75,13 @@ public class ClientOrderEndpoint {
 	public ObjectList<ClientOrder> getSubmittedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("showAccepted") Boolean showAccepted) {
 		return clientOrderHandler.getClientOrderRequestObjectList(pageNumber, showAccepted);
+	}
+	
+	@GET
+	@Path("/formattedpayable")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public StringWrapper getFormattedTotalPayable() {
+		return clientOrderHandler.getFormattedTotalPayable();
 	}
 	
 	@POST

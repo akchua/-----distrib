@@ -1,15 +1,18 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -80,6 +83,22 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
+	
+	@Override
+	public StringWrapper getFormattedTotalPayable() {
+		final StringWrapper sw = new StringWrapper();
+		List<ClientOrder> clientOrders = clientOrderService.findAllWithStatusReceived();
+		
+		float total = 0.0f;
+		for(ClientOrder clientOrder : clientOrders) {
+			total += clientOrder.getNetTotal();
+		}
+		
+		DecimalFormat df = new DecimalFormat("#,##0.00");
+		sw.setContent("Php " + df.format(total));
+		
+		return sw;
+	}
 
 	@Override
 	public ResultBean addClientOrder() {
@@ -98,6 +117,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				clientOrder.setWarehouse(null);
 				clientOrder.setAdditionalDiscount(UserContextHolder.getUser().getDiscount());
 				clientOrder.setLessVat(UserContextHolder.getUser().getVatType().getLessVat());
+				clientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
 				
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.insert(clientOrder) != null);

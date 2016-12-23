@@ -59,4 +59,9 @@ public class ClientOrderServiceImpl
 	public List<ClientOrder> findAllByClientWithStatusCreating(Long clientId) {
 		return dao.findAllByClientAndStatus(clientId, new Status[] { Status.CREATING });
 	}
+
+	@Override
+	public List<ClientOrder> findAllWithStatusReceived() {
+		return dao.findAllByStatus(new Status[] { Status.RECEIVED });
+	}
 }

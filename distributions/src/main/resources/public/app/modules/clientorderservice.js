@@ -60,6 +60,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getFormattedTotalPayable: function() {
+			return $.ajax({
+				url: '/services/clientorder/formattedpayable'
+			});
+		},
+		
 		addClientOrder: function() {
     		return $.ajax({
     			url: '/services/clientorder/add',

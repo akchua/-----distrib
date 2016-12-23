@@ -3,6 +3,7 @@ package com.chua.distributions.rest.handler;
 import java.util.List;
 
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -25,6 +26,8 @@ public interface ClientOrderHandler {
 	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	
 	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
+	
+	StringWrapper getFormattedTotalPayable();
 	
 	ResultBean addClientOrder();
 	

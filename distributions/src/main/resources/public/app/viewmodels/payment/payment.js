@@ -36,6 +36,14 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	});
     };
     
+    Payment.prototype.viewPayable = function() {
+    	var self = this;
+    	
+    	clientOrderService.getFormattedTotalPayable().done(function(formattedPayable) {
+    		app.showMessage('<h4>Total Payable: <span class="text-primary">' + formattedPayable.content + '</span></h4>');
+    	});
+    };
+    
     Payment.prototype.pay = function(clientOrderId, formattedNetTotal) {
     	var self = this;
     	

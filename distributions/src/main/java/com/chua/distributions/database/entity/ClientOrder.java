@@ -52,7 +52,7 @@ public class ClientOrder extends Order {
 	
 	@Transient
 	public Float getAdditionalDiscountAmount() {
-		return super.getNetTotal() * super.getCreator().getDiscount() / 100.0f;
+		return super.getNetTotal() * additionalDiscount / 100.0f;
 	}
 	
 	@Transient
