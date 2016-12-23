@@ -1,3 +1,11 @@
+body {
+	background: url('../img/sample.jpg') no-repeat center center fixed; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+
 /*  ----------------------  SPACING  ----------------------  */
 .margin-top-ten-px { margin-top: 10px; }
 .margin-bottom-ten-px { margin-bottom: 10px; }
