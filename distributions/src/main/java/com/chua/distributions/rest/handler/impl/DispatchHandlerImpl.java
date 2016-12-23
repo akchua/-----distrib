@@ -29,7 +29,7 @@ import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
-import com.chua.distributions.utility.TextWriter;
+import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.format.ClientOrderFormatter;
 
 /**
@@ -122,21 +122,21 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						}
 					}
 					
-					// CREATING PRINTABLE DISPATCH FILE
-					final String filePath = FileConstants.FILE_HOME + "files/dispatch/Dispatch_#" + dispatch.getId() + ".txt";
-					TextWriter.write(printableDispatch, filePath);
-					//
-					
-					// SENDING PRINTABLE DISPATCH TO THIS USER
 					if(flag) {
+						// CREATING PRINTABLE DISPATCH FILE
+						final String filePath = FileConstants.FILE_HOME + "files/dispatch/Dispatch_#" + dispatch.getId() + ".pdf";
+						SimplePdfWriter.write(printableDispatch, filePath, true);
+						//
+						
+						// SENDING PRINTABLE DISPATCH TO THIS USER
 						flag = EmailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
 								null,
 								MailConstants.DEFAULT_EMAIL,
 								"Dispatch",
 								"Dispatch #" + dispatch.getId(),
 								new String[] { filePath });
+						//
 					}
-					//
 					
 					dispatch.setStatus(Status.DISPATCHED);
 					result = new ResultBean();

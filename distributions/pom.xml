@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.chua</groupId>
   <artifactId>distributions</artifactId>
-  <version>0.3.5.TESTING</version>
+  <version>0.3.6.TESTING</version>
   <packaging>jar</packaging>
   
   <properties>
@@ -113,6 +113,12 @@
 	    <groupId>com.sun.mail</groupId>
 	    <artifactId>javax.mail</artifactId>
 	    <version>1.5.5</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>com.itextpdf</groupId>
+	    <artifactId>itextpdf</artifactId>
+	    <version>5.0.6</version>
 	</dependency>
   </dependencies>
   

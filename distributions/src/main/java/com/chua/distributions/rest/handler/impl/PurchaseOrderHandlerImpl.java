@@ -29,7 +29,7 @@ import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
-import com.chua.distributions.utility.TextWriter;
+import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.format.PurchaseOrderFormatter;
 
 /**
@@ -170,8 +170,8 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
 				PurchaseOrderFormatter pof = new PurchaseOrderFormatter(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()));
-				final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".txt";
-				TextWriter.write(pof.getFormat(), filePath);
+				final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
+				SimplePdfWriter.write(pof.getFormat(), filePath, true);
 				boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 						null,
 						MailConstants.DEFAULT_EMAIL,
