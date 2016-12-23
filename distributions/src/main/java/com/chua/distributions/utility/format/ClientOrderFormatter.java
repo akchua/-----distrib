@@ -57,8 +57,8 @@ public class ClientOrderFormatter {
 		format += "\n";
 		format += String.format("%105s", "Gross Total: ") + clientOrder.getFormattedGrossTotal() + "\n";
 		format += String.format("%105s", "Total Discount: ") + clientOrder.getFormattedDiscountTotal() + "\n";
-		format += String.format("%105s", "Less VAT: ") + clientOrder.getFormattedLessVatAmount() + "\n";
 		format += String.format("%105s", "Client Discount: ") + clientOrder.getFormattedAdditionalDiscountAmount() + "\n";
+		format += String.format("%105s", "Less VAT: ") + clientOrder.getFormattedLessVatAmount() + "\n";
 		format += String.format("%105s", "Net Total: ") + clientOrder.getFormattedNetTotal() + "\n";
 		
 		return format;
