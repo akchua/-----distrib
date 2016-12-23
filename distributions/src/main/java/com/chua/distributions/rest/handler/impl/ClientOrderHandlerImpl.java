@@ -174,6 +174,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		
 		if(clientOrder != null && warehouse != null && (clientOrder.getWarehouse() == null || !clientOrder.getWarehouse().equals(warehouse))) {
 			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrderId);
+			int itemCount = clientOrderItems.size();
 			
 			result = new ResultBean();
 			result.setSuccess(Boolean.TRUE);
@@ -184,7 +185,12 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 					result.setSuccess(Boolean.FALSE);
 					if(warehouseItem == null) result.setMessage(result.getMessage() + Html.line(Color.BLUE, QuantityFormatter.format((orderItem.getQuantity()), orderItem.getPackaging()) + " " + orderItem.getDisplayName()));
 					else result.setMessage(result.getMessage() + Html.line(Color.BLUE, QuantityFormatter.format((orderItem.getQuantity() - warehouseItem.getStockCount()), orderItem.getPackaging()) + " " + orderItem.getDisplayName()));
+					itemCount--;
 				}
+			}
+			
+			if(itemCount == 0) {
+				result.setMessage(Html.line(Color.RED, "All items are missing. Adjusting will result to the cancellation of the order."));
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, "");
@@ -233,7 +239,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				}
 				if(flag) {
 					adjustClientOrder(clientOrder, warehouse);
-					result = acceptClientOrder(clientOrder, warehouse);
+					if(clientOrder.getNetTotal() != 0.0f) {
+						result = acceptClientOrder(clientOrder, warehouse);
+					} else {
+						result = removeClientOrder(clientOrder.getId());
+					}
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 				}
