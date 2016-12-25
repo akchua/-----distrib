@@ -105,7 +105,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ResultBean result;
 		
 		if(UserContextHolder.getUser().getUserType().equals(UserType.CLIENT)) {
-			final List<ClientOrder> clientOrders = clientOrderService.findAllByClientWithStatusCreating(UserContextHolder.getUser().getId());
+			final List<ClientOrder> clientOrders = clientOrderService.findAllByClientWithStatusCreatingOrSubmitted(UserContextHolder.getUser().getId());
 			
 			if(clientOrders != null && clientOrders.size() < 5) {
 				final ClientOrder clientOrder = new ClientOrder();
@@ -127,7 +127,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create more than 5 orders with status " + Html.text(Color.BLUE, "CREATING") + " at the same time."));
+				result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create more than 5 simultaneous order requests."));
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create an order. Only " + Html.text(Color.BLUE, "Clients") + " are allowed."));

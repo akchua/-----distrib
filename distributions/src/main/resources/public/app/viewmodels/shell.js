@@ -4,6 +4,10 @@
 	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: true }
 	];
 	
+	var ourproductsroute = [
+	    { route: 'ourproducts', moduleId: 'viewmodels/ourproducts/ourproducts', title: 'Our Products', nav: true, hash: '#ourproducts' }                    
+	];
+	
 	var userroute = [
  	    { route: 'user', moduleId: 'viewmodels/user/user', title: 'Users', nav: true, hash: '#user' }
  	];
@@ -84,8 +88,10 @@
 	    			self.routes = self.routes.concat(purchaseorderroute);
 	    			self.routes = self.routes.concat(requestroute);
 	    			self.routes = self.routes.concat(dispatchroute);
+	    			self.routes = self.routes.concat(ourproductsroute);
 	    			break;
 	    		case 'CLIENT':
+	    			self.routes = self.routes.concat(ourproductsroute);
 	    			self.routes = self.routes.concat(clientorderroute);
 	    			break;
     		}
@@ -170,9 +176,11 @@
 	};
 	
 	Shell.prototype.register = function() {
-		var self = this;
-		
-		UserForm.show(new Object(), 'Registration');
+		/*UserForm.show(new Object(), 'Registration');*/
+		app.showMessage('<p>To register please email us at <span class="text-primary">primepad.pampanga@gmail.com</span> or Call/Text <span class="text-primary">+63 926 615 9373</span>.'
+				+ ' Make sure to include <span class="text-primary">Contact Person, Contact Number, Business Name and Business Address</span> in your message.</p>'
+				+ '<p/>'
+				+ '<p>To ensure the quality of our service, we make sure to meet up with new clients before accepting any order requests.</p>');
 	};
 	
 	return Shell;

@@ -1,0 +1,52 @@
+<div class="container-fluid">
+	<br/>
+	<div class="container-fluid">
+		<form role="search" class="form-inline">
+	        <div class="input-group pull-right col-md-8 col-xs-8">
+        		<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: search }" class="form-control" id="inputCompany"></select>
+				<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+				<select data-bind="options: categoryList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Category --', value: categoryId, event: { change: search }" class="form-control" id="inputCategory"></select>
+	        	<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+	          	<input data-bind="value: searchKey" type="text" class="form-control" placeholder="Search">
+		        <span class="input-group-btn">
+		        	<button data-bind="click: search" type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+		        </span>
+	        </div>
+      	</form>
+	</div>
+	<br/>
+	<div class="container-fluid">
+		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12"></div>
+	</div>
+	<div class="container-fluid">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class = "text-center">Code</th>
+						<th>Name</th>
+						<th>Company</th>
+						<th>Category</th>
+						<th class = "text-center">Selling Price</th>
+					</tr>
+				</thead>
+				
+				<tbody data-bind="foreach: { data: productList, as: 'product' }">
+					<tr>
+						<td data-bind="text: product.productCode" class = "text-center"></td>
+						<td data-bind="text: product.displayName"></td>
+						<td data-bind="text: product.company.name"></td>
+						<td data-bind="text: product.category.name"></td>
+						<td data-bind="text: product.formattedPackageNetSellingPrice" class = "text-center"></td>
+						
+						<td>
+							<div class="btn-group pull-right">
+								<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
