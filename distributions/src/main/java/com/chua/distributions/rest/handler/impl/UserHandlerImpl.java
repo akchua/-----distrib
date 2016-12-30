@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.ClientSettingsFormBean;
+import com.chua.distributions.beans.PartialUserBean;
 import com.chua.distributions.beans.PasswordFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
@@ -56,8 +57,21 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
-	public User getUserByUsernameOrEmail(String username, String emailAddress) {
-		return userService.findByUsernameOrEmail(username, emailAddress);
+	public PartialUserBean retrieveUser(String username, String emailAddress) {
+		final PartialUserBean partialUser;
+		final User user = userService.findByUsernameOrEmail(username, emailAddress);
+		
+		if(user != null && user.getUserType().equals(UserType.CLIENT)) {
+			partialUser = new PartialUserBean();
+			partialUser.setId(user.getId());
+			partialUser.setFirstName(user.getFirstName());
+			partialUser.setLastName(user.getLastName());
+			partialUser.setEmailAddress(user.getEmailAddress());
+		} else {
+			partialUser = null;
+		}
+		
+		return partialUser;
 	}
 
 	@Override

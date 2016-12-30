@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.chua</groupId>
   <artifactId>distributions</artifactId>
-  <version>1.0.0.LIVE</version>
+  <version>1.0.3</version>
   <packaging>jar</packaging>
   
   <properties>
@@ -118,7 +118,7 @@
 	<dependency>
 	    <groupId>com.itextpdf</groupId>
 	    <artifactId>itextpdf</artifactId>
-	    <version>5.0.6</version>
+	    <version>5.5.10</version>
 	</dependency>
   </dependencies>
   

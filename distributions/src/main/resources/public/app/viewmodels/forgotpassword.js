@@ -24,7 +24,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/userservice'], fu
 	    			}
 	    		})
         	} else {
-        		app.showMessage("<p>Username / Email Address does not exist.</p>")
+        		app.showMessage("<p>Username / Email Address does not exist. Contact us for support.</p>")
         	}
         });
     };

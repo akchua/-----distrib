@@ -4,11 +4,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import com.chua.distributions.constants.BusinessConstants;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**
@@ -20,6 +33,57 @@ import com.itextpdf.text.pdf.PdfWriter;
  * @since   Dec 23, 2016
  */
 public class SimplePdfWriter {
+	
+	/**
+	 * This internal class is used for paging
+	 */
+	class Header extends PdfPageEventHelper {
+        Font font;
+        PdfTemplate t;
+        Image total;
+ 
+        @Override
+        public void onOpenDocument(PdfWriter writer, Document document) {
+            t = writer.getDirectContent().createTemplate(30, 16);
+            try {
+                total = Image.getInstance(t);
+                total.setRole(PdfName.ARTIFACT);
+                font =  defaultFont;
+            } catch (DocumentException de) {
+                throw new ExceptionConverter(de);
+            }
+        }
+ 
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            PdfPTable table = new PdfPTable(3);
+            try {
+                table.setWidths(new int[]{24, 24, 2});
+                table.setTotalWidth(770);
+                table.getDefaultCell().setFixedHeight(20);
+                table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+                table.addCell(new Phrase(BusinessConstants.BUSINESS_NAME, font));
+                table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+                table.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), font));
+                PdfPCell cell = new PdfPCell(total);
+                cell.setBorder(Rectangle.BOTTOM);
+                table.addCell(cell);
+                PdfContentByte canvas = writer.getDirectContent();
+                canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
+                table.writeSelectedRows(0, -1, 36, 30, canvas);
+                canvas.endMarkedContentSequence();
+            } catch (DocumentException de) {
+                throw new ExceptionConverter(de);
+            }
+        }
+ 
+        @Override
+        public void onCloseDocument(PdfWriter writer, Document document) {
+            ColumnText.showTextAligned(t, Element.ALIGN_LEFT,
+                new Phrase(String.valueOf(writer.getPageNumber()), font),
+                2, 4, 0);
+        }
+    }
 
 	/**
 	 * The default font
