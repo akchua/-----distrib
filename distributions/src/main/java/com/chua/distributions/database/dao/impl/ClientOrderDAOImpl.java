@@ -7,6 +7,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Status;
@@ -105,5 +106,25 @@ public class ClientOrderDAOImpl
 		}
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
+
+	@Override
+	public List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		conjunction.add(Restrictions.between("updatedOn", salesReportQuery.getFrom(), salesReportQuery.getTo()));
+		
+		if(salesReportQuery.getWarehouse() != null) {
+			conjunction.add(Restrictions.eq("warehouse", salesReportQuery.getWarehouse()));
+		}
+		
+		if(salesReportQuery.getClientId() != null) {
+			conjunction.add(Restrictions.eq("creator.id", salesReportQuery.getClientId()));
+		}
+		
+		if(salesReportQuery.getPaidOnly()) conjunction.add(Restrictions.eq("status", Status.PAID));
+		
+		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.asc("updatedOn") }, conjunction);
 	}
 }

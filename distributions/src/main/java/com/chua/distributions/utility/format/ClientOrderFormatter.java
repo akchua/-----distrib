@@ -15,20 +15,17 @@ import com.chua.distributions.utility.StringHelper;
  * @since   Dec 14, 2016
  */
 public class ClientOrderFormatter {
-
-	private ClientOrder clientOrder;
 	
-	private List<ClientOrderItem> orderItems;
+	private static final int CHARACTERS_PER_LINE = 127;
 	
-	public ClientOrderFormatter(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
-		this.clientOrder = clientOrder;
-		this.orderItems = orderItems;
+	private ClientOrderFormatter() {
+		
 	}
 	
-	public String getFormat() {
+	public static String format(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
 		String format = "";
 		
-		format += StringHelper.center("SALES ORDER", 125) + "\n";
+		format += StringHelper.center("SALES ORDER", CHARACTERS_PER_LINE) + "\n";
 		format += "\n";
 		format += String.format("%20s", "DISTRIBUTOR: ") + BusinessConstants.BUSINESS_NAME + "\n";
 		format += String.format("%20s", "DELIVER TO: ") + clientOrder.getCreator().getBusinessName() + "\n";
@@ -37,13 +34,13 @@ public class ClientOrderFormatter {
 		format += String.format("%20s", "Date: ") + new SimpleDateFormat("MM/dd/yyyy hh:mm aa").format(new Date()) + "\n";
 		format += "\n";
 		format += " Sales Order #" + clientOrder.getId() + "\n";
-		format += " "; for(int i = 0; i < 126; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "|" + StringHelper.center("Quantity", 14) + "|";
 		format += StringHelper.center("Item Description", 49) + "|";
 		format += StringHelper.center("Unit Price", 19) + "|";
 		format += StringHelper.center("Discount", 19) + "|";
 		format += StringHelper.center("Amount", 20) + " |" + "\n";
-		format += " "; for(int i = 0; i < 126; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		for(ClientOrderItem orderItem : orderItems) {
 			format += "|";
 			format += StringHelper.center(orderItem.getFormattedQuantity() + "", 14) + "|";
@@ -53,7 +50,7 @@ public class ClientOrderFormatter {
 			format += StringHelper.center(orderItem.getFormattedNetPrice(), 20);
 			format += " |\n";
 		}
-		format += " "; for(int i = 0; i < 126; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
 		format += String.format("%105s", "Gross Total: ") + clientOrder.getFormattedGrossTotal() + "\n";
 		format += String.format("%105s", "Total Discount: ") + clientOrder.getFormattedDiscountTotal() + "\n";

@@ -3,6 +3,7 @@ package com.chua.distributions.rest.handler;
 import java.util.List;
 
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Warehouse;
@@ -42,6 +43,8 @@ public interface ClientOrderHandler {
 	ResultBean payClientOrder(Long clientOrderId);
 	
 	ResultBean removeClientOrder(Long clientOrderId);
+	
+	ResultBean generateReport(SalesReportQueryBean salesReportQuery);
 	
 	List<Warehouse> getWarehouseList();
 }

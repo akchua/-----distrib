@@ -1,5 +1,7 @@
 package com.chua.distributions.database.service.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.chua.distributions.database.dao.UserDAO;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.UserType;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -52,5 +55,10 @@ public class UserServiceImpl
 	@Override
 	public ObjectList<User> findAllClientsWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey) {
 		return dao.findAllClientsWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, new Order[] { Order.asc("lastName"), Order.asc("firstName") });
+	}
+	
+	@Override
+	public List<User> findAllClients() {
+		return dao.findAllByUserType(UserType.CLIENT);
 	}
 }

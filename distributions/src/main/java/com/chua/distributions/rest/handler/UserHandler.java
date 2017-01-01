@@ -43,6 +43,8 @@ public interface UserHandler {
 	
 	ResultBean changeClientSettings(ClientSettingsFormBean clientSettingsForm);
 	
+	List<User> getClientList();
+	
 	List<UserType> getUserTypeList();
 	
 	List<Area> getAreaList();

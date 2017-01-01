@@ -15,20 +15,17 @@ import com.chua.distributions.utility.StringHelper;
  * @since   Dec 11, 2016
  */
 public class PurchaseOrderFormatter {
-
-	private PurchaseOrder purchaseOrder;
 	
-	private List<PurchaseOrderItem> orderItems;
+	private static final int CHARACTERS_PER_LINE = 107;
 	
-	public PurchaseOrderFormatter(PurchaseOrder purchaseOrder, List<PurchaseOrderItem> orderItems) {
-		this.purchaseOrder = purchaseOrder;
-		this.orderItems = orderItems;
+	private PurchaseOrderFormatter() {
+		
 	}
 	
-	public String getFormat() {
+	public static String format(PurchaseOrder purchaseOrder, List<PurchaseOrderItem> orderItems) {
 		String format = "";
 		
-		format += StringHelper.center("PURCHASE ORDER", 105) + "\n";
+		format += StringHelper.center("PURCHASE ORDER", CHARACTERS_PER_LINE) + "\n";
 		format += "\n";
 		format += String.format("%15s", "SUPPLIER: ") + purchaseOrder.getCompany().getName() + "\n";
 		format += String.format("%15s", "DELIVER TO: ") + BusinessConstants.BUSINESS_NAME + "\n";
@@ -36,12 +33,12 @@ public class PurchaseOrderFormatter {
 		format += String.format("%15s", "Date: ") + new SimpleDateFormat("MM/dd/yyyy hh:mm aa").format(new Date()) + "\n";
 		format += "\n";
 		format += " Purchase Order #" + purchaseOrder.getId() + "\n";
-		format += " "; for(int i = 0; i < 106; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "|" + StringHelper.center("Quantity", 14) + "|";
 		format += StringHelper.center("Item Description", 49) + "|";
 		format += StringHelper.center("Unit Price", 19) + "|";
 		format += StringHelper.center("Amount", 20) + " |" + "\n";
-		format += " "; for(int i = 0; i < 106; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		for(PurchaseOrderItem orderItem : orderItems) {
 			format += "|";
 			format += StringHelper.center(orderItem.getFormattedQuantity() + "", 14) + "|";
@@ -50,7 +47,7 @@ public class PurchaseOrderFormatter {
 			format += StringHelper.center(orderItem.getFormattedGrossPrice(), 20);
 			format += " |\n";
 		}
-		format += " "; for(int i = 0; i < 106; i++) format += "-"; format += "\n";
+		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
 		format += String.format("%85s", "Total:") + StringHelper.center(purchaseOrder.getFormattedGrossTotal(), 20) + "\n";
 		format += "\n";

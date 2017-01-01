@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/clientorder/saleview'],
-		function (router, app, ko, clientOrderService, SaleView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/manage/salereport', 'viewmodels/clientorder/saleview'],
+		function (router, app, ko, clientOrderService, SaleReport, SaleView) {
     var Sale = function() {
     	this.clientOrderList = ko.observable();
     	this.warehouseList = ko.observable();
@@ -39,7 +39,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Sale.prototype.generateReport = function() {
     	var self = this;
     	
-    	alert('not yet working');
+    	SaleReport.show()
     };
     
     Sale.prototype.view = function(clientOrderId) {

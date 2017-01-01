@@ -6,6 +6,7 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
@@ -63,5 +64,10 @@ public class ClientOrderServiceImpl
 	@Override
 	public List<ClientOrder> findAllWithStatusReceived() {
 		return dao.findAllByStatus(new Status[] { Status.RECEIVED });
+	}
+
+	@Override
+	public List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery) {
+		return dao.findAllBySalesReportQuery(salesReportQuery);
 	}
 }

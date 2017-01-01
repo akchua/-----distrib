@@ -1,0 +1,77 @@
+<div class="modal-content modal-lg">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 align="center">Sales Report Query</h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Report Query</h3>
+					</div>
+					
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="from">Date From</label>
+							<div class="controls">
+								<div class="form-group">
+					                <div class='input-group date' id='from'>
+					                    <input data-bind="value: salesReportQuery.from" type="text" class="form-control" />
+					                    <span class="input-group-addon">
+					                        <span class="fa fa-calendar"></span>
+					                    </span>
+					                </div>
+					            </div>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="to">Date To</label>
+							<div class="controls">
+								<div class="form-group">
+					                <div class='input-group date' id='to'>
+					                    <input data-bind="value: salesReportQuery.to" type="text" class="form-control" />
+					                    <span class="input-group-addon">
+					                        <span class="fa fa-calendar"></span>
+					                    </span>
+					                </div>
+					            </div>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="inputWarehouse">Warehouse</label>
+							<div class="controls">
+								<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouse" class="form-control" id="inputWarehouse"></select>
+								<p class="help-block">Include selected warehouse only</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="inputWarehouse">Client</label>
+							<div class="controls">
+								<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputWarehouse"></select>
+								<p class="help-block">Include selected client only</p>
+							</div>
+						</div>
+						
+						<label class="checkbox-inline">
+							<input data-bind="checked: salesReportQuery.paidOnly" type="checkbox" name="paidOnlyCheckbox">Include Paid Only
+						</label>
+						
+						<label class="checkbox-inline">
+							<input data-bind="checked: salesReportQuery.showNetTrail" type="checkbox" name="showTrailCheckBox">Show Gross and Discount of each Sale
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" data-bind="click: generateReport">Generate</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+  	</form>
+</div>

@@ -136,6 +136,16 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	generateReport: function(salesReportQueryData) {
+    		return $.ajax({
+    			url: '/services/clientorder/generatereport',
+    			method: 'POST',
+    			data: {
+    				salesReportQueryData: salesReportQueryData
+    			}
+    		});
+    	},
+    	
     	getWarehouseList: function() {
     		return $.ajax({
     			url: '/services/clientorder/warehouse'

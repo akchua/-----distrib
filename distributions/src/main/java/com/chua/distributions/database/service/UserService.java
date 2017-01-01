@@ -1,5 +1,7 @@
 package com.chua.distributions.database.service;
 
+import java.util.List;
+
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.prototype.UserPrototype;
 import com.chua.distributions.objects.ObjectList;
@@ -16,4 +18,6 @@ public interface UserService extends Service<User, Long>, UserPrototype {
 	ObjectList<User> findAllWithPagingOrderByNameAndUserType(int pageNumber, int resultsPerPage, String searchKey);
 	
 	ObjectList<User> findAllClientsWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey);
+	
+	List<User> findAllClients();
 }

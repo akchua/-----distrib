@@ -287,6 +287,11 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	public List<User> getClientList() {
+		return userService.findAllClients();
+	}
+	
+	@Override
 	public List<UserType> getUserTypeList() {
 		return Stream.of(UserType.values())
 					.collect(Collectors.toList());

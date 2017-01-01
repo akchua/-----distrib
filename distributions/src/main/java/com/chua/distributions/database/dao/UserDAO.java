@@ -1,9 +1,12 @@
 package com.chua.distributions.database.dao;
 
+import java.util.List;
+
 import org.hibernate.criterion.Order;
 
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.prototype.UserPrototype;
+import com.chua.distributions.enums.UserType;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -18,4 +21,6 @@ public interface UserDAO extends DAO<User, Long>, UserPrototype {
 	ObjectList<User> findAllClientsWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Order[] orders);
 	
 	ObjectList<User> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Order[] orders);
+	
+	List<User> findAllByUserType(UserType userType);
 }

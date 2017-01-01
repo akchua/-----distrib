@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.endpoint;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -13,11 +14,13 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -134,6 +137,14 @@ public class ClientOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removeClientOrder(@FormParam("clientOrderId") Long clientOrderId) {
 		return clientOrderHandler.removeClientOrder(clientOrderId);
+	}
+	
+	@POST
+	@Path("/generatereport")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean generateReport(@FormParam("salesReportQueryData") String salesReportQueryData) throws IOException {
+		final SalesReportQueryBean salesReportQuery = new ObjectMapper().readValue(salesReportQueryData, SalesReportQueryBean.class);
+		return clientOrderHandler.generateReport(salesReportQuery);
 	}
 	
 	@GET

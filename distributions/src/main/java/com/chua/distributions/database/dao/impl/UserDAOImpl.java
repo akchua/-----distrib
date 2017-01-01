@@ -1,5 +1,7 @@
 package com.chua.distributions.database.dao.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -58,6 +60,15 @@ public class UserDAOImpl
 		}
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
+	
+	@Override
+	public List<User> findAllByUserType(UserType userType) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("userType", userType));
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
 
 	@Override

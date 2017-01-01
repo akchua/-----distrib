@@ -121,6 +121,13 @@ public class UserEndpoint {
 	}
 	
 	@GET
+	@Path("/fullclientlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<User> getFullClientList() {
+		return userHandler.getClientList();
+	}
+	
+	@GET
 	@Path("/usertype")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<UserType> getUserTypeList() {

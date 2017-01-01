@@ -112,8 +112,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						
 						// GENERATING PRINTABLE CLIENT ORDER
 						final List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-						ClientOrderFormatter cof = new ClientOrderFormatter(clientOrder, clientOrderItems);
-						printableDispatch += cof.getFormat() + "\n";
+						printableDispatch += ClientOrderFormatter.format(clientOrder, clientOrderItems) + "\n";
 						//
 						
 						if(!clientOrderService.update(clientOrder)) {

@@ -169,9 +169,8 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
-				PurchaseOrderFormatter pof = new PurchaseOrderFormatter(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()));
 				final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
-				SimplePdfWriter.write(pof.getFormat(), filePath, true);
+				SimplePdfWriter.write(PurchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
 				boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 						null,
 						MailConstants.DEFAULT_EMAIL,

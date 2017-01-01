@@ -98,6 +98,12 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	getFullClientList: function() {
+    		return $.ajax({
+    			url: '/services/user/fullclientlist'
+    		});
+    	},
+    	
     	getUserTypeList: function() {
     		return $.ajax({
     			url: '/services/user/usertype'
