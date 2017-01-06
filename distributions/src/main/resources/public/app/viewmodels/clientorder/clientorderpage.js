@@ -4,6 +4,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/clien
     	this.clientOrderItemList = ko.observable();
     	
     	this.showCheckButton = ko.observable(false);
+    	this.showClientDiscount = ko.observable(true);
     	
     	this.clientOrder = {
 			id: ko.observable(),
@@ -52,8 +53,8 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/clien
     		self.clientOrder.formattedNetTotal(clientOrder.formattedNetTotal);
     		self.clientOrder.status(clientOrder.status.displayName);
     		
-    		if(clientOrder.status.name == 'CREATING') self.showCheckButton(true);
-    		else self.showCheckButton(false);
+    		self.showCheckButton(clientOrder.status.name == 'CREATING');
+    		self.showClientDiscount(clientOrder.additionalDiscount != 0);
     	});
     	
     	clientOrderItemService.getClientOrderItemList(self.currentPage(), self.clientOrder.id(), true).done(function(data) {

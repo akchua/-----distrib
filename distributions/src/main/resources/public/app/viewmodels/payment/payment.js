@@ -5,6 +5,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.warehouseList = ko.observable();
     	
     	this.warehouse = ko.observable();
+    	this.formattedPayable = ko.observable();
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -34,13 +35,9 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     		self.clientOrderList(data.list);
     		self.totalItems(data.total);
     	});
-    };
-    
-    Payment.prototype.viewPayable = function() {
-    	var self = this;
     	
     	clientOrderService.getFormattedTotalPayable().done(function(formattedPayable) {
-    		app.showMessage('<h4>Total Payable: <span class="text-primary">' + formattedPayable.content + '</span></h4>');
+    		self.formattedPayable(formattedPayable.content);
     	});
     };
     

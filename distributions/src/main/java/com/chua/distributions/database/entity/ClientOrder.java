@@ -1,7 +1,5 @@
 package com.chua.distributions.database.entity;
 
-import java.text.DecimalFormat;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +14,10 @@ import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import com.chua.distributions.serializer.json.UserSerializer;
+import com.chua.distributions.utility.format.CurrencyFormatter;
+import com.chua.distributions.utility.format.DateFormatter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -57,8 +55,7 @@ public class ClientOrder extends Order {
 	
 	@Transient
 	public String getFormattedAdditionalDiscountAmount() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getAdditionalDiscountAmount());
+		return CurrencyFormatter.pesoFormat(getAdditionalDiscountAmount());
 	}
 
 	@Basic
@@ -74,8 +71,7 @@ public class ClientOrder extends Order {
 	
 	@Transient
 	public String getFormattedLessVatAmount() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getLessVatAmount());
+		return CurrencyFormatter.pesoFormat(getLessVatAmount());
 	}
 
 	public void setLessVat(Float lessVat) {
@@ -91,8 +87,7 @@ public class ClientOrder extends Order {
 	@Transient
 	@Override
 	public String getFormattedNetTotal() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(this.getNetTotal());
+		return CurrencyFormatter.pesoFormat(this.getNetTotal());
 	}
 
 	public void setAdditionalDiscount(Float additionalDiscount) {
@@ -119,8 +114,7 @@ public class ClientOrder extends Order {
 	
 	@Transient
 	public String getFormattedDeliveredOn() {
-		DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
-		return deliveredOn.toString(dtf);
+		return DateFormatter.shortFormat(deliveredOn);
 	}
 
 	public void setDeliveredOn(DateTime deliveredOn) {

@@ -1,7 +1,5 @@
 package com.chua.distributions.database.entity;
 
-import java.text.DecimalFormat;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +18,8 @@ import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.serializer.json.CategorySerializer;
 import com.chua.distributions.serializer.json.CompanySerializer;
+import com.chua.distributions.utility.format.CurrencyFormatter;
+import com.chua.distributions.utility.format.QuantityFormatter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -162,8 +162,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public String getFormattedPackageGrossPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getPackageGrossPrice());
+		return CurrencyFormatter.pesoFormat(getPackageGrossPrice());
 	}
 
 	public void setGrossPrice(Float grossPrice) {
@@ -198,8 +197,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public String getFormattedPackageNetPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getPackageNetPrice());
+		return CurrencyFormatter.pesoFormat(getPackageNetPrice());
 	}
 
 	public void setDiscount(Float discount) {
@@ -226,8 +224,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public String getFormattedPackageNetSellingPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getPackageNetSellingPrice());
+		return CurrencyFormatter.pesoFormat(getPackageNetSellingPrice());
 	}
 
 	public void setSellingPrice(Float sellingPrice) {
@@ -261,17 +258,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public String getFormattedStockCountCurrent() {
-		String formattedStockCount = "";
-		
-		if(stockCountCurrent != null) {
-			int packageCount = stockCountCurrent / packaging;
-			int pieceCount = stockCountCurrent % packaging;
-			if(packageCount != 0) formattedStockCount += packageCount + "";
-			if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
-			if(formattedStockCount.equals("")) formattedStockCount += "0";
-		}
-		
-		return formattedStockCount;
+		return QuantityFormatter.format(stockCountCurrent, packaging);
 	}
 
 	public void setStockCountCurrent(Integer stockCountCurrent) {
@@ -285,17 +272,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public String getFormattedStockCountAll() {
-		String formattedStockCount = "";
-		
-		if(stockCountAll != null) {
-			int packageCount = stockCountAll / packaging;
-			int pieceCount = stockCountAll % packaging;
-			if(packageCount != 0) formattedStockCount += packageCount + "";
-			if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + packaging;
-			if(formattedStockCount.equals("")) formattedStockCount += "0";
-		}
-		
-		return formattedStockCount;
+		return QuantityFormatter.format(stockCountAll, packaging);
 	}
 
 	public void setStockCountAll(Integer stockCountAll) {

@@ -1,13 +1,13 @@
 package com.chua.distributions.database.entity;
 
-import java.text.DecimalFormat;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import com.chua.distributions.database.entity.base.BaseObject;
+import com.chua.distributions.utility.format.CurrencyFormatter;
+import com.chua.distributions.utility.format.QuantityFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -69,15 +69,7 @@ public class OrderItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedQuantity() {
-		String formattedQuantity = "";
-		
-		int packageCount = quantity / packaging;
-		int pieceCount = quantity % packaging;
-		if(packageCount > 0) formattedQuantity += packageCount + "";
-		if(pieceCount > 0) formattedQuantity += " & " + pieceCount + "/" + packaging;
-		if(formattedQuantity.equals("")) formattedQuantity += "0";
-		
-		return formattedQuantity;
+		return QuantityFormatter.format(quantity, packaging);
 	}
 
 	public void setQuantity(Integer quantity) {
@@ -127,8 +119,7 @@ public class OrderItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedPackageUnitPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getPackageUnitPrice());
+		return CurrencyFormatter.pesoFormat(getPackageUnitPrice());
 	}
 	
 	@Transient
@@ -138,8 +129,7 @@ public class OrderItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedGrossPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getGrossPrice());
+		return CurrencyFormatter.pesoFormat(getGrossPrice());
 	}
 
 	public void setUnitPrice(Float unitPrice) {
@@ -159,8 +149,7 @@ public class OrderItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedDiscountAmount() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getDiscountAmount()) + " (" + discount + "%)";
+		return CurrencyFormatter.pesoFormat(getDiscountAmount()) + " (" + discount + "%)";
 	}
 	
 	@Transient
@@ -170,8 +159,7 @@ public class OrderItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedNetPrice() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getNetPrice());
+		return CurrencyFormatter.pesoFormat(getNetPrice());
 	}
 
 	public void setDiscount(Float discount) {

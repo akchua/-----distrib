@@ -1,6 +1,5 @@
 package com.chua.distributions.utility.format;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class PurchaseOrderFormatter {
 		format += String.format("%15s", "SUPPLIER: ") + purchaseOrder.getCompany().getName() + "\n";
 		format += String.format("%15s", "DELIVER TO: ") + BusinessConstants.BUSINESS_NAME + "\n";
 		format += String.format("%15s", "ADDRESS: ") + purchaseOrder.getWarehouse().getAddress() + "\n";
-		format += String.format("%15s", "Date: ") + new SimpleDateFormat("MM/dd/yyyy hh:mm aa").format(new Date()) + "\n";
+		format += String.format("%15s", "Date: ") + DateFormatter.longFormat(new Date()) + "\n";
 		format += "\n";
 		format += " Purchase Order #" + purchaseOrder.getId() + "\n";
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";

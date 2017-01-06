@@ -1,7 +1,5 @@
 package com.chua.distributions.database.entity;
 
-import java.text.DecimalFormat;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +11,7 @@ import javax.persistence.Transient;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.utility.format.CurrencyFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -63,8 +62,7 @@ public class Dispatch extends BaseObject {
 	
 	@Transient
 	public String getFormattedTotalAmount() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(totalAmount);
+		return CurrencyFormatter.pesoFormat(totalAmount);
 	}
 
 	public void setTotalAmount(Float totalAmount) {

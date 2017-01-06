@@ -15,9 +15,9 @@ public class QuantityFormatter {
 		String formattedQuantity = "";
 		
 		int packageCount = quantity / packaging;
-		int pieceCount = quantity % packaging;
-		if(packageCount > 0) formattedQuantity += packageCount + "";
-		if(pieceCount > 0) formattedQuantity += " & " + pieceCount + "/" + packaging;
+		int pieceCount = quantity - (packageCount * packaging);
+		formattedQuantity += packageCount + "";
+		if(pieceCount != 0) formattedQuantity += " & " + pieceCount + "/" + packaging;
 		if(formattedQuantity.equals("")) formattedQuantity += "0";
 		
 		return formattedQuantity;

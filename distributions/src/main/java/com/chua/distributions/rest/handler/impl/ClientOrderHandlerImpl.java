@@ -1,6 +1,5 @@
 package com.chua.distributions.rest.handler.impl;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,7 @@ import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
+import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
 import com.chua.distributions.utility.format.QuantityFormatter;
 import com.chua.distributions.utility.format.SalesReportFormatter;
@@ -107,8 +107,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			total += clientOrder.getNetTotal();
 		}
 		
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		sw.setContent("Php " + df.format(total));
+		sw.setContent(CurrencyFormatter.pesoFormat(total));
 		
 		return sw;
 	}

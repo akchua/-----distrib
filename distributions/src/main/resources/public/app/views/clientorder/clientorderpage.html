@@ -24,8 +24,10 @@
 					<dd data-bind="text: clientOrder.formattedDiscountTotal"></dd>
 					<dt>Less VAT(<span data-bind="text: clientOrder.lessVat"></span>%):</dt>
 					<dd data-bind="text: clientOrder.formattedLessVatAmount"></dd>
+					<!-- ko if: showClientDiscount -->
 					<dt>Client Discount(<span data-bind="text: clientOrder.discount"></span>%):</dt>
 					<dd data-bind="text: clientOrder.formattedAdditionalDiscount"></dd>
+					<!-- /ko -->
 					<dt class="h3">Net Total:</dt>
 					<dd data-bind="text: clientOrder.formattedNetTotal" class="h3"></dd>
 		    	</dl>

@@ -1,7 +1,5 @@
 package com.chua.distributions.database.entity;
 
-import java.text.DecimalFormat;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -20,6 +18,7 @@ import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.serializer.json.UserSerializer;
+import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -63,8 +62,7 @@ public class Order extends BaseObject {
 	
 	@Transient
 	public String getFormattedGrossTotal() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(grossTotal);
+		return CurrencyFormatter.pesoFormat(grossTotal);
 	}
 
 	public void setGrossTotal(Float grossTotal) {
@@ -79,8 +77,7 @@ public class Order extends BaseObject {
 	
 	@Transient
 	public String getFormattedDiscountTotal() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(discountTotal);
+		return CurrencyFormatter.pesoFormat(discountTotal);
 	}
 	
 	@Transient
@@ -90,8 +87,7 @@ public class Order extends BaseObject {
 	
 	@Transient
 	public String getFormattedNetTotal() {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		return "Php " + df.format(getNetTotal());
+		return CurrencyFormatter.pesoFormat(getNetTotal());
 	}
 
 	public void setDiscountTotal(Float discountTotal) {

@@ -18,6 +18,7 @@ import org.hibernate.annotations.Where;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.serializer.json.ProductSerializer;
+import com.chua.distributions.utility.format.QuantityFormatter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
@@ -70,15 +71,7 @@ public class WarehouseItem extends BaseObject {
 	
 	@Transient
 	public String getFormattedStockCount() {
-		String formattedStockCount = "";
-		
-		int packageCount = stockCount / product.getPackaging();
-		int pieceCount = stockCount % product.getPackaging();
-		if(packageCount != 0) formattedStockCount += packageCount + "";
-		if(pieceCount != 0) formattedStockCount += " & " + pieceCount + "/" + product.getPackaging();
-		if(formattedStockCount.equals("")) formattedStockCount += "0";
-		
-		return formattedStockCount;
+		return QuantityFormatter.format(stockCount, product.getPackaging());
 	}
 
 	public void setStockCount(Integer stockCount) {

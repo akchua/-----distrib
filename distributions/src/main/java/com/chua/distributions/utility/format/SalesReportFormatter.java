@@ -1,6 +1,5 @@
 package com.chua.distributions.utility.format;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +22,6 @@ public class SalesReportFormatter {
 	}
 	
 	public static String format(Date from, Date to, User client, Warehouse warehouse, Boolean paidOnly, Boolean showNetTrail, List<ClientOrder> clientOrders) {
-		DecimalFormat df = new DecimalFormat("#,##0.00");
-		
 		String format = "";
 		float tempTotal = 0.0f;
 		
@@ -67,7 +64,7 @@ public class SalesReportFormatter {
 		}
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
-		format += String.format("%90s", "(" + DateFormatter.longFormat(from) + " - " + DateFormatter.longFormat(to) + ") Total Sales: ") + df.format(tempTotal) + "\n";
+		format += String.format("%90s", "(" + DateFormatter.longFormat(from) + " - " + DateFormatter.longFormat(to) + ") Total Sales: ") + CurrencyFormatter.pesoFormat(tempTotal) + "\n";
 		
 		return format;
 	}
