@@ -54,11 +54,11 @@ public class SalesReportFormatter {
 			format += StringHelper.center(clientOrder.getFormattedNetTotal(), 20);
 			format += " |\n";
 			if(showNetTrail) {
-				format += "|"; format += String.format("%95s", "Gross Total: ") + String.format("%30s", clientOrder.getFormattedGrossTotal()) + "|\n";
-				format += "|"; format += String.format("%95s", "Total Discount: ") + String.format("%30s", clientOrder.getFormattedDiscountTotal()) + "|\n";
-				format += "|"; format += String.format("%95s", "Client Discount: ") + String.format("%30s", clientOrder.getFormattedAdditionalDiscountAmount()) + "|\n";
-				format += "|"; format += String.format("%95s", "Less VAT: ") + String.format("%30s", clientOrder.getFormattedLessVatAmount()) + "|\n";
-				format += "|"; format += String.format("%95s", "Net Total: ") + String.format("%30s", clientOrder.getFormattedNetTotal()) + "|\n";
+				format += "|"; format += String.format("%105s", "Gross Total: ") + String.format("%20s", clientOrder.getFormattedGrossTotal()) + " |\n";
+				format += "|"; format += String.format("%105s", "Total Discount: ") + String.format("%20s", clientOrder.getFormattedDiscountTotal()) + " |\n";
+				format += "|"; format += String.format("%105s", "Client Discount: ") + String.format("%20s", clientOrder.getFormattedAdditionalDiscountAmount()) + " |\n";
+				format += "|"; format += String.format("%105s", "Less VAT: ") + String.format("%20s", clientOrder.getFormattedLessVatAmount()) + " |\n";
+				format += "|"; format += String.format("%105s", "Net Total: ") + String.format("%20s", clientOrder.getFormattedNetTotal()) + " |\n";
 			}
 			tempTotal += clientOrder.getNetTotal();
 		}
