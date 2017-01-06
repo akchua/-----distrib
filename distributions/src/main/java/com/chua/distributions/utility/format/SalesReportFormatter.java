@@ -1,8 +1,6 @@
 package com.chua.distributions.utility.format;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +23,6 @@ public class SalesReportFormatter {
 	}
 	
 	public static String format(Date from, Date to, User client, Warehouse warehouse, Boolean paidOnly, Boolean showNetTrail, List<ClientOrder> clientOrders) {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		DecimalFormat df = new DecimalFormat("#,##0.00");
 		
 		String format = "";
@@ -33,13 +30,13 @@ public class SalesReportFormatter {
 		
 		format += StringHelper.center("SALES REPORT", CHARACTERS_PER_LINE) + "\n";
 		format += "\n";
-		format += String.format("%20s", "Date From: ") + dateFormat.format(from) + "\n";
-		format += String.format("%20s", "Date To: ") + dateFormat.format(to) + "\n";
+		format += String.format("%20s", "Date From: ") + DateFormatter.longFormat(from) + "\n";
+		format += String.format("%20s", "Date To: ") + DateFormatter.longFormat(to) + "\n";
 		if(warehouse != null) format += String.format("%20s", "Warehouse: ") + warehouse.getDisplayName() + "\n";
 		else format += String.format("%20s", "Warehouse: ") + "ALL WAREHOUSES" + "\n";
 		if(client != null) format += String.format("%20s", "Client: ") + client.getFormattedName() + "\n";
 		else format += String.format("%20s", "Client: ") + "ALL CLIENTS" + "\n";
-		format += String.format("%20s", "Report Date: ") + dateFormat.format(new Date()) + "\n";
+		format += String.format("%20s", "Report Date: ") + DateFormatter.longFormat(new Date()) + "\n";
 		format += "\n";
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "|" + StringHelper.center("Created On", 19) + "|";
@@ -52,11 +49,11 @@ public class SalesReportFormatter {
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		for(ClientOrder clientOrder : clientOrders) {
 			format += "|";
-			format += StringHelper.center(dateFormat.format(clientOrder.getCreatedOn()) + "", 19) + "|";
-			format += StringHelper.center(dateFormat.format(clientOrder.getUpdatedOn()), 19) + "|";
-			format += StringHelper.center(clientOrder.getId() + "", 19) + "|";
-			format += StringHelper.center(clientOrder.getCreator().getFormattedName(), 39) + "|";
-			format += StringHelper.center(clientOrder.getWarehouse().getDisplayName(), 14) + "|";
+			format += StringHelper.center(DateFormatter.longFormat(clientOrder.getCreatedOn()), 19) + "|";
+			format += StringHelper.center(DateFormatter.longFormat(clientOrder.getUpdatedOn()), 19) + "|";
+			format += StringHelper.center(clientOrder.getId() + "", 9) + "|";
+			format += StringHelper.center(clientOrder.getCreator().getBusinessName(), 39) + "|";
+			format += StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14) + "|";
 			format += StringHelper.center(clientOrder.getFormattedNetTotal(), 20);
 			format += " |\n";
 			if(showNetTrail) {
@@ -70,7 +67,7 @@ public class SalesReportFormatter {
 		}
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
-		format += String.format("%90s", "(" + dateFormat.format(from) + " - " + dateFormat.format(to) + ") Total Sales: ") + df.format(tempTotal) + "\n";
+		format += String.format("%90s", "(" + DateFormatter.longFormat(from) + " - " + DateFormatter.longFormat(to) + ") Total Sales: ") + df.format(tempTotal) + "\n";
 		
 		return format;
 	}

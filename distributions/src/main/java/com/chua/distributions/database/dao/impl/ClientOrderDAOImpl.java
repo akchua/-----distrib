@@ -123,7 +123,10 @@ public class ClientOrderDAOImpl
 			conjunction.add(Restrictions.eq("creator.id", salesReportQuery.getClientId()));
 		}
 		
-		if(salesReportQuery.getPaidOnly()) conjunction.add(Restrictions.eq("status", Status.PAID));
+		final Junction disjunction = Restrictions.disjunction();
+		disjunction.add(Restrictions.eq("status", Status.PAID));
+		if(!salesReportQuery.getPaidOnly()) disjunction.add(Restrictions.eq("status", Status.RECEIVED));
+		conjunction.add(disjunction);
 		
 		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.asc("updatedOn") }, conjunction);
 	}

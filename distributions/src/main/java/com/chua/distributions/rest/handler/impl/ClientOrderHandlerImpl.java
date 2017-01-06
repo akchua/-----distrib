@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.ws.rs.NotAuthorizedException;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
@@ -35,6 +38,7 @@ import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
+import com.chua.distributions.utility.format.DateFormatter;
 import com.chua.distributions.utility.format.QuantityFormatter;
 import com.chua.distributions.utility.format.SalesReportFormatter;
 
@@ -355,6 +359,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		return result;
 	}
 	
+	/**
+	 * Handles both machine and user generated reports
+	 */
 	@Override
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		final ResultBean result;
@@ -364,20 +371,31 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			final List<ClientOrder> clientOrders = clientOrderService.findAllBySalesReportQuery(salesReportQuery);
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
-				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + new Date() + ".pdf";
+				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf";
 				SimplePdfWriter.write(SalesReportFormatter.format(salesReportQuery.getFrom(), salesReportQuery.getTo(), 
 						(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null,
 						salesReportQuery.getWarehouse(), salesReportQuery.getPaidOnly(), salesReportQuery.getShowNetTrail(), clientOrders), filePath, true);
 
 				result = new ResultBean();
-				result.setSuccess(EmailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
+				
+				// TO CHECK IF REPORT IS CREATED BY THE SYSTEM
+				UserBean currentUser;
+				try {
+					currentUser = UserContextHolder.getUser();
+				} catch(NotAuthorizedException e) {
+					currentUser = null;
+				}
+				//
+				
+				// SENDING SYSTEM CREATED REPORTS to MailConstants.DEFAULT_REPORT_RECEIVER
+				result.setSuccess(EmailUtil.send((currentUser != null) ? currentUser.getEmailAddress() : MailConstants.DEFAULT_REPORT_RECEIVER, 
 							null,
 							MailConstants.DEFAULT_EMAIL,
 							"Sales Report",
 							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 							new String[] { filePath }));
 				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created sales report and it has been emailed to " + Html.text(Color.TURQUOISE, UserContextHolder.getUser().getEmailAddress()) + "."));
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created sales report and it has been emailed to " + Html.text(Color.TURQUOISE, (currentUser != null) ? currentUser.getEmailAddress() : MailConstants.DEFAULT_REPORT_RECEIVER) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}

@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.ImportResource;
  * @since   Nov 13, 2016
  */
 @SpringBootApplication
+@EnableScheduling
 @ImportResource({"classpath:META-INF/spring/hibernate.xml", "classpath:META-INF/spring/beans.xml"})
 public class Application {
 

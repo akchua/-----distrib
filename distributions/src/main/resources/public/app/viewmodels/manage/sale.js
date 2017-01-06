@@ -39,7 +39,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Sale.prototype.generateReport = function() {
     	var self = this;
     	
-    	SaleReport.show()
+    	//SaleReport.show()
+    	alert('user triggered report is not yet working')
     };
     
     Sale.prototype.view = function(clientOrderId) {
