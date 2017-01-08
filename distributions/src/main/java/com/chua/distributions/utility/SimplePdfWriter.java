@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.chua.distributions.constants.BusinessConstants;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -37,7 +36,7 @@ public class SimplePdfWriter {
 	/**
 	 * This internal class is used for paging
 	 */
-	class Header extends PdfPageEventHelper {
+	static class Pager extends PdfPageEventHelper {
         Font font;
         PdfTemplate t;
         Image total;
@@ -62,7 +61,7 @@ public class SimplePdfWriter {
                 table.setTotalWidth(770);
                 table.getDefaultCell().setFixedHeight(20);
                 table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                table.addCell(new Phrase(BusinessConstants.BUSINESS_NAME, font));
+                table.addCell(new Phrase("Prime Pad", font));
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), font));
                 PdfPCell cell = new PdfPCell(total);
@@ -119,7 +118,9 @@ public class SimplePdfWriter {
 			Document document = new Document();
 			if(landscape) document.setPageSize(PageSize.LETTER.rotate());
 			
-			PdfWriter.getInstance(document, new FileOutputStream(file));
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			Pager pager = new Pager();
+			writer.setPageEvent(pager);
 			
 			document.open();
 			

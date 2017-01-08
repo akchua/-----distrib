@@ -65,6 +65,11 @@ public class Product extends BaseObject {
 	
 	private Integer stockCountAll;
 	
+	public Product() {
+		stockCountCurrent = 0;
+		stockCountAll = 0;
+	}
+	
 	@ManyToOne(targetEntity = Company.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "company_id")
 	@Where(clause = "valid = 1")
