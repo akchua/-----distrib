@@ -371,9 +371,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
 				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf";
-				SimplePdfWriter.write(SalesReportFormatter.format(salesReportQuery.getFrom(), salesReportQuery.getTo(), 
-						(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null,
-						salesReportQuery.getWarehouse(), salesReportQuery.getPaidOnly(), salesReportQuery.getShowNetTrail(), clientOrders), filePath, true);
+				SimplePdfWriter.write(SalesReportFormatter.format(salesReportQuery, 
+						(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
+								clientOrders), filePath, true);
 
 				result = new ResultBean();
 				
@@ -498,6 +498,10 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		
 		if(salesReportQuery.getFrom() == null || salesReportQuery.getTo() == null) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Date from and to cannot be empty."));
+		} else if(!(salesReportQuery.getIncludePaid() || salesReportQuery.getIncludeDelivered() 
+				|| salesReportQuery.getIncludeDispatched() || salesReportQuery.getIncludeAccepted()
+				|| salesReportQuery.getIncludeSubmitted() || salesReportQuery.getIncludeCreating())) {
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "You must include at least 1 Status."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");
 		}

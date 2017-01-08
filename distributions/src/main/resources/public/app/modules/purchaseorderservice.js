@@ -62,6 +62,16 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	receivePurchaseOrder: function(purchaseOrderId) {
+    		return $.ajax({
+    			url: '/services/purchaseorder/receive',
+    			method: 'POST',
+    			data: {
+    				purchaseOrderId: purchaseOrderId
+    			}
+    		});
+    	},
+    	
     	payPurchaseOrder: function(purchaseOrderId) {
     		return $.ajax({
     			url: '/services/purchaseorder/pay',

@@ -89,6 +89,13 @@ public class PurchaseOrderEndpoint {
 	}
 	
 	@POST
+	@Path("/receive")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean receivePurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
+		return purchaseOrderHandler.receivePurchaseOrder(purchaseOrderId);
+	}
+	
+	@POST
 	@Path("/pay")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean payPurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {

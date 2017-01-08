@@ -72,11 +72,28 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 		})
     };
     
+    PurchaseOrder.prototype.receive = function(purchaseOrderId) {
+    	var self = this;
+    	
+    	app.showMessage('<p>Receive Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '?</p>'
+    			+ '<p>Make sure that all items in this order have been received.</p>',
+				'<p>Confirm and Pay Purchase Order</p>',
+				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
+		.then(function(confirm) {
+			if(confirm) {
+				purchaseOrderService.receivePurchaseOrder(purchaseOrderId).done(function(result) {
+					self.refreshPurchaseOrderList();
+					app.showMessage(result.message);
+				});
+			}
+		})
+    };
+    
     PurchaseOrder.prototype.pay = function(purchaseOrderId, formattedNetTotal) {
     	var self = this;
     	
-    	app.showMessage('<p>Finalize and pay Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '</span> with total amount of <span class="text-success">' + formattedNetTotal + '</span>?</p>',
-				'<p>Confirm and Pay Purchase Order</p>',
+    	app.showMessage('<p>Mark Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '</span> with total amount of <span class="text-success">' + formattedNetTotal + '</span> as paid?</p>',
+				'<p>Mark Purchase Order as Paid</p>',
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {

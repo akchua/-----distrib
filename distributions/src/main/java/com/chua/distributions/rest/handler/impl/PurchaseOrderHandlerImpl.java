@@ -199,14 +199,14 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	@Override
-	public ResultBean payPurchaseOrder(Long purchaseOrderId) {
+	public ResultBean receivePurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 		
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.ACCEPTED)) {
 				if(addToWarehouse(purchaseOrder)) {
-					purchaseOrder.setStatus(Status.PAID);
+					purchaseOrder.setStatus(Status.RECEIVED);
 					
 					result = new ResultBean();
 					result.setSuccess(purchaseOrderService.update(purchaseOrder));
@@ -217,6 +217,33 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 					}
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+						Html.line(" You are not authorized to receive purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load purchase order. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean payPurchaseOrder(Long purchaseOrderId) {
+		final ResultBean result;
+		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
+		
+		if(purchaseOrder != null) {
+			if(purchaseOrder.getStatus().equals(Status.RECEIVED)) {
+				purchaseOrder.setStatus(Status.PAID);
+				
+				result = new ResultBean();
+				result.setSuccess(purchaseOrderService.update(purchaseOrder));
+				if(result.getSuccess()) {
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " marked Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " as paid."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -237,6 +264,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.CREATING) || purchaseOrder.getStatus().equals(Status.SUBMITTED)
 					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
+						&& !purchaseOrder.getStatus().equals(Status.RECEIVED)
 						&& !purchaseOrder.getStatus().equals(Status.PAID)
 						&& !purchaseOrder.getStatus().equals(Status.CANCELLED)) {
 				result = new ResultBean();

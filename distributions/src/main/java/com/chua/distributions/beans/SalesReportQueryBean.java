@@ -20,7 +20,17 @@ public class SalesReportQueryBean {
 	
 	private Long clientId;
 	
-	private Boolean paidOnly;
+	private Boolean includePaid;
+	
+	private Boolean includeDelivered;
+	
+	private Boolean includeDispatched;
+	
+	private Boolean includeAccepted;
+	
+	private Boolean includeSubmitted;
+	
+	private Boolean includeCreating;
 	
 	private Boolean showNetTrail;
 	
@@ -36,6 +46,10 @@ public class SalesReportQueryBean {
 		return to;
 	}
 
+	/**
+	 * Inclusive end date.
+	 * @param to The end date
+	 */
 	public void setTo(Date to) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(to);
@@ -61,12 +75,52 @@ public class SalesReportQueryBean {
 		this.clientId = clientId;
 	}
 
-	public Boolean getPaidOnly() {
-		return paidOnly;
+	public Boolean getIncludePaid() {
+		return includePaid;
 	}
 
-	public void setPaidOnly(Boolean paidOnly) {
-		this.paidOnly = paidOnly;
+	public void setIncludePaid(Boolean includePaid) {
+		this.includePaid = includePaid;
+	}
+
+	public Boolean getIncludeDelivered() {
+		return includeDelivered;
+	}
+
+	public void setIncludeDelivered(Boolean includeDelivered) {
+		this.includeDelivered = includeDelivered;
+	}
+
+	public Boolean getIncludeDispatched() {
+		return includeDispatched;
+	}
+
+	public void setIncludeDispatched(Boolean includeDispatched) {
+		this.includeDispatched = includeDispatched;
+	}
+
+	public Boolean getIncludeAccepted() {
+		return includeAccepted;
+	}
+
+	public void setIncludeAccepted(Boolean includeAccepted) {
+		this.includeAccepted = includeAccepted;
+	}
+
+	public Boolean getIncludeSubmitted() {
+		return includeSubmitted;
+	}
+
+	public void setIncludeSubmitted(Boolean includeSubmitted) {
+		this.includeSubmitted = includeSubmitted;
+	}
+
+	public Boolean getIncludeCreating() {
+		return includeCreating;
+	}
+
+	public void setIncludeCreating(Boolean includeCreating) {
+		this.includeCreating = includeCreating;
 	}
 
 	public Boolean getShowNetTrail() {

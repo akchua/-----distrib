@@ -51,23 +51,21 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
         		.then(function(reply) {
         			switch(reply) {
         			case 1:
-        				self.enableAccept(false);
         				clientOrderService.adjustAndAcceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
                 			if(result.success) {
-                        		dialog.close(self);	
-                        	} 
-                        	app.showMessage(result.message);
-                        	self.enableAccept(true);
-                		});
-        				break;
-        			case 2:
-        				self.enableAccept(false);
-        				clientOrderService.acceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
-                			if(result.success) {
+                        		dialog.close(self);
                         		dialog.close(self);
                         	} 
                         	app.showMessage(result.message);
-                        	self.enableAccept(true);
+                		});
+        				break;
+        			case 2:
+        				clientOrderService.acceptClientOrder(self.acceptFormModel.id(), self.acceptFormModel.warehouse()).done(function(result) {
+                			if(result.success) {
+                        		dialog.close(self);
+                        		dialog.close(self);
+                        	} 
+                        	app.showMessage(result.message);
                 		});
         				break;
         			case 3:

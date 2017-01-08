@@ -29,6 +29,8 @@ public interface PurchaseOrderHandler {
 	
 	ResultBean sendPurchaseOrder(Long purchaseOrderId);
 	
+	ResultBean receivePurchaseOrder(Long purchaseOrderId);
+	
 	ResultBean payPurchaseOrder(Long purchaseOrderId);
 	
 	ResultBean removePurchaseOrder(Long purchaseOrderId);

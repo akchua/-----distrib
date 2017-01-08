@@ -171,7 +171,7 @@ public class ProductHandlerImpl implements ProductHandler {
 				stockCountCurrent = warehouseItem.getStockCount();
 			}
 		}
-		if(warehouse != null) product.setStockCountCurrent(stockCountCurrent);
+		product.setStockCountCurrent(stockCountCurrent);
 		product.setStockCountAll(stockCountAll);
 	}
 	

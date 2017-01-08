@@ -22,12 +22,12 @@ public class SalesReportScheduler {
 	private ClientOrderHandler clientOrderHandler;
 	
 	/**
-	 * Daily Sales Report
-	 * fires at 1:00AM everyday
-	 * includes: all paid, all clients, all warehouses
+	 * Weekly Sales Report
+	 * fires at 1:00AM every Saturday
+	 * includes: all paid and delivered, all clients, all warehouses
 	 */
-	@Scheduled(cron = "0 0 1 * * ?")
-	public void dailySalesReport() {
+	@Scheduled(cron = "0 0 1 * * SAT")
+	public void weeklySalesReport() {
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
 		Calendar yesterday = Calendar.getInstance();
@@ -35,7 +35,12 @@ public class SalesReportScheduler {
 		
 		salesReportQuery.setFrom(yesterday.getTime());
 		salesReportQuery.setTo(yesterday.getTime());
-		salesReportQuery.setPaidOnly(true);
+		salesReportQuery.setIncludePaid(true);
+		salesReportQuery.setIncludeDelivered(true);
+		salesReportQuery.setIncludeDispatched(false);
+		salesReportQuery.setIncludeAccepted(false);
+		salesReportQuery.setIncludeSubmitted(false);
+		salesReportQuery.setIncludeCreating(false);
 		salesReportQuery.setShowNetTrail(true);
 		salesReportQuery.setClientId(null);
 		salesReportQuery.setWarehouse(null);

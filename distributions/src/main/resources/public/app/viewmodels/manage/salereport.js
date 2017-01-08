@@ -9,7 +9,12 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		to: ko.observable(new Date()),
     		warehouse: ko.observable(),
     		clientId: ko.observable(),
-    		paidOnly: ko.observable(true),
+    		includePaid: ko.observable(true),
+    		includeDelivered: ko.observable(true),
+    		includeDispatched: ko.observable(false),
+    		includeAccepted: ko.observable(false),
+    		includeSubmitted: ko.observable(false),
+    		includeCreating: ko.observable(false),
     		showNetTrail: ko.observable()
 	    };
     };

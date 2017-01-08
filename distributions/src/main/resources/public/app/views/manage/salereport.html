@@ -57,12 +57,29 @@
 							</div>
 						</div>
 						
-						<label class="checkbox-inline">
-							<input data-bind="checked: salesReportQuery.paidOnly" type="checkbox" name="paidOnlyCheckbox">Include Paid Only
+						<label for="includePaidCheckbox">Include:</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includePaid" type="checkbox" name="includePaidCheckbox">Paid
+						</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includeDelivered" type="checkbox" name="includeDeliveredCheckbox">Delivered
+						</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includeDispatched" type="checkbox" name="includeDispatchedCheckbox">Dispatched
+						</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includeAccepted" type="checkbox" name="includeAcceptedCheckbox">Accepted
+						</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includeSubmitted" type="checkbox" name="includeSubmittedCheckbox">Submitted
+						</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.includeCreating" type="checkbox" name="includeCreatingCheckbox">Creating
 						</label>
 						
-						<label class="checkbox-inline">
-							<input data-bind="checked: salesReportQuery.showNetTrail" type="checkbox" name="showTrailCheckBox">Show Gross and Discount of each Sale
+						<label for="showTrailCheckBox">Show:</label>
+						<label class="checkbox">
+							<input data-bind="checked: salesReportQuery.showNetTrail" type="checkbox" name="showTrailCheckBox">Gross and Discount of each Sale
 						</label>
 					</div>
 				</div>
