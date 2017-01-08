@@ -11,7 +11,7 @@ public class FileConstants {
 	
 	public static final String MAC_HOME = "~/Library/Application Support/";
 	
-	public static final String LINUX_HOME = "~/usr/local/primepad/data/";
+	public static final String LINUX_HOME = "data/";
 	
 	public static final String FILE_HOME = WINDOWS_HOME;
 }
