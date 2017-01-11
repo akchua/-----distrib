@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/request/accept', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, userService, Accept, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
+		function (router, app, ko, clientOrderService, userService, SaleView, UserView) {
     var Request = function() {
     	this.clientOrderList = ko.observable();
     	
@@ -43,14 +43,22 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Request.prototype.accept = function(clientOrderId) {
     	var self = this;
     	
-    	clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    		Accept.show(clientOrder, 'Accept Order').done(function() {
-    			self.refreshClientOrderList();
-    		});
-    	});
+    	app.showMessage('<p>Are you sure you want to accept Order of <span class="text-primary">ID #' + clientOrderId + '</span>?</p>',
+				'<p class="text-primary">Confirm Accept</p>',
+				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
+		.then(function(confirm) {
+			if(confirm) {
+				self.enableAccept(false);
+        		clientOrderService.acceptClientOrder(clientOrderId).done(function(result) {
+        			self.refreshClientOrderList();
+                	app.showMessage(result.message);
+                	self.enableAccept(true);
+        		});
+			}
+		})
     };
     
-    Request.prototype.changeWarehouse = function(clientOrderId) {
+    /*Request.prototype.changeWarehouse = function(clientOrderId) {
     	var self = this;
     	
     	clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
@@ -58,7 +66,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     			self.refreshClientOrderList();
     		});
     	});
-    };
+    };*/
     
     Request.prototype.view = function(clientOrderId) {
     	var self = this;
@@ -76,11 +84,9 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
-				self.enableAccept(false);
 				clientOrderService.removeClientOrder(clientOrderId).done(function(result) {
 					self.refreshClientOrderList();
 					app.showMessage(result.message);
-					self.enableAccept(true);
 				});
 			}
 		})

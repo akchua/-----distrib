@@ -101,29 +101,28 @@ public class ClientOrderEndpoint {
 		return clientOrderHandler.submitClientOrder(clientOrderId);
 	}
 	
-	@POST
+	/*@POST
 	@Path("/testaccept")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean testAcceptClientOrder(@FormParam("clientOrderId") Long clientOrderId,
 			@FormParam("warehouse") Warehouse warehouse) {
 		return clientOrderHandler.testAcceptClientOrder(clientOrderId, warehouse);
-	}
+	}*/
 	
 	@POST
 	@Path("/accept")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ResultBean acceptClientOrder(@FormParam("clientOrderId") Long clientOrderId,
-			@FormParam("warehouse") Warehouse warehouse) {
-		return clientOrderHandler.acceptClientOrder(clientOrderId, warehouse);
+	public ResultBean acceptClientOrder(@FormParam("clientOrderId") Long clientOrderId) {
+		return clientOrderHandler.acceptClientOrder(clientOrderId);
 	}
 	
-	@POST
+	/*@POST
 	@Path("/adjustaccept")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean adjustAndAcceptClientOrder(@FormParam("clientOrderId") Long clientOrderId,
 			@FormParam("warehouse") Warehouse warehouse) {
 		return clientOrderHandler.adjustAndAcceptClientOrder(clientOrderId, warehouse);
-	}
+	}*/
 	
 	@POST
 	@Path("/pay")

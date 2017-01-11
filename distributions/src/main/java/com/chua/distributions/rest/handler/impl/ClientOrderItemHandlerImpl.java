@@ -55,7 +55,12 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		if(product != null) {
 			final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 			if(clientOrder != null) {
-				if(clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) {
+				if(((clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) 
+						&& UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId()))
+						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+							&& !clientOrder.getStatus().equals(Status.RECEIVED)
+							&& !clientOrder.getStatus().equals(Status.PAID)
+							&& !clientOrder.getStatus().equals(Status.CANCELLED))) {
 					final ClientOrderItem clientOrderItem = clientOrderItemService.findByNameAndClientOrder(product.getDisplayName(), clientOrder.getId());
 					
 					if(clientOrderItem == null) {
@@ -95,7 +100,12 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
 				result = removeItem(clientOrderItem);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -128,7 +138,12 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
 				result = changeQuantity(clientOrderItem, (clientOrderItem.getPackageQuantity() * clientOrderItem.getPackaging()) + pieceQuantity);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -147,7 +162,12 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) 
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
+						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
 				result = changeQuantity(clientOrderItem, (packageQuantity * clientOrderItem.getPackaging()) + clientOrderItem.getPieceQuantity());
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -189,7 +209,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		clientOrderItem.setProductCode(product.getProductCode());
 		clientOrderItem.setDisplayName(product.getDisplayName());
 		clientOrderItem.setPackaging(product.getPackaging());
-		clientOrderItem.setUnitPrice(product.getNetSellingPrice());
+		clientOrderItem.setUnitPrice(product.getSellingPrice() * (100.0f + clientOrderItem.getClientOrder().getCreator().getMarkup()) / 100.0f);
 		clientOrderItem.setDiscount(0.0f);		//PROMOTIONS UPDATE
 	}
 }

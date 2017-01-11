@@ -1,4 +1,4 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice'],
+/*define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice'],
 		function (dialog, app, ko, clientOrderService) {
     var Accept = function(clientOrder, title) {
     	this.clientOrder = clientOrder;
@@ -83,4 +83,4 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     };
     
     return Accept;
-});
+});*/

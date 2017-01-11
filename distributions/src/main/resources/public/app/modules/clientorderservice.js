@@ -83,7 +83,7 @@ define(['jquery'], function ($) {
     		});
     	},
     	
-    	testAcceptClientOrder: function(clientOrderId, warehouse) {
+    	/*testAcceptClientOrder: function(clientOrderId, warehouse) {
     		return $.ajax({
     			url: '/services/clientorder/testaccept',
     			method: 'POST',
@@ -92,20 +92,19 @@ define(['jquery'], function ($) {
     				warehouse: warehouse
     			}
     		});
-    	},
+    	},*/
     	
-    	acceptClientOrder: function(clientOrderId, warehouse) {
+    	acceptClientOrder: function(clientOrderId) {
     		return $.ajax({
     			url: '/services/clientorder/accept',
     			method: 'POST',
     			data: {
-    				clientOrderId: clientOrderId,
-    				warehouse: warehouse
+    				clientOrderId: clientOrderId
     			}
     		});
     	},
     	
-    	adjustAndAcceptClientOrder: function(clientOrderId, warehouse) {
+    	/*adjustAndAcceptClientOrder: function(clientOrderId, warehouse) {
     		return $.ajax({
     			url: '/services/clientorder/adjustaccept',
     			method: 'POST',
@@ -114,7 +113,7 @@ define(['jquery'], function ($) {
     				warehouse: warehouse
     			}
     		});
-    	},
+    	},*/
     	
     	payClientOrder: function(clientOrderId) {
     		return $.ajax({

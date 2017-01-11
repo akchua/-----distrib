@@ -32,7 +32,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice',
     AddOrder.prototype.refreshClientOrderList = function() {
     	var self = this;
     	
-    	clientOrderService.getAcceptedClientOrderList(self.currentPage(), self.warehouse, false).done(function(data) {
+    	clientOrderService.getAcceptedClientOrderList(self.currentPage(), null, false).done(function(data) {
     		self.clientOrderList(data.list);
     		self.totalItems(data.total);
     	});

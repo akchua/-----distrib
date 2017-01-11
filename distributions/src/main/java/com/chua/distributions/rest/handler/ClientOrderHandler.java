@@ -34,11 +34,7 @@ public interface ClientOrderHandler {
 	
 	ResultBean submitClientOrder(Long clientOrderId);
 	
-	ResultBean testAcceptClientOrder(Long clientOrderId, Warehouse warehouse);
-	
-	ResultBean acceptClientOrder(Long clientOrderId, Warehouse warehouse);
-	
-	ResultBean adjustAndAcceptClientOrder(Long clientOrderId, Warehouse warehouse);
+	ResultBean acceptClientOrder(Long clientOrderId);
 	
 	ResultBean payClientOrder(Long clientOrderId);
 	

@@ -21,13 +21,9 @@ import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
-import com.chua.distributions.database.entity.Product;
-import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
-import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.UserService;
-import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.UserType;
@@ -39,7 +35,6 @@ import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
-import com.chua.distributions.utility.format.QuantityFormatter;
 import com.chua.distributions.utility.format.SalesReportFormatter;
 
 /**
@@ -60,12 +55,6 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
 	
-	@Autowired
-	private WarehouseItemService warehouseItemService;
-	
-	@Autowired
-	private ProductService productService;
-
 	@Override
 	public ClientOrder getClientOrder(Long clientOrderId) {
 		refreshClientOrder(clientOrderId);
@@ -179,7 +168,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		return result;
 	}
 	
-	@Override
+	/*@Override
 	public ResultBean testAcceptClientOrder(Long clientOrderId, Warehouse warehouse) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
@@ -209,24 +198,16 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		}
 		
 		return result;
-	}
+	}*/
 
 	@Override
-	public ResultBean acceptClientOrder(Long clientOrderId, Warehouse warehouse) {
+	public ResultBean acceptClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
 			if(clientOrder.getStatus().equals(Status.SUBMITTED) || clientOrder.getStatus().equals(Status.ACCEPTED)) {
-				boolean flag = true;
-				if(clientOrder.getWarehouse() != null) {
-					flag = addToWarehouse(clientOrder, clientOrder.getWarehouse());
-				}
-				if(flag) {
-					result = acceptClientOrder(clientOrder, warehouse);
-				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
-				}
+				result = acceptClientOrder(clientOrder);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
 						Html.line(" You are not authorized to accept order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
@@ -238,7 +219,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		return result;
 	}
 
-	@Override
+	/*@Override
 	public ResultBean adjustAndAcceptClientOrder(Long clientOrderId, Warehouse warehouse) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
@@ -268,31 +249,26 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		}
 		
 		return result;
-	}
+	}*/
 	
-	private ResultBean acceptClientOrder(ClientOrder clientOrder, Warehouse warehouse) {
+	private ResultBean acceptClientOrder(ClientOrder clientOrder) {
 		final ResultBean result;
 		
-		if(removeFromWareHouse(clientOrder, warehouse)) {
-			clientOrder.setStatus(Status.ACCEPTED);
-			clientOrder.setWarehouse(warehouse);
-			
-			result = new ResultBean();
-			result.setSuccess(clientOrderService.update(clientOrder) &&
-					EmailUtil.send(clientOrder.getCreator().getEmailAddress(), 
-							null,
-							MailConstants.DEFAULT_EMAIL,
-							"Order Accepted",
-							"Thank you " + clientOrder.getCreator().getFormattedName() + "(" + clientOrder.getCreator().getBusinessName() + ") for ordering at Prime Pad."
-							+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
-							null));
-			if(result.getSuccess()) {
-				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted and removed Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + " from stock."));
-			} else {
-				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
-			}
+		clientOrder.setStatus(Status.ACCEPTED);
+
+		result = new ResultBean();
+		result.setSuccess(clientOrderService.update(clientOrder) &&
+				EmailUtil.send(clientOrder.getCreator().getEmailAddress(), 
+						null,
+						MailConstants.DEFAULT_EMAIL,
+						"Order Accepted",
+						"Thank you " + clientOrder.getCreator().getFormattedName() + "(" + clientOrder.getCreator().getBusinessName() + ") for ordering at Prime Pad."
+						+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
+						null));
+		if(result.getSuccess()) {
+			result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + ". An email notification has been sent to the client."));
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 		}
 		
 		return result;
@@ -336,9 +312,6 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 						&& clientOrder.getStatus().equals(Status.ACCEPTED)) {
 				result = new ResultBean();
 				
-				if(clientOrder.getStatus().equals(Status.ACCEPTED)) {
-					addToWarehouse(clientOrder, clientOrder.getWarehouse());
-				}
 				clientOrder.setStatus(Status.CANCELLED);
 				
 				result.setSuccess(clientOrderService.delete(clientOrder));
@@ -414,7 +387,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				.collect(Collectors.toList());
 	}
 	
-	private void adjustClientOrder(ClientOrder clientOrder, Warehouse warehouse) {
+	/*private void adjustClientOrder(ClientOrder clientOrder, Warehouse warehouse) {
 		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
 		for(ClientOrderItem clientOrderItem : clientOrderItems) {
 			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
@@ -426,32 +399,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			}
 		}
 		refreshClientOrder(clientOrder.getId());
-	}
+	}*/
 	
-	private boolean removeFromWareHouse(ClientOrder clientOrder, Warehouse warehouse) {
-		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-		for(ClientOrderItem clientOrderItem : clientOrderItems) {
-			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
-			if(warehouseItem == null) {
-				final Product product = productService.find(clientOrderItem.getProductId());
-				final WarehouseItem warehouzeItem = new WarehouseItem();
-				
-				warehouzeItem.setProduct(product);
-				warehouzeItem.setWarehouse(warehouse);
-				warehouzeItem.setStockCount(0 - clientOrderItem.getQuantity());
-				
-				if(warehouseItemService.insert(warehouzeItem) == null) return false;
-			} else {
-				warehouseItem.setStockCount(warehouseItem.getStockCount() - clientOrderItem.getQuantity());
-				
-				if(!warehouseItemService.update(warehouseItem)) return false;;
-			}
-		}
-		
-		return true;
-	}
-	
-	private boolean addToWarehouse(ClientOrder clientOrder, Warehouse warehouse) {
+	/*private boolean addToWarehouse(ClientOrder clientOrder, Warehouse warehouse) {
 		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
 		for(ClientOrderItem clientOrderItem : clientOrderItems) {
 			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
@@ -472,7 +422,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		}
 		
 		return true;
-	}
+	}*/
 	
 	private void refreshClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
