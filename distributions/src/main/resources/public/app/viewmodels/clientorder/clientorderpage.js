@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/clientorderitemservice', 'viewmodels/clientorder/additem'],
-		function (app, ko, clientOrderService, clientOrderItemService, AddItem) {
+define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservice', 'modules/clientorderitemservice', 'viewmodels/clientorder/additem'],
+		function (app, system, ko, clientOrderService, clientOrderItemService, AddItem) {
     var ClientOrderPage = function() {
     	this.clientOrderItemList = ko.observable();
     	
@@ -24,6 +24,15 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/clien
 		this.totalItems = ko.observable();
 		this.currentPage = ko.observable(1);
 		this.currentPageSubscription = null;
+    };
+    
+    ClientOrderPage.prototype.canActivate = function(clientOrderId) {
+    	return system.defer(function (dfd) {
+    		clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
+    			dfd.resolve(clientOrder.creator.id == app.user.id);
+        	});
+        })
+        .promise();
     };
     
     ClientOrderPage.prototype.activate = function(clientOrderId) {
