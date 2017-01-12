@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
 
 /**
@@ -52,11 +53,14 @@ public class SalesReportScheduler {
 		salesReportQuery.setIncludeCreating(false);
 		salesReportQuery.setShowNetTrail(true);
 		salesReportQuery.setClientId(null);
-		salesReportQuery.setWarehouse(null);
 		
-		final ResultBean result = clientOrderHandler.generateReport(salesReportQuery);
-		
-		if(result.getSuccess()) LOG.info(result.getMessage());
-		else LOG.error(result.getMessage());
+		for(Warehouse warehouse : Warehouse.values()) {
+			salesReportQuery.setWarehouse(warehouse);
+			
+			final ResultBean result = clientOrderHandler.generateReport(salesReportQuery);
+			
+			if(result.getSuccess()) LOG.info(result.getMessage());
+			else LOG.error(result.getMessage());
+		}
 	}
 }

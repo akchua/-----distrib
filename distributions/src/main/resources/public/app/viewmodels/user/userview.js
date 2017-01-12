@@ -19,7 +19,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     		businessArea: ko.observable(),
     		businessAddress: ko.observable(),
     		businessContactNumber: ko.observable(),
-    		discount: ko.observable()
+    		discount: ko.observable(),
+    		markup: ko.observable(),
+    		vatType: ko.observable()
 	    };
     };
     
@@ -41,6 +43,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	self.userViewModel.businessAddress(self.user.businessAddress);
     	self.userViewModel.businessContactNumber(self.user.businessContactNumber);
     	self.userViewModel.discount(self.user.formattedDiscount);
+    	self.userViewModel.markup(self.user.formattedMarkup);
+    	if(self.user.vatType != null) self.userViewModel.vatType(self.user.vatType.displayName);
+    	else self.userViewModel.vatType('n/a');
     	
     	if(self.user.userType.name == 'CLIENT') self.showBusinessInfo(true);
     	else self.showBusinessInfo(false);

@@ -2,29 +2,39 @@
   	<form>
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
-			<h3 align="center">View User</h3>
+			<h3 align="center">View <span data-bind="text: userViewModel.userType"></span></h3>
 		</div>
 	  
 		<div class="modal-body">
 			<div class="container-fluid">
 				<div class="panel panel-info">
 					<div class="panel-heading">
-						<h3 class="panel-title"><strong data-bind="text: userViewModel.name"></strong></h3>
+						<h3 class="panel-title"><strong>Account Information</strong></h3>
 					</div>
 					
 					<div class="panel-body">
 						<dl class="dl-horizontal">
+							<dt>Name:</dt>
+							<dd data-bind="text: userViewModel.name"></dd>
 							<dt>Contact Number:</dt>
 							<dd data-bind="text: userViewModel.contactNumber"></dd>
 							<dt>Username:</dt>
 							<dd data-bind="text: userViewModel.username"></dd>
 							<dt>Email:</dt>
 							<dd data-bind="text: userViewModel.email"></dd>
-							<dt>User Type:</dt>
-							<dd data-bind="text: userViewModel.userType"></dd>
 						</dl>
-						<!-- ko if: showBusinessInfo -->
-						<hr><br>
+					</div>
+				</div>
+			</div>
+			
+			<!-- ko if: showBusinessInfo -->
+			<div class="container-fluid">
+				<div class="panel panel-danger">
+					<div class="panel-heading">
+						<h3 class="panel-title"><strong>Business Information</strong></h3>
+					</div>
+					
+					<div class="panel-body">
 						<dl class="dl-horizontal">
 							<dt>Business Name:</dt>
 							<dd data-bind="text: userViewModel.businessName"></dd>
@@ -34,13 +44,17 @@
 							<dd data-bind="text: userViewModel.businessAddress"></dd>
 							<dt>Business Contact#:</dt>
 							<dd data-bind="text: userViewModel.businessContactNumber"></dd>
-							<dt>Discount:</dt>
+							<dt>Client Discount:</dt>
 							<dd data-bind="text: userViewModel.discount"></dd>
+							<dt>Markup:</dt>
+							<dd data-bind="text: userViewModel.markup"></dd>
+							<dt>Vat Type:</dt>
+							<dd data-bind="text: userViewModel.vatType"></dd>
 				    	</dl>
-				    	<!-- /ko -->
 					</div>
 				</div>
 			</div>
+			<!-- /ko -->
 		</div>
   
 		<div class="modal-footer">

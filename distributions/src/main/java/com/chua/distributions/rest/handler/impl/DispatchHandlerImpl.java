@@ -258,36 +258,40 @@ public class DispatchHandlerImpl implements DispatchHandler {
 		
 		if(clientOrder != null) {
 			if(clientOrder.getStatus().equals(Status.ACCEPTED)) {
-				final Dispatch dispatch = dispatchService.find(dispatchId);
-				
-				if(dispatch != null) {
-					if(dispatch.getStatus().equals(Status.CREATING)) {
-						final DispatchItem dispatchItem = dispatchItemService.findByDispatchAndOrder(dispatchId, clientOrderId);
-						
-						if(dispatchItem == null) {
-							final DispatchItem dispatchItemm = new DispatchItem();
-							dispatchItemm.setClientOrder(clientOrder);
-							dispatchItemm.setDispatch(dispatch);
-							clientOrder.setWarehouse(dispatch.getWarehouse());
-							clientOrder.setStatus(Status.DISPATCHED);
+				if(!clientOrder.getNetTotal().equals(0.0f)) {
+					final Dispatch dispatch = dispatchService.find(dispatchId);
+					
+					if(dispatch != null) {
+						if(dispatch.getStatus().equals(Status.CREATING)) {
+							final DispatchItem dispatchItem = dispatchItemService.findByDispatchAndOrder(dispatchId, clientOrderId);
 							
-							result = new ResultBean();
-							result.setSuccess(dispatchItemService.insert(dispatchItemm) != null &&
-									clientOrderService.update(clientOrder));
-							if(result.getSuccess()) {
-								result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " added Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+							if(dispatchItem == null) {
+								final DispatchItem dispatchItemm = new DispatchItem();
+								dispatchItemm.setClientOrder(clientOrder);
+								dispatchItemm.setDispatch(dispatch);
+								clientOrder.setWarehouse(dispatch.getWarehouse());
+								clientOrder.setStatus(Status.DISPATCHED);
+								
+								result = new ResultBean();
+								result.setSuccess(dispatchItemService.insert(dispatchItemm) != null &&
+										clientOrderService.update(clientOrder));
+								if(result.getSuccess()) {
+									result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " added Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+								} else {
+									result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+								}
 							} else {
-								result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+								result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Client Order already in this dispatch.") + " Please refresh the page."));
 							}
 						} else {
-							result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Client Order already in this dispatch.") + " Please refresh the page."));
+							result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+									Html.line(" You are not authorized to add to dispatch with status " + Html.text(Color.BLUE, dispatch.getStatus().getDisplayName()) + "."));
 						}
 					} else {
-						result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-								Html.line(" You are not authorized to add to dispatch with status " + Html.text(Color.BLUE, dispatch.getStatus().getDisplayName()) + "."));
+						result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load dispatch. Please refresh the page."));
 					}
 				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load dispatch. Please refresh the page."));
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Selected Order is empty."));
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
