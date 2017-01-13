@@ -39,8 +39,8 @@ public class ClientOrderItemServiceImpl
 	}
 
 	@Override
-	public ClientOrderItem findByNameAndClientOrder(String displayName, Long clientOrderId) {
-		return dao.findByNameAndClientOrder(displayName, clientOrderId);
+	public ClientOrderItem findByProductAndClientOrder(Long productId, Long clientOrderId) {
+		return dao.findByProductAndClientOrder(productId, clientOrderId);
 	}
 
 	@Override

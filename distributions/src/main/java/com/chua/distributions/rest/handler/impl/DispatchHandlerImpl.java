@@ -257,7 +257,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.ACCEPTED)) {
+			if(clientOrder.getStatus().equals(Status.ACCEPTED) || clientOrder.getStatus().equals(Status.TO_FOLLOW)) {
 				if(!clientOrder.getNetTotal().equals(0.0f)) {
 					final Dispatch dispatch = dispatchService.find(dispatchId);
 					
@@ -311,7 +311,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 		
 		if(dispatchItem != null) {
 			if(dispatchItem.getDispatch().getStatus().equals(Status.CREATING)
-					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(3)
 						&& !dispatchItem.getDispatch().getStatus().equals(Status.RECEIVED)
 						&& !dispatchItem.getDispatch().getStatus().equals(Status.CANCELLED))) {
 				final ClientOrder clientOrder = dispatchItem.getClientOrder();

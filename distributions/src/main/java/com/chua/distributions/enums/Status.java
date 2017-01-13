@@ -18,6 +18,8 @@ public enum Status {
 	
 	ACCEPTED("Accepted", Integer.valueOf(3)),
 	
+	TO_FOLLOW("To Follow", Integer.valueOf(3)),
+	
 	DISPATCHED("Dispatched", Integer.valueOf(4)),
 	
 	RECEIVED("Delivered", Integer.valueOf(5)),

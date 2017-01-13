@@ -56,10 +56,10 @@ public class ClientOrderItemDAOImpl
 	}
 
 	@Override
-	public ClientOrderItem findByNameAndClientOrder(String displayName, Long clientOrderId) {
+	public ClientOrderItem findByProductAndClientOrder(Long productId, Long clientOrderId) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.eq("displayName", displayName));
+		conjunction.add(Restrictions.eq("productId", productId));
 		conjunction.add(Restrictions.eq("clientOrder.id", clientOrderId));
 		
 		return findUniqueResult(null, null, null, conjunction);

@@ -17,6 +17,7 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderItemHandler;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.format.QuantityFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -56,30 +57,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 			final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 			if(clientOrder != null) {
 				if(((clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) 
-						&& UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId()))
-						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-							&& !clientOrder.getStatus().equals(Status.RECEIVED)
-							&& !clientOrder.getStatus().equals(Status.PAID)
-							&& !clientOrder.getStatus().equals(Status.CANCELLED))) {
-					final ClientOrderItem clientOrderItem = clientOrderItemService.findByNameAndClientOrder(product.getDisplayName(), clientOrder.getId());
-					
-					if(clientOrderItem == null) {
-						final ClientOrderItem clientOrderItemm = new ClientOrderItem();
-						
-						clientOrderItemm.setClientOrder(clientOrder);
-						clientOrderItemm.setQuantity(product.getPackaging());
-						setClientOrderItem(clientOrderItemm, product);
-						
-						result = new ResultBean();
-						result.setSuccess(clientOrderItemService.insert(clientOrderItemm) != null);
-						if(result.getSuccess()) {
-							result.setMessage(Html.line("Added 1 package of " + Html.text(Color.BLUE, clientOrderItemm.getDisplayName()) + "."));
-						} else {
-							result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
-						}
-					} else {
-						result = changeQuantity(clientOrderItem, clientOrderItem.getQuantity() + clientOrderItem.getPackaging());
-					}
+						&& UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId()))) {
+					result = addItem(product, clientOrder, product.getPackaging());
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
 							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
@@ -93,6 +72,31 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		
 		return result;
 	}
+	
+	private ResultBean addItem(Product product, ClientOrder clientOrder, Integer quantity) {
+		final ResultBean result;
+		final ClientOrderItem clientOrderItem = clientOrderItemService.findByProductAndClientOrder(product.getId(), clientOrder.getId());
+		
+		if(clientOrderItem == null) {
+			final ClientOrderItem clientOrderItemm = new ClientOrderItem();
+			
+			clientOrderItemm.setClientOrder(clientOrder);
+			clientOrderItemm.setQuantity(quantity);
+			setClientOrderItem(clientOrderItemm, product);
+			
+			result = new ResultBean();
+			result.setSuccess(clientOrderItemService.insert(clientOrderItemm) != null);
+			if(result.getSuccess()) {
+				result.setMessage(Html.line("Added " + QuantityFormatter.format(quantity, product.getPackaging()) + " package of " + Html.text(Color.BLUE, clientOrderItemm.getDisplayName()) + "."));
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = changeQuantity(clientOrderItem, clientOrderItem.getQuantity() + quantity);
+		}
+		
+		return result;
+	}
 
 	@Override
 	public ResultBean removeItem(Long clientOrderItemId) {
@@ -101,11 +105,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		
 		if(clientOrderItem != null) {
 			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
-					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
 				result = removeItem(clientOrderItem);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -139,11 +139,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		
 		if(clientOrderItem != null) {
 			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
-					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
 				result = changeQuantity(clientOrderItem, (clientOrderItem.getPackageQuantity() * clientOrderItem.getPackaging()) + pieceQuantity);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -163,11 +159,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		
 		if(clientOrderItem != null) {
 			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) 
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))
-					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.RECEIVED)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.PAID)
-						&& !clientOrderItem.getClientOrder().getStatus().equals(Status.CANCELLED))) {
+					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
 				result = changeQuantity(clientOrderItem, (packageQuantity * clientOrderItem.getPackaging()) + clientOrderItem.getPieceQuantity());
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +

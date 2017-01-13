@@ -11,7 +11,7 @@ import com.chua.distributions.database.entity.ClientOrderItem;
  */
 public interface ClientOrderItemPrototype extends Prototype<ClientOrderItem, Long> {
 
-	ClientOrderItem findByNameAndClientOrder(String displayName, Long clientOrderId);
+	ClientOrderItem findByProductAndClientOrder(Long productId, Long clientOrderId);
 	
 	List<ClientOrderItem> findAllByClientOrder(Long clientOrderId);
 }

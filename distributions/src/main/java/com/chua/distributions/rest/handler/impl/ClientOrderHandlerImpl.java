@@ -206,7 +206,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.SUBMITTED) || clientOrder.getStatus().equals(Status.ACCEPTED)) {
+			if(clientOrder.getStatus().equals(Status.SUBMITTED)) {
 				result = acceptClientOrder(clientOrder);
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -309,7 +309,8 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		if(clientOrder != null) {
 			if(clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED) 
 					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
-						&& clientOrder.getStatus().equals(Status.ACCEPTED)) {
+						&& (clientOrder.getStatus().equals(Status.ACCEPTED)
+							|| clientOrder.getStatus().equals(Status.TO_FOLLOW))) {
 				result = new ResultBean();
 				
 				clientOrder.setStatus(Status.CANCELLED);
