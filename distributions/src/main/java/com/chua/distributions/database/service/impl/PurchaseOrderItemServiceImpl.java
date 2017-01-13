@@ -39,8 +39,8 @@ public class PurchaseOrderItemServiceImpl
 	}
 
 	@Override
-	public PurchaseOrderItem findByNameAndPurchaseOrder(String displayName, Long purchaseOrderId) {
-		return dao.findByNameAndPurchaseOrder(displayName, purchaseOrderId);
+	public PurchaseOrderItem findByProductAndPurchaseOrder(Long productId, Long purchaseOrderId) {
+		return dao.findByProductAndPurchaseOrder(productId, purchaseOrderId);
 	}
 
 	@Override

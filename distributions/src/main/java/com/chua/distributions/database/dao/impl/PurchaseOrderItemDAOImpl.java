@@ -54,10 +54,10 @@ public class PurchaseOrderItemDAOImpl
 	}
 
 	@Override
-	public PurchaseOrderItem findByNameAndPurchaseOrder(String displayName, Long purchaseOrderId) {
+	public PurchaseOrderItem findByProductAndPurchaseOrder(Long productId, Long purchaseOrderId) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.eq("displayName", displayName));
+		conjunction.add(Restrictions.eq("productId", productId));
 		conjunction.add(Restrictions.eq("purchaseOrder.id", purchaseOrderId));
 		
 		return findUniqueResult(null, null, null, conjunction);

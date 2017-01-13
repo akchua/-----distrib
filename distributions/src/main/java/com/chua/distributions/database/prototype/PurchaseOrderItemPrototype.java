@@ -11,7 +11,7 @@ import com.chua.distributions.database.entity.PurchaseOrderItem;
  */
 public interface PurchaseOrderItemPrototype extends Prototype<PurchaseOrderItem, Long> {
 
-	PurchaseOrderItem findByNameAndPurchaseOrder(String displayName, Long purchaseOrderId);
+	PurchaseOrderItem findByProductAndPurchaseOrder(Long productId, Long purchaseOrderId);
 	
 	List<PurchaseOrderItem> findAllByPurchaseOrder(Long purchaseOrderId);
 }

@@ -59,7 +59,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
 							&& !purchaseOrder.getStatus().equals(Status.PAID)
 							&& !purchaseOrder.getStatus().equals(Status.CANCELLED))) {
-					final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByNameAndPurchaseOrder(product.getDisplayName(), purchaseOrder.getId());
+					final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByProductAndPurchaseOrder(product.getId(), purchaseOrder.getId());
 					
 					if(purchaseOrderItem == null) {
 						final PurchaseOrderItem purchaseOrderItemm = new PurchaseOrderItem();
