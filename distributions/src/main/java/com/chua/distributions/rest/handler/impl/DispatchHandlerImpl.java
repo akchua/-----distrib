@@ -311,7 +311,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 		
 		if(dispatchItem != null) {
 			if(dispatchItem.getDispatch().getStatus().equals(Status.CREATING)
-					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(3)
+					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
 						&& !dispatchItem.getDispatch().getStatus().equals(Status.RECEIVED)
 						&& !dispatchItem.getDispatch().getStatus().equals(Status.CANCELLED))) {
 				final ClientOrder clientOrder = dispatchItem.getClientOrder();

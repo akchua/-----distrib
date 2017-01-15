@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
+import com.chua.distributions.utility.EmailUtil;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -60,7 +62,17 @@ public class SalesReportScheduler {
 			final ResultBean result = clientOrderHandler.generateReport(salesReportQuery);
 			
 			if(result.getSuccess()) LOG.info(result.getMessage());
-			else LOG.error(result.getMessage());
+			else {
+				LOG.error(result.getMessage());
+				EmailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER, 
+						null,
+						MailConstants.DEFAULT_EMAIL,
+						"Sales Report",
+						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + "." + "\n"
+						+ "\n"
+						+ result.getMessage(),
+						null);
+			}
 		}
 	}
 }
