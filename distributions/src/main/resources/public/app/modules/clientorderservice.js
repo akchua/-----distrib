@@ -9,6 +9,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getTransferInstance: function(sourceId) {
+			return $.ajax({
+				url: '/services/clientorder/gettransfer',
+				data: {
+					sourceId: sourceId
+				}
+			});
+		},
+		
 		getClientOrderList: function(currentPage, showPaid) {
 			return $.ajax({
 				url: '/services/clientorder/list',

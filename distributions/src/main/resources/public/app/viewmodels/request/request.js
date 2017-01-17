@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, userService, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview', 'viewmodels/clientorder/transfer'],
+		function (router, app, ko, clientOrderService, userService, SaleView, UserView, Transfer) {
     var Request = function() {
     	this.clientOrderList = ko.observable();
     	
@@ -36,7 +36,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	var self = this;
     	
     	userService.getUser(clientId).done(function(client) {
-    		UserView.show(client);
+    		UserView.show(client)
     	});
     };
     
@@ -56,6 +56,12 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
         		});
 			}
 		})
+    };
+    
+    Request.prototype.transfer = function(clientOrderId) {
+    	Transfer.show(clientOrderId).done(function() {
+    		self.refreshClientOrderList();
+    	});
     };
     
     /*Request.prototype.changeWarehouse = function(clientOrderId) {

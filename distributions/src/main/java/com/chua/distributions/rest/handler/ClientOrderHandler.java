@@ -18,6 +18,8 @@ public interface ClientOrderHandler {
 
 	ClientOrder getClientOrder(Long clientOrderId);
 
+	ClientOrder getTransferInstance(Long sourceId);
+	
 	ObjectList<ClientOrder> getClientOrderObjectList(Integer pageNumber, Boolean showPaid);
 	
 	ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted);

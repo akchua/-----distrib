@@ -7,11 +7,11 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderitem
     	this.clientOrderItemList = ko.observable();
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
-		this.totalItems = ko.observable();
+		
+    	this.totalItems = ko.observable();
 		this.currentPage = ko.observable(1);
 		this.currentPageSubscription = null;
 		
-		this.itemsPerPage2 = ko.observable(app.user.itemsPerPage);
 		this.totalItems2 = ko.observable();
 		this.currentPage2 = ko.observable(1);
 		this.currentPageSubscription2 = null;

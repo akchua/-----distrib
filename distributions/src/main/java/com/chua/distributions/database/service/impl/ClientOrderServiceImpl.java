@@ -36,8 +36,11 @@ public class ClientOrderServiceImpl
 	
 	@Override
 	public ObjectList<ClientOrder> findAllRequestWithPaging(int pageNumber, int resultsPerPage, boolean showAccepted) {
-		if(showAccepted) return dao.findAllWithPagingAndStatus(pageNumber, resultsPerPage, new Status[] { Status.SUBMITTED, Status.ACCEPTED });
-		else return	dao.findAllWithPagingAndStatus(pageNumber, resultsPerPage, new Status[] { Status.SUBMITTED });
+		final Status[] status;
+		if(showAccepted) status = new Status[] { Status.SUBMITTED, Status.ACCEPTED, Status.TO_FOLLOW };
+		else status = new Status[] { Status.SUBMITTED };
+		
+		return dao.findAllWithPagingAndStatus(pageNumber, resultsPerPage, status);
 	}
 	
 	@Override
@@ -57,13 +60,18 @@ public class ClientOrderServiceImpl
 	}
 
 	@Override
-	public List<ClientOrder> findAllByClientWithStatusCreatingOrSubmitted(Long clientId) {
+	public List<ClientOrder> findAllCreatingOrSubmittedByClient(Long clientId) {
 		return dao.findAllByClientAndStatus(clientId, new Status[] { Status.CREATING, Status.SUBMITTED });
 	}
 
 	@Override
-	public List<ClientOrder> findAllWithStatusReceived() {
+	public List<ClientOrder> findAllReceived() {
 		return dao.findAllByStatus(new Status[] { Status.RECEIVED });
+	}
+	
+	@Override
+	public List<ClientOrder> findAllToFollowByClient(Long clientId) {
+		return dao.findAllByClientAndStatus(clientId, new Status[] { Status.TO_FOLLOW });
 	}
 
 	@Override

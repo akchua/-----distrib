@@ -21,6 +21,7 @@ import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
+import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.UserService;
@@ -60,7 +61,40 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		refreshClientOrder(clientOrderId);
 		return clientOrderService.find(clientOrderId);
 	}
-
+	
+	@Override
+	public ClientOrder getTransferInstance(Long sourceId) {
+		final ClientOrder sourceOrder = clientOrderService.find(sourceId);
+		final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getCreator().getId());
+		ClientOrder transferInstance = null;
+		
+		for(ClientOrder clientOrder : toFollowOrders) {
+			if(clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
+				transferInstance = clientOrder;
+				break;
+			}
+		}
+		
+		if(transferInstance == null) {
+			final User sourceOwner = clientOrderService.find(sourceId).getCreator();
+			final ClientOrder newClientOrder = new ClientOrder();
+			
+			newClientOrder.setCreator(sourceOwner);
+			newClientOrder.setGrossTotal(0.0f);
+			newClientOrder.setDiscountTotal(0.0f);
+			newClientOrder.setStatus(Status.TO_FOLLOW);
+			newClientOrder.setWarehouse(null);
+			newClientOrder.setAdditionalDiscount(sourceOwner.getDiscount());
+			newClientOrder.setLessVat(sourceOwner.getVatType().getLessVat());
+			newClientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
+			
+			clientOrderService.insert(newClientOrder);
+			transferInstance = newClientOrder;
+		}
+		
+		return transferInstance;
+	}
+	
 	@Override
 	public ObjectList<ClientOrder> getClientOrderObjectList(Integer pageNumber, Boolean showPaid) {
 		return clientOrderService.findByClientWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId(), showPaid);
@@ -89,7 +123,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	public StringWrapper getFormattedTotalPayable() {
 		final StringWrapper sw = new StringWrapper();
-		List<ClientOrder> clientOrders = clientOrderService.findAllWithStatusReceived();
+		List<ClientOrder> clientOrders = clientOrderService.findAllReceived();
 		
 		float total = 0.0f;
 		for(ClientOrder clientOrder : clientOrders) {
@@ -106,7 +140,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ResultBean result;
 		
 		if(UserContextHolder.getUser().getUserType().equals(UserType.CLIENT)) {
-			final List<ClientOrder> clientOrders = clientOrderService.findAllByClientWithStatusCreatingOrSubmitted(UserContextHolder.getUser().getId());
+			final List<ClientOrder> clientOrders = clientOrderService.findAllCreatingOrSubmittedByClient(UserContextHolder.getUser().getId());
 			
 			if(clientOrders != null && clientOrders.size() < 5) {
 				final ClientOrder clientOrder = new ClientOrder();

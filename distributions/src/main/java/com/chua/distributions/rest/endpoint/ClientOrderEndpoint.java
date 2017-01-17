@@ -41,6 +41,13 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/gettransfer")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ClientOrder getTransferInstance(@QueryParam("sourceId") Long sourceId) {
+		return clientOrderHandler.getTransferInstance(sourceId);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,

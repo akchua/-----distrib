@@ -75,21 +75,26 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 	
 	private ResultBean addItem(Product product, ClientOrder clientOrder, Integer quantity) {
 		final ResultBean result;
+		
 		final ClientOrderItem clientOrderItem = clientOrderItemService.findByProductAndClientOrder(product.getId(), clientOrder.getId());
 		
 		if(clientOrderItem == null) {
-			final ClientOrderItem clientOrderItemm = new ClientOrderItem();
-			
-			clientOrderItemm.setClientOrder(clientOrder);
-			clientOrderItemm.setQuantity(quantity);
-			setClientOrderItem(clientOrderItemm, product);
-			
-			result = new ResultBean();
-			result.setSuccess(clientOrderItemService.insert(clientOrderItemm) != null);
-			if(result.getSuccess()) {
-				result.setMessage(Html.line("Added " + QuantityFormatter.format(quantity, product.getPackaging()) + " package of " + Html.text(Color.BLUE, clientOrderItemm.getDisplayName()) + "."));
+			if(quantity > 0) {
+				final ClientOrderItem clientOrderItemm = new ClientOrderItem();
+				
+				clientOrderItemm.setClientOrder(clientOrder);
+				clientOrderItemm.setQuantity(quantity);
+				setClientOrderItem(clientOrderItemm, product);
+				
+				result = new ResultBean();
+				result.setSuccess(clientOrderItemService.insert(clientOrderItemm) != null);
+				if(result.getSuccess()) {
+					result.setMessage(Html.line("Added " + QuantityFormatter.format(quantity, product.getPackaging()) + " package of " + Html.text(Color.BLUE, clientOrderItemm.getDisplayName()) + "."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
 			} else {
-				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity must be greater than 0."));
 			}
 		} else {
 			result = changeQuantity(clientOrderItem, clientOrderItem.getQuantity() + quantity);
@@ -191,6 +196,118 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 			}
 		} else {
 			result = removeItem(clientOrderItem);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean transferPiece(Long clientOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
+		final ClientOrder destinationOrder = clientOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(clientOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(clientOrderItem, destinationOrder, 1);
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public ResultBean transferPackage(Long clientOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
+		final ClientOrder destinationOrder = clientOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(clientOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(clientOrderItem, destinationOrder, clientOrderItem.getPackaging());
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public ResultBean transferAll(Long clientOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
+		final ClientOrder destinationOrder = clientOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(clientOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(clientOrderItem, destinationOrder, clientOrderItem.getQuantity());
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+	
+	private ResultBean transferItem(ClientOrderItem clientOrderItem, ClientOrder destinationOrder, Integer quantity) {
+		final ResultBean result;
+		
+		// SET TO [MAX] IF EXCEEDS QUANTITY
+		if(quantity > clientOrderItem.getQuantity()) {
+			quantity = clientOrderItem.getQuantity();
+		}
+		//
+		
+		result = new ResultBean();
+		
+		Product product = productService.find(clientOrderItem.getProductId());
+		
+		result.setSuccess(changeQuantity(clientOrderItem, clientOrderItem.getQuantity() - quantity).getSuccess()
+							&& addItem(product, destinationOrder, quantity).getSuccess());
+		if(result.getSuccess()) {
+			result.setMessage(Html.line("Transferred "
+								+ Html.text(Color.GREEN, QuantityFormatter.format(quantity, product.getPackaging()))
+								+ " " + product.getDisplayName() + " from "
+								+ Html.text(Color.BLUE, "Order of " + Html.text(Color.BLUE, "ID #" + clientOrderItem.getClientOrder().getId()))
+								+ " to "
+								+ Html.text(Color.BLUE, "Order of " + Html.text(Color.BLUE, "ID #" + destinationOrder.getId())) + "."));
+		} else {
+			result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+		}
+		
+		return result;
+	}
+	
+	private ResultBean validateTransfer(ClientOrderItem clientOrderItem, ClientOrder destinationOrder) {
+		final ResultBean result;
+		
+		if(clientOrderItem != null) {
+			if(destinationOrder != null) {
+				Status orderStatus = clientOrderItem.getClientOrder().getStatus();
+				
+				if(orderStatus.equals(Status.ACCEPTED) || orderStatus.equals(Status.TO_FOLLOW)
+						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+							&& !orderStatus.equals(Status.RECEIVED)
+							&& !orderStatus.equals(Status.CANCELLED))) {
+					Status destinationStatus = destinationOrder.getStatus();
+					if(destinationStatus.equals(Status.ACCEPTED) || destinationStatus.equals(Status.TO_FOLLOW)
+							|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+								&& !destinationStatus.equals(Status.RECEIVED)
+								&& !destinationStatus.equals(Status.CANCELLED))) {
+						result = new ResultBean(Boolean.TRUE, "");
+					} else {
+						result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+								Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, destinationStatus.getDisplayName()) + "."));
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, orderStatus.getDisplayName()) + "."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load item. Please refresh the page."));
 		}
 		
 		return result;

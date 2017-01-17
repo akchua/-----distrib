@@ -22,4 +22,10 @@ public interface ClientOrderItemHandler {
 	ResultBean changePieceQuantity(Long clientOrderItemId, Integer pieceQuantity);
 	
 	ResultBean changePackageQuantity(Long clientOrderItemId, Integer packageQuantity);
+	
+	ResultBean transferPiece(Long clientOrderItemId, Long destinationOrderId);
+	
+	ResultBean transferPackage(Long clientOrderItemId, Long destinationOrderId);
+	
+	ResultBean transferAll(Long clientOrderItemId, Long destinationOrderId);
 }

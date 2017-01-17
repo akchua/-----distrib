@@ -24,7 +24,9 @@ public interface ClientOrderService extends Service<ClientOrder, Long>, ClientOr
 	
 	ObjectList<ClientOrder> findAllReceivedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse);
 	
-	List<ClientOrder> findAllByClientWithStatusCreatingOrSubmitted(Long clientId);
+	List<ClientOrder> findAllCreatingOrSubmittedByClient(Long clientId);
 	
-	List<ClientOrder> findAllWithStatusReceived();
+	List<ClientOrder> findAllReceived();
+	
+	List<ClientOrder> findAllToFollowByClient(Long clientId);
 }

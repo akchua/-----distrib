@@ -68,4 +68,25 @@ public class ClientOrderItemEndpoint {
 	public ResultBean changePackageQuantity(@FormParam("clientOrderItemId") Long clientOrderItemId, @FormParam("packageQuantity") Integer packageQuantity) {
 		return clientOrderItemHandler.changePackageQuantity(clientOrderItemId, packageQuantity);
 	}
+	
+	@POST
+	@Path("/transferpiece")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferPiece(@FormParam("clientOrderItemId") Long clientOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return clientOrderItemHandler.transferPiece(clientOrderItemId, destinationOrderId);
+	}
+	
+	@POST
+	@Path("/transferpackage")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferPackage(@FormParam("clientOrderItemId") Long clientOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return clientOrderItemHandler.transferPackage(clientOrderItemId, destinationOrderId);
+	}
+	
+	@POST
+	@Path("/transferall")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferAll(@FormParam("clientOrderItemId") Long clientOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return clientOrderItemHandler.transferAll(clientOrderItemId, destinationOrderId);
+	}
 }
