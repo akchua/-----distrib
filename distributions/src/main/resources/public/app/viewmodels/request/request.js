@@ -59,6 +59,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     };
     
     Request.prototype.transfer = function(clientOrderId) {
+    	var self = this;
+    	
     	Transfer.show(clientOrderId).done(function() {
     		self.refreshClientOrderList();
     	});

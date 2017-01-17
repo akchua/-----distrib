@@ -32,6 +32,7 @@
 							
 							<td>
 								<div class="btn-group pull-right">
+									<button data-bind="click: function() { $parent.transfer(clientOrder.id) }" type="button" class="btn btn-primary btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
 									<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
 									<button data-bind="click: function() { $parent.addItem(clientOrder.id) }" type="button" class="btn btn-success btn-sm" title="Add Item"><i class="fa fa-plus-circle"></i></button>
 								</div>

@@ -99,6 +99,8 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     	});
     };
     
+    };
+    
     DispatchPage.prototype.remove = function(clientOrderId, dispatchItemId) {
     	var self = this;
     	

@@ -1,5 +1,5 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (dialog, app, ko, dispatchService, clientOrderService, userService, SaleView, UserView) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview', 'viewmodels/clientorder/transfer'],
+		function (dialog, app, ko, dispatchService, clientOrderService, userService, SaleView, UserView, Transfer) {
     var AddOrder = function(dispatchId, warehouse) {
     	this.dispatchId = dispatchId;
     	this.warehouse = warehouse;
@@ -64,6 +64,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice',
     	
     	userService.getUser(clientId).done(function(client) {
     		UserView.show(client);
+    	});
+    };
+    
+    AddOrder.prototype.transfer = function(clientOrderId) {
+    	var self = this;
+    	
+    	Transfer.show(clientOrderId).done(function() {
+    		self.refreshClientOrderList();
     	});
     };
     

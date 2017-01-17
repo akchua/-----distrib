@@ -25,7 +25,7 @@
 		<button data-bind="click: dispatchNow, enable: enableDispatch" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-reply"> Dispatch</i></button>
 		<!-- /ko -->
 		<!-- ko ifnot: showDispatchButton -->
-		<div class="col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"></div>
+		<button type="button" class="btn btn-info col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3 disabled">Dispatched</button>
 		<!-- /ko -->
 		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
 	</div>
