@@ -179,10 +179,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {
-				if(self.sourceOrder.netTotal() == 0) {
-					clientOrderService.removeClientOrder(self.sourceOrder.id()).done(function() {
-						dialog.close(self);
-					});
+				if(self.sourceOrder.netTotal() == 0 && self.sourceOrder.id() != self.destinationOrder.id()) {
+					clientOrderService.removeClientOrder(self.sourceOrder.id());
+					dialog.close(self);
 				} else {
 					dialog.close(self);
 				}

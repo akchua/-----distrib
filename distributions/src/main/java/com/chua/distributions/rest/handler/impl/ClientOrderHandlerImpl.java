@@ -65,31 +65,36 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	public ClientOrder getTransferInstance(Long sourceId) {
 		final ClientOrder sourceOrder = clientOrderService.find(sourceId);
-		final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getCreator().getId());
 		ClientOrder transferInstance = null;
-		
-		for(ClientOrder clientOrder : toFollowOrders) {
-			if(clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
-				transferInstance = clientOrder;
-				break;
+
+		if(!sourceOrder.getNetTotal().equals(0.0f)) {
+			final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getCreator().getId());
+			
+			for(ClientOrder clientOrder : toFollowOrders) {
+				if(clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
+					transferInstance = clientOrder;
+					break;
+				}
 			}
-		}
-		
-		if(transferInstance == null) {
-			final User sourceOwner = clientOrderService.find(sourceId).getCreator();
-			final ClientOrder newClientOrder = new ClientOrder();
 			
-			newClientOrder.setCreator(sourceOwner);
-			newClientOrder.setGrossTotal(0.0f);
-			newClientOrder.setDiscountTotal(0.0f);
-			newClientOrder.setStatus(Status.TO_FOLLOW);
-			newClientOrder.setWarehouse(null);
-			newClientOrder.setAdditionalDiscount(sourceOwner.getDiscount());
-			newClientOrder.setLessVat(sourceOwner.getVatType().getLessVat());
-			newClientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
-			
-			clientOrderService.insert(newClientOrder);
-			transferInstance = newClientOrder;
+			if(transferInstance == null) {
+				final User sourceOwner = clientOrderService.find(sourceId).getCreator();
+				final ClientOrder newClientOrder = new ClientOrder();
+				
+				newClientOrder.setCreator(sourceOwner);
+				newClientOrder.setGrossTotal(0.0f);
+				newClientOrder.setDiscountTotal(0.0f);
+				newClientOrder.setStatus(Status.TO_FOLLOW);
+				newClientOrder.setWarehouse(null);
+				newClientOrder.setAdditionalDiscount(sourceOwner.getDiscount());
+				newClientOrder.setLessVat(sourceOwner.getVatType().getLessVat());
+				newClientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
+				
+				clientOrderService.insert(newClientOrder);
+				transferInstance = newClientOrder;
+			}
+		} else {
+			transferInstance = sourceOrder;
 		}
 		
 		return transferInstance;

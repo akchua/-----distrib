@@ -42,7 +42,7 @@
 								<button data-bind="click: function() { $parent.accept(clientOrder.id) }, enable: $parent.enableAccept " type="button" class="btn btn-success btn-sm" title="Accept"><i class="fa fa-check"></i></button>
 								<!-- /ko -->
 								<!-- ko ifnot: clientOrder.status.name == 'SUBMITTED' -->
-								<button data-bind="click: function() { $parent.transfer(clientOrder.id) }" type="button" class="btn btn-primary btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+								<button data-bind="click: function() { $parent.transfer(clientOrder.id) }, enable: clientOrder.netTotal != 0" type="button" class="btn btn-primary btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
 								<!-- /ko -->
 								<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
 								<button data-bind="click: function() { $parent.remove(clientOrder.id) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>

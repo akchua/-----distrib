@@ -18,6 +18,12 @@ public interface ClientOrderHandler {
 
 	ClientOrder getClientOrder(Long clientOrderId);
 
+	/**
+	 * This method is used for auto generating destination instances for ClientOrderItem transfer.
+	 * Get an empty instance of ClientOrder from the same creator with the TO_FOLLOW status.
+	 * @param sourceId The id of the source ClientOrder.
+	 * @return The ClientOrder instance based on the source given. Return source instance if source is an empty order.
+	 */
 	ClientOrder getTransferInstance(Long sourceId);
 	
 	ObjectList<ClientOrder> getClientOrderObjectList(Integer pageNumber, Boolean showPaid);
