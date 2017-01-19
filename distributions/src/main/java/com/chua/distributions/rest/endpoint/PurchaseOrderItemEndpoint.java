@@ -68,4 +68,25 @@ public class PurchaseOrderItemEndpoint {
 	public ResultBean changePackageQuantity(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, @FormParam("packageQuantity") Integer packageQuantity) {
 		return purchaseOrderItemHandler.changePackageQuantity(purchaseOrderItemId, packageQuantity);
 	}
+	
+	@POST
+	@Path("/transferpiece")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferPiece(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return purchaseOrderItemHandler.transferPiece(purchaseOrderItemId, destinationOrderId);
+	}
+	
+	@POST
+	@Path("/transferpackage")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferPackage(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return purchaseOrderItemHandler.transferPackage(purchaseOrderItemId, destinationOrderId);
+	}
+	
+	@POST
+	@Path("/transferall")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferAll(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {
+		return purchaseOrderItemHandler.transferAll(purchaseOrderItemId, destinationOrderId);
+	}
 }

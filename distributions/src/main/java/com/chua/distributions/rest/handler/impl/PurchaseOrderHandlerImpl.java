@@ -61,6 +61,41 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		refreshPurchaseOrder(purchaseOrderId);
 		return purchaseOrderService.find(purchaseOrderId);
 	}
+	
+	@Override
+	public PurchaseOrder getTransferInstance(Long sourceId) {
+		final PurchaseOrder sourceOrder = purchaseOrderService.find(sourceId);
+		PurchaseOrder transferInstance = null;
+		
+		if(!sourceOrder.getNetTotal().equals(0.0f)) {
+			final List<PurchaseOrder> toFollowOrders = purchaseOrderService.findAllToFollowByCompanyAndWarehouse(sourceOrder.getCompany().getId(), sourceOrder.getWarehouse());
+			
+			for(PurchaseOrder purchaseOrder : toFollowOrders) {
+				if(purchaseOrder.getNetTotal().equals(0.0f) && !purchaseOrder.getId().equals(sourceId)) {
+					transferInstance = purchaseOrder;
+					break;
+				}
+			}
+			
+			if(transferInstance == null) {
+				final PurchaseOrder newPurchaseOrder = new PurchaseOrder();
+				
+				newPurchaseOrder.setCreator(UserContextHolder.getUser().getUserEntity());
+				newPurchaseOrder.setStatus(Status.TO_FOLLOW);
+				newPurchaseOrder.setWarehouse(sourceOrder.getWarehouse());
+				newPurchaseOrder.setCompany(sourceOrder.getCompany());
+				newPurchaseOrder.setGrossTotal(0.0f);
+				newPurchaseOrder.setDiscountTotal(0.0f);
+				
+				purchaseOrderService.insert(newPurchaseOrder);
+				transferInstance = newPurchaseOrder;
+			}
+		} else {
+			transferInstance = sourceOrder;
+		}
+		
+		return transferInstance;
+	}
 
 	@Override
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid) {
@@ -169,23 +204,27 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
-				final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
-				SimplePdfWriter.write(PurchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
-				boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
-						null,
-						MailConstants.DEFAULT_EMAIL,
-						"Purchase Order",
-						"Purchase Order #" + purchaseOrder.getId(),
-						new String[] { filePath });
-				
-				purchaseOrder.setStatus(Status.ACCEPTED);
-				
-				result = new ResultBean();
-				result.setSuccess(flag && purchaseOrderService.update(purchaseOrder));
-				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " sent email of Purchase Order with " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " to " + Html.text(Color.TURQUOISE, purchaseOrder.getCompany().getEmailAddress()) + "."));
+				if(!purchaseOrder.getNetTotal().equals(0.0f)) {
+					final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
+					SimplePdfWriter.write(PurchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
+					boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
+							null,
+							MailConstants.DEFAULT_EMAIL,
+							"Purchase Order",
+							"Purchase Order #" + purchaseOrder.getId(),
+							new String[] { filePath });
+					
+					purchaseOrder.setStatus(Status.ACCEPTED);
+					
+					result = new ResultBean();
+					result.setSuccess(flag && purchaseOrderService.update(purchaseOrder));
+					if(result.getSuccess()) {
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " sent email of Purchase Order with " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + " to " + Html.text(Color.TURQUOISE, purchaseOrder.getCompany().getEmailAddress()) + "."));
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
 				} else {
-					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Send Failed.") + " Please send a non-empty form."));
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
@@ -204,7 +243,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 		
 		if(purchaseOrder != null) {
-			if(purchaseOrder.getStatus().equals(Status.ACCEPTED)) {
+			if(purchaseOrder.getStatus().equals(Status.ACCEPTED) || purchaseOrder.getStatus().equals(Status.TO_FOLLOW)) {
 				if(addToWarehouse(purchaseOrder)) {
 					purchaseOrder.setStatus(Status.RECEIVED);
 					

@@ -17,6 +17,7 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderItemHandler;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.format.QuantityFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -59,25 +60,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
 							&& !purchaseOrder.getStatus().equals(Status.PAID)
 							&& !purchaseOrder.getStatus().equals(Status.CANCELLED))) {
-					final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByProductAndPurchaseOrder(product.getId(), purchaseOrder.getId());
-					
-					if(purchaseOrderItem == null) {
-						final PurchaseOrderItem purchaseOrderItemm = new PurchaseOrderItem();
-						
-						purchaseOrderItemm.setPurchaseOrder(purchaseOrder);
-						purchaseOrderItemm.setQuantity(product.getPackaging());
-						setPurchaseOrderItem(purchaseOrderItemm, product);
-						
-						result = new ResultBean();
-						result.setSuccess(purchaseOrderItemService.insert(purchaseOrderItemm) != null);
-						if(result.getSuccess()) {
-							result.setMessage(Html.line("Added 1 package of " + Html.text(Color.BLUE, purchaseOrderItemm.getDisplayName()) + "."));
-						} else {
-							result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
-						}
-					} else {
-						result = changeQuantity(purchaseOrderItem, purchaseOrderItem.getQuantity() + purchaseOrderItem.getPackaging());
-					}
+					result = addItem(product, purchaseOrder, product.getPackaging());
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
 							Html.line(" You are not authorized to change purchase order with status " + Html.text(Color.BLUE, purchaseOrder.getStatus().getDisplayName()) + "."));
@@ -87,6 +70,35 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	private ResultBean addItem(Product product, PurchaseOrder purchaseOrder, Integer quantity) {
+		final ResultBean result;
+		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByProductAndPurchaseOrder(product.getId(), purchaseOrder.getId());
+		
+		if(purchaseOrderItem == null) {
+			if(quantity > 0) {
+				final PurchaseOrderItem purchaseOrderItemm = new PurchaseOrderItem();
+				
+				purchaseOrderItemm.setPurchaseOrder(purchaseOrder);
+				purchaseOrderItemm.setQuantity(quantity);
+				setPurchaseOrderItem(purchaseOrderItemm, product);
+				
+				result = new ResultBean();
+				result.setSuccess(purchaseOrderItemService.insert(purchaseOrderItemm) != null);
+				if(result.getSuccess()) {
+					result.setMessage(Html.line("Added " + QuantityFormatter.format(quantity, product.getPackaging()) + " package of " + Html.text(Color.BLUE, purchaseOrderItemm.getDisplayName()) + "."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity must be greater than 0."));
+			}
+		} else {
+			result = changeQuantity(purchaseOrderItem, purchaseOrderItem.getQuantity() + quantity);
 		}
 		
 		return result;
@@ -191,6 +203,118 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 			}
 		} else {
 			result = removeItem(purchaseOrderItem);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean transferPiece(Long purchaseOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
+		final PurchaseOrder destinationOrder = purchaseOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(purchaseOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(purchaseOrderItem, destinationOrder, 1);
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean transferPackage(Long purchaseOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
+		final PurchaseOrder destinationOrder = purchaseOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(purchaseOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(purchaseOrderItem, destinationOrder, purchaseOrderItem.getPackaging());
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public ResultBean transferAll(Long purchaseOrderItemId, Long destinationOrderId) {
+		final ResultBean result;
+		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
+		final PurchaseOrder destinationOrder = purchaseOrderService.find(destinationOrderId);
+		final ResultBean validateTransfer = validateTransfer(purchaseOrderItem, destinationOrder);
+		
+		if(validateTransfer.getSuccess()) {
+			result = transferItem(purchaseOrderItem, destinationOrder, purchaseOrderItem.getQuantity());
+		} else {
+			result = validateTransfer;
+		}
+		
+		return result;
+	}
+	
+	private ResultBean transferItem(PurchaseOrderItem purchaseOrderItem, PurchaseOrder destinationOrder, Integer quantity) {
+		final ResultBean result;
+		
+		// SET TO [MAX] IF EXCEEDS QUANTITY
+		if(quantity > purchaseOrderItem.getQuantity()) {
+			quantity = purchaseOrderItem.getQuantity();
+		}
+		//
+		
+		result = new ResultBean();
+		
+		Product product = productService.find(purchaseOrderItem.getProductId());
+		
+		result.setSuccess(changeQuantity(purchaseOrderItem, purchaseOrderItem.getQuantity() - quantity).getSuccess()
+							&& addItem(product, destinationOrder, quantity).getSuccess());
+		if(result.getSuccess()) {
+			result.setMessage(Html.line("Transferred "
+								+ Html.text(Color.GREEN, QuantityFormatter.format(quantity, product.getPackaging()))
+								+ " " + product.getDisplayName() + " from "
+								+ Html.text(Color.BLUE, "Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrderItem.getPurchaseOrder().getId()))
+								+ " to "
+								+ Html.text(Color.BLUE, "Order of " + Html.text(Color.BLUE, "ID #" + destinationOrder.getId())) + "."));
+		} else {
+			result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+		}
+		
+		return result;
+	}
+	
+	private ResultBean validateTransfer(PurchaseOrderItem purchaseOrderItem, PurchaseOrder destinationOrder) {
+		final ResultBean result;
+		
+		if(purchaseOrderItem != null) {
+			if(destinationOrder != null) {
+				Status sourceStatus = purchaseOrderItem.getPurchaseOrder().getStatus();
+				
+				if(sourceStatus.equals(Status.ACCEPTED) || sourceStatus.equals(Status.TO_FOLLOW)
+						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+							&& !sourceStatus.equals(Status.RECEIVED)
+							&& !sourceStatus.equals(Status.CANCELLED))) {
+					Status destinationStatus = destinationOrder.getStatus();
+					if(destinationStatus.equals(Status.ACCEPTED) || destinationStatus.equals(Status.TO_FOLLOW)
+							|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
+								&& !destinationStatus.equals(Status.RECEIVED)
+								&& !destinationStatus.equals(Status.CANCELLED))) {
+						result = new ResultBean(Boolean.TRUE, "");
+					} else {
+						result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+								Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, destinationStatus.getDisplayName()) + "."));
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, sourceStatus.getDisplayName()) + "."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load item. Please refresh the page."));
 		}
 		
 		return result;

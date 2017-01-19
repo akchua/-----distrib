@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform', 'viewmodels/purchaseorder/purchaseview'],
-		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm, PurchaseView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform', 'viewmodels/purchaseorder/purchaseview', 'viewmodels/purchaseorder/transfer'],
+		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm, PurchaseView, Transfer) {
     var PurchaseOrder = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
@@ -70,6 +70,14 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 				});
 			}
 		})
+    };
+    
+    PurchaseOrder.prototype.transfer = function(purchaseOrderId) {
+    	var self = this;
+    	
+    	Transfer.show(purchaseOrderId).done(function() {
+    		self.refreshPurchaseOrderList();
+    	});
     };
     
     PurchaseOrder.prototype.receive = function(purchaseOrderId) {

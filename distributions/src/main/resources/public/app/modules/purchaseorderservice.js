@@ -9,6 +9,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getTransferInstance: function(sourceId) {
+			return $.ajax({
+				url: '/services/purchaseorder/gettransfer',
+				data: {
+					sourceId: sourceId
+				}
+			});
+		},
+		
 		getPurchaseOrderList: function(currentPage, companyId, warehouse, showPaid) {
 			return $.ajax({
 				url: '/services/purchaseorder/list',

@@ -63,6 +63,39 @@ define(['jquery'], function ($) {
 					packageQuantity: packageQuantity
 				}
 			});
+		},
+		
+		transferPiece: function(purchaseOrderItemId, destinationOrderId) {
+			return $.ajax({
+				url: '/services/purchaseorderitem/transferpiece',
+				method: 'POST',
+				data: {
+					purchaseOrderItemId: purchaseOrderItemId,
+					destinationOrderId: destinationOrderId
+				}
+			});
+		},
+		
+		transferPackage: function(purchaseOrderItemId, destinationOrderId) {
+			return $.ajax({
+				url: '/services/purchaseorderitem/transferpackage',
+				method: 'POST',
+				data: {
+					purchaseOrderItemId: purchaseOrderItemId,
+					destinationOrderId: destinationOrderId
+				}
+			});
+		},
+		
+		transferAll: function(purchaseOrderItemId, destinationOrderId) {
+			return $.ajax({
+				url: '/services/purchaseorderitem/transferall',
+				method: 'POST',
+				data: {
+					purchaseOrderItemId: purchaseOrderItemId,
+					destinationOrderId: destinationOrderId
+				}
+			});
 		}
 	};
 });

@@ -1,9 +1,12 @@
 package com.chua.distributions.database.dao;
 
+import java.util.List;
+
 import org.hibernate.criterion.Order;
 
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.database.prototype.PurchaseOrderPrototype;
+import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
@@ -19,4 +22,6 @@ public interface PurchaseOrderDAO extends DAO<PurchaseOrder, Long>, PurchaseOrde
 	ObjectList<PurchaseOrder> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid, Order[] orders);
 	
 	ObjectList<PurchaseOrder> findAllPaidWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, Order[] orders);
+	
+	List<PurchaseOrder> findAllByCompanyWarehouseAndStatus(Long companyId, Warehouse warehouse, Status[] status);
 }

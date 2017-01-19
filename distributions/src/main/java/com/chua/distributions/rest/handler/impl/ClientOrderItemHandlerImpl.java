@@ -283,12 +283,12 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		
 		if(clientOrderItem != null) {
 			if(destinationOrder != null) {
-				Status orderStatus = clientOrderItem.getClientOrder().getStatus();
+				Status sourceStatus = clientOrderItem.getClientOrder().getStatus();
 				
-				if(orderStatus.equals(Status.ACCEPTED) || orderStatus.equals(Status.TO_FOLLOW)
+				if(sourceStatus.equals(Status.ACCEPTED) || sourceStatus.equals(Status.TO_FOLLOW)
 						|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
-							&& !orderStatus.equals(Status.RECEIVED)
-							&& !orderStatus.equals(Status.CANCELLED))) {
+							&& !sourceStatus.equals(Status.RECEIVED)
+							&& !sourceStatus.equals(Status.CANCELLED))) {
 					Status destinationStatus = destinationOrder.getStatus();
 					if(destinationStatus.equals(Status.ACCEPTED) || destinationStatus.equals(Status.TO_FOLLOW)
 							|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2)
@@ -301,7 +301,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 					}
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, orderStatus.getDisplayName()) + "."));
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, sourceStatus.getDisplayName()) + "."));
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));

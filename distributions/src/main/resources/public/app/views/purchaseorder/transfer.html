@@ -1,0 +1,99 @@
+<div class="modal-content modal-lg">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+		<h3 align="center">Transfer Item - <strong data-bind="text: sourceOrder.company"></strong></h3>
+	</div>
+  
+	<div class="modal-body">
+		<div class="container-fluid">
+			<span data-bind="html: log" class="text-center"></span>
+		</div>
+	
+		<div class="row">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<span class="col-xs-6">Source ID : <span data-bind="text: sourceOrder.id"></span></span>
+						<span class="col-xs-6">Status : <span data-bind="text: sourceOrder.status"></span></span>
+						<br />
+					</h3>
+				</div>
+				
+				<div class="panel-body">
+					<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: sourceTotalItems, currentPage: sourceCurrentPage } }" class="col-xs-12"></div>
+					
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th class = "text-center">Quantity</th>
+									<th>Name</th>
+									<th class = "text-right">Transfer</th>
+								</tr>
+							</thead>
+							
+							<tbody data-bind="foreach: { data: sourceOrderItemList, as: 'purchaseOrderItem' }">
+								<tr>
+									<td data-bind="text: purchaseOrderItem.formattedQuantity" class = "text-center"></td>
+									<td data-bind="text: purchaseOrderItem.displayName"></td>
+									
+									<td>
+										<div class="btn-group pull-right">
+											<button data-bind="click: function() { $parent.sourceTransferPiece(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer Piece">1/<span data-bind="text: purchaseOrderItem.packaging"></span></button>
+											<button data-bind="click: function() { $parent.sourceTransferPackage(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.sourceTransferAll(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer All"><span data-bind="text: purchaseOrderItem.formattedQuantity"></span></button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<span class="col-xs-6">Dest. ID : <span data-bind="text: destinationOrder.id"></span></span>
+						<span class="col-xs-6">Status : <span data-bind="text: destinationOrder.status"></span></span>
+						<br />
+					</h3>
+				</div>
+				
+				<div class="panel-body">
+					<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: destinationTotalItems, currentPage: destinationCurrentPage } }" class="col-xs-12"></div>
+					
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th class = "text-center">Quantity</th>
+									<th>Name</th>
+								</tr>
+							</thead>
+							
+							<tbody data-bind="foreach: { data: destinationOrderItemList, as: 'purchaseOrderItem' }">
+								<tr>
+									<td data-bind="text: purchaseOrderItem.formattedQuantity" class = "text-center"></td>
+									<td data-bind="text: purchaseOrderItem.displayName"></td>
+									
+									<td>
+										<div class="btn-group pull-right">
+											<button data-bind="click: function() { $parent.destinationTransferPiece(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer Piece">1/<span data-bind="text: purchaseOrderItem.packaging"></span></button>
+											<button data-bind="click: function() { $parent.destinationTransferPackage(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.destinationTransferAll(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer All"><span data-bind="text: purchaseOrderItem.formattedQuantity"></span></button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+      	</div>
+	</div>
+ 
+	<div class="modal-footer">
+        <button class="btn btn-primary" data-bind="click: cancel">Done</button>
+	</div>
+</div>

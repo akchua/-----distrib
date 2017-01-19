@@ -40,6 +40,13 @@ public class PurchaseOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/gettransfer")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public PurchaseOrder getTransferInstance(@QueryParam("sourceId") Long sourceId) {
+		return purchaseOrderHandler.getTransferInstance(sourceId);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,

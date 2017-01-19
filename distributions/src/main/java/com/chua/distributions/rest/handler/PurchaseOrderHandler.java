@@ -17,6 +17,14 @@ public interface PurchaseOrderHandler {
 
 	PurchaseOrder getPurchaseOrder(Long purchaseOrderId);
 
+	/**
+	 * This method is used for auto generating destination instances for PurchaseOrderItem transfer.
+	 * Get an empty instance of PurchaseOrder from the same creator with the TO_FOLLOW status.
+	 * @param sourceId The id of the source PurchaseOrder.
+	 * @return The PurchaseOrder instance based on the source given. Return source instance if source is an empty order.
+	 */
+	PurchaseOrder getTransferInstance(Long sourceId);
+	
 	ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid);
 	
 	ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse);

@@ -1,5 +1,7 @@
 package com.chua.distributions.database.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -63,5 +65,29 @@ public class PurchaseOrderDAOImpl
 		}
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
+
+	@Override
+	public List<PurchaseOrder> findAllByCompanyWarehouseAndStatus(Long companyId, Warehouse warehouse, Status[] status) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+
+		if(companyId != null) {
+			conjunction.add(Restrictions.eq("company.id", companyId));
+		}
+		
+		if(warehouse != null) {
+			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		}
+		
+		if(status != null && status.length > 0) {
+			final Junction disjunction = Restrictions.disjunction();
+			for(Status stat : status) {
+				disjunction.add(Restrictions.eq("status", stat));
+			}
+			conjunction.add(disjunction);
+		}
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
 }
