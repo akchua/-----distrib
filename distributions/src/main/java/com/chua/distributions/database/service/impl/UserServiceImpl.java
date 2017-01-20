@@ -61,4 +61,9 @@ public class UserServiceImpl
 	public List<User> findAllClients() {
 		return dao.findAllByUserType(UserType.CLIENT);
 	}
+
+	@Override
+	public List<User> findAllAdministrators() {
+		return dao.findAllByUserType(UserType.ADMINISTRATOR);
+	}
 }

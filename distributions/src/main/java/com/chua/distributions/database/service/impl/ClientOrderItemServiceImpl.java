@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.chua.distributions.database.dao.ClientOrderItemDAO;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.service.ClientOrderItemService;
+import com.chua.distributions.enums.Status;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -46,5 +48,10 @@ public class ClientOrderItemServiceImpl
 	@Override
 	public List<ClientOrderItem> findAllByClientOrder(Long clientOrderId) {
 		return dao.findAllByClientOrder(clientOrderId);
+	}
+	
+	@Override
+	public List<ClientOrderItem> findAllUnstockedByProductAndWarehouse(Long productId, Warehouse warehouse) {
+		return dao.findAllByProductWarehouseAndStatus(productId, warehouse, new Status[] { Status.PAID, Status.RECEIVED });
 	}
 }

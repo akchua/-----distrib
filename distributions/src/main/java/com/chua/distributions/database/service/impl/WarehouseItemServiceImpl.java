@@ -37,6 +37,11 @@ public class WarehouseItemServiceImpl
 	public List<WarehouseItem> findAllByProduct(Long productId) {
 		return dao.findAllByProduct(productId);
 	}
+	
+	@Override
+	public List<WarehouseItem> findAllByWarehouse(Warehouse warehouse) {
+		return dao.findAllByWarehouse(warehouse);
+	}
 
 	@Override
 	public WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse) {

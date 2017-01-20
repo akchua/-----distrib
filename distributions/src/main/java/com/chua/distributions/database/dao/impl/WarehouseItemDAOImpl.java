@@ -60,6 +60,15 @@ public class WarehouseItemDAOImpl
 	}
 	
 	@Override
+	public List<WarehouseItem> findAllByWarehouse(Warehouse warehouse) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("warehouse", warehouse));
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
+	
+	@Override
 	public WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));

@@ -12,7 +12,7 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.enums.Warehouse;
-import com.chua.distributions.rest.handler.ClientOrderHandler;
+import com.chua.distributions.handler.SalesReportHandler;
 import com.chua.distributions.utility.EmailUtil;
 
 /**
@@ -26,7 +26,7 @@ public class SalesReportScheduler {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private ClientOrderHandler clientOrderHandler;
+	private SalesReportHandler salesReportHandler;
 	
 	/**
 	 * Weekly Sales Report
@@ -59,7 +59,7 @@ public class SalesReportScheduler {
 		for(Warehouse warehouse : Warehouse.values()) {
 			salesReportQuery.setWarehouse(warehouse);
 			
-			final ResultBean result = clientOrderHandler.generateReport(salesReportQuery);
+			final ResultBean result = salesReportHandler.generateReport(salesReportQuery, MailConstants.DEFAULT_REPORT_RECEIVER);
 			
 			if(result.getSuccess()) LOG.info(result.getMessage());
 			else {

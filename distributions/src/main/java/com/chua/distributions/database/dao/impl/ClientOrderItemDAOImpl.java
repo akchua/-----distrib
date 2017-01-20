@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.chua.distributions.database.dao.ClientOrderItemDAO;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.enums.Status;
+import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -72,5 +73,30 @@ public class ClientOrderItemDAOImpl
 		conjunction.add(Restrictions.eq("clientOrder.id", clientOrderId));
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
+	
+	@Override
+	public List<ClientOrderItem> findAllByProductWarehouseAndStatus(Long productId, Warehouse warehouse, Status[] status) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("productId", productId));
+		
+		if(warehouse != null) {
+			conjunction.add(Restrictions.eq("order.warehouse", warehouse));
+		}
+		
+		if(status != null && status.length > 0) {
+			final Junction disjunction = Restrictions.disjunction();
+			for(Status stat : status) {
+				disjunction.add(Restrictions.eq("order.status", stat));
+			}
+			conjunction.add(disjunction);
+		}
+		
+		String[] associatedPaths = { "clientOrder" };
+		String[] aliasNames = { "order" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, null, conjunction);
 	}
 }

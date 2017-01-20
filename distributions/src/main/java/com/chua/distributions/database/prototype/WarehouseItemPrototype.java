@@ -14,5 +14,7 @@ public interface WarehouseItemPrototype extends Prototype<WarehouseItem, Long> {
 
 	List<WarehouseItem> findAllByProduct(Long productId);
 	
+	List<WarehouseItem> findAllByWarehouse(Warehouse warehouse);
+	
 	WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse);
 }
