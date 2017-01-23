@@ -12,7 +12,7 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.enums.Warehouse;
-import com.chua.distributions.handler.SalesReportHandler;
+import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.EmailUtil;
 
 /**

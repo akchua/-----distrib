@@ -1,4 +1,4 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/manage/warehouseview'],
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/report/warehouseview'],
 		function (router, app, ko, clientOrderService, WarehouseView) {
     var Warehouse = function() {
     	this.warehouseList = ko.observable();

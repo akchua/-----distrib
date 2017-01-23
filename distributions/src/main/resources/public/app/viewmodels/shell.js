@@ -15,16 +15,23 @@
 	var manageroute = [
    	  	{ route: 'manage', moduleRootId: 'viewmodels/manage', title: '', nav: true, hash: '#manage',
    	  		childRoutes: [
-   	  		    { route: 'client', moduleId: 'client', title: 'Clients', nav: true, hash: 'client' },
-   	  		    { route: 'purchase', moduleId: 'purchase', title: 'Purchases', nav: true, hash: 'purchase' },
-   	  		    { route: 'sale', moduleId: 'sale', title: 'Sales', nav: true, hash: 'sale' },
-   	  		    { route: 'warehouse', moduleId: 'warehouse', title: 'Warehouse', nav: true, hash: 'warehouse' },
    	  		    { route: 'category', moduleId: 'category', title: 'Categories', nav: true, hash: 'category' },
+   	  		    { route: 'client', moduleId: 'client', title: 'Clients', nav: true, hash: 'client' },
    	  		    { route: 'company', moduleId: 'company', title: 'Companies', nav: true, hash: 'company' },
    	  		    { route: 'product', moduleId: 'product', title: 'Products', nav: true, hash: 'product' }
    	  		]
    	  	}
    	];
+	
+	var reportroute = [
+		{ route: 'report', moduleRootId: 'viewmodels/report', title: 'Report', nav: true, hash: '#report',
+			childRoutes: [
+				{ route: 'purchase', moduleId: 'purchase', title: 'Purchases', nav: true, hash: 'purchase' },
+   	  		    { route: 'sale', moduleId: 'sale', title: 'Sales', nav: true, hash: 'sale' },
+   	  		    { route: 'warehouse', moduleId: 'warehouse', title: 'Warehouse', nav: true, hash: 'warehouse' }
+			]
+		}
+	];
 	
 	var paymentroute = [
   	    { route: 'payment', moduleId: 'viewmodels/payment/payment', title: 'Payments', nav: true, hash: '#payment' }
@@ -83,12 +90,13 @@
 	    			self.routes = self.routes.concat(userroute);
 	    		case 'MANAGER':
 	    			self.routes = self.routes.concat(manageroute);
+	    			self.routes = self.routes.concat(reportroute);
 	    			self.routes = self.routes.concat(paymentroute);
 	    		case 'SECRETARY':
 	    			self.routes = self.routes.concat(purchaseorderroute);
 	    			self.routes = self.routes.concat(requestroute);
 	    			self.routes = self.routes.concat(dispatchroute);
-	    			self.routes = self.routes.concat(ourproductsroute);
+	    			if(app.user.userType.name == 'SECRETARY') self.routes = self.routes.concat(ourproductsroute);
 	    			break;
 	    		case 'CLIENT':
 	    			self.routes = self.routes.concat(ourproductsroute);

@@ -37,8 +37,8 @@
 						<th class = "text-center">ID</th>
 						<th>Client</th>
 						<th>Area</th>
-						<th class = "text-center">Total Amount</th>
 						<th class = "text-center">Status</th>
+						<th class = "text-right">Amount (Php)</th>
 					</tr>
 				</thead>
 				
@@ -47,8 +47,8 @@
 						<td data-bind="text: dispatchItem.clientOrder.id" class = "text-center"></td>
 						<td><a data-bind="text: dispatchItem.clientOrder.creator.businessName, click: function() { $parent.viewClient(dispatchItem.clientOrder.creator.id) }"></a></td>
 							<td data-bind="text: dispatchItem.clientOrder.creator.businessArea.displayName"></td>
-						<td data-bind="text: dispatchItem.clientOrder.formattedNetTotal" class = "text-center"></td>
 						<td data-bind="text: dispatchItem.clientOrder.status.displayName" class = "text-center"></td>
+						<td data-bind="text: dispatchItem.clientOrder.formattedNetTotal" class = "text-right"></td>
 						
 						<td>
 							<div class="btn-group pull-right">

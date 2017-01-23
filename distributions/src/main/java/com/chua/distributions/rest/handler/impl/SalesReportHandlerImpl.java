@@ -1,4 +1,4 @@
-package com.chua.distributions.handler.impl;
+package com.chua.distributions.rest.handler.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
-import com.chua.distributions.handler.SalesReportHandler;
+import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;

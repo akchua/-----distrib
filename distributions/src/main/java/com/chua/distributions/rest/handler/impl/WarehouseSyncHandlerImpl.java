@@ -1,4 +1,4 @@
-package com.chua.distributions.handler.impl;
+package com.chua.distributions.rest.handler.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Warehouse;
-import com.chua.distributions.handler.WarehouseSyncHandler;
+import com.chua.distributions.rest.handler.WarehouseSyncHandler;
 import com.chua.distributions.utility.EmailUtil;
 
 /**

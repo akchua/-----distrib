@@ -58,9 +58,9 @@ public class SalesReportFormatter {
 			format += StringHelper.center(clientOrder.getId() + "", 9) + "|";
 			format += StringHelper.center(clientOrder.getCreator().getBusinessName(), 39) + "|";
 			format += StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14) + "|";
-			format += StringHelper.center(clientOrder.getFormattedNetTotal(), 20);
+			format += String.format("%20s", clientOrder.getFormattedNetTotal());
 			format += " |\n";
-			if(salesReportQuery.getShowNetTrail()) {
+			if(salesReportQuery.getShowNetTrail() != null && salesReportQuery.getShowNetTrail()) {
 				format += "|"; format += String.format("%105s", "Gross Total: ") + String.format("%20s", clientOrder.getFormattedGrossTotal()) + " |\n";
 				format += "|"; format += String.format("%105s", "Total Discount: ") + String.format("%20s", clientOrder.getFormattedDiscountTotal()) + " |\n";
 				format += "|"; format += String.format("%105s", "Client Discount: ") + String.format("%20s", clientOrder.getFormattedAdditionalDiscountAmount()) + " |\n";

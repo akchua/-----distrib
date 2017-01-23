@@ -69,6 +69,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getClientOrderListByReportQuery: function(currentPage, salesReportQueryData) {
+			return $.ajax({
+				url: '/services/clientorder/listbyreportquery',
+				data: {
+					pageNumber: currentPage - 1,
+					salesReportQueryData: salesReportQueryData
+				}
+			});
+		},
+		
 		getFormattedTotalPayable: function() {
 			return $.ajax({
 				url: '/services/clientorder/formattedpayable'
@@ -157,6 +167,12 @@ define(['jquery'], function ($) {
     	getWarehouseList: function() {
     		return $.ajax({
     			url: '/services/clientorder/warehouse'
+    		});
+    	},
+    	
+    	getClientList: function() {
+    		return $.ajax({
+    			url: '/services/clientorder/client'
     		});
     	}
 	};

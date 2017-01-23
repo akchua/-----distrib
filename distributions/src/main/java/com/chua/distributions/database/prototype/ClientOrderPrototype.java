@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.objects.ObjectList;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -12,5 +13,7 @@ import com.chua.distributions.database.entity.ClientOrder;
  */
 public interface ClientOrderPrototype extends Prototype<ClientOrder, Long> {
 
+	ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage, SalesReportQueryBean salesReportQuery);
+	
 	List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery);
 }

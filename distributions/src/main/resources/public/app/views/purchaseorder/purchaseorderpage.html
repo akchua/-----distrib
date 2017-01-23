@@ -49,9 +49,9 @@
 						<th class = "text-center col-lg-1 col-md-1 col-xs-2">Quantity</th>
 						<th class = "text-center">Code</th>
 						<th>Name</th>
-						<th class = "text-center">Unit Price</th>
-						<th class = "text-center">Discount</th>
-						<th class = "text-center">Net Price</th>
+						<th class = "text-right">Unit Price (Php)</th>
+						<th class = "text-right">Discount</th>
+						<th class = "text-right">Net Price (Php)</th>
 					</tr>
 				</thead>
 				
@@ -67,9 +67,9 @@
 						</td>
 						<td data-bind="text: purchaseOrderItem.productCode" class = "text-center"></td>
 						<td data-bind="text: purchaseOrderItem.displayName"></td>
-						<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-center"></td>
-						<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-center"></td>
-						<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-center"></td>
+						<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
+						<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-right"></td>
+						<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-right"></td>
 						
 						<td>
 							<div class="btn-group pull-right">

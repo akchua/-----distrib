@@ -42,13 +42,13 @@ public class PurchaseOrderFormatter {
 			format += "|";
 			format += StringHelper.center(orderItem.getFormattedQuantity() + "", 14) + "|";
 			format += StringHelper.center(orderItem.getDisplayName(), 49) + "|";
-			format += StringHelper.center(orderItem.getFormattedPackageUnitPrice(), 19) + "|";
-			format += StringHelper.center(orderItem.getFormattedGrossPrice(), 20);
+			format += String.format("%19s", orderItem.getFormattedPackageUnitPrice()) + "|";
+			format += String.format("%20s", orderItem.getFormattedGrossPrice());
 			format += " |\n";
 		}
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
-		format += String.format("%85s", "Total:") + StringHelper.center(purchaseOrder.getFormattedGrossTotal(), 20) + "\n";
+		format += String.format("%85s", "Total:") + String.format("%20s", purchaseOrder.getFormattedGrossTotal()) + "\n";
 		format += "\n";
 		format += String.format("%20s", "Prepared By: ") + purchaseOrder.getCreator().getFormattedName();
 		format += "\n";

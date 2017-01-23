@@ -1,4 +1,4 @@
-package com.chua.distributions.handler;
+package com.chua.distributions.rest.handler;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;

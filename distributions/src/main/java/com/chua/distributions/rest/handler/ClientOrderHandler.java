@@ -36,6 +36,8 @@ public interface ClientOrderHandler {
 	
 	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	
+	ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery);
+	
 	StringWrapper getFormattedTotalPayable();
 	
 	ResultBean addClientOrder();

@@ -16,14 +16,14 @@ public class CurrencyFormatter {
 	}
 	
 	public static String pesoFormat(Float amount) {
-		return "Php " + CURRENCY_FORMAT.format(amount);
+		return CURRENCY_FORMAT.format(amount);
 	}
 	
 	public static String pesoFormat(Double amount) {
-		return "Php " + CURRENCY_FORMAT.format(amount);
+		return CURRENCY_FORMAT.format(amount);
 	}
 	
 	public static String pesoFormat(String amount) {
-		return "Php " + CURRENCY_FORMAT.format(amount);
+		return CURRENCY_FORMAT.format(amount);
 	}
 }

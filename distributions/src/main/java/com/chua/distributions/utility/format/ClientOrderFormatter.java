@@ -46,16 +46,16 @@ public class ClientOrderFormatter {
 			format += StringHelper.center(orderItem.getDisplayName(), 49) + "|";
 			format += StringHelper.center(orderItem.getFormattedPackageUnitPrice(), 19) + "|";
 			format += StringHelper.center(orderItem.getFormattedDiscountAmount(), 19) + "|";
-			format += StringHelper.center(orderItem.getFormattedNetPrice(), 20);
+			format += String.format("%20s", orderItem.getFormattedNetPrice());
 			format += " |\n";
 		}
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		format += "\n";
-		format += String.format("%105s", "Gross Total: ") + clientOrder.getFormattedGrossTotal() + "\n";
-		format += String.format("%105s", "Total Discount: ") + clientOrder.getFormattedDiscountTotal() + "\n";
-		format += String.format("%105s", "Client Discount: ") + clientOrder.getFormattedAdditionalDiscountAmount() + "\n";
-		format += String.format("%105s", "Less VAT: ") + clientOrder.getFormattedLessVatAmount() + "\n";
-		format += String.format("%105s", "Net Total: ") + clientOrder.getFormattedNetTotal() + "\n";
+		format += String.format("%105s", "Gross Total: ") + String.format("%20s", clientOrder.getFormattedGrossTotal()) + "\n";
+		format += String.format("%105s", "Total Discount: ") + String.format("%20s", clientOrder.getFormattedDiscountTotal()) + "\n";
+		format += String.format("%105s", "Client Discount: ") + String.format("%20s", clientOrder.getFormattedAdditionalDiscountAmount()) + "\n";
+		format += String.format("%105s", "Less VAT: ") + String.format("%20s", clientOrder.getFormattedLessVatAmount()) + "\n";
+		format += String.format("%105s", "Net Total: ") + String.format("%20s", clientOrder.getFormattedNetTotal()) + "\n";
 		
 		return format;
 	}

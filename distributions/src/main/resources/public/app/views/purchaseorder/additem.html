@@ -17,6 +17,10 @@
 	      	
 	      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-5 col-xs-5"></div>
       	</div>
+     
+     	<div class="container-fluid">
+			<span data-bind="html: log" class="text-center"></span>
+		</div>
       	
       	<div class="container-fluid">
 			<div class="table-responsive">
@@ -24,18 +28,18 @@
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th class = "text-center">Net Price</th>
 							<th class = "text-center">Stock Here</th>
 							<th class = "text-center">All Stock</th>
+							<th class = "text-right">Net Price (Php)</th>
 						</tr>
 					</thead>
 					
 					<tbody data-bind="foreach: { data: productList, as: 'product' }">
 						<tr>
 							<td data-bind="text: product.displayName"></td>
-							<td data-bind="text: product.formattedPackageNetPrice" class = "text-center"></td>
 							<td data-bind="text: product.formattedStockCountCurrent" class = "text-center"></td>
 							<td data-bind="text: product.formattedStockCountAll" class = "text-center"></td>
+							<td data-bind="text: product.formattedPackageNetPrice" class = "text-right"></td>
 							
 							<td>
 								<div class="btn-group pull-right">
@@ -47,10 +51,6 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-		
-		<div class="container-fluid">
-			<span data-bind="html: log" class="text-center"></span>
 		</div>
 	</div>
  

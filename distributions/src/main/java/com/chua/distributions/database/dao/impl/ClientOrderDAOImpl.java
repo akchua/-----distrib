@@ -109,11 +109,24 @@ public class ClientOrderDAOImpl
 	}
 
 	@Override
+	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,
+			SalesReportQueryBean salesReportQuery) {
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, 
+				new Order[] { Order.asc("status"), Order.asc("updatedOn") }, generateConjunction(salesReportQuery));
+	}
+	
+	@Override
 	public List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery) {
+		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.asc("updatedOn") }, generateConjunction(salesReportQuery));
+	}
+	
+	private Junction generateConjunction(SalesReportQueryBean salesReportQuery) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
-		conjunction.add(Restrictions.between("updatedOn", salesReportQuery.getFrom(), salesReportQuery.getTo()));
+		if(salesReportQuery.getFrom() != null && salesReportQuery.getTo() != null) {
+			conjunction.add(Restrictions.between("updatedOn", salesReportQuery.getFrom(), salesReportQuery.getTo()));
+		}
 		
 		if(salesReportQuery.getWarehouse() != null) {
 			conjunction.add(Restrictions.eq("warehouse", salesReportQuery.getWarehouse()));
@@ -132,6 +145,6 @@ public class ClientOrderDAOImpl
 		if(salesReportQuery.getIncludeCreating()) disjunction.add(Restrictions.eq("status", Status.CREATING));
 		conjunction.add(disjunction);
 		
-		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.asc("updatedOn") }, conjunction);
+		return conjunction;
 	}
 }

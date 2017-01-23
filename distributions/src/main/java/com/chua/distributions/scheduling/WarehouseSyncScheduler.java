@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.enums.Warehouse;
-import com.chua.distributions.handler.WarehouseSyncHandler;
+import com.chua.distributions.rest.handler.WarehouseSyncHandler;
 
 /**
  * @author	Adrian Jasper K. Chua

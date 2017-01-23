@@ -18,8 +18,8 @@
 						<th class = "text-center">ID</th>
 						<th class = "text-center">Created On</th>
 						<th class = "text-center">Last Status Update</th>
-						<th class = "text-center">Total Amount</th>
 						<th class = "text-center">Status</th>
+						<th class = "text-right">Amount (Php)</th>
 					</tr>
 				</thead>
 				
@@ -28,8 +28,8 @@
 						<td data-bind="text: clientOrder.id" class = "text-center"></td>
 						<td data-bind="text: clientOrder.formattedCreatedOn" class = "text-center"></td>
 						<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
-						<td data-bind="text: clientOrder.formattedNetTotal" class = "text-center"></td>
 						<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>
+						<td data-bind="text: clientOrder.formattedNetTotal" class = "text-right"></td>
 						
 						<td>
 							<div class="btn-group pull-right">

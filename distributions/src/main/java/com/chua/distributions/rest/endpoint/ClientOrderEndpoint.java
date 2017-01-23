@@ -56,6 +56,14 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/requestlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<ClientOrder> getSubmittedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("showAccepted") Boolean showAccepted) {
+		return clientOrderHandler.getClientOrderRequestObjectList(pageNumber, showAccepted);
+	}
+	
+	@GET
 	@Path("/acceptedlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
@@ -80,11 +88,11 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
-	@Path("/requestlist")
+	@Path("/listbyreportquery")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ObjectList<ClientOrder> getSubmittedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
-					@QueryParam("showAccepted") Boolean showAccepted) {
-		return clientOrderHandler.getClientOrderRequestObjectList(pageNumber, showAccepted);
+	public ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("salesReportQueryData") String salesReportQueryData) throws IOException {
+		return clientOrderHandler.getClientOrderObjectListBySalesReportQuery(pageNumber, new ObjectMapper().readValue(salesReportQueryData, SalesReportQueryBean.class));
 	}
 	
 	@GET

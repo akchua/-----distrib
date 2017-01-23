@@ -23,9 +23,9 @@ import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.UserType;
 import com.chua.distributions.enums.Warehouse;
-import com.chua.distributions.handler.SalesReportHandler;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
+import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.format.CurrencyFormatter;
@@ -44,7 +44,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
-	
+
 	@Autowired
 	private SalesReportHandler salesReportHandler;
 	
@@ -115,6 +115,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	}
+	
+	@Override
+	public ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery) {
+		return clientOrderService.findBySalesReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), salesReportQuery);
 	}
 	
 	@Override
