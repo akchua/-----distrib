@@ -3,6 +3,7 @@ package com.chua.distributions.rest.handler;
 import java.util.List;
 
 import com.chua.distributions.beans.PurchaseOrderFormBean;
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.enums.Warehouse;
@@ -28,6 +29,8 @@ public interface PurchaseOrderHandler {
 	ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid);
 	
 	ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse);
+	
+	ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(Integer pageNumber, PurchaseReportQueryBean purchaseReportQuery);
 	
 	ResultBean createPurchaseOrder(PurchaseOrderFormBean purchaseOrderForm);
 	

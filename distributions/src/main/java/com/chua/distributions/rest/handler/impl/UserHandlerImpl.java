@@ -315,15 +315,18 @@ public class UserHandlerImpl implements UserHandler {
 		user.setLastName(userForm.getLastName().trim());
 		user.setEmailAddress(userForm.getEmailAddress().trim());
 		user.setContactNumber(userForm.getContactNumber().trim());
-		user.setBusinessName(userForm.getBusinessName() != null ? userForm.getBusinessName().trim() : null);
-		user.setBusinessAddress(userForm.getBusinessAddress() != null ? userForm.getBusinessAddress().trim() : null);
-		user.setBusinessContactNumber(userForm.getBusinessContactNumber() != null ? userForm.getBusinessContactNumber().trim() : null);
-		user.setBusinessArea(userForm.getBusinessArea());
 		user.setUserType(userForm.getUserType() != null ? userForm.getUserType() : UserType.CLIENT);
 		if(user.getItemsPerPage() == null) user.setItemsPerPage(10);
 		if(user.getDiscount() == null) user.setDiscount(0.0f);
 		if(user.getMarkup() == null) user.setMarkup(0.0f);
-		if(userForm.getBusinessArea() != null && user.getVatType() == null) user.setVatType(userForm.getBusinessArea().getVatType());
+		
+		if(user.getUserType().equals(UserType.CLIENT)) {
+			user.setBusinessName(userForm.getBusinessName() != null ? userForm.getBusinessName().trim() : null);
+			user.setBusinessAddress(userForm.getBusinessAddress() != null ? userForm.getBusinessAddress().trim() : null);
+			user.setBusinessContactNumber(userForm.getBusinessContactNumber() != null ? userForm.getBusinessContactNumber().trim() : null);
+			user.setBusinessArea(userForm.getBusinessArea());
+			if(userForm.getBusinessArea() != null && user.getVatType() == null) user.setVatType(userForm.getBusinessArea().getVatType());
+		}
 	}
 	
 	private void setSettings(User user, SettingsFormBean settingsForm) {

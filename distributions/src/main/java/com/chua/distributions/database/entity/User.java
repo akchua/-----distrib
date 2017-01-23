@@ -42,6 +42,7 @@ public class User extends BaseObject {
 	
 	private UserType userType;
 	
+	//CLIENT
 	private String businessName;
 	
 	private String businessAddress;
@@ -55,7 +56,8 @@ public class User extends BaseObject {
 	private Float markup;
 	
 	private VatType vatType;
-
+	//
+	
 	@Basic
 	@Column(name = "first_name")
 	public String getFirstName() {

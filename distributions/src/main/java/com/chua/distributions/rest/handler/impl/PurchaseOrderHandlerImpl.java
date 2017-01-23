@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
@@ -55,6 +56,9 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private PurchaseOrderFormatter purchaseOrderFormatter;
 
 	@Override
 	public PurchaseOrder getPurchaseOrder(Long purchaseOrderId) {
@@ -106,6 +110,12 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId,
 			Warehouse warehouse) {
 		return purchaseOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse);
+	}
+	
+	@Override
+	public ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(Integer pageNumber,
+			PurchaseReportQueryBean purchaseReportQuery) {
+		return purchaseOrderService.findByPurchaseReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseReportQuery);
 	}
 
 	@Override
@@ -206,7 +216,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
 				if(!purchaseOrder.getNetTotal().equals(0.0f)) {
 					final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
-					SimplePdfWriter.write(PurchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
+					SimplePdfWriter.write(purchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
 					boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 							null,
 							MailConstants.DEFAULT_EMAIL,

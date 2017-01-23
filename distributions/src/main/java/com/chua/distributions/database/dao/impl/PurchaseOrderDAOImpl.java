@@ -7,6 +7,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.database.dao.PurchaseOrderDAO;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.enums.Status;
@@ -89,5 +90,40 @@ public class PurchaseOrderDAOImpl
 		}
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
+
+	@Override
+	public ObjectList<PurchaseOrder> findByPurchaseReportQueryWithPaging(int pageNumber, int resultsPerPage,
+			PurchaseReportQueryBean purchaseReportQuery) {
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, 
+				new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(purchaseReportQuery));
+	}
+	
+	private Junction generateConjunction(PurchaseReportQueryBean purchaseReportQuery) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(purchaseReportQuery.getFrom() != null && purchaseReportQuery.getTo() != null) {
+			conjunction.add(Restrictions.between("updatedOn", purchaseReportQuery.getFrom(), purchaseReportQuery.getTo()));
+		}
+		
+		if(purchaseReportQuery.getWarehouse() != null) {
+			conjunction.add(Restrictions.eq("warehouse", purchaseReportQuery.getWarehouse()));
+		}
+		
+		if(purchaseReportQuery.getCompanyId() != null) {
+			conjunction.add(Restrictions.eq("company.id", purchaseReportQuery.getCompanyId()));
+		}
+		
+		final Junction disjunction = Restrictions.disjunction();
+		if(purchaseReportQuery.getIncludePaid()) disjunction.add(Restrictions.eq("status", Status.PAID));
+		if(purchaseReportQuery.getIncludeDelivered()) disjunction.add(Restrictions.eq("status", Status.RECEIVED));
+		if(purchaseReportQuery.getIncludeToFollow()) disjunction.add(Restrictions.eq("status", Status.TO_FOLLOW));
+		if(purchaseReportQuery.getIncludeAccepted()) disjunction.add(Restrictions.eq("status", Status.ACCEPTED));
+		if(purchaseReportQuery.getIncludeSubmitted()) disjunction.add(Restrictions.eq("status", Status.SUBMITTED));
+		if(purchaseReportQuery.getIncludeCreating()) disjunction.add(Restrictions.eq("status", Status.CREATING));
+		conjunction.add(disjunction);
+		
+		return conjunction;
 	}
 }

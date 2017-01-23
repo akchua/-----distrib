@@ -6,6 +6,7 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.database.dao.PurchaseOrderDAO;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.database.service.PurchaseOrderService;
@@ -42,5 +43,11 @@ public class PurchaseOrderServiceImpl
 	@Override
 	public List<PurchaseOrder> findAllToFollowByCompanyAndWarehouse(Long companyId, Warehouse warehouse) {
 		return dao.findAllByCompanyWarehouseAndStatus(companyId, warehouse, new Status[] { Status.TO_FOLLOW });
+	}
+
+	@Override
+	public ObjectList<PurchaseOrder> findByPurchaseReportQueryWithPaging(int pageNumber, int resultsPerPage,
+			PurchaseReportQueryBean purchaseReportQuery) {
+		return dao.findByPurchaseReportQueryWithPaging(pageNumber, resultsPerPage, purchaseReportQuery);
 	}
 }

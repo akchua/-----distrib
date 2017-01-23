@@ -63,6 +63,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private ClientOrderFormatter clientOrderFormatter;
+	
 	@Override
 	public Dispatch getDispatch(Long dispatchId) {
 		refreshDispatch(dispatchId);
@@ -122,7 +125,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						
 						// GENERATING PRINTABLE CLIENT ORDER
 						final List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-						printableDispatch += ClientOrderFormatter.format(clientOrder, clientOrderItems) + "\n";
+						printableDispatch += clientOrderFormatter.format(clientOrder, clientOrderItems) + "\n";
 						//
 						
 						if(!clientOrderService.update(clientOrder)) {

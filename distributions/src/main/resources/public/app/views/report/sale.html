@@ -11,22 +11,27 @@
       	</form>
 	</div>
 	<br/>
-	<div class="container-fluid">
-		<label class="checkbox-inline col-xs-offset-1 col-xs-1">
+	<div class="container-fluid col-xs-offset-1 col-xs-11">
+		<label class="checkbox-inline">
 			<input data-bind="checked: salesReportQuery.includePaid, event: { change: refreshClientOrderList }" type="checkbox" name="paidcheckbox">Paid
 		</label>
-		<label class="checkbox-inline col-xs-1">	
+		<label class="checkbox-inline">	
 			<input data-bind="checked: salesReportQuery.includeDelivered, event: { change: refreshClientOrderList }" type="checkbox" name="deliveredcheckbox">Delivered
 		</label>
-		<label class="checkbox-inline col-xs-1">	
+		<label class="checkbox-inline">	
 			<input data-bind="checked: salesReportQuery.includeDispatched, event: { change: refreshClientOrderList }" type="checkbox" name="dispatchedcheckbox">Dispatched
 		</label>
-		<label class="checkbox-inline col-xs-1">
+		<label class="checkbox-inline">
+			<input data-bind="checked: salesReportQuery.includeToFollow, event: { change: refreshClientOrderList }" type="checkbox" name="tofollowcheckbox">To Follow
+		</label>
+		<label class="checkbox-inline">
 			<input data-bind="checked: salesReportQuery.includeAccepted, event: { change: refreshClientOrderList }" type="checkbox" name="acceptedcheckbox">Accepted
 		</label>
-		<label class="checkbox-inline col-xs-1">
+		<label class="checkbox-inline">
 			<input data-bind="checked: salesReportQuery.includeSubmitted, event: { change: refreshClientOrderList }" type="checkbox" name="submittedcheckbox">Submitted
 		</label>
+	</div>
+	<div class="container-fluid">
 		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
 	</div>
 	<div class="container-fluid">

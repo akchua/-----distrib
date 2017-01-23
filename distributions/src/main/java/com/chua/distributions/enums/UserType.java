@@ -16,6 +16,8 @@ public enum UserType {
 	
 	SECRETARY("Secretary", Integer.valueOf(3)),
 	
+	SUPERVISOR("Supervisor", Integer.valueOf(5)),
+	
 	CLIENT("Client", Integer.valueOf(10));
 	
 	private final String displayName;

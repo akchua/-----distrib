@@ -17,13 +17,9 @@ import com.chua.distributions.utility.StringHelper;
  */
 public class SalesReportFormatter {
 	
-	private static final int CHARACTERS_PER_LINE = 127;
+	private final int CHARACTERS_PER_LINE = 127;
 	
-	private SalesReportFormatter() {
-		
-	}
-	
-	public static String format(SalesReportQueryBean salesReportQuery, User client, List<ClientOrder> clientOrders) {
+	public String format(SalesReportQueryBean salesReportQuery, User client, List<ClientOrder> clientOrders) {
 		String format = "";
 		float tempTotal = 0.0f;
 		

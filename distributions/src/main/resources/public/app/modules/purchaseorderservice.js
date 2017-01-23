@@ -41,6 +41,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPurchaseOrderListByReportQuery: function(currentPage, purchaseReportQueryData) {
+			return $.ajax({
+				url: '/services/purchaseorder/listbyreportquery',
+				data: {
+					pageNumber: currentPage - 1,
+					purchaseReportQueryData: purchaseReportQueryData
+				}
+			});
+		},
+		
 		savePurchaseOrder: function(purchaseOrderFormData) {
     		return $.ajax({
     			url: '/services/purchaseorder/save',

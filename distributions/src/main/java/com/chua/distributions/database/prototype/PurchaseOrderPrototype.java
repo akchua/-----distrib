@@ -1,6 +1,8 @@
 package com.chua.distributions.database.prototype;
 
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
+import com.chua.distributions.objects.ObjectList;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -9,5 +11,5 @@ import com.chua.distributions.database.entity.PurchaseOrder;
  */
 public interface PurchaseOrderPrototype extends Prototype<PurchaseOrder, Long> {
 
-	
+	ObjectList<PurchaseOrder> findByPurchaseReportQueryWithPaging(int pageNumber, int resultsPerPage, PurchaseReportQueryBean purchaseReportQuery);
 }

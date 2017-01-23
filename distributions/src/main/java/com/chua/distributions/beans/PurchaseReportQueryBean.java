@@ -3,21 +3,19 @@ package com.chua.distributions.beans;
 import com.chua.distributions.enums.Warehouse;
 
 /**
- * @author  Adrian Jasper K. Chua
- * @version 1.0
- * @since   Dec 30, 2016
+ * @author	Adrian Jasper K. Chua
+ * @version	1.0
+ * @since	23 Jan 2017
  */
-public class SalesReportQueryBean extends ReportQueryBean {
+public class PurchaseReportQueryBean extends ReportQueryBean {
 
 	private Warehouse warehouse;
 	
-	private Long clientId;
+	private Long companyId;
 	
 	private Boolean includePaid;
 	
 	private Boolean includeDelivered;
-	
-	private Boolean includeDispatched;
 	
 	private Boolean includeToFollow;
 	
@@ -28,7 +26,7 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	private Boolean includeCreating;
 	
 	private Boolean showNetTrail;
-	
+
 	public Warehouse getWarehouse() {
 		return warehouse;
 	}
@@ -37,12 +35,12 @@ public class SalesReportQueryBean extends ReportQueryBean {
 		this.warehouse = warehouse;
 	}
 
-	public Long getClientId() {
-		return clientId;
+	public Long getCompanyId() {
+		return companyId;
 	}
 
-	public void setClientId(Long clientId) {
-		this.clientId = clientId;
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	public Boolean getIncludePaid() {
@@ -59,14 +57,6 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setIncludeDelivered(Boolean includeDelivered) {
 		this.includeDelivered = includeDelivered;
-	}
-
-	public Boolean getIncludeDispatched() {
-		return includeDispatched;
-	}
-
-	public void setIncludeDispatched(Boolean includeDispatched) {
-		this.includeDispatched = includeDispatched;
 	}
 
 	public Boolean getIncludeToFollow() {

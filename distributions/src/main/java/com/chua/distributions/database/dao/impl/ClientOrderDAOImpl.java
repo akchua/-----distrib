@@ -112,12 +112,12 @@ public class ClientOrderDAOImpl
 	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,
 			SalesReportQueryBean salesReportQuery) {
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, 
-				new Order[] { Order.asc("status"), Order.asc("updatedOn") }, generateConjunction(salesReportQuery));
+				new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
 	}
 	
 	@Override
 	public List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery) {
-		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.asc("updatedOn") }, generateConjunction(salesReportQuery));
+		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
 	}
 	
 	private Junction generateConjunction(SalesReportQueryBean salesReportQuery) {
@@ -140,6 +140,7 @@ public class ClientOrderDAOImpl
 		if(salesReportQuery.getIncludePaid()) disjunction.add(Restrictions.eq("status", Status.PAID));
 		if(salesReportQuery.getIncludeDelivered()) disjunction.add(Restrictions.eq("status", Status.RECEIVED));
 		if(salesReportQuery.getIncludeDispatched()) disjunction.add(Restrictions.eq("status", Status.DISPATCHED));
+		if(salesReportQuery.getIncludeToFollow()) disjunction.add(Restrictions.eq("status", Status.TO_FOLLOW));
 		if(salesReportQuery.getIncludeAccepted()) disjunction.add(Restrictions.eq("status", Status.ACCEPTED));
 		if(salesReportQuery.getIncludeSubmitted()) disjunction.add(Restrictions.eq("status", Status.SUBMITTED));
 		if(salesReportQuery.getIncludeCreating()) disjunction.add(Restrictions.eq("status", Status.CREATING));

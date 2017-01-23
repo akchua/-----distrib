@@ -15,13 +15,13 @@ import com.chua.distributions.utility.StringHelper;
  */
 public class ClientOrderFormatter {
 	
-	private static final int CHARACTERS_PER_LINE = 127;
+	private final int CHARACTERS_PER_LINE = 127;
 	
-	private ClientOrderFormatter() {
+	public ClientOrderFormatter() {
 		
 	}
 	
-	public static String format(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
+	public String format(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
 		String format = "";
 		
 		format += StringHelper.center("SALES ORDER", CHARACTERS_PER_LINE) + "\n";

@@ -98,9 +98,13 @@
 	    			self.routes = self.routes.concat(dispatchroute);
 	    			if(app.user.userType.name == 'SECRETARY') self.routes = self.routes.concat(ourproductsroute);
 	    			break;
-	    		case 'CLIENT':
+	    		case 'SUPERVISOR':
+	    			self.routes = self.routes.concat(reportroute);
 	    			self.routes = self.routes.concat(ourproductsroute);
+	    			break;
+	    		case 'CLIENT':
 	    			self.routes = self.routes.concat(clientorderroute);
+	    			self.routes = self.routes.concat(ourproductsroute);
 	    			break;
     		}
 		}

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.PurchaseOrderFormBean;
+import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.enums.Warehouse;
@@ -63,6 +64,14 @@ public class PurchaseOrderEndpoint {
 					@QueryParam("companyId") Long companyId,
 					@QueryParam("warehouse") Warehouse warehouse) {
 		return purchaseOrderHandler.getPaidPurchaseOrderObjectList(pageNumber, companyId, warehouse);
+	}
+	
+	@GET
+	@Path("/listbyreportquery")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(@QueryParam("pageNumber") Integer pageNumber,
+					@QueryParam("purchaseReportQueryData") String purchaseReportQueryData) throws IOException {
+		return purchaseOrderHandler.getPurchaseOrderObjectListByPurchaseReportQuery(pageNumber, new ObjectMapper().readValue(purchaseReportQueryData, PurchaseReportQueryBean.class));
 	}
 	
 	@POST

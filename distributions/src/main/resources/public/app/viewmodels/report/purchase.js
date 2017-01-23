@@ -5,8 +5,19 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	this.companyList = ko.observable();
     	this.warehouseList = ko.observable();
     	
-    	this.companyId = ko.observable();
-    	this.warehouse = ko.observable();
+    	this.purchaseReportQuery = {
+    		from: ko.observable(),
+    		to: ko.observable(),
+    		warehouse: ko.observable(),
+    		companyId: ko.observable(),
+    		includePaid: ko.observable(true),
+    		includeDelivered: ko.observable(true),
+    		includeToFollow: ko.observable(false),
+    		includeAccepted: ko.observable(false),
+    		includeSubmitted: ko.observable(false),
+    		includeCreating: ko.observable(false),
+    		showNetTrail: ko.observable()
+	    };
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -36,7 +47,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     Purchase.prototype.refreshPurchaseOrderList = function() {
     	var self = this;
     	
-    	purchaseOrderService.getPaidPurchaseOrderList(self.currentPage(), self.companyId(), self.warehouse()).done(function(data) {
+    	purchaseOrderService.getPurchaseOrderListByReportQuery(self.currentPage(), ko.toJSON(self.purchaseReportQuery)).done(function(data) {
     		self.purchaseOrderList(data.list);
     		self.totalItems(data.total);
     	});

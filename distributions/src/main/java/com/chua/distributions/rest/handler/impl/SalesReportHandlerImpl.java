@@ -32,10 +32,13 @@ import com.chua.distributions.utility.format.SalesReportFormatter;
 public class SalesReportHandlerImpl implements SalesReportHandler {
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	ClientOrderService clientOrderService;
+	private ClientOrderService clientOrderService;
+	
+	@Autowired
+	private SalesReportFormatter salesReportFormatter;
 	
 	@Override
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery, String recipient) {
@@ -47,7 +50,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
 				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf";
-				SimplePdfWriter.write(SalesReportFormatter.format(salesReportQuery, 
+				SimplePdfWriter.write(salesReportFormatter.format(salesReportQuery, 
 						(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
 								clientOrders), filePath, true);
 
