@@ -1,0 +1,1 @@
+java -Dloader.path=/usr/local/primepad/config -jar ../bin/distributions-1.3.12.RELEASE.jar
