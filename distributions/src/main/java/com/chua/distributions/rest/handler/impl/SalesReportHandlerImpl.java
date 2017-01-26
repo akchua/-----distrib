@@ -40,6 +40,9 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	@Autowired
 	private SalesReportFormatter salesReportFormatter;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery, String recipient) {
 		final ResultBean result;
@@ -56,7 +59,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 
 				result = new ResultBean();
 				
-				result.setSuccess(EmailUtil.send(recipient, 
+				result.setSuccess(emailUtil.send(recipient, 
 							null,
 							MailConstants.DEFAULT_EMAIL,
 							"Sales Report",

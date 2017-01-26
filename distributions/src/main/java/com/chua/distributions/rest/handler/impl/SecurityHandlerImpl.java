@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.rest.handler.SecurityHandler;
 
 /**
@@ -21,7 +22,7 @@ import com.chua.distributions.rest.handler.SecurityHandler;
 @Transactional
 @Component
 public class SecurityHandlerImpl implements SecurityHandler {
-
+	
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -32,6 +33,7 @@ public class SecurityHandlerImpl implements SecurityHandler {
 
 	@Override
 	public UserBean getUser() {
+		System.out.println("here - " + FileConstants.FILE_HOME);
 		return UserContextHolder.getUser();
 	}
 }

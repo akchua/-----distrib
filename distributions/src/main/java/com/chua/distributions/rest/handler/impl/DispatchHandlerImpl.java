@@ -66,6 +66,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	@Autowired
 	private ClientOrderFormatter clientOrderFormatter;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public Dispatch getDispatch(Long dispatchId) {
 		refreshDispatch(dispatchId);
@@ -141,7 +144,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						//
 						
 						// SENDING PRINTABLE DISPATCH TO THIS USER
-						flag = EmailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
+						flag = emailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
 								null,
 								MailConstants.DEFAULT_EMAIL,
 								"Dispatch",

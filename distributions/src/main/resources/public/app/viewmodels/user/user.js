@@ -68,6 +68,16 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
 		})
     };
     
+    User.prototype.edit = function(userId) {
+    	var self = this;
+    	
+    	userService.getUser(userId).done(function(user) {
+    		UserForm.show(user,  'Edit User').done(function() {
+        		self.refreshUserList();
+        	});
+    	});
+    };
+    
     User.prototype.remove = function(userId, lastName, firstName) {
     	var self = this;
     	

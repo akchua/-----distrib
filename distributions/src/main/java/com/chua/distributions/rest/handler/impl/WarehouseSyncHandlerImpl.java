@@ -46,6 +46,9 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public ResultBean syncExisting(Warehouse warehouse) {
 		final ResultBean result = new ResultBean();
@@ -98,7 +101,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 						message += s + "\n";
 					}
 					
-					EmailUtil.send(recipient, "Warehouse Sync", message);
+					emailUtil.send(recipient, "Warehouse Sync", message);
 				//
 				
 				result.setMessage("Sync for " + warehouse.getDisplayName() + " complete. " + errorList.size() + " error/s found.");

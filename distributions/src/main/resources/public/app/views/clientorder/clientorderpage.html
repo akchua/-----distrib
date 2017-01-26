@@ -1,88 +1,86 @@
+<br/>
 <div class="container-fluid">
-	<br/>
-	<div class="container-fluid">
-		<div class="panel panel-info col-lg-6">
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-					<dt>Order ID:</dt>
-					<dd data-bind="text: clientOrder.id"></dd>
-					<dt>Client Discount:</dt>
-					<dd><span data-bind="text: clientOrder.discount"></span>%</dd>
-					<dt>Client:</dt>
-					<dd data-bind="text: clientOrder.clientName"></dd>
-					<dt>Status:</dt>
-					<dd data-bind="text: clientOrder.status"></dd>
-		    	</dl>
-			</div>
-		</div>
-		<div class="panel panel-success col-lg-6">
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-					<dt>Gross Total:</dt>
-					<dd data-bind="text: clientOrder.formattedGrossTotal"></dd>
-					<dt>Item Discount:</dt>
-					<dd data-bind="text: clientOrder.formattedDiscountTotal"></dd>
-					<!-- ko if: showClientDiscount -->
-					<dt>Client Discount(<span data-bind="text: clientOrder.discount"></span>%):</dt>
-					<dd data-bind="text: clientOrder.formattedAdditionalDiscount"></dd>
-					<!-- /ko -->
-					<dt>Less VAT(<span data-bind="text: clientOrder.lessVat"></span>%):</dt>
-					<dd data-bind="text: clientOrder.formattedLessVatAmount"></dd>
-					<dt class="h3">Net Total:</dt>
-					<dd data-bind="text: clientOrder.formattedNetTotal" class="h3"></dd>
-		    	</dl>
-			</div>
+	<div class="panel panel-info col-lg-6">
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>Order ID:</dt>
+				<dd data-bind="text: clientOrder.id"></dd>
+				<dt>Client Discount:</dt>
+				<dd><span data-bind="text: clientOrder.discount"></span>%</dd>
+				<dt>Client:</dt>
+				<dd data-bind="text: clientOrder.clientName"></dd>
+				<dt>Status:</dt>
+				<dd data-bind="text: clientOrder.status"></dd>
+	    	</dl>
 		</div>
 	</div>
-	<br/>
-	<div class="container-fluid">
-		<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Item</button>
-		<!-- ko if: showCheckButton -->
-		<button data-bind="click: submit" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-check"> Submit</i></button>
-		<!-- /ko -->
-		<!-- ko ifnot: showCheckButton -->
-		<button type="button" class="btn btn-info col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3 disabled">Submitted</button>
-		<!-- /ko -->
-		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
-	</div>
-	<div class="container-fluid">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class = "text-center col-lg-3 col-md-3 col-xs-4">Quantity</th>
-						<th class = "text-center">Code</th>
-						<th>Name</th>
-						<th class = "text-right">Unit Price (Php)</th>
-						<th class = "text-right">Discount</th>
-						<th class = "text-right">Net Price (Php)</th>
-					</tr>
-				</thead>
-				
-				<tbody data-bind="foreach: { data: clientOrderItemList, as: 'clientOrderItem' }">
-					<tr>
-						<td>
-							<div class="input-group">
-								<input data-bind="value: clientOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(clientOrderItem.id, clientOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">&amp</span>
-								<input data-bind="value: clientOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(clientOrderItem.id, clientOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">of <span data-bind="text: clientOrderItem.packaging"></span></span>
-							</div>
-						</td>
-						<td data-bind="text: clientOrderItem.productCode" class = "text-center"></td>
-						<td data-bind="text: clientOrderItem.displayName"></td>
-						<td data-bind="text: clientOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
-						<td data-bind="text: clientOrderItem.formattedDiscountAmount" class = "text-right"></td>
-						<td data-bind="text: clientOrderItem.formattedNetPrice" class = "text-right"></td>
-						
-						<td>
-							<div class="btn-group pull-right">
-								<button data-bind="click: function() { $parent.remove(clientOrderItem.id, clientOrderItem.displayName) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="panel panel-success col-lg-6">
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>Gross Total:</dt>
+				<dd data-bind="text: clientOrder.formattedGrossTotal"></dd>
+				<dt>Item Discount:</dt>
+				<dd data-bind="text: clientOrder.formattedDiscountTotal"></dd>
+				<!-- ko if: showClientDiscount -->
+				<dt>Client Discount(<span data-bind="text: clientOrder.discount"></span>%):</dt>
+				<dd data-bind="text: clientOrder.formattedAdditionalDiscount"></dd>
+				<!-- /ko -->
+				<dt>Less VAT(<span data-bind="text: clientOrder.lessVat"></span>%):</dt>
+				<dd data-bind="text: clientOrder.formattedLessVatAmount"></dd>
+				<dt class="h3">Net Total:</dt>
+				<dd data-bind="text: clientOrder.formattedNetTotal" class="h3"></dd>
+	    	</dl>
 		</div>
+	</div>
+</div>
+<br/>
+<div class="container-fluid">
+	<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Item</button>
+	<!-- ko if: showCheckButton -->
+	<button data-bind="click: submit" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-check"> Submit</i></button>
+	<!-- /ko -->
+	<!-- ko ifnot: showCheckButton -->
+	<button type="button" class="btn btn-info col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3 disabled">Submitted</button>
+	<!-- /ko -->
+	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
+</div>
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class = "text-center col-lg-3 col-md-3 col-xs-4">Quantity</th>
+					<th class = "text-center">Code</th>
+					<th>Name</th>
+					<th class = "text-right">Unit Price (Php)</th>
+					<th class = "text-right">Discount</th>
+					<th class = "text-right">Net Price (Php)</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: { data: clientOrderItemList, as: 'clientOrderItem' }">
+				<tr>
+					<td>
+						<div class="input-group">
+							<input data-bind="value: clientOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(clientOrderItem.id, clientOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
+							<span class="input-group-addon">&amp</span>
+							<input data-bind="value: clientOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(clientOrderItem.id, clientOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
+							<span class="input-group-addon">of <span data-bind="text: clientOrderItem.packaging"></span></span>
+						</div>
+					</td>
+					<td data-bind="text: clientOrderItem.productCode" class = "text-center"></td>
+					<td data-bind="text: clientOrderItem.displayName"></td>
+					<td data-bind="text: clientOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
+					<td data-bind="text: clientOrderItem.formattedDiscountAmount" class = "text-right"></td>
+					<td data-bind="text: clientOrderItem.formattedNetPrice" class = "text-right"></td>
+					
+					<td>
+						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.remove(clientOrderItem.id, clientOrderItem.displayName) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

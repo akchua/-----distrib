@@ -11,12 +11,13 @@
 
 	<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true" />
 
-	<bean id="emailUtil" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	<!-- <bean id="emailUtilConnect" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="com.chua.distributions.utility.EmailUtil"/>
 		<property name="targetMethod" value="connect"/>
-	</bean>
+	</bean> -->
 	
 	<bean id="clientOrderFormatter" class="com.chua.distributions.utility.format.ClientOrderFormatter" scope="singleton"></bean>
 	<bean id="purchaseOrderFormatter" class="com.chua.distributions.utility.format.PurchaseOrderFormatter" scope="singleton"></bean>
 	<bean id="salesReportFormatter" class="com.chua.distributions.utility.format.SalesReportFormatter" scope="singleton"></bean>
+	<bean id="emailUtil" class="com.chua.distributions.utility.EmailUtil" scope="singleton"></bean>
 </beans>

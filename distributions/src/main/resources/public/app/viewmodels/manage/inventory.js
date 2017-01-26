@@ -1,6 +1,6 @@
-define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/productform', 'viewmodels/manage/productview'],
-		function (app, ko, productService, companyService, categoryService, ProductForm, ProductView) {
-    var Product = function() {
+define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/productform', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
+		function (app, ko, productService, companyService, categoryService, ProductView, ProductHistory) {
+    var Inventory = function() {
     	this.productList = ko.observable();
     	this.companyList = ko.observable();
     	this.categoryList = ko.observable();
@@ -16,7 +16,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
 		this.currentPageSubscription = null;
     };
     
-    Product.prototype.activate = function() {
+    Inventory.prototype.activate = function() {
     	var self = this;
     	
     	self.currentPage(1);
@@ -35,7 +35,7 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
 		self.refreshProductList();
     };
     
-    Product.prototype.refreshProductList = function() {
+    Inventory.prototype.refreshProductList = function() {
     	var self = this;
     	
     	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId(), null, true).done(function(data) {
@@ -44,15 +44,15 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     	});
     };
     
-    Product.prototype.add = function() {
+    Inventory.prototype.history = function(productId) {
     	var self = this;
     	
-    	ProductForm.show(new Object(), 'Create Product').done(function() {
-    		self.refreshProductList();
+    	productService.getProduct(productId, null).done(function(product) {
+    		ProductHistory.show(product)
     	});
     };
     
-    Product.prototype.view = function(productId) {
+    Inventory.prototype.view = function(productId) {
     	var self = this;
     	
     	productService.getProduct(productId, null).done(function(product) {
@@ -60,38 +60,12 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     	});
     };
     
-    Product.prototype.edit = function(productId) {
-    	var self = this;
-    	
-    	productService.getProduct(productId, null).done(function(product) {
-    		ProductForm.show(product, 'Edit Product').done(function() {
-    			self.refreshProductList();
-    		});
-    	});
-    };
-    
-    Product.prototype.remove = function(productId, productDisplayName) {
-    	var self = this;
-    	
-    	app.showMessage('<p>Are you sure you want to remove Product <span class="text-primary">' + productDisplayName + '</span>?</p>',
-				'<p class="text-danger">Confirm Remove</p>',
-				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
-		.then(function(confirm) {
-			if(confirm) {
-				productService.removeProduct(productId).done(function(result) {
-					self.refreshProductList();
-					app.showMessage(result.message);
-				});
-			}
-		})
-    };
-    
-    Product.prototype.search = function() {
+    Inventory.prototype.search = function() {
     	var self = this;
     	
     	self.currentPage(1);
     	self.refreshProductList();
     };
     
-    return Product;
+    return Inventory;
 });

@@ -1,84 +1,82 @@
+<br/>
 <div class="container-fluid">
-	<br/>
-	<div class="container-fluid">
-		<div class="panel panel-info col-lg-6">
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-					<dt>Purchase ID:</dt>
-					<dd data-bind="text: purchaseOrder.id"></dd>
-					<dt>Company:</dt>
-					<dd data-bind="text: purchaseOrder.companyName"></dd>
-					<dt>Warehouse:</dt>
-					<dd data-bind="text: purchaseOrder.warehouse"></dd>
-					<dt>Creator:</dt>
-					<dd data-bind="text: purchaseOrder.creatorName"></dd>
-					<dt>Status:</dt>
-					<dd data-bind="text: purchaseOrder.status"></dd>
-		    	</dl>
-			</div>
-		</div>
-		<div class="panel panel-success col-lg-6">
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-					<dt>Gross Total:</dt>
-					<dd data-bind="text: purchaseOrder.formattedGrossTotal"></dd>
-					<dt>Total Discount:</dt>
-					<dd data-bind="text: purchaseOrder.formattedDiscountTotal"></dd>
-					<dt class="h2">Net Total:</dt>
-					<dd data-bind="text: purchaseOrder.formattedNetTotal" class="h2"></dd>
-		    	</dl>
-			</div>
+	<div class="panel panel-info col-lg-6">
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>Purchase ID:</dt>
+				<dd data-bind="text: purchaseOrder.id"></dd>
+				<dt>Company:</dt>
+				<dd data-bind="text: purchaseOrder.companyName"></dd>
+				<dt>Warehouse:</dt>
+				<dd data-bind="text: purchaseOrder.warehouse"></dd>
+				<dt>Creator:</dt>
+				<dd data-bind="text: purchaseOrder.creatorName"></dd>
+				<dt>Status:</dt>
+				<dd data-bind="text: purchaseOrder.status"></dd>
+	    	</dl>
 		</div>
 	</div>
-	<br/>
-	<div class="container-fluid">
-		<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Item</button>
-		<!-- ko if: showCheckButton -->
-		<button data-bind="click: submit" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-check"> Submit</i></button>
-		<!-- /ko -->
-		<!-- ko ifnot: showCheckButton -->
-		<button type="button" class="btn btn-info col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3 disabled">Submitted</button>
-		<!-- /ko -->
-		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
-	</div>
-	<div class="container-fluid">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class = "text-center col-lg-1 col-md-1 col-xs-2">Quantity</th>
-						<th class = "text-center">Code</th>
-						<th>Name</th>
-						<th class = "text-right">Unit Price (Php)</th>
-						<th class = "text-right">Discount</th>
-						<th class = "text-right">Net Price (Php)</th>
-					</tr>
-				</thead>
-				
-				<tbody data-bind="foreach: { data: purchaseOrderItemList, as: 'purchaseOrderItem' }">
-					<tr>
-						<td>
-							<div class="input-group">
-								<input data-bind="value: purchaseOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(purchaseOrderItem.id, purchaseOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<!-- <span class="input-group-addon">&amp</span>
-								<input data-bind="value: purchaseOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(purchaseOrderItem.id, purchaseOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">of <span data-bind="text: purchaseOrderItem.packaging"></span></span> -->
-							</div>
-						</td>
-						<td data-bind="text: purchaseOrderItem.productCode" class = "text-center"></td>
-						<td data-bind="text: purchaseOrderItem.displayName"></td>
-						<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
-						<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-right"></td>
-						<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-right"></td>
-						
-						<td>
-							<div class="btn-group pull-right">
-								<button data-bind="click: function() { $parent.remove(purchaseOrderItem.id, purchaseOrderItem.displayName) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="panel panel-success col-lg-6">
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>Gross Total:</dt>
+				<dd data-bind="text: purchaseOrder.formattedGrossTotal"></dd>
+				<dt>Total Discount:</dt>
+				<dd data-bind="text: purchaseOrder.formattedDiscountTotal"></dd>
+				<dt class="h2">Net Total:</dt>
+				<dd data-bind="text: purchaseOrder.formattedNetTotal" class="h2"></dd>
+	    	</dl>
 		</div>
+	</div>
+</div>
+<br/>
+<div class="container-fluid">
+	<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Item</button>
+	<!-- ko if: showCheckButton -->
+	<button data-bind="click: submit" type="button" class="btn btn-warning col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3"><i class="fa fa-check"> Submit</i></button>
+	<!-- /ko -->
+	<!-- ko ifnot: showCheckButton -->
+	<button type="button" class="btn btn-info col-md-offset-1 col-xs-offset-1 col-md-2 col-xs-3 disabled">Submitted</button>
+	<!-- /ko -->
+	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-7 col-xs-5"></div>
+</div>
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class = "text-center col-lg-1 col-md-1 col-xs-2">Quantity</th>
+					<th class = "text-center">Code</th>
+					<th>Name</th>
+					<th class = "text-right">Unit Price (Php)</th>
+					<th class = "text-right">Discount</th>
+					<th class = "text-right">Net Price (Php)</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: { data: purchaseOrderItemList, as: 'purchaseOrderItem' }">
+				<tr>
+					<td>
+						<div class="input-group">
+							<input data-bind="value: purchaseOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(purchaseOrderItem.id, purchaseOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
+							<!-- <span class="input-group-addon">&amp</span>
+							<input data-bind="value: purchaseOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(purchaseOrderItem.id, purchaseOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
+							<span class="input-group-addon">of <span data-bind="text: purchaseOrderItem.packaging"></span></span> -->
+						</div>
+					</td>
+					<td data-bind="text: purchaseOrderItem.productCode" class = "text-center"></td>
+					<td data-bind="text: purchaseOrderItem.displayName"></td>
+					<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
+					<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-right"></td>
+					<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-right"></td>
+					
+					<td>
+						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.remove(purchaseOrderItem.id, purchaseOrderItem.displayName) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

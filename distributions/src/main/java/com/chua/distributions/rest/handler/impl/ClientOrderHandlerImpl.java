@@ -48,6 +48,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Autowired
 	private SalesReportHandler salesReportHandler;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public ClientOrder getClientOrder(Long clientOrderId) {
 		refreshClientOrder(clientOrderId);
@@ -294,7 +297,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 		result = new ResultBean();
 		result.setSuccess(clientOrderService.update(clientOrder) &&
-				EmailUtil.send(clientOrder.getCreator().getEmailAddress(), 
+				emailUtil.send(clientOrder.getCreator().getEmailAddress(), 
 						null,
 						MailConstants.DEFAULT_EMAIL,
 						"Order Accepted",

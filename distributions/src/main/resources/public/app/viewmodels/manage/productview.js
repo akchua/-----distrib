@@ -3,6 +3,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     var ProductView = function(product, showStock) {
     	this.product = product;
     	this.showStock = showStock;
+    	this.showHere = false;
     	
     	this.productViewModel = {
     		id: ko.observable(),
@@ -35,6 +36,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	
     	self.productViewModel.companyName(self.product.company.name);
     	self.productViewModel.categoryName(self.product.category.name);
+    	
+    	if(self.product.formattedStockCountCurrent != 0) self.showHere = true;
     };
     
     ProductView.show = function(product, showStock) {

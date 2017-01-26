@@ -40,6 +40,9 @@ public class UserHandlerImpl implements UserHandler {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private EmailUtil emailUtil;
 
 	@Override
 	public User getUser(Long userId) {
@@ -127,7 +130,7 @@ public class UserHandlerImpl implements UserHandler {
 					result.setSuccess(userService.update(user));
 					if(result.getSuccess()) {
 						UserContextHolder.refreshUser(user);
-						result.setMessage(Html.line("Your profile has been " + Html.text(Color.GREEN, "updated") + "."));
+						result.setMessage(Html.line("Profile has been " + Html.text(Color.GREEN, "updated") + "."));
 					} else {
 						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 					}
@@ -216,7 +219,7 @@ public class UserHandlerImpl implements UserHandler {
 			
 			user.setPassword(EncryptionUtil.getMd5(randomPassword));
 			result.setSuccess(userService.update(user) &&
-					EmailUtil.send(user.getEmailAddress(),
+					emailUtil.send(user.getEmailAddress(),
 					null,
 					MailConstants.DEFAULT_EMAIL,
 					"Prime Pad Reset Password",
@@ -357,7 +360,7 @@ public class UserHandlerImpl implements UserHandler {
 		} else if(!userForm.getUsername().trim().matches("^[A-Za-z_]\\w{2,31}$")) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Username!")
 												+ Html.line("Username must be at least 3 to 30 characters and cannot contain white spaces and/or special characters."));
-		} else if(!EmailUtil.validateEmail(userForm.getEmailAddress().trim())) {
+		} else if(!emailUtil.validateEmail(userForm.getEmailAddress().trim())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Email Address!"));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");

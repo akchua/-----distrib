@@ -29,6 +29,9 @@ public class CompanyHandlerImpl implements CompanyHandler {
 	@Autowired
 	private CompanyService companyService;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public Company getCompany(Long companyId) {
 		return companyService.find(companyId);
@@ -140,7 +143,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 				companyForm.getContactNumber() == null || companyForm.getContactNumber().trim().length() < 3 ||
 				companyForm.getEmailAddress() == null || companyForm.getEmailAddress().trim().length() < 3) {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters."));
-		} else if(!EmailUtil.validateEmail(companyForm.getEmailAddress().trim())) {
+		} else if(!emailUtil.validateEmail(companyForm.getEmailAddress().trim())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Email Address!"));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");

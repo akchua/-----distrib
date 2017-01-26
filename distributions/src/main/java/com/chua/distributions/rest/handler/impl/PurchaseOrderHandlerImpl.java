@@ -60,6 +60,9 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	@Autowired
 	private PurchaseOrderFormatter purchaseOrderFormatter;
 
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	@Override
 	public PurchaseOrder getPurchaseOrder(Long purchaseOrderId) {
 		refreshPurchaseOrder(purchaseOrderId);
@@ -217,7 +220,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 				if(!purchaseOrder.getNetTotal().equals(0.0f)) {
 					final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
 					SimplePdfWriter.write(purchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, true);
-					boolean flag = EmailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
+					boolean flag = emailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 							null,
 							MailConstants.DEFAULT_EMAIL,
 							"Purchase Order",

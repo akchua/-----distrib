@@ -28,6 +28,9 @@ public class SalesReportScheduler {
 	@Autowired
 	private SalesReportHandler salesReportHandler;
 	
+	@Autowired
+	private EmailUtil emailUtil;
+	
 	/**
 	 * Weekly Sales Report
 	 * fires at 1:00AM every Saturday
@@ -64,7 +67,7 @@ public class SalesReportScheduler {
 			if(result.getSuccess()) LOG.info(result.getMessage());
 			else {
 				LOG.error(result.getMessage());
-				EmailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER, 
+				emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER, 
 						null,
 						MailConstants.DEFAULT_EMAIL,
 						"Sales Report",
