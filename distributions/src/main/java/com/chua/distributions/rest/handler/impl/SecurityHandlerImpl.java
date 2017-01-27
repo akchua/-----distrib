@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.beans.UserBean;
-import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.rest.handler.SecurityHandler;
 
 /**
@@ -33,7 +32,6 @@ public class SecurityHandlerImpl implements SecurityHandler {
 
 	@Override
 	public UserBean getUser() {
-		System.out.println("here - " + FileConstants.FILE_HOME);
 		return UserContextHolder.getUser();
 	}
 }

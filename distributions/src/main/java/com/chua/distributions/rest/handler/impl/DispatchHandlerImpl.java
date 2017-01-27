@@ -18,19 +18,16 @@ import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.Dispatch;
 import com.chua.distributions.database.entity.DispatchItem;
-import com.chua.distributions.database.entity.Product;
-import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.DispatchItemService;
 import com.chua.distributions.database.service.DispatchService;
-import com.chua.distributions.database.service.ProductService;
-import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
+import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
@@ -56,15 +53,12 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
-	
-	@Autowired
-	private WarehouseItemService warehouseItemService;
-	
-	@Autowired
-	private ProductService productService;
 
 	@Autowired
 	private ClientOrderFormatter clientOrderFormatter;
+	
+	@Autowired
+	private WarehouseItemHandler warehouseItemHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
@@ -351,22 +345,10 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	private boolean removeFromWareHouse(ClientOrder clientOrder) {
 		final Warehouse warehouse = clientOrder.getWarehouse();
 		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
+		
 		for(ClientOrderItem clientOrderItem : clientOrderItems) {
-			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
-			if(warehouseItem == null) {
-				final Product product = productService.find(clientOrderItem.getProductId());
-				final WarehouseItem warehouzeItem = new WarehouseItem();
-				
-				warehouzeItem.setProduct(product);
-				warehouzeItem.setWarehouse(warehouse);
-				warehouzeItem.setStockCount(0 - clientOrderItem.getQuantity());
-				
-				if(warehouseItemService.insert(warehouzeItem) == null) return false;
-			} else {
-				warehouseItem.setStockCount(warehouseItem.getStockCount() - clientOrderItem.getQuantity());
-				
-				if(!warehouseItemService.update(warehouseItem)) return false;;
-			}
+			if(!warehouseItemHandler.removeFromWarehouse(clientOrderItem.getProductId(), warehouse, clientOrderItem.getQuantity())) 
+				return false;
 		}
 		
 		return true;

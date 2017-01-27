@@ -14,20 +14,17 @@ import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
-import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
-import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CompanyService;
-import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.database.service.PurchaseOrderService;
-import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
+import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
@@ -43,16 +40,10 @@ import com.chua.distributions.utility.format.PurchaseOrderFormatter;
 public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 
 	@Autowired
-	private WarehouseItemService warehouseItemService;
-	
-	@Autowired
 	private PurchaseOrderService purchaseOrderService;
 	
 	@Autowired
 	private PurchaseOrderItemService purchaseOrderItemService;
-	
-	@Autowired
-	private ProductService productService;
 	
 	@Autowired
 	private CompanyService companyService;
@@ -60,6 +51,9 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	@Autowired
 	private PurchaseOrderFormatter purchaseOrderFormatter;
 
+	@Autowired
+	private WarehouseItemHandler warehouseItemHandler;
+	
 	@Autowired
 	private EmailUtil emailUtil;
 	
@@ -368,21 +362,8 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private boolean addToWarehouse(PurchaseOrder purchaseOrder) {
 		List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId());
 		for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
-			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse());
-			if(warehouseItem == null) {
-				final Product product = productService.find(purchaseOrderItem.getProductId());
-				final WarehouseItem warehouzeItem = new WarehouseItem();
-				
-				warehouzeItem.setProduct(product);
-				warehouzeItem.setWarehouse(purchaseOrder.getWarehouse());
-				warehouzeItem.setStockCount(purchaseOrderItem.getQuantity());
-				
-				if(warehouseItemService.insert(warehouzeItem) == null) return false;
-			} else {
-				warehouseItem.setStockCount(warehouseItem.getStockCount() + purchaseOrderItem.getQuantity());
-				
-				if(!warehouseItemService.update(warehouseItem)) return false;;
-			}
+			if(!warehouseItemHandler.addToWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse(), purchaseOrderItem.getQuantity()))
+				return false;
 		}
 		
 		return true;

@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.chua.distributions.constants.MailConstants;
 
@@ -23,6 +24,7 @@ import com.chua.distributions.constants.MailConstants;
  * @version 1.0
  * @since   Dec 2, 2016
  */
+@Component
 public class EmailUtil {
 	
 	@Value("${enable.send.email}")
