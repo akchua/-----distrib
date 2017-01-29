@@ -1,74 +1,72 @@
+<br/>
 <div class="container-fluid">
-	<br/>
-	<div class="container-fluid">
-		<!-- <button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button> -->
-		<form role="search" class="form-inline">
-			<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
-				<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId, event: { change: refreshClientOrderList }" class="form-control" id="inputClient"></select>
-				<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-				<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouse, event: { change: refreshClientOrderList }" class="form-control" id="inputWarehouse"></select>
-	        </div>
-      	</form>
-	</div>
-	<br/>
-	<div class="container-fluid col-xs-offset-1 col-xs-11">
-		<label class="checkbox-inline">
-			<input data-bind="checked: salesReportQuery.includePaid, event: { change: refreshClientOrderList }" type="checkbox" name="paidcheckbox">Paid
-		</label>
-		<label class="checkbox-inline">	
-			<input data-bind="checked: salesReportQuery.includeDelivered, event: { change: refreshClientOrderList }" type="checkbox" name="deliveredcheckbox">Delivered
-		</label>
-		<label class="checkbox-inline">	
-			<input data-bind="checked: salesReportQuery.includeDispatched, event: { change: refreshClientOrderList }" type="checkbox" name="dispatchedcheckbox">Dispatched
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: salesReportQuery.includeToFollow, event: { change: refreshClientOrderList }" type="checkbox" name="tofollowcheckbox">To Follow
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: salesReportQuery.includeAccepted, event: { change: refreshClientOrderList }" type="checkbox" name="acceptedcheckbox">Accepted
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: salesReportQuery.includeSubmitted, event: { change: refreshClientOrderList }" type="checkbox" name="submittedcheckbox">Submitted
-		</label>
-	</div>
-	<div class="container-fluid">
-		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
-	</div>
-	<div class="container-fluid">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class = "text-center">ID</th>
-						<th>Client</th>
-						<th class = "text-center">Last Status Change</th>
-						<th>Warehouse</th>
-						<th class = "text-center">Status</th>
-						<th class = "text-right">Amount (Php)</th>
-					</tr>
-				</thead>
-				
-				<tbody data-bind="foreach: { data: clientOrderList, as: 'clientOrder' }">
-					<tr>
-						<td data-bind="text: clientOrder.id" class = "text-center"></td>
-						<td><a data-bind="text: clientOrder.creator.businessName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
-						<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
-						<td>
-						<!-- ko if: clientOrder.warehouse -->
-						<span data-bind="text: clientOrder.warehouse.displayName"></span>
-						<!-- /ko -->
-						</td>
-						<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>
-						<td data-bind="text: clientOrder.formattedNetTotal" class = "text-right"></td>
-						
-						<td>
-							<div class="btn-group pull-right">
-								<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	<!-- <button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button> -->
+	<form role="search" class="form-inline">
+		<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
+			<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId, event: { change: refreshClientOrderList }" class="form-control" id="inputClient"></select>
+			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+			<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouse, event: { change: refreshClientOrderList }" class="form-control" id="inputWarehouse"></select>
+        </div>
+     	</form>
+</div>
+<br/>
+<div class="container-fluid col-xs-offset-1 col-xs-11">
+	<label class="checkbox-inline">
+		<input data-bind="checked: salesReportQuery.includePaid, event: { change: refreshClientOrderList }" type="checkbox" name="paidcheckbox">Paid
+	</label>
+	<label class="checkbox-inline">	
+		<input data-bind="checked: salesReportQuery.includeDelivered, event: { change: refreshClientOrderList }" type="checkbox" name="deliveredcheckbox">Delivered
+	</label>
+	<label class="checkbox-inline">	
+		<input data-bind="checked: salesReportQuery.includeDispatched, event: { change: refreshClientOrderList }" type="checkbox" name="dispatchedcheckbox">Dispatched
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: salesReportQuery.includeToFollow, event: { change: refreshClientOrderList }" type="checkbox" name="tofollowcheckbox">To Follow
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: salesReportQuery.includeAccepted, event: { change: refreshClientOrderList }" type="checkbox" name="acceptedcheckbox">Accepted
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: salesReportQuery.includeSubmitted, event: { change: refreshClientOrderList }" type="checkbox" name="submittedcheckbox">Submitted
+	</label>
+</div>
+<div class="container-fluid">
+	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
+</div>
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class = "text-center">ID</th>
+					<th>Client</th>
+					<th class = "text-center">Last Status Change</th>
+					<th>Warehouse</th>
+					<th class = "text-center">Status</th>
+					<th class = "text-right">Amount (Php)</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: { data: clientOrderList, as: 'clientOrder' }">
+				<tr>
+					<td data-bind="text: clientOrder.id" class = "text-center"></td>
+					<td><a data-bind="text: clientOrder.creator.businessName, click: function() { $parent.viewClient(clientOrder.creator.id) }"></a></td>
+					<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
+					<td>
+					<!-- ko if: clientOrder.warehouse -->
+					<span data-bind="text: clientOrder.warehouse.displayName"></span>
+					<!-- /ko -->
+					</td>
+					<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>
+					<td data-bind="text: clientOrder.formattedNetTotal" class = "text-right"></td>
+					
+					<td>
+						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

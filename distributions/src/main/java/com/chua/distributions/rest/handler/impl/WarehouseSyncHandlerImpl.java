@@ -13,10 +13,12 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
+import com.chua.distributions.database.entity.StockAdjust;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.PurchaseOrderItemService;
+import com.chua.distributions.database.service.StockAdjustService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Warehouse;
@@ -44,7 +46,13 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 	private PurchaseOrderItemService purchaseOrderItemService;
 	
 	@Autowired
+	private StockAdjustService stockAdjustService;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private EmailUtil emailUtil;
 	
 	@Override
 	public ResultBean syncExisting(Warehouse warehouse) {
@@ -60,6 +68,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 			Product product = warehouseItem.getProduct();
 			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllUnstockedByProductAndWarehouse(product.getId(), warehouse);
 			List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllStockedByProductAndWarehouse(product.getId(), warehouse);
+			List<StockAdjust> stockAdjusts = stockAdjustService.findAllByProductAndWarehouse(product.getId(), warehouse);
 			if(clientOrderItems != null && purchaseOrderItems != null) {
 				Integer stockCount = warehouseItem.getStockCount();
 				Integer actualCount = 0;
@@ -68,6 +77,9 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 				}
 				for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
 					actualCount += purchaseOrderItem.getQuantity();
+				}
+				for(StockAdjust stockAdjust : stockAdjusts) {
+					actualCount += stockAdjust.getQuantity();
 				}
 				if(!stockCount.equals(actualCount)) {
 					String error = "Adjust " + product.getDisplayName() + " at " + warehouse.getDisplayName() + " from " + stockCount + " to " + actualCount;
@@ -98,7 +110,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 						message += s + "\n";
 					}
 					
-					EmailUtil.send(recipient, "Warehouse Sync", message);
+					emailUtil.send(recipient, "Warehouse Sync", message);
 				//
 				
 				result.setMessage("Sync for " + warehouse.getDisplayName() + " complete. " + errorList.size() + " error/s found.");

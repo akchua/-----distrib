@@ -19,6 +19,10 @@
       	</div>
       	
       	<div class="container-fluid">
+			<span data-bind="html: log" class="text-center"></span>
+		</div>
+      	
+      	<div class="container-fluid">
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>
@@ -38,17 +42,13 @@
 							<td>
 								<div class="btn-group pull-right">
 									<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
-									<button data-bind="click: function() { $parent.addItem(product.id) }" type="button" class="btn btn-success btn-sm" title="Add Item"><i class="fa fa-cart-plus"></i></button>
+									<button data-bind="click: function() { $parent.addItem(product.id) }, enable: $parent.enableAdd" type="button" class="btn btn-success btn-sm" title="Add Item"><i class="fa fa-cart-plus"></i></button>
 								</div>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>
-		
-		<div class="container-fluid">
-			<span data-bind="html: log" class="text-center"></span>
 		</div>
 	</div>
  

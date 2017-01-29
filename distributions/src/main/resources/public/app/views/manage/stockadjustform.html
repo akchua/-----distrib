@@ -1,0 +1,57 @@
+<div class="modal-content modal-lg">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 align="center">Adjust Stock</h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="container-fluid">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 data-bind="text: productDisplayName" class="panel-title"></h3>
+					</div>
+					
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="inputWarehouse">Warehouse</label>
+							<div class="controls">
+								<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- Select Warehouse --', value: stockAdjustFormModel.warehouse" class="form-control" id="inputWarehouse"></select>
+								<p class="help-block">Warehouse to adjust stock at</p>
+							</div>
+						</div>
+						
+						<div class="row">
+							<dl class="dl-horizontal col-xs-6">
+								<dt>All Stock:</dt>
+								<dd data-bind="text: allStock"></dd>
+								<dt>Stock Here:</dt>
+								<dd><span data-bind="text: stockCount"></span></dd>
+					    	</dl>
+							
+							<div class="input-group col-xs-6">
+								<input data-bind="value: stockAdjustFormModel.packageQuantity" type="text" class="form-control text-center" placeholder="">
+								<span class="input-group-addon">&amp</span>
+								<input data-bind="value: stockAdjustFormModel.pieceQuantity" type="text" class="form-control text-center" placeholder="">
+								<span class="input-group-addon">of <span data-bind="text: productPackaging"></span></span>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="description">Description</label>
+							<div class="controls">
+								<textarea data-bind="textInput: stockAdjustFormModel.description" id="description" name="description" placeholder="" class="form-control input-lg"></textarea>
+								<p class="help-block">Description/Reason of  adjustment</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" data-bind="click: adjust">Adjust</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+  	</form>
+</div>

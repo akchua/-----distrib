@@ -21,7 +21,7 @@ import com.chua.distributions.rest.handler.SecurityHandler;
 @Transactional
 @Component
 public class SecurityHandlerImpl implements SecurityHandler {
-
+	
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

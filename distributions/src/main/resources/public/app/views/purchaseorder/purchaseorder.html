@@ -1,75 +1,73 @@
+<br/>
 <div class="container-fluid">
-	<br/>
-	<div class="container-fluid">
-		<button data-bind="click: add" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-plus-circle"></i> Add Purchase Order</button>
-		<form role="search" class="form-inline">
-			<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
-				<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputCompany"></select>
-				<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-				<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: warehouse, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
-	        </div>
-      	</form>
-	</div>
-	<br/>
-	<div class="container-fluid">
-		<!-- <label class="checkbox-inline col-xs-offset-1 col-xs-2">
-			<input data-bind="checked: showPaid, event: { change: refreshPurchaseOrderList }" type="checkbox" name="paidcheckbox">Show Paid
-		</label> -->
-		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
-	</div>
-	<div class="container-fluid">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class = "text-center">ID</th>
-						<th class = "text-center">Last Update</th>
-						<th>Company</th>
-						<th>Warehouse</th>
-						<th class = "text-center">Status</th>
-						<th class = "text-right">Total Amount</th>
-					</tr>
-				</thead>
-				
-				<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
-					<tr>
-						<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.company.name"></td>
-						<td data-bind="text: purchaseOrder.warehouse.displayName"></td>
-						<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.formattedNetTotal" class = "text-right"></td>
-						
-						<td>
-							<div class="btn-group pull-right">
-								<!-- ko if: purchaseOrder.status.name == 'CREATING' -->
-								<button data-bind="click: function() { $parent.edit(purchaseOrder.id) } " type="button" class="btn btn-warning btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
-								<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm" title="Open"><i class="fa fa-folder-open"></i></button>
-								<!-- /ko -->
-								<!-- ko if: purchaseOrder.status.name == 'SUBMITTED' -->
-								<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) }, enable: $parent.enableSend " type="button" class="btn btn-success btn-sm" title="Send"><i class="fa fa-send"></i></button>
-								<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm" title="Open"><i class="fa fa-folder-open"></i></button>
-								<!-- /ko -->
-								<!-- ko if: purchaseOrder.status.name == 'ACCEPTED' -->
-								<button data-bind="click: function() { $parent.receive(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0  " type="button" class="btn btn-success btn-sm" title="Receive"><i class="fa fa-check"></i></button>
-								<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Transfer"><i class="fa fa-exchange"></i></button>
-								<!-- /ko -->
-								<!-- ko if: purchaseOrder.status.name == 'TO_FOLLOW' -->
-								<button data-bind="click: function() { $parent.receive(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0  " type="button" class="btn btn-success btn-sm" title="Receive"><i class="fa fa-check"></i></button>
-								<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Receive"><i class="fa fa-exchange"></i></button>
-								<!-- /ko -->
-								<!-- ko if: purchaseOrder.status.name == 'RECEIVED' -->
-								<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm" title="Pay"><i class="fa fa-money"></i></button>
-								<!-- /ko -->
-								<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
-								<!-- ko ifnot: purchaseOrder.status.name == 'RECEIVED' -->
-								<button data-bind="click: function() { $parent.remove(purchaseOrder.id) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
-								<!-- /ko -->
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	<button data-bind="click: add" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-plus-circle"></i> Add Purchase Order</button>
+	<form role="search" class="form-inline">
+		<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
+			<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputCompany"></select>
+			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+			<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: warehouse, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
+        </div>
+     	</form>
+</div>
+<br/>
+<div class="container-fluid">
+	<!-- <label class="checkbox-inline col-xs-offset-1 col-xs-2">
+		<input data-bind="checked: showPaid, event: { change: refreshPurchaseOrderList }" type="checkbox" name="paidcheckbox">Show Paid
+	</label> -->
+	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
+</div>
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class = "text-center">ID</th>
+					<th class = "text-center">Last Update</th>
+					<th>Company</th>
+					<th>Warehouse</th>
+					<th class = "text-center">Status</th>
+					<th class = "text-right">Total Amount</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
+				<tr>
+					<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.company.name"></td>
+					<td data-bind="text: purchaseOrder.warehouse.displayName"></td>
+					<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.formattedNetTotal" class = "text-right"></td>
+					
+					<td>
+						<div class="btn-group pull-right">
+							<!-- ko if: purchaseOrder.status.name == 'CREATING' -->
+							<button data-bind="click: function() { $parent.edit(purchaseOrder.id) } " type="button" class="btn btn-warning btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+							<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm" title="Open"><i class="fa fa-folder-open"></i></button>
+							<!-- /ko -->
+							<!-- ko if: purchaseOrder.status.name == 'SUBMITTED' -->
+							<button data-bind="click: function() { $parent.send(purchaseOrder.id, purchaseOrder.company.name, purchaseOrder.company.emailAddress) }, enable: $parent.enableSend " type="button" class="btn btn-success btn-sm" title="Send"><i class="fa fa-send"></i></button>
+							<button data-bind="click: function() { $parent.open(purchaseOrder.id) } "type="button" class="btn btn-primary btn-sm" title="Open"><i class="fa fa-folder-open"></i></button>
+							<!-- /ko -->
+							<!-- ko if: purchaseOrder.status.name == 'ACCEPTED' -->
+							<button data-bind="click: function() { $parent.receive(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0  " type="button" class="btn btn-success btn-sm" title="Receive"><i class="fa fa-check"></i></button>
+							<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Transfer"><i class="fa fa-exchange"></i></button>
+							<!-- /ko -->
+							<!-- ko if: purchaseOrder.status.name == 'TO_FOLLOW' -->
+							<button data-bind="click: function() { $parent.receive(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0  " type="button" class="btn btn-success btn-sm" title="Receive"><i class="fa fa-check"></i></button>
+							<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Receive"><i class="fa fa-exchange"></i></button>
+							<!-- /ko -->
+							<!-- ko if: purchaseOrder.status.name == 'RECEIVED' -->
+							<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm" title="Pay"><i class="fa fa-money"></i></button>
+							<!-- /ko -->
+							<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+							<!-- ko ifnot: purchaseOrder.status.name == 'RECEIVED' -->
+							<button data-bind="click: function() { $parent.remove(purchaseOrder.id) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>
+							<!-- /ko -->
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

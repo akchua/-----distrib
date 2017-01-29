@@ -6,6 +6,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	
     	this.searchKey = ko.observable();
     	this.log = ko.observable('<p class="text-info">Click the cart beside the product to add ONE PACKAGE of that product.</p>');
+    	this.enableAdd = ko.observable(true);
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -40,12 +41,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.addItem = function(productId) {
     	var self = this;
     	
+    	self.enableAdd(false);
     	clientOrderItemService.addItem(productId, self.clientOrderId).done(function(result) {
     		if(result.success) {
     			self.log(result.message);
         	} else {
         		app.showMessage(result.message);
         	}
+    		self.enableAdd(true);
     	});
     };
     

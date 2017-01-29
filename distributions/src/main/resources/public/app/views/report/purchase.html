@@ -1,67 +1,65 @@
+<br/>
 <div class="container-fluid">
-	<br/>
-	<div class="container-fluid">
-		<!-- <button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button> -->
-		<form role="search" class="form-inline">
-			<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
-				<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: purchaseReportQuery.companyId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputCompany"></select>
-				<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-				<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: purchaseReportQuery.warehouse, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
-	        </div>
-      	</form>
-	</div>
-	<br/>
-	<div class="container-fluid col-xs-offset-1 col-xs-11">
-		<label class="checkbox-inline ">
-			<input data-bind="checked: purchaseReportQuery.includePaid, event: { change: refreshPurchaseOrderList }" type="checkbox" name="paidcheckbox">Paid
-		</label>
-		<label class="checkbox-inline">	
-			<input data-bind="checked: purchaseReportQuery.includeDelivered, event: { change: refreshPurchaseOrderList }" type="checkbox" name="deliveredcheckbox">Delivered
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: purchaseReportQuery.includeToFollow, event: { change: refreshPurchaseOrderList }" type="checkbox" name="tofollowcheckbox">To Follow
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: purchaseReportQuery.includeAccepted, event: { change: refreshPurchaseOrderList }" type="checkbox" name="acceptedcheckbox">Accepted
-		</label>
-		<label class="checkbox-inline">
-			<input data-bind="checked: purchaseReportQuery.includeSubmitted, event: { change: refreshPurchaseOrderList }" type="checkbox" name="submittedcheckbox">Submitted
-		</label>
-	</div>
-	<div class="container-fluid">
-		<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
-	</div>
-	<div class="container-fluid">
-		<div class="table-responsive">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th class = "text-center">ID</th>
-						<th class = "text-center">Last Update</th>
-						<th>Company</th>
-						<th>Warehouse</th>
-						<th class = "text-center">Status</th>
-						<th class = "text-right">Amount (Php)</th>
-					</tr>
-				</thead>
-				
-				<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
-					<tr>
-						<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.company.name"></td>
-						<td data-bind="text: purchaseOrder.warehouse.displayName + ' - ' + purchaseOrder.warehouse.address"></td>
-						<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
-						<td data-bind="text: purchaseOrder.formattedNetTotal" class = "text-right"></td>
-						
-						<td>
-							<div class="btn-group pull-right">
-								<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	<!-- <button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button> -->
+	<form role="search" class="form-inline">
+		<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
+			<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: purchaseReportQuery.companyId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputCompany"></select>
+			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
+			<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: purchaseReportQuery.warehouse, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
+        </div>
+     	</form>
+</div>
+<br/>
+<div class="container-fluid col-xs-offset-1 col-xs-11">
+	<label class="checkbox-inline ">
+		<input data-bind="checked: purchaseReportQuery.includePaid, event: { change: refreshPurchaseOrderList }" type="checkbox" name="paidcheckbox">Paid
+	</label>
+	<label class="checkbox-inline">	
+		<input data-bind="checked: purchaseReportQuery.includeDelivered, event: { change: refreshPurchaseOrderList }" type="checkbox" name="deliveredcheckbox">Delivered
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: purchaseReportQuery.includeToFollow, event: { change: refreshPurchaseOrderList }" type="checkbox" name="tofollowcheckbox">To Follow
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: purchaseReportQuery.includeAccepted, event: { change: refreshPurchaseOrderList }" type="checkbox" name="acceptedcheckbox">Accepted
+	</label>
+	<label class="checkbox-inline">
+		<input data-bind="checked: purchaseReportQuery.includeSubmitted, event: { change: refreshPurchaseOrderList }" type="checkbox" name="submittedcheckbox">Submitted
+	</label>
+</div>
+<div class="container-fluid">
+	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
+</div>
+<div class="container-fluid">
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class = "text-center">ID</th>
+					<th class = "text-center">Last Update</th>
+					<th>Company</th>
+					<th>Warehouse</th>
+					<th class = "text-center">Status</th>
+					<th class = "text-right">Amount (Php)</th>
+				</tr>
+			</thead>
+			
+			<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
+				<tr>
+					<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.company.name"></td>
+					<td data-bind="text: purchaseOrder.warehouse.displayName + ' - ' + purchaseOrder.warehouse.address"></td>
+					<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
+					<td data-bind="text: purchaseOrder.formattedNetTotal" class = "text-right"></td>
+					
+					<td>
+						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

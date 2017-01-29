@@ -1,5 +1,5 @@
-﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'viewmodels/userform', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
-		function (router, app, ko, securityService, UserForm, PasswordForm, ForgotPasswordForm, Settings) {
+﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
+		function (router, app, ko, securityService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
 	var homeroute = [
 	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: true }
 	];
@@ -18,6 +18,7 @@
    	  		    { route: 'category', moduleId: 'category', title: 'Categories', nav: true, hash: 'category' },
    	  		    { route: 'client', moduleId: 'client', title: 'Clients', nav: true, hash: 'client' },
    	  		    { route: 'company', moduleId: 'company', title: 'Companies', nav: true, hash: 'company' },
+   	  		    { route: 'inventory', moduleId: 'inventory', title: 'Inventory', nav: true, hash: 'inventory' },
    	  		    { route: 'product', moduleId: 'product', title: 'Products', nav: true, hash: 'product' }
    	  		]
    	  	}
@@ -156,7 +157,7 @@
 	Shell.prototype.profile = function() {
 		var self = this;
 		
-		UserForm.show(app.user, 'My Profile').done(function() {
+		Profile.show(app.user).done(function() {
 			self.refreshUser();
 		});
 	};
