@@ -103,7 +103,17 @@ public class EmailUtil {
 	}
 	
 	public boolean validateEmail(String emailAddress) {
-		return emailAddress.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-										+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+		boolean valid = true;
+		String[] emails = emailAddress.split(",");
+		
+		for(String email : emails) {
+			if(!email.trim().matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+										+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+				valid = false;
+				break;
+			}
+		}
+		
+		return valid;
 	}
 }

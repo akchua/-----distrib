@@ -1,1 +1,1 @@
-java -Dloader.path=/usr/local/primepad/config -jar ../bin/distributions-1.3.12.RELEASE.jar
+java -Dloader.path=/usr/local/primepad/config -jar ../bin/distributions-1.4.4.QUICKFIX.jar

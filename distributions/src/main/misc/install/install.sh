@@ -3,7 +3,7 @@
 # kill -15 option is gracefully shutdown, kill -9 option is instant kill 
 
 # Export PRIMEPAD_HOME to be used for installation
-EXPORT PRIMEPAD_HOME=/usr/local/primepad
+export PRIMEPAD_HOME=/usr/local/primepad
 
 # Package is in gunzip - .gz
 # Hard code for now
