@@ -58,10 +58,10 @@ public class SimplePdfWriter {
             PdfPTable table = new PdfPTable(3);
             try {
                 table.setWidths(new int[]{24, 24, 2});
-                table.setTotalWidth(770);
+                table.setTotalWidth(document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
                 table.getDefaultCell().setFixedHeight(20);
                 table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                table.addCell(new Phrase("Prime Pad", font));
+                table.addCell(new Phrase("Prime Pad Pampanga", font));
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), font));
                 PdfPCell cell = new PdfPCell(total);

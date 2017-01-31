@@ -15,7 +15,7 @@ import com.chua.distributions.utility.StringHelper;
  */
 public class PurchaseOrderFormatter {
 	
-	private final int CHARACTERS_PER_LINE = 107;
+	private final int CHARACTERS_PER_LINE = 94;
 	
 	public String format(PurchaseOrder purchaseOrder, List<PurchaseOrderItem> orderItems) {
 		String format = "";
@@ -28,23 +28,23 @@ public class PurchaseOrderFormatter {
 		format += String.format("%15s", "Date: ") + DateFormatter.longFormat(new Date()) + "\n";
 		format += "\n";
 		format += " Purchase Order #" + purchaseOrder.getId() + "\n";
-		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
+		format += "+"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "+\n";
 		format += "|" + StringHelper.center("Quantity", 14) + "|";
-		format += StringHelper.center("Item Description", 49) + "|";
-		format += StringHelper.center("Unit Price", 19) + "|";
-		format += StringHelper.center("Amount", 20) + " |" + "\n";
-		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
+		format += StringHelper.center("Item Description", 49) + "| ";
+		format += StringHelper.center("Unit Price", 12) + " |";
+		format += StringHelper.center("Amount", 12) + " |" + "\n";
+		format += "+"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "+\n";
 		for(PurchaseOrderItem orderItem : orderItems) {
 			format += "|";
 			format += StringHelper.center(orderItem.getFormattedQuantity() + "", 14) + "|";
-			format += StringHelper.center(orderItem.getDisplayName(), 49) + "|";
-			format += String.format("%19s", orderItem.getFormattedPackageUnitPrice()) + "|";
-			format += String.format("%20s", orderItem.getFormattedGrossPrice());
+			format += StringHelper.center(orderItem.getDisplayName(), 49) + "| ";
+			format += String.format("%12s", orderItem.getFormattedPackageUnitPrice()) + " |";
+			format += String.format("%12s", orderItem.getFormattedGrossPrice());
 			format += " |\n";
 		}
-		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
+		format += "+"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "+\n";
 		format += "\n";
-		format += String.format("%85s", "Total:") + String.format("%20s", purchaseOrder.getFormattedGrossTotal()) + "\n";
+		format += String.format("%70s", "Total Amount: ") + String.format("%-20s", purchaseOrder.getFormattedGrossTotal()) + "\n";
 		format += "\n";
 		format += String.format("%20s", "Prepared By: ") + purchaseOrder.getCreator().getFormattedName();
 		format += "\n";

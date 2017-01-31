@@ -7,7 +7,7 @@ package com.chua.distributions.constants;
  */
 public class BusinessConstants {
 
-	public static final String BUSINESS_NAME = "Prime Pad Industrial Corporation";
+	public static final String BUSINESS_NAME = "Prime Pad Industrial Corporation Pampanga";
 	
 	public static final String BUSINESS_CHIEF_OFFICER = "Ms. Noemi Pineda";
 	

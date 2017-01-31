@@ -17,7 +17,7 @@ import com.chua.distributions.utility.StringHelper;
  */
 public class SalesReportFormatter {
 	
-	private final int CHARACTERS_PER_LINE = 127;
+	private final int CHARACTERS_PER_LINE = 122;
 	
 	public String format(SalesReportQueryBean salesReportQuery, User client, List<ClientOrder> clientOrders) {
 		String format = "";
@@ -44,8 +44,8 @@ public class SalesReportFormatter {
 		
 		format += StringHelper.center("Order ID", 9) + "|";
 		format += StringHelper.center("Client", 39) + "|";
-		format += StringHelper.center("Warehouse", 14) + "|";
-		format += StringHelper.center("Amount", 20) + " |" + "\n";
+		format += StringHelper.center("Warehouse", 14) + "| ";
+		format += StringHelper.center("Amount", 14) + " |" + "\n";
 		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
 		for(ClientOrder clientOrder : clientOrders) {
 			format += "|";
@@ -53,21 +53,26 @@ public class SalesReportFormatter {
 			format += StringHelper.center(DateFormatter.longFormat(clientOrder.getUpdatedOn()), 19) + "|";
 			format += StringHelper.center(clientOrder.getId() + "", 9) + "|";
 			format += StringHelper.center(clientOrder.getCreator().getBusinessName(), 39) + "|";
-			format += StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14) + "|";
-			format += String.format("%20s", clientOrder.getFormattedNetTotal());
+			format += StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14) + "| ";
+			format += String.format("%14s", clientOrder.getFormattedNetTotal());
 			format += " |\n";
 			if(salesReportQuery.getShowNetTrail() != null && salesReportQuery.getShowNetTrail()) {
-				format += "|"; format += String.format("%105s", "Gross Total: ") + String.format("%20s", clientOrder.getFormattedGrossTotal()) + " |\n";
-				format += "|"; format += String.format("%105s", "Total Discount: ") + String.format("%20s", clientOrder.getFormattedDiscountTotal()) + " |\n";
-				format += "|"; format += String.format("%105s", "Client Discount: ") + String.format("%20s", clientOrder.getFormattedAdditionalDiscountAmount()) + " |\n";
-				format += "|"; format += String.format("%105s", "Less VAT: ") + String.format("%20s", clientOrder.getFormattedLessVatAmount()) + " |\n";
-				format += "|"; format += String.format("%105s", "Net Total: ") + String.format("%20s", clientOrder.getFormattedNetTotal()) + " |\n";
+				format += "|"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += " "; format += "|\n";
+				format += "|"; format += String.format("%100s", "Gross Total: ") + String.format("%-20s", clientOrder.getFormattedGrossTotal()) + " |\n";
+				format += "|"; format += String.format("%100s", "Total Discount: ") + String.format("%-20s", clientOrder.getFormattedDiscountTotal()) + " |\n";
+				format += "|"; format += String.format("%100s", "Client Discount: ") + String.format("%-20s", clientOrder.getFormattedAdditionalDiscountAmount()) + " |\n";
+				format += "|"; format += String.format("%100s", "Less VAT: ") + String.format("%-20s", clientOrder.getFormattedLessVatAmount()) + " |\n";
+				format += "|"; format += String.format("%100s", "Net Total: ") + String.format("%-20s", clientOrder.getFormattedNetTotal()) + " |\n";
+				format += "+"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "+\n";
 			}
 			tempTotal += clientOrder.getNetTotal();
 		}
-		format += " "; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "\n";
+		
+		if(salesReportQuery.getShowNetTrail() == null || !salesReportQuery.getShowNetTrail()) {
+			format += "+"; for(int i = 0; i < CHARACTERS_PER_LINE - 1; i++) format += "-"; format += "+\n";
+		}
 		format += "\n";
-		format += String.format("%90s", "(" + DateFormatter.longFormat(salesReportQuery.getFrom()) + " - " + DateFormatter.longFormat(salesReportQuery.getTo()) + ") Total Sales: ") + CurrencyFormatter.pesoFormat(tempTotal) + "\n";
+		format += StringHelper.center("(" + DateFormatter.longFormat(salesReportQuery.getFrom()) + " - " + DateFormatter.longFormat(salesReportQuery.getTo()) + ") Total Sales: " + CurrencyFormatter.pesoFormat(tempTotal) + "\n", CHARACTERS_PER_LINE + 2);
 		
 		return format;
 	}

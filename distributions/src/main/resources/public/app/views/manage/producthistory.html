@@ -8,49 +8,13 @@
 		<div class="modal-body">
 			<div class="tabbable">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="#purchases" data-toggle="tab">Purchases</a></li>
-					<li><a href="#sales" data-toggle="tab">Sales</a></li>
+					<li class="active"><a href="#sales" data-toggle="tab">Sales</a></li>
+					<li><a href="#purchases" data-toggle="tab">Purchases</a></li>
 					<li><a href="#stockadjust" data-toggle="tab">Stock Adjust</a></li>
 				</ul>
+				
 				<div class="tab-content">
-					<div class="tab-pane active" id="purchases">
-						<br />
-						<div class="panel panel-primary">
-							<div class="panel-body">
-								<div class="container-fluid">
-							      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
-						      	</div>
-						      	
-						      	<div class="container-fluid">
-									<div class="table-responsive">
-										<table class="table table-hover">
-											<thead>
-												<tr>
-													<th class = "text-center">Quantity</th>
-													<th>Warehouse</th>
-													<th>Purchaser</th>
-													<th class = "text-center">P.O. ID</th>
-													<th class = "text-center">Date</th>
-												</tr>
-											</thead>
-											
-											<tbody data-bind="foreach: { data: purchaseOrderItemList, as: 'purchaseOrderItem' }">
-												<tr>
-													<td data-bind="text: purchaseOrderItem.formattedQuantity" class = "text-center"></td>
-													<td data-bind="text: purchaseOrderItem.purchaseOrder.warehouse.displayName"></td>
-													<td data-bind="text: purchaseOrderItem.purchaseOrder.creator.formattedName"></td>
-													<td data-bind="text: purchaseOrderItem.purchaseOrder.id" class = "text-center"></td>
-													<td data-bind="text: purchaseOrderItem.purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="tab-pane" id="sales">
+					<div class="tab-pane active" id="sales">
 						<br />
 						<div class="panel panel-primary">
 							<div class="panel-body">
@@ -78,6 +42,43 @@
 													<td data-bind="text: clientOrderItem.clientOrder.creator.businessName"></td>
 													<td data-bind="text: clientOrderItem.clientOrder.id" class = "text-center"></td>
 													<td data-bind="text: clientOrderItem.clientOrder.formattedDeliveredOn" class = "text-center"></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="tab-pane" id="purchases">
+						<br />
+						<div class="panel panel-primary">
+							<div class="panel-body">
+								<div class="container-fluid">
+							      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
+						      	</div>
+						      	
+						      	<div class="container-fluid">
+									<div class="table-responsive">
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th class = "text-center">Quantity</th>
+													<th>Warehouse</th>
+													<th>Purchaser</th>
+													<th class = "text-center">P.O. ID</th>
+													<th class = "text-center">Date</th>
+												</tr>
+											</thead>
+											
+											<tbody data-bind="foreach: { data: purchaseOrderItemList, as: 'purchaseOrderItem' }">
+												<tr>
+													<td data-bind="text: purchaseOrderItem.formattedQuantity" class = "text-center"></td>
+													<td data-bind="text: purchaseOrderItem.purchaseOrder.warehouse.displayName"></td>
+													<td data-bind="text: purchaseOrderItem.purchaseOrder.creator.formattedName"></td>
+													<td data-bind="text: purchaseOrderItem.purchaseOrder.id" class = "text-center"></td>
+													<td data-bind="text: purchaseOrderItem.purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
 												</tr>
 											</tbody>
 										</table>

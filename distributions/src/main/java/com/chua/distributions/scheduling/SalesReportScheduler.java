@@ -54,6 +54,7 @@ public class SalesReportScheduler {
 		salesReportQuery.setIncludeDelivered(true);
 		salesReportQuery.setIncludeDispatched(false);
 		salesReportQuery.setIncludeAccepted(false);
+		salesReportQuery.setIncludeToFollow(false);
 		salesReportQuery.setIncludeSubmitted(false);
 		salesReportQuery.setIncludeCreating(false);
 		salesReportQuery.setShowNetTrail(true);
