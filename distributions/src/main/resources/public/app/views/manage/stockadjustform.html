@@ -21,21 +21,28 @@
 							</div>
 						</div>
 						
-						<div class="row">
-							<dl class="dl-horizontal col-xs-6">
-								<dt>All Stock:</dt>
-								<dd data-bind="text: allStock"></dd>
-								<dt>Stock Here:</dt>
-								<dd><span data-bind="text: stockCount"></span></dd>
-					    	</dl>
-							
-							<div class="input-group col-xs-6">
-								<input data-bind="value: stockAdjustFormModel.packageQuantity" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">&amp</span>
-								<input data-bind="value: stockAdjustFormModel.pieceQuantity" type="text" class="form-control text-center" placeholder="">
-								<span class="input-group-addon">of <span data-bind="text: productPackaging"></span></span>
+						<br />
+						<div class="panel panel-primary">
+							<div class="panel-body">
+								<dl class="dl-horizontal col-xs-6">
+									<dt>All Stock:</dt>
+									<dd data-bind="text: allStock"></dd>
+									<dt>Stock Here:</dt>
+									<dd><span data-bind="text: stockCount"></span></dd>
+						    	</dl>
+								
+								<div class="col-xs-6">
+									<div class="input-group">
+										<input data-bind="value: stockAdjustFormModel.packageQuantity" type="text" class="form-control text-center" placeholder="">
+										<span class="input-group-addon">&amp</span>
+										<input data-bind="value: stockAdjustFormModel.pieceQuantity" type="text" class="form-control text-center" placeholder="">
+										<span class="input-group-addon">of <span data-bind="text: productPackaging"></span></span>
+									</div>
+									<p class="help-block">Quantity of stock to adjust</p>
+								</div>
 							</div>
 						</div>
+						<br />
 						
 						<div class="control-group">
 							<label class="control-label" for="description">Description</label>

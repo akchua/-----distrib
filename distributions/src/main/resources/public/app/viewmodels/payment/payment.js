@@ -26,6 +26,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 		});
 		
 		self.refreshClientOrderList();
+		self.refreshTotalPayable();
     };
     
     Payment.prototype.refreshClientOrderList = function() {
@@ -35,6 +36,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     		self.clientOrderList(data.list);
     		self.totalItems(data.total);
     	});
+    };
+    
+    Payment.prototype.refreshTotalPayable = function() {
+    	var self = this;
     	
     	clientOrderService.getFormattedTotalPayable().done(function(formattedPayable) {
     		self.formattedPayable(formattedPayable.content);
@@ -51,6 +56,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 			if(confirm) {
 				clientOrderService.payClientOrder(clientOrderId).done(function(result) {
 					self.refreshClientOrderList();
+					self.refreshTotalPayable();
 					app.showMessage(result.message);
 				});
 			}

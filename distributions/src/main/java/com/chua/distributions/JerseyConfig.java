@@ -16,6 +16,7 @@ import com.chua.distributions.rest.endpoint.PurchaseOrderItemEndpoint;
 import com.chua.distributions.rest.endpoint.SecurityEndpoint;
 import com.chua.distributions.rest.endpoint.StockAdjustEndpoint;
 import com.chua.distributions.rest.endpoint.UserEndpoint;
+import com.chua.distributions.rest.endpoint.WarehouseItemEndpoint;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -39,5 +40,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(ClientOrderItemEndpoint.class);
 		register(DispatchEndpoint.class);
 		register(StockAdjustEndpoint.class);
+		register(WarehouseItemEndpoint.class);
 	}
 }

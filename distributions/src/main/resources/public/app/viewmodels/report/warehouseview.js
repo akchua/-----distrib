@@ -1,9 +1,10 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
-		function (dialog, app, ko, productService, ProductView, ProductHistory) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/warehouseitemservice', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
+		function (dialog, app, ko, productService, warehouseItemService, ProductView, ProductHistory) {
     var WarehouseView = function(warehouse) {
     	this.warehouse = warehouse;
     	this.warehouseItemList = ko.observable();
     	
+    	this.formattedPurchaseValue = ko.observable();
     	this.searchKey = ko.observable();
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
@@ -18,6 +19,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	self.currentPage(1);
 		self.currentPageSubscription = self.currentPage.subscribe(function() {
 			self.refreshWarehouseItemList();
+		});
+		
+		warehouseItemService.getFormattedPurchaseValue(self.warehouse).done(function(formattedPurchaseValue) {
+			self.formattedPurchaseValue(formattedPurchaseValue.content);
 		});
 		
 		self.refreshWarehouseItemList();

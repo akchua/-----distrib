@@ -6,6 +6,10 @@
   
 	<div class="modal-body">
 		<div class="container-fluid">
+			<h4 class="col-xs-6">Purchase Value: <span data-bind="text: formattedPurchaseValue" class="text-primary"></span></h4>
+      	</div>
+		
+		<div class="container-fluid">
 			<form role="search" class="form-inline col-md-7 col-xs-7">
 		        <div class="input-group" >
 		          	<input data-bind="value: searchKey" type="text" class="form-control" placeholder="Search">
@@ -24,7 +28,7 @@
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th class = "text-center">Net Price</th>
+							<th class = "text-center">Purchase Price</th>
 							<th class = "text-center">Stock Here</th>
 						</tr>
 					</thead>
