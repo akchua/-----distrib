@@ -91,6 +91,36 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 		return result;
 	}
 	
+	@Override
+	public ResultBean removeAdjustment(Long stockAdjustId) {
+		final ResultBean result;
+		final StockAdjust stockAdjust = stockAdjustService.find(stockAdjustId);
+		
+		if(stockAdjust != null) {
+			final Product product = productService.find(stockAdjust.getProductId());
+			
+			if(product != null) {
+				result = new ResultBean();
+				
+				result.setSuccess(warehouseItemHandler.removeFromWarehouse(stockAdjust.getProductId(), stockAdjust.getWarehouse(), stockAdjust.getQuantity())
+						&& stockAdjustService.delete(stockAdjust));
+				if(result.getSuccess()) {
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " cancelled adjustment of " + stockAdjust.getFormattedQuantity() 
+								+ " packages of " + Html.text(Color.BLUE, product.getDisplayName()) + " at " + Html.text(Color.BLUE, stockAdjust.getWarehouse().getDisplayName()) + "."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load adjustment. Please refresh the page."));
+		}
+		
+		
+		return result;
+	}
+	
 	private ResultBean validateStockAdjustForm(StockAdjustFormBean stockAdjustForm) {
 		final ResultBean result;
 		

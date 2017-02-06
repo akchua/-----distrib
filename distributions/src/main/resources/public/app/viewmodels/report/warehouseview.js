@@ -45,7 +45,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	var self = this;
     	
     	productService.getProduct(productId, null).done(function(product) {
-    		ProductHistory.show(product)
+    		ProductHistory.show(product, false)
     	});
     };
     

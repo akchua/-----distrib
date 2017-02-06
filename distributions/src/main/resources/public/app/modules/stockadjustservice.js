@@ -21,6 +21,16 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	removeAdjustment: function(stockAdjustId) {
+    		return $.ajax({
+    			url: '/services/stockadjust/remove',
+    			method: 'POST',
+    			data: {
+    				stockAdjustId: stockAdjustId
+    			}
+    		});
+    	},
+    	
     	getWarehouseList: function() {
     		return $.ajax({
     			url: '/services/stockadjust/warehouse'

@@ -1,7 +1,8 @@
 define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderitemservice', 'modules/clientorderitemservice', 'modules/stockadjustservice'], 
 		function (dialog, app, ko, purchaseOrderItemService, clientOrderItemService, stockAdjustService) {
-    var ProductHistory = function(product) {
+    var ProductHistory = function(product, enableEdit) {
     	this.product = product;
+    	this.enableEdit = enableEdit;
     	this.productDisplayName = ko.observable();
     	
     	this.purchaseOrderItemList = ko.observable();
@@ -80,8 +81,26 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderitem
     	});
     };
     
-    ProductHistory.show = function(product) {
-    	return dialog.show(new ProductHistory(product));
+    ProductHistory.prototype.removeAdjustment = function(stockAdjustId) {
+    	var self = this;
+    	
+    	if(self.enableEdit) {
+	    	app.showMessage('<p>Are you sure you want to remove Adjustment of <span class="text-primary"> ID #' + stockAdjustId + '</span>?</p>',
+					'<p class="text-danger">Confirm Remove</p>',
+					[{ text: 'Yes', value: true }, { text: 'No', value: false }])
+			.then(function(confirm) {
+				if(confirm) {
+					stockAdjustService.removeAdjustment(stockAdjustId).done(function(result) {
+						self.refreshStockAdjustList();
+						app.showMessage(result.message);
+					});
+				}
+			})
+    	}
+    };
+    
+    ProductHistory.show = function(product, enableEdit) {
+    	return dialog.show(new ProductHistory(product, enableEdit));
     };
     
     ProductHistory.prototype.cancel = function() {

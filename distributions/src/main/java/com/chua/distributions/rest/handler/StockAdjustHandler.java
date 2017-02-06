@@ -18,6 +18,8 @@ public interface StockAdjustHandler {
 	ObjectList<StockAdjust> getStockAdjustByProductObjectList(Integer pageNumber, Long productId);
 	
 	ResultBean adjustStock(StockAdjustFormBean stockAdjustForm);
+	
+	ResultBean removeAdjustment(Long stockAdjustId);
 
 	List<Warehouse> getWarehouseList();
 }

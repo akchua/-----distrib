@@ -1,3 +1,4 @@
+
 package com.chua.distributions.rest.endpoint;
 
 import java.io.IOException;
@@ -45,6 +46,13 @@ public class StockAdjustEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean adjustStock(@FormParam("stockAdjustFormData") String stockAdjustFormData) throws IOException {
 		return stockAdjustHandler.adjustStock(new ObjectMapper().readValue(stockAdjustFormData, StockAdjustFormBean.class));
+	}
+	
+	@POST
+	@Path("/remove")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean removeAdjustment(@FormParam("stockAdjustId") Long stockAdjustId) {
+		return stockAdjustHandler.removeAdjustment(stockAdjustId);
 	}
 	
 	@GET
