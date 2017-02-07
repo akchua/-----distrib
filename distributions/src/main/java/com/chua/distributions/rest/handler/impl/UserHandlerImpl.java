@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ClientSettingsFormBean;
 import com.chua.distributions.beans.PartialUserBean;
 import com.chua.distributions.beans.PasswordFormBean;
@@ -45,16 +46,19 @@ public class UserHandlerImpl implements UserHandler {
 	private EmailUtil emailUtil;
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public User getUser(Long userId) {
 		return userService.find(userId);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<User> getUserObjectList(Integer pageNumber, String searchKey) {
 		return userService.findAllWithPagingOrderByNameAndUserType(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey) {
 		return userService.findAllClientsWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
@@ -78,6 +82,7 @@ public class UserHandlerImpl implements UserHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createUser(UserFormBean userForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateUserForm(userForm);
@@ -112,6 +117,7 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean updateUser(UserFormBean userForm) {
 		final ResultBean result;
 		final User user = userService.find(userForm.getId());
@@ -129,7 +135,9 @@ public class UserHandlerImpl implements UserHandler {
 					result = new ResultBean();
 					result.setSuccess(userService.update(user));
 					if(result.getSuccess()) {
-						UserContextHolder.refreshUser(user);
+						if(UserContextHolder.getUser().getId().equals(user.getId())) {
+							UserContextHolder.refreshUser(user);
+						}
 						result.setMessage(Html.line("Profile has been " + Html.text(Color.GREEN, "updated") + "."));
 					} else {
 						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
@@ -146,6 +154,7 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 1)
 	public ResultBean removeUser(Long userId) {
 		final ResultBean result;
 		
@@ -209,6 +218,7 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 1)
 	public ResultBean resetPassword(Long userId) {
 		final ResultBean result;
 		final User user = userService.find(userId);
@@ -230,7 +240,6 @@ public class UserHandlerImpl implements UserHandler {
 					null));
 			
 			if(result.getSuccess()) {
-				UserContextHolder.refreshUser(user);
 				result.setMessage(Html.line(Color.GREEN, "Password successfully reset.") 
 						+ Html.line("New password sent to " + Html.text(Color.BLUE, user.getEmailAddress()) + "."));
 			} else {
@@ -267,6 +276,7 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean changeClientSettings(ClientSettingsFormBean clientSettingsForm) {
 		final ResultBean result;
 		final User user = userService.find(clientSettingsForm.getId());
@@ -277,7 +287,6 @@ public class UserHandlerImpl implements UserHandler {
 			
 			result.setSuccess(userService.update(user));
 			if(result.getSuccess()) {
-				UserContextHolder.refreshUser(user);
 				result.setMessage(Html.line(Color.GREEN, "Client settings successfully updated."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
@@ -290,23 +299,27 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<User> getClientList() {
 		return userService.findAllClients();
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<UserType> getUserTypeList() {
 		return Stream.of(UserType.values())
 					.collect(Collectors.toList());
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<Area> getAreaList() {
 		return Stream.of(Area.values())
 					.collect(Collectors.toList());
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<VatType> getVatTypeList() {
 		return Stream.of(VatType.values())
 					.collect(Collectors.toList());

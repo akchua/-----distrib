@@ -9,7 +9,9 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 
 /**
@@ -22,6 +24,15 @@ public class WarehouseItemEndpoint {
 
 	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
+
+	@GET
+	@Path("/warehouseitemlist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(@QueryParam("pageNumber") Integer pageNumber, 
+				@QueryParam("searchKey") String searchKey,
+				@QueryParam("warehouse") Warehouse warehouse) {
+		return warehouseItemHandler.getWarehouseItemObjectList(pageNumber, searchKey, warehouse);
+	}
 	
 	@GET
 	@Path("/formattedpurchasevalue")

@@ -6,12 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 
@@ -31,6 +34,13 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 	private ProductService productService;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse) {
+		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, warehouse);
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public StringWrapper getFormattedPurchaseValue(Warehouse warehouse) {
 		final StringWrapper sw = new StringWrapper();
 		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);

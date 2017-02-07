@@ -4,15 +4,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.ws.rs.NotAuthorizedException;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -53,11 +57,19 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Override
 	public ClientOrder getClientOrder(Long clientOrderId) {
-		refreshClientOrder(clientOrderId);
-		return clientOrderService.find(clientOrderId);
+		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
+		final UserBean currentUser = UserContextHolder.getUser();
+		
+		if(currentUser.getUserType().equals(UserType.CLIENT) && !currentUser.getId().equals(clientOrder.getCreator().getId())) {
+			throw new NotAuthorizedException("User is not authenticated.");
+		} else {
+			refreshClientOrder(clientOrderId);
+			return clientOrder;
+		}
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ClientOrder getTransferInstance(Long sourceId) {
 		final ClientOrder sourceOrder = clientOrderService.find(sourceId);
 		ClientOrder transferInstance = null;
@@ -101,31 +113,37 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted) {
 		return clientOrderService.findAllRequestWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllAcceptedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllReceivedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery) {
 		return clientOrderService.findBySalesReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), salesReportQuery);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public StringWrapper getFormattedTotalPayable() {
 		final StringWrapper sw = new StringWrapper();
 		List<ClientOrder> clientOrders = clientOrderService.findAllReceived();
@@ -182,23 +200,27 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.CREATING)) {
-				if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
-					clientOrder.setStatus(Status.SUBMITTED);
-					
-					result = new ResultBean();
-					result.setSuccess(clientOrderService.update(clientOrder));
-					if(result.getSuccess()) {
-						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " submitted Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+			if(clientOrder.getCreator().getId().equals(UserContextHolder.getUser().getId())) {
+				if(clientOrder.getStatus().equals(Status.CREATING)) {
+					if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
+						clientOrder.setStatus(Status.SUBMITTED);
+						
+						result = new ResultBean();
+						result.setSuccess(clientOrderService.update(clientOrder));
+						if(result.getSuccess()) {
+							result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " submitted Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+						} else {
+							result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+						}
 					} else {
-						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+						result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Submit Failed.") + " Please submit a non-empty form."));
 					}
 				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Submit Failed.") + " Please submit a non-empty form."));
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to submit order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to submit order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
@@ -240,6 +262,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}*/
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean acceptClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
@@ -314,6 +337,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean payClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
@@ -375,11 +399,13 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	 * Handles both machine and user generated reports
 	 */
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		return salesReportHandler.generateReport(salesReportQuery, UserContextHolder.getUser().getEmailAddress());
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<Warehouse> getWarehouseList() {
 		return Stream.of(Warehouse.values())
 				.collect(Collectors.toList());

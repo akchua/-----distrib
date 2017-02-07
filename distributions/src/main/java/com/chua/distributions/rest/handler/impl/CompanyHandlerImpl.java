@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.CompanyFormBean;
+import com.chua.distributions.beans.PartialCompanyBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.service.CompanyService;
@@ -33,21 +36,37 @@ public class CompanyHandlerImpl implements CompanyHandler {
 	private EmailUtil emailUtil;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public Company getCompany(Long companyId) {
 		return companyService.find(companyId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<Company> getCompanyObjectList(Integer pageNumber, String searchKey) {
 		return companyService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<Company> getCompanyList() {
 		return companyService.findAllOrderByName();
 	}
 	
 	@Override
+	public List<PartialCompanyBean> getPartialCompanyList() {
+		final List<PartialCompanyBean> partialCompanies = new ArrayList<PartialCompanyBean>();
+		final List<Company> companies = companyService.findAllOrderByName();
+		for(Company company : companies) {
+			final PartialCompanyBean partialCompany = new PartialCompanyBean();
+			setPartialCompany(partialCompany, company);
+			partialCompanies.add(partialCompany);
+		}
+		return partialCompanies;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createCompany(CompanyFormBean companyForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateCompanyForm(companyForm);
@@ -76,6 +95,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean updateCompany(CompanyFormBean companyForm) {
 		final ResultBean result;
 		final Company company = companyService.find(companyForm.getId());
@@ -108,6 +128,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean removeCompany(Long companyId) {
 		final ResultBean result;
 		final Company company = companyService.find(companyId);
@@ -133,6 +154,11 @@ public class CompanyHandlerImpl implements CompanyHandler {
 		company.setContactPerson(companyForm.getContactPerson().trim());
 		company.setContactNumber(companyForm.getContactNumber().trim());
 		company.setEmailAddress(companyForm.getEmailAddress().trim());
+	}
+	
+	private void setPartialCompany(PartialCompanyBean partialCompany, Company company) {
+		partialCompany.setId(company.getId());
+		partialCompany.setName(company.getName());
 	}
 	
 	private ResultBean validateCompanyForm(CompanyFormBean companyForm) {

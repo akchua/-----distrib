@@ -25,6 +25,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPartialCompanyListByName: function() {
+			return $.ajax({
+				url: '/services/company/listpartialbyname'
+			});
+		},
+		
 		saveCompany: function(companyFormData) {
     		return $.ajax({
     			url: '/services/company/save',

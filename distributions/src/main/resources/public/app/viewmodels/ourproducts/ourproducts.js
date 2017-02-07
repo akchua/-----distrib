@@ -1,8 +1,8 @@
-define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/productview'],
-		function (app, ko, productService, companyService, categoryService, ProductView) {
+define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/partialproductview'],
+		function (app, ko, productService, companyService, categoryService, PartialProductView) {
     var OurProducts = function() {
-    	this.productList = ko.observable();
-    	this.companyList = ko.observable();
+    	this.partialProductList = ko.observable();
+    	this.partialCompanyList = ko.observable();
     	this.categoryList = ko.observable();
     	
     	this.companyId = ko.observable();
@@ -28,8 +28,8 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     		self.categoryList(categoryList);
     	});
     	
-    	companyService.getCompanyListByName().done(function(companyList) {
-    		self.companyList(companyList);
+    	companyService.getPartialCompanyListByName().done(function(partialCompanyList) {
+    		self.partialCompanyList(partialCompanyList);
     	});
 		
 		self.refreshProductList();
@@ -38,8 +38,8 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     OurProducts.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId(), null, true).done(function(data) {
-    		self.productList(data.list);
+    	productService.getPartialProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId(), null, true).done(function(data) {
+    		self.partialProductList(data.list);
     		self.totalItems(data.total);
     	});
     };
@@ -47,8 +47,8 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     OurProducts.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId, null).done(function(product) {
-    		ProductView.show(product, false)
+    	productService.getPartialProduct(productId, null).done(function(partialProduct) {
+    		PartialProductView.show(partialProduct)
     	});
     };
     

@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.CompanyFormBean;
+import com.chua.distributions.beans.PartialCompanyBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.objects.ObjectList;
@@ -50,6 +51,13 @@ public class CompanyEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Company> getCompanyList() {
 		return companyHandler.getCompanyList();
+	}
+	
+	@GET
+	@Path("listpartialbyname")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<PartialCompanyBean> getPartialCompanyList() {
+		return companyHandler.getPartialCompanyList();
 	}
 	
 	@POST

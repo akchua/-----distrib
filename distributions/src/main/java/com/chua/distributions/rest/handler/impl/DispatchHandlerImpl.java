@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.constants.FileConstants;
@@ -64,22 +65,26 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	private EmailUtil emailUtil;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public Dispatch getDispatch(Long dispatchId) {
 		refreshDispatch(dispatchId);
 		return dispatchService.find(dispatchId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<Dispatch> getDispatchObjectList(Integer pageNumber, Boolean showReceived) {
 		return dispatchService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), showReceived);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<DispatchItem> getDispatchItemObjectList(Integer pageNumber, Long dispatchId) {
 		return dispatchItemService.findAllWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), dispatchId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean createDispatch(DispatchFormBean dispatchForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateDispatchForm(dispatchForm);
@@ -104,6 +109,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean dispatch(Long dispatchId) {
 		final ResultBean result;
 		final Dispatch dispatch = dispatchService.find(dispatchId);
@@ -171,6 +177,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean completeDispatch(Long dispatchId) {
 		final ResultBean result;
 		final Dispatch dispatch = dispatchService.find(dispatchId);
@@ -213,6 +220,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean removeDispatch(Long dispatchId) {
 		final ResultBean result;
 		final Dispatch dispatch = dispatchService.find(dispatchId);
@@ -252,6 +260,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean addItem(Long clientOrderId, Long dispatchId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
@@ -305,6 +314,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean removeItem(Long dispatchItemId) {
 		final ResultBean result;
 		final DispatchItem dispatchItem = dispatchItemService.find(dispatchItemId);
@@ -337,6 +347,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<Warehouse> getWarehouseList() {
 		return Stream.of(Warehouse.values())
 				.collect(Collectors.toList());

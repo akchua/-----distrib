@@ -1,8 +1,8 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/clientorderitemservice', 'viewmodels/manage/productview'],
-		function (dialog, app, ko, productService, clientOrderItemService, ProductView) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/clientorderitemservice', 'viewmodels/manage/partialproductview'],
+		function (dialog, app, ko, productService, clientOrderItemService, PartialProductView) {
     var AddItem = function(clientOrderId) {
     	this.clientOrderId = clientOrderId;
-    	this.productList = ko.observable();
+    	this.partialProductList = ko.observable();
     	
     	this.searchKey = ko.observable();
     	this.log = ko.observable('<p class="text-info">Click the cart beside the product to add ONE PACKAGE of that product.</p>');
@@ -32,8 +32,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getProductList(self.currentPage(), self.searchKey(), null, null, null, false).done(function(data) {
-    		self.productList(data.list);
+    	productService.getPartialProductList(self.currentPage(), self.searchKey(), null, null, null, false).done(function(data) {
+    		self.partialProductList(data.list);
     		self.totalItems(data.total);
     	});
     };
@@ -55,8 +55,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId, null).done(function(product) {
-    		ProductView.show(product, false)
+    	productService.getPartialProduct(productId, null).done(function(partialProduct) {
+    		PartialProductView.show(partialProduct)
     	});
     };
     

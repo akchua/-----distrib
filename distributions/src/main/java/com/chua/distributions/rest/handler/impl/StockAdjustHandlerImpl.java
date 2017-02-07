@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.StockAdjustFormBean;
 import com.chua.distributions.database.entity.Product;
@@ -42,11 +43,13 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 	private ProductService productService;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<StockAdjust> getStockAdjustByProductObjectList(Integer pageNumber, Long productId) {
 		return stockAdjustService.findByProductWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), productId);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean adjustStock(StockAdjustFormBean stockAdjustForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateStockAdjustForm(stockAdjustForm);
@@ -92,6 +95,7 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean removeAdjustment(Long stockAdjustId) {
 		final ResultBean result;
 		final StockAdjust stockAdjust = stockAdjustService.find(stockAdjustId);
@@ -121,6 +125,13 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 		return result;
 	}
 	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public List<Warehouse> getWarehouseList() {
+		return Stream.of(Warehouse.values())
+				.collect(Collectors.toList());
+	}
+	
 	private ResultBean validateStockAdjustForm(StockAdjustFormBean stockAdjustForm) {
 		final ResultBean result;
 		
@@ -142,11 +153,5 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 		stockAdjust.setWarehouse(stockAdjustForm.getWarehouse());
 		stockAdjust.setQuantity(quantity);
 		stockAdjust.setDescription(stockAdjustForm.getDescription());
-	}
-
-	@Override
-	public List<Warehouse> getWarehouseList() {
-		return Stream.of(Warehouse.values())
-				.collect(Collectors.toList());
 	}
 }

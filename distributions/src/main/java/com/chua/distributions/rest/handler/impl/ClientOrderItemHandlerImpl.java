@@ -1,5 +1,7 @@
 package com.chua.distributions.rest.handler.impl;
 
+import javax.ws.rs.NotAuthorizedException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,12 +58,15 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		if(product != null) {
 			final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 			if(clientOrder != null) {
-				if(((clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) 
-						&& UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId()))) {
-					result = addItem(product, clientOrder, product.getPackaging());
+				if(UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId())) {
+					if(clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) {
+						result = addItem(product, clientOrder, product.getPackaging());
+					} else {
+						result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+								Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+					}
 				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+					throw new NotAuthorizedException("User is not authenticated.");
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
@@ -109,12 +114,15 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
-				result = removeItem(clientOrderItem);
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+					result = removeItem(clientOrderItem);
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load item. Please refresh the page."));
@@ -143,12 +151,15 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED))
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
-				result = changeQuantity(clientOrderItem, (clientOrderItem.getPackageQuantity() * clientOrderItem.getPackaging()) + pieceQuantity);
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+					result = changeQuantity(clientOrderItem, (clientOrderItem.getPackageQuantity() * clientOrderItem.getPackaging()) + pieceQuantity);
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load item. Please refresh the page."));
@@ -163,12 +174,15 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(((clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) 
-					&& UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId()))) {
-				result = changeQuantity(clientOrderItem, (packageQuantity * clientOrderItem.getPackaging()) + clientOrderItem.getPieceQuantity());
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
+					result = changeQuantity(clientOrderItem, (packageQuantity * clientOrderItem.getPackaging()) + clientOrderItem.getPieceQuantity());
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+							Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to change order with status " + Html.text(Color.BLUE, clientOrderItem.getClientOrder().getStatus().getDisplayName()) + "."));
+				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load item. Please refresh the page."));

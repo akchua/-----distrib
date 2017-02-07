@@ -9,6 +9,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	this.warehouse = ko.observable();
     	
     	this.enableSend = ko.observable(true);
+    	this.isManager = ko.observable(app.user.userType.authority <= 2);
     	
     	this.showPaid = ko.observable(false);
     	
@@ -85,7 +86,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	
     	app.showMessage('<p>Receive Purchase Order of <span class="text-primary">ID #' + purchaseOrderId + '?</p>'
     			+ '<p>Make sure that all items in this order have been received.</p>',
-				'<p>Confirm and Pay Purchase Order</p>',
+				'<p>Confirm Receive Purchase Order</p>',
 				[{ text: 'Yes', value: true }, { text: 'No', value: false }])
 		.then(function(confirm) {
 			if(confirm) {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrder;
@@ -38,16 +39,19 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	private PurchaseOrderItemService purchaseOrderItemService;
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemObjectList(Integer pageNumber, Long purchaseOrderId) {
 		return purchaseOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseOrderId);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<PurchaseOrderItem> getPurchaseOrderItemByProductObjectList(Integer pageNumber, Long productId) {
 		return purchaseOrderItemService.findByProductWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), productId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean addItem(Long productId, Long purchaseOrderId) {
 		final ResultBean result;
 		
@@ -105,6 +109,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean removeItem(Long purchaseOrderItemId) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
@@ -141,6 +146,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean changePieceQuantity(Long purchaseOrderItemId, Integer pieceQuantity) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
@@ -163,6 +169,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean changePackageQuantity(Long purchaseOrderItemId, Integer packageQuantity) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
@@ -209,6 +216,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean transferPiece(Long purchaseOrderItemId, Long destinationOrderId) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
@@ -225,6 +233,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean transferPackage(Long purchaseOrderItemId, Long destinationOrderId) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
@@ -241,6 +250,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean transferAll(Long purchaseOrderItemId, Long destinationOrderId) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);

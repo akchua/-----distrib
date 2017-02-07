@@ -33,16 +33,16 @@
 						</tr>
 					</thead>
 					
-					<tbody data-bind="foreach: { data: productList, as: 'product' }">
+					<tbody data-bind="foreach: { data: partialProductList, as: 'partialProduct' }">
 						<tr>
-							<td data-bind="text: product.displayName"></td>
-							<td data-bind="text: product.company.name" class = "text-center"></td>
-							<td data-bind="text: product.formattedPackageNetSellingPrice" class = "text-right"></td>
+							<td data-bind="text: partialProduct.displayName"></td>
+							<td data-bind="text: partialProduct.companyName" class = "text-center"></td>
+							<td data-bind="text: partialProduct.formattedPackageNetSellingPrice" class = "text-right"></td>
 							
 							<td>
 								<div class="btn-group pull-right">
-									<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
-									<button data-bind="click: function() { $parent.addItem(product.id) }, enable: $parent.enableAdd" type="button" class="btn btn-success btn-sm" title="Add Item"><i class="fa fa-cart-plus"></i></button>
+									<button data-bind="click: function() { $parent.view(partialProduct.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+									<button data-bind="click: function() { $parent.addItem(partialProduct.id) }, enable: $parent.enableAdd" type="button" class="btn btn-success btn-sm" title="Add Item"><i class="fa fa-cart-plus"></i></button>
 								</div>
 							</td>
 						</tr>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
@@ -58,12 +59,14 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private EmailUtil emailUtil;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public PurchaseOrder getPurchaseOrder(Long purchaseOrderId) {
 		refreshPurchaseOrder(purchaseOrderId);
 		return purchaseOrderService.find(purchaseOrderId);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public PurchaseOrder getTransferInstance(Long sourceId) {
 		final PurchaseOrder sourceOrder = purchaseOrderService.find(sourceId);
 		PurchaseOrder transferInstance = null;
@@ -99,23 +102,27 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid) {
 		return purchaseOrderService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse, showPaid);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId,
 			Warehouse warehouse) {
 		return purchaseOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse);
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(Integer pageNumber,
 			PurchaseReportQueryBean purchaseReportQuery) {
 		return purchaseOrderService.findByPurchaseReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseReportQuery);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean createPurchaseOrder(PurchaseOrderFormBean purchaseOrderForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validatePurchaseOrderForm(purchaseOrderForm);
@@ -142,6 +149,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean updatePurchaseOrder(PurchaseOrderFormBean purchaseOrderForm) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderForm.getId());
@@ -174,6 +182,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean submitPurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -205,6 +214,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean sendPurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -245,6 +255,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean receivePurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -276,6 +287,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean payPurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -303,6 +315,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean removePurchaseOrder(Long purchaseOrderId) {
 		final ResultBean result;
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -335,6 +348,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<Warehouse> getWarehouseList() {
 		return Stream.of(Warehouse.values())
 				.collect(Collectors.toList());

@@ -12,10 +12,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
-import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
@@ -40,6 +40,13 @@ public class ProductEndpoint {
 	}
 	
 	@GET
+	@Path("/getpartial")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public PartialProductBean getPartialProduct(@QueryParam("productId") Long productId, @QueryParam("warehouse") Warehouse warehouse) {
+		return productHandler.getPartialProduct(productId, warehouse);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<Product> getProductObjectList(@QueryParam("pageNumber") Integer pageNumber, 
@@ -51,12 +58,14 @@ public class ProductEndpoint {
 	}
 	
 	@GET
-	@Path("/warehouseitemlist")
+	@Path("/listpartial")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ObjectList<WarehouseItem> getWarehouseItemObjectList(@QueryParam("pageNumber") Integer pageNumber, 
+	public ObjectList<PartialProductBean> getPartialProductObjectList(@QueryParam("pageNumber") Integer pageNumber, 
 				@QueryParam("searchKey") String searchKey,
+				@QueryParam("companyId") Long companyId,
+				@QueryParam("categoryId") Long categoryId,
 				@QueryParam("warehouse") Warehouse warehouse) {
-		return productHandler.getWarehouseItemObjectList(pageNumber, searchKey, warehouse);
+		return productHandler.getPartialProductObjectList(pageNumber, searchKey, companyId, categoryId, warehouse);
 	}
 	
 	@POST

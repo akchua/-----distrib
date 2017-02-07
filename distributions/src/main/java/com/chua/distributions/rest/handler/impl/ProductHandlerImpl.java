@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
+import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
@@ -43,6 +46,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	private WarehouseItemService warehouseItemService;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public Product getProduct(Long productId, Warehouse warehouse) {
 		final Product product = productService.find(productId);
 		if(product != null) setProductStock(product, warehouse);
@@ -50,6 +54,15 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
+	public PartialProductBean getPartialProduct(Long productId, Warehouse warehouse) {
+		final PartialProductBean partialProduct = new PartialProductBean();
+		final Product product = productService.find(productId);
+		if(product != null) setPartialProduct(partialProduct, product);
+		return partialProduct;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse) {
 		ObjectList<Product> objProducts = productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
 		for(Product product : objProducts.getList()) setProductStock(product, warehouse);
@@ -57,11 +70,24 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
-	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse) {
-		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, warehouse);
+	public ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse) {
+		ObjectList<PartialProductBean> objPartialProducts = new ObjectList<PartialProductBean>();
+		ObjectList<Product> objProducts = productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
+		if(objProducts != null) {
+			objPartialProducts.setTotal(objProducts.getTotal());
+			final List<PartialProductBean> partialProducts = new ArrayList<PartialProductBean>();
+			for(Product product : objProducts.getList()) {
+				final PartialProductBean partialProduct = new PartialProductBean();
+				setPartialProduct(partialProduct, product);
+				partialProducts.add(partialProduct);
+			}
+			objPartialProducts.setList(partialProducts);
+		}
+		return objPartialProducts;
 	}
-
+	
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createProduct(ProductFormBean productForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateProductForm(productForm);
@@ -93,6 +119,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean updateProduct(ProductFormBean productForm) {
 		final ResultBean result;
 		final Product product = productService.find(productForm.getId());
@@ -127,6 +154,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean removeProduct(Long productId) {
 		final ResultBean result;
 		final Product product = productService.find(productId);
@@ -173,6 +201,16 @@ public class ProductHandlerImpl implements ProductHandler {
 		}
 		product.setStockCountCurrent(stockCountCurrent);
 		product.setStockCountAll(stockCountAll);
+	}
+	
+	private void setPartialProduct(PartialProductBean partialProduct, Product product) {
+		partialProduct.setId(product.getId());
+		partialProduct.setDisplayName(product.getDisplayName());
+		partialProduct.setProductCode(product.getProductCode());
+		partialProduct.setCompanyName(product.getCompany().getName());
+		partialProduct.setCategoryName(product.getCategory().getName());
+		partialProduct.setDescription(product.getDescription());
+		partialProduct.setFormattedPackageNetSellingPrice(product.getFormattedPackageNetSellingPrice());
 	}
 	
 	private String getDisplayName(ProductFormBean productForm) {

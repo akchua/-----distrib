@@ -10,6 +10,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPartialProduct: function(productId, warehouse) {
+			return $.ajax({
+				url: '/services/product/getpartial',
+				data: {
+					productId: productId,
+					warehouse: warehouse
+				}
+			});
+		},
+		
 		getProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/list',
@@ -24,13 +34,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getWarehouseItemList: function(currentPage, searchKey, warehouse, async) {
+		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
-				url: '/services/product/warehouseitemlist',
+				url: '/services/product/listpartial',
 				async: async,
 				data: {
 					pageNumber: currentPage - 1,
 					searchKey: searchKey,
+					companyId: companyId,
+					categoryId: categoryId,
 					warehouse, warehouse
 				}
 			});

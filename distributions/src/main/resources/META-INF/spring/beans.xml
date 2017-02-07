@@ -11,6 +11,8 @@
 
 	<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true" />
 
+	<bean id="methodAuthenticationAspect" class="com.chua.distributions.aspects.MethodAuthenticationAspect" />
+	
 	<!-- <bean id="emailUtilConnect" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="targetClass" value="com.chua.distributions.utility.EmailUtil"/>
 		<property name="targetMethod" value="connect"/>

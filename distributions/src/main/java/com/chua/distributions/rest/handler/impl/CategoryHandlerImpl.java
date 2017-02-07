@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.CategoryFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Category;
@@ -29,11 +30,13 @@ public class CategoryHandlerImpl implements CategoryHandler {
 	private CategoryService categoryService;
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public Category getCategory(Long categoryId) {
 		return categoryService.find(categoryId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<Category> getCategoryObjectList(Integer pageNumber, String searchKey) {
 		return categoryService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
@@ -44,6 +47,7 @@ public class CategoryHandlerImpl implements CategoryHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createCategory(CategoryFormBean categoryForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateCategoryForm(categoryForm);
@@ -72,6 +76,7 @@ public class CategoryHandlerImpl implements CategoryHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean updateCategory(CategoryFormBean categoryForm) {
 		final ResultBean result;
 		final Category category = categoryService.find(categoryForm.getId());
@@ -104,6 +109,7 @@ public class CategoryHandlerImpl implements CategoryHandler {
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean removeCategory(Long categoryId) {
 		final ResultBean result;
 		final Category category = categoryService.find(categoryId);

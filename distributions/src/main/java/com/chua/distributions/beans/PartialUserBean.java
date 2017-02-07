@@ -5,23 +5,13 @@ package com.chua.distributions.beans;
  * @version 1.0
  * @since   Dec 30, 2016
  */
-public class PartialUserBean {
+public class PartialUserBean extends PartialEntityBean {
 
-	private Long id;
-	
 	private String firstName;
 	
 	private String lastName;
 	
 	private String emailAddress;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getFirstName() {
 		return firstName;

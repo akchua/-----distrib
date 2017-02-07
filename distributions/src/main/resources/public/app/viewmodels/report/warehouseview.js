@@ -35,7 +35,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     WarehouseView.prototype.refreshWarehouseItemList = function() {
     	var self = this;
     	
-    	productService.getWarehouseItemList(self.currentPage(), self.searchKey(), self.warehouse, false).done(function(data) {
+    	warehouseItemService.getWarehouseItemList(self.currentPage(), self.searchKey(), self.warehouse, false).done(function(data) {
     		self.warehouseItemList(data.list);
     		self.totalItems(data.total);
     	});

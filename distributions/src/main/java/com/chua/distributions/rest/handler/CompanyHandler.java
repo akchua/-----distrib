@@ -3,6 +3,7 @@ package com.chua.distributions.rest.handler;
 import java.util.List;
 
 import com.chua.distributions.beans.CompanyFormBean;
+import com.chua.distributions.beans.PartialCompanyBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.objects.ObjectList;
@@ -19,6 +20,8 @@ public interface CompanyHandler {
 	ObjectList<Company> getCompanyObjectList(Integer pageNumber, String searchKey);
 	
 	List<Company> getCompanyList();
+	
+	List<PartialCompanyBean> getPartialCompanyList();
 	
 	ResultBean createCompany(CompanyFormBean companyForm);
 	
