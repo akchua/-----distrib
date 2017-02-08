@@ -401,7 +401,16 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
-		return salesReportHandler.generateReport(salesReportQuery, UserContextHolder.getUser().getEmailAddress());
+		final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
+		if(salesReportQuery.getSendMail()) {
+			emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
+					null,
+					MailConstants.DEFAULT_EMAIL,
+					"Sales Report",
+					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+					new String[] { (String) result.getExtras().get("filePath") });
+		}
+		return result;
 	}
 	
 	@Override

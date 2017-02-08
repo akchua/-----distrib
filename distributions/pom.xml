@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.chua</groupId>
   <artifactId>distributions</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.2</version>
   <packaging>jar</packaging>
   
   <properties>
@@ -131,6 +131,18 @@
 	    <groupId>org.aspectj</groupId>
 	    <artifactId>aspectjweaver</artifactId>
 	    <version>1.8.10</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-velocity</artifactId>
+	    <version>1.4.4.RELEASE</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.apache.velocity</groupId>
+	    <artifactId>velocity</artifactId>
+	    <version>1.7</version>
 	</dependency>
 	
   </dependencies>

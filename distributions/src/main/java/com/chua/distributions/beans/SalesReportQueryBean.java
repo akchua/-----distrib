@@ -29,6 +29,10 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	
 	private Boolean showNetTrail;
 	
+	private Boolean sendMail;
+	
+	private Boolean downloadFile;
+	
 	public Warehouse getWarehouse() {
 		return warehouse;
 	}
@@ -107,5 +111,21 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setShowNetTrail(Boolean showNetTrail) {
 		this.showNetTrail = showNetTrail;
+	}
+
+	public Boolean getSendMail() {
+		return sendMail;
+	}
+
+	public void setSendMail(Boolean sendMail) {
+		this.sendMail = sendMail;
+	}
+
+	public Boolean getDownloadFile() {
+		return downloadFile;
+	}
+
+	public void setDownloadFile(Boolean downloadFile) {
+		this.downloadFile = downloadFile;
 	}
 }

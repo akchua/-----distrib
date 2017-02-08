@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.MailConstants;
+import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.EmailUtil;
@@ -26,19 +27,23 @@ public class SalesReportScheduler {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
+	private UserService userService;
+	
+	@Autowired
 	private SalesReportHandler salesReportHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
 	
 	/**
-	 * Weekly Sales Report
+	 * Weekly Sales Report.
+	 * Includes report for each warehouse
 	 * fires at 1:00AM every Saturday
 	 * includes: all paid and delivered, all clients, all warehouses
 	 */
 	@Scheduled(cron = "0 0 1 * * SAT")
-	public void weeklySalesReport() {
-		LOG.info("Creating Weekly Sales Report");
+	public void weeklyWarehouseSalesReport() {
+		LOG.info("Creating Weekly Warehouse Sales Report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -59,11 +64,19 @@ public class SalesReportScheduler {
 		salesReportQuery.setIncludeCreating(false);
 		salesReportQuery.setShowNetTrail(true);
 		salesReportQuery.setClientId(null);
+		salesReportQuery.setSendMail(true);
+		salesReportQuery.setDownloadFile(false);
 		
 		for(Warehouse warehouse : Warehouse.values()) {
 			salesReportQuery.setWarehouse(warehouse);
 			
-			final ResultBean result = salesReportHandler.generateReport(salesReportQuery, MailConstants.DEFAULT_REPORT_RECEIVER);
+			final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
+			emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
+					null,
+					MailConstants.DEFAULT_EMAIL,
+					"Sales Report",
+					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+					new String[] { (String) result.getExtras().get("filePath") });
 			
 			if(result.getSuccess()) LOG.info(result.getMessage());
 			else {

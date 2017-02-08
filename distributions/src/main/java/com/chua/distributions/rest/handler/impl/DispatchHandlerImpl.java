@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
-import com.chua.distributions.utility.format.ClientOrderFormatter;
+import com.chua.distributions.utility.template.ClientOrderTemplate;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -56,13 +57,13 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	private ClientOrderItemService clientOrderItemService;
 
 	@Autowired
-	private ClientOrderFormatter clientOrderFormatter;
-	
-	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private VelocityEngine velocityEngine;
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -128,7 +129,8 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						
 						// GENERATING PRINTABLE CLIENT ORDER
 						final List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-						printableDispatch += clientOrderFormatter.format(clientOrder, clientOrderItems) + "\n";
+						printableDispatch += new ClientOrderTemplate(clientOrder, clientOrderItems)
+												.merge(velocityEngine) + "\n";
 						//
 						
 						if(!clientOrderService.update(clientOrder)) {

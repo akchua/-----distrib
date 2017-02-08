@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
-import com.chua.distributions.utility.format.PurchaseOrderFormatter;
+import com.chua.distributions.utility.template.PurchaseOrderTemplate;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -50,13 +51,13 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private CompanyService companyService;
 	
 	@Autowired
-	private PurchaseOrderFormatter purchaseOrderFormatter;
-
-	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private VelocityEngine velocityEngine;
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -223,7 +224,13 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
 				if(!purchaseOrder.getNetTotal().equals(0.0f)) {
 					final String filePath = FileConstants.FILE_HOME + "files/purchase_order/PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
-					SimplePdfWriter.write(purchaseOrderFormatter.format(purchaseOrder, purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId())), filePath, false);
+					
+					SimplePdfWriter.write(
+							new PurchaseOrderTemplate(
+									purchaseOrder, 
+									purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()))
+							.merge(velocityEngine), 
+							filePath, false);
 					boolean flag = emailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 							null,
 							MailConstants.DEFAULT_EMAIL,

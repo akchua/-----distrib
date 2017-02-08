@@ -1,0 +1,22 @@
+## Template for Purchase Order
+## Has a maximum of 97 columns per line
+                                       PURCHASE ORDER                                       
+
+    SUPPLIER : ${t.Supplier}
+  DELIVER TO : ${t.BusinessName}
+     ADDRESS : ${t.Address}
+        DATE : ${t.Date}
+
+ Purchase Order #[[#]]#${t.OrderId}
++--------------+-------------------------------------------------+--------------+--------------+
+|   Quantity   |                Item Description                 |  Unit Price  |    Amount    |
++--------------+-------------------------------------------------+--------------+--------------+
+#foreach( $formattedOrderItem in $t.FormattedOrderItems)
+$formattedOrderItem
+#end
++--------------+-------------------------------------------------+--------------+--------------+
+
+                                                      Total Amount: ${t.GrossTotal}
+														
+        Prepared By : ${t.Creator}
+        Approved By : ${t.Approver}

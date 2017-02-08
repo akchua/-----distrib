@@ -110,15 +110,19 @@ public class SimplePdfWriter {
 	 * @param path The path where the file will be created
 	 * @param landscape True if orientation is landscape
 	 */
-	public static void write(String message, String path, boolean landscape) {
+	public static boolean write(String message, String path, boolean landscape) {
+		boolean success = true;
+		
 		try {
-			File file = new File(path);
+			File file = new File(convertPathToPdf(path));
 			if(file.getParentFile() != null) file.getParentFile().mkdirs();
 			
 			Document document = new Document();
 			if(landscape) document.setPageSize(PageSize.LETTER.rotate());
 			
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			PdfWriter writer;
+				writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			
 			Pager pager = new Pager();
 			writer.setPageEvent(pager);
 			
@@ -130,8 +134,26 @@ public class SimplePdfWriter {
 			document.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			success = false;
 		} catch (DocumentException e) {
 			e.printStackTrace();
+			success = false;
 		}
+		
+		return success;
+	}
+	
+	/**
+	 * This method checks if the given path specifies a pdf file.
+	 * If not then it will append .pdf at the end of the path
+	 * @param path The path to be checked
+	 * @return The converted path
+	 */
+	public static String convertPathToPdf(String path) {
+		String[] tokens = path.split("\\.");
+		if(!tokens[tokens.length - 1].equals("pdf")) {
+			path += ".pdf";
+		}
+		return path;
 	}
 }

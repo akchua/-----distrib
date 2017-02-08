@@ -1,8 +1,11 @@
 package com.chua.distributions.rest.handler.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,17 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.rest.handler.SalesReportHandler;
-import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.format.DateFormatter;
-import com.chua.distributions.utility.format.SalesReportFormatter;
+import com.chua.distributions.utility.template.SalesReportTemplate;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -36,15 +37,12 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	
 	@Autowired
 	private ClientOrderService clientOrderService;
-	
+
 	@Autowired
-	private SalesReportFormatter salesReportFormatter;
-	
-	@Autowired
-	private EmailUtil emailUtil;
+	private VelocityEngine velocityEngine;
 	
 	@Override
-	public ResultBean generateReport(SalesReportQueryBean salesReportQuery, String recipient) {
+	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		final ResultBean result;
 		final ResultBean validateQuery = validateSalesReportQuery(salesReportQuery);
 		
@@ -53,20 +51,23 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
 				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf";
-				SimplePdfWriter.write(salesReportFormatter.format(salesReportQuery, 
-						(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
-								clientOrders), filePath, true);
-
 				result = new ResultBean();
 				
-				result.setSuccess(emailUtil.send(recipient, 
-							null,
-							MailConstants.DEFAULT_EMAIL,
-							"Sales Report",
-							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-							new String[] { filePath }));
+				result.setSuccess(
+						SimplePdfWriter.write(
+								new SalesReportTemplate(
+										salesReportQuery, 
+										(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
+										clientOrders
+											).merge(velocityEngine), 
+								filePath, 
+								true)
+						);
 				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created sales report and it has been emailed to " + Html.text(Color.TURQUOISE, recipient) + "."));
+					final Map<String, Object> extras = new HashMap<String, Object>();
+					extras.put("filePath", filePath);
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created sales report."));
+					result.setExtras(extras);
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
@@ -89,6 +90,8 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 				|| salesReportQuery.getIncludeDispatched() || salesReportQuery.getIncludeAccepted()
 				|| salesReportQuery.getIncludeSubmitted() || salesReportQuery.getIncludeCreating())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "You must include at least 1 Status."));
+		} else if(!salesReportQuery.getSendMail() && !salesReportQuery.getDownloadFile()) {
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Please select how you will receive the report."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");
 		}

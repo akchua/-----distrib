@@ -1,0 +1,20 @@
+## Template for Sales Order
+## Has a maximum of 117 Column per line
+                                                   SALES ORDER                                                    
+                                                   
+        DISTRIBUTOR : ${t.Distributor}
+         DELIVER TO : ${t.Creator}
+            ADDRESS : ${t.Address}
+          CONTACT # : ${t.ContactNumber}
+               DATE : ${t.Date}
+               
+ Sales Order #[[#]]#${t.OrderId}
++--------------+-------------------------------------------------+--------------+-------------------+--------------+
+|   Quantity   |                 Item Description                |  Unit Price  |     Discount      |    Amount    |
++--------------+-------------------------------------------------+--------------+-------------------+--------------+
+#foreach( $formattedOrderItem in $t.FormattedOrderItems)
+$formattedOrderItem
+#end
++--------------+-------------------------------------------------+--------------+-------------------+--------------+
+
+${t.NetTrail}
