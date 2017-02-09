@@ -6,88 +6,103 @@
 		</div>
 	  
 		<div class="modal-body">
+			<div class="row">	
+				<div class="control-group col-xs-6">
+					<label class="control-label" for="from">Date From</label>
+					<div class="controls">
+						<input data-bind="value: salesReportQuery.from" type="date" class="form-control" />
+					</div>
+				</div>
+				
+				<div class="control-group col-xs-6">
+					<label class="control-label" for="to">Date To</label>
+					<div class="controls">
+						<input data-bind="value: salesReportQuery.to" type="date" class="form-control" />
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="control-group col-xs-6">
+					<label class="control-label" for="inputWarehouse">Warehouse</label>
+					<div class="controls">
+						<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouse" class="form-control" id="inputWarehouse"></select>
+						<p class="help-block">Include selected warehouse only</p>
+					</div>
+				</div>
+			
+				<div class="control-group col-xs-6">
+					<label class="control-label" for="inputWarehouse">Client</label>
+					<div class="controls">
+						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputWarehouse"></select>
+						<p class="help-block">Include selected client only</p>
+					</div>
+				</div>
+			</div>
+			
 			<div class="container-fluid">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Report Query</h3>
-					</div>
-					
-					<div class="panel-body">
-						<div class="control-group">
-							<label class="control-label" for="from">Date From</label>
-							<div class="controls">
-								<div class="form-group">
-					                <div class='input-group date' id='from'>
-					                    <input data-bind="value: salesReportQuery.from" type="text" class="form-control" />
-					                    <span class="input-group-addon">
-					                        <span class="fa fa-calendar"></span>
-					                    </span>
-					                </div>
-					            </div>
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="to">Date To</label>
-							<div class="controls">
-								<div class="form-group">
-					                <div class='input-group date' id='to'>
-					                    <input data-bind="value: salesReportQuery.to" type="text" class="form-control" />
-					                    <span class="input-group-addon">
-					                        <span class="fa fa-calendar"></span>
-					                    </span>
-					                </div>
-					            </div>
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="inputWarehouse">Warehouse</label>
-							<div class="controls">
-								<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouse" class="form-control" id="inputWarehouse"></select>
-								<p class="help-block">Include selected warehouse only</p>
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label" for="inputWarehouse">Client</label>
-							<div class="controls">
-								<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputWarehouse"></select>
-								<p class="help-block">Include selected client only</p>
-							</div>
-						</div>
-						
-						<label for="includePaidCheckbox">Include:</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includePaid" type="checkbox" name="includePaidCheckbox">Paid
-						</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includeDelivered" type="checkbox" name="includeDeliveredCheckbox">Delivered
-						</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includeDispatched" type="checkbox" name="includeDispatchedCheckbox">Dispatched
-						</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includeAccepted" type="checkbox" name="includeAcceptedCheckbox">Accepted
-						</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includeSubmitted" type="checkbox" name="includeSubmittedCheckbox">Submitted
-						</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.includeCreating" type="checkbox" name="includeCreatingCheckbox">Creating
-						</label>
-						
-						<label for="showTrailCheckBox">Show:</label>
-						<label class="checkbox">
-							<input data-bind="checked: salesReportQuery.showNetTrail" type="checkbox" name="showTrailCheckBox">Gross and Discount of each Sale
-						</label>
-					</div>
+				<div class="col-xs-3">
+					<label for="includePaidCheckbox">Include:</label>
+				</div>
+				<div class="col-xs-4">
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includePaid" type="checkbox" name="includePaidCheckbox">Paid
+					</label>
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeDelivered" type="checkbox" name="includeDeliveredCheckbox">Delivered
+					</label>
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeDispatched" type="checkbox" name="includeDispatchedCheckbox">Dispatched
+					</label>
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeToFollow" type="checkbox" name="includeToFollowCheckbox">Accepted
+					</label>
+				</div>
+				<div class="col-xs-4">
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeAccepted" type="checkbox" name="includeAcceptedCheckbox">Accepted
+					</label>
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeSubmitted" type="checkbox" name="includeSubmittedCheckbox">Submitted
+					</label>
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.includeCreating" type="checkbox" name="includeCreatingCheckbox">Creating
+					</label>
+				</div>
+			</div>
+			
+			<div class="container-fluid">
+				<div class="col-xs-3">
+					<label for="showTrailCheckBox">Show:</label>
+				</div>
+				
+				<div class="col-xs-8">
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.showNetTrail" type="checkbox" name="showTrailCheckBox">Gross and Discount of each Sale
+					</label>
+				</div>
+			</div>
+			
+			<div class="container-fluid">
+				<div class="col-xs-3">
+					<label for="showTrailCheckBox">Receive Via:</label>
+				</div>
+				
+				<div class="col-xs-4">
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.sendMail" type="checkbox" name="receiveViaMail">Mail
+					</label>
+				</div>
+				<div class="col-xs-4">
+					<label class="checkbox">
+						<input data-bind="checked: salesReportQuery.downloadFile" type="checkbox" name="receiveViaFileDownload">File Download
+					</label>
 				</div>
 			</div>
 		</div>
   
 		<div class="modal-footer">
-			<button class="btn btn-primary" type="submit" data-bind="click: generateReport">Generate</button>
+			<button class="btn btn-primary" type="submit" data-bind="click: generateReport, enable: enableGenerateButton">Generate</button>
 	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
 		</div>
   	</form>

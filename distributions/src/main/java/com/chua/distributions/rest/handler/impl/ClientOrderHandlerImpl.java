@@ -17,6 +17,7 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -408,7 +409,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 					MailConstants.DEFAULT_EMAIL,
 					"Sales Report",
 					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-					new String[] { (String) result.getExtras().get("filePath") });
+					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
 		}
 		return result;
 	}

@@ -86,7 +86,7 @@ public class SalesReportScheduler {
 					MailConstants.DEFAULT_EMAIL,
 					"Weekly Warehouse Sales Report",
 					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-					new String[] { (String) result.getExtras().get("filePath") });
+					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
 			
 			if(result.getSuccess()) LOG.info(result.getMessage());
 			else {
@@ -145,7 +145,7 @@ public class SalesReportScheduler {
 			final ResultBean result = salesReportHandler.generateReport(salesReportQuery, 
 					client.getFormattedName() + "_-_" + DateUtil.getNameOfMonth(firstDayOfLastMonth) + "_Sales_Report.pdf");
 			if(result.getSuccess()) {
-				filePaths.add((String) result.getExtras().get("filePath"));
+				filePaths.add(FileConstants.SALES_HOME + (String) result.getExtras().get("fileName"));
 			} else {
 				LOG.error(client.getFormattedName() + " : " + result.getMessage());
 			}
@@ -154,7 +154,7 @@ public class SalesReportScheduler {
 		final String attachment;
 		
 		if(filePaths.size() > 1) {
-			attachment = FileConstants.FILE_HOME + "files/zip/MonthlyClientSales_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
+			attachment = FileConstants.SALES_HOME + "MonthlyClientSales_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
 			FileZipUtil.zipFile(filePaths, attachment);
 		} else if(filePaths.size() == 1) {
 			attachment = filePaths.get(1);

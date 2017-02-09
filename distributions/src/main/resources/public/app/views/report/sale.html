@@ -1,6 +1,6 @@
 <br/>
 <div class="container-fluid">
-	<!-- <button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button> -->
+	<button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button>
 	<form role="search" class="form-inline">
 		<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
 			<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId, event: { change: refreshClientOrderList }" class="form-control" id="inputClient"></select>

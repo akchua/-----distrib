@@ -141,7 +141,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					
 					if(flag) {
 						// CREATING PRINTABLE DISPATCH FILE
-						final String filePath = FileConstants.FILE_HOME + "files/dispatch/Dispatch_#" + dispatch.getId() + ".pdf";
+						final String filePath = FileConstants.DISPATCH_HOME + "Dispatch_#" + dispatch.getId() + ".pdf";
 						SimplePdfWriter.write(printableDispatch, filePath, true);
 						//
 						

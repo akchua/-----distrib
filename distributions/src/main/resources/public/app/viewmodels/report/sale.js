@@ -16,8 +16,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     		includeToFollow: ko.observable(false),
     		includeAccepted: ko.observable(false),
     		includeSubmitted: ko.observable(false),
-    		includeCreating: ko.observable(false),
-    		showNetTrail: ko.observable()
+    		includeCreating: ko.observable(false)
 	    };
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
@@ -57,8 +56,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Sale.prototype.generateReport = function() {
     	var self = this;
     	
-    	//SaleReport.show()
-    	alert('user triggered report is not yet working')
+    	SaleReport.show()
     };
     
     Sale.prototype.view = function(clientOrderId) {

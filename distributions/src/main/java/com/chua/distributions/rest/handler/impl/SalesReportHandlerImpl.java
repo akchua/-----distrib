@@ -56,7 +56,8 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			final List<ClientOrder> clientOrders = clientOrderService.findAllBySalesReportQuery(salesReportQuery);
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
-				final String filePath = FileConstants.FILE_HOME + "files/sales_report/" + StringHelper.convertToFileSafeFormat(fileName);
+				fileName = StringHelper.convertToFileSafeFormat(fileName);
+				final String filePath = FileConstants.SALES_HOME + fileName;
 				result = new ResultBean();
 				result.setSuccess(
 						SimplePdfWriter.write(
@@ -70,7 +71,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 						);
 				if(result.getSuccess()) {
 					final Map<String, Object> extras = new HashMap<String, Object>();
-					extras.put("filePath", filePath);
+					extras.put("fileName", fileName);
 					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created sales report."));
 					result.setExtras(extras);
 				} else {

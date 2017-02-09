@@ -32,7 +32,7 @@ public class ClientOrderEndpoint {
 
 	@Autowired
 	private ClientOrderHandler clientOrderHandler;
-	
+
 	@GET
 	@Path("/get")
 	@Produces({ MediaType.APPLICATION_JSON })
