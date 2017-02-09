@@ -11,6 +11,13 @@ public class StringHelper {
 		
 	}
 
+	/**
+	 * Centers the string in the given length.
+	 * Pads white spaces on the whole length including after the string.
+	 * @param s The string to be centered.
+	 * @param length The length of the area.
+	 * @return The centered string.
+	 */
 	public static String center(String s, int length) {
 		if(s == null || length <= s.length()) return s;
 		
@@ -22,5 +29,23 @@ public class StringHelper {
 		if((length - s.length()) % 2 == 1) centered += " ";
 		
 		return centered;
+	}
+	
+	/**
+	 * Removes all special characters from a string.
+	 * Preserves the file type of the string.
+	 * @param s The string to be converted.
+	 * @return The file safe string.
+	 */
+	public static String convertToFileSafeFormat(String s) {
+		String[] tokens = s.split("\\.");
+		String convertedString = "";
+		for(int i = 0; i < tokens.length - 1; i++) {
+			convertedString += tokens[i].replaceAll("\\W+", "_");
+		}
+		if(tokens.length > 1) {
+			convertedString += "." + tokens[tokens.length - 1];
+		}
+		return convertedString;
 	}
 }

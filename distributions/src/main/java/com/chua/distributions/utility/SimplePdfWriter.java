@@ -114,7 +114,7 @@ public class SimplePdfWriter {
 		boolean success = true;
 		
 		try {
-			File file = new File(convertPathToPdf(path));
+			File file = new File(path);
 			if(file.getParentFile() != null) file.getParentFile().mkdirs();
 			
 			Document document = new Document();

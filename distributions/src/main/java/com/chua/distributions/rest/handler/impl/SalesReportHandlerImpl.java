@@ -20,6 +20,7 @@ import com.chua.distributions.enums.Color;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
+import com.chua.distributions.utility.StringHelper;
 import com.chua.distributions.utility.format.DateFormatter;
 import com.chua.distributions.utility.template.SalesReportTemplate;
 
@@ -43,6 +44,11 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	
 	@Override
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
+		return generateReport(salesReportQuery, "SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf");
+	}
+
+	@Override
+	public ResultBean generateReport(SalesReportQueryBean salesReportQuery, String fileName) {
 		final ResultBean result;
 		final ResultBean validateQuery = validateSalesReportQuery(salesReportQuery);
 		
@@ -50,9 +56,8 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			final List<ClientOrder> clientOrders = clientOrderService.findAllBySalesReportQuery(salesReportQuery);
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
-				final String filePath = FileConstants.FILE_HOME + "files/sales_report/SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf";
+				final String filePath = FileConstants.FILE_HOME + "files/sales_report/" + StringHelper.convertToFileSafeFormat(fileName);
 				result = new ResultBean();
-				
 				result.setSuccess(
 						SimplePdfWriter.write(
 								new SalesReportTemplate(
@@ -60,7 +65,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 										(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
 										clientOrders
 											).merge(velocityEngine), 
-								filePath, 
+								filePath,
 								true)
 						);
 				if(result.getSuccess()) {

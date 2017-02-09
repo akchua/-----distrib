@@ -402,7 +402,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@CheckAuthority(minimumAuthority = 5)
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
-		if(salesReportQuery.getSendMail()) {
+		if(result.getSuccess() && salesReportQuery.getSendMail()) {
 			emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
 					null,
 					MailConstants.DEFAULT_EMAIL,

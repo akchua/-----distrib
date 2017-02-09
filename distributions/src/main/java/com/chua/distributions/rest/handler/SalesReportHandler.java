@@ -11,4 +11,6 @@ import com.chua.distributions.beans.SalesReportQueryBean;
 public interface SalesReportHandler {
 
 	ResultBean generateReport(SalesReportQueryBean salesReportQuery);
+
+	ResultBean generateReport(SalesReportQueryBean salesReportQuery, String fileName);
 }
