@@ -81,14 +81,16 @@ public class SalesReportScheduler {
 			salesReportQuery.setWarehouse(warehouse);
 			
 			final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
-			emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
-					null,
-					MailConstants.DEFAULT_EMAIL,
-					"Weekly Warehouse Sales Report",
-					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
 			
-			if(result.getSuccess()) LOG.info(result.getMessage());
+			if(result.getSuccess()) {
+				LOG.info(result.getMessage());
+				emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
+						null,
+						MailConstants.DEFAULT_EMAIL,
+						"Weekly Warehouse Sales Report",
+						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+						new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
+			}
 			else {
 				LOG.error(result.getMessage());
 				emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER, 
@@ -101,6 +103,8 @@ public class SalesReportScheduler {
 						null);
 			}
 		}
+		
+		LOG.info("Weekly Warehouse Sales Report complete...");
 	}
 	
 	/**
@@ -111,7 +115,7 @@ public class SalesReportScheduler {
 	 */
 	@Scheduled(cron = "0 0 1 1 * ?")
 	public void monthlyClientSalesReport() {
-		LOG.info("Creating Weekly Warehouse Sales Report");
+		LOG.info("Creating Monthly Warehouse Sales Report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -162,11 +166,15 @@ public class SalesReportScheduler {
 			attachment = "";
 		}
 		
-		emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
-				null,
-				MailConstants.DEFAULT_EMAIL,
-				"Monthly Client Sales Report",
-				"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-				new String[] { attachment });
+		if(!attachment.isEmpty()) {
+			emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
+					null,
+					MailConstants.DEFAULT_EMAIL,
+					"Monthly Client Sales Report",
+					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+					new String[] { attachment });
+		}
+		
+		LOG.info("Monthly Warehouse Sales Report complete...");
 	}
 }

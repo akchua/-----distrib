@@ -13,14 +13,17 @@ public class FileConstants {
 
 	public static String FILE_HOME;
 	
-	public static final String SALES_HOME = FILE_HOME + "files/sales_report/";
+	public static String SALES_HOME;
 
-	public static final String PURCHASES_HOME = FILE_HOME + "files/purchase_order/";
+	public static String PURCHASES_HOME;
 
-	public static final String DISPATCH_HOME = FILE_HOME + "files/dispatch/";
+	public static String DISPATCH_HOME;
 	
 	@Value("${file.home}")
     public void setFileHome(String home) {
         FileConstants.FILE_HOME = home;
+        FileConstants.SALES_HOME = home + "files\\sales_report\\";
+        FileConstants.PURCHASES_HOME = home + "files\\purchase_order\\";
+        FileConstants.DISPATCH_HOME = home + "files\\dispatch\\";
     }
 }
