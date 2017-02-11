@@ -233,10 +233,11 @@ public class UserHandlerImpl implements UserHandler {
 					null,
 					MailConstants.DEFAULT_EMAIL,
 					"Prime Pad Reset Password",
-					"Hi, " + user.getFirstName() + " " + user.getLastName()
+					"Hi " + user.getFirstName() + " " + user.getLastName() + ", your Prime Pad account password has just been reset."
+						+ "\nYour new credentials are : "
 						+ "\n\nUsername - " + user.getUsername()
 						+ "\nPasswrod - " + randomPassword
-						+ "\nPlease login and change your password as soon as possible.",
+						+ "\n\nPlease login at distributions.primepad.net and change your password as soon as possible.",
 					null));
 			
 			if(result.getSuccess()) {
