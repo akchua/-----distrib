@@ -22,8 +22,8 @@ public class FileConstants {
 	@Value("${file.home}")
     public void setFileHome(String home) {
         FileConstants.FILE_HOME = home;
-        FileConstants.SALES_HOME = home + "files\\sales_report\\";
-        FileConstants.PURCHASES_HOME = home + "files\\purchase_order\\";
-        FileConstants.DISPATCH_HOME = home + "files\\dispatch\\";
+        FileConstants.SALES_HOME = home + "files/sales_report/";
+        FileConstants.PURCHASES_HOME = home + "files/purchase_order/";
+        FileConstants.DISPATCH_HOME = home + "files/dispatch/";
     }
 }
