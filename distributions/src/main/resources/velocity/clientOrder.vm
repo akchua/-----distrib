@@ -3,7 +3,7 @@
                                                    SALES ORDER                                                    
                                                    
         DISTRIBUTOR : ${t.Distributor}
-         DELIVER TO : ${t.Creator}
+         DELIVER TO : ${t.Client}
             ADDRESS : ${t.Address}
           CONTACT # : ${t.ContactNumber}
                DATE : ${t.Date}

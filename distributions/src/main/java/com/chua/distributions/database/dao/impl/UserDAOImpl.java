@@ -64,11 +64,16 @@ public class UserDAOImpl
 	
 	@Override
 	public List<User> findAllByUserType(UserType userType) {
+		return findAllByUserTypeWithOrder(userType, null);
+	}
+	
+	@Override
+	public List<User> findAllByUserTypeWithOrder(UserType userType, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("userType", userType));
 		
-		return findAllByCriterionList(null, null, null, null, conjunction);
+		return findAllByCriterionList(null, null, null, orders, conjunction);
 	}
 
 	@Override

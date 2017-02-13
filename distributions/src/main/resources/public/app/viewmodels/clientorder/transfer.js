@@ -61,7 +61,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	clientOrderService.getClientOrder(self.sourceId).done(function(sourceOrder) {
     		self.sourceOrder.id(sourceOrder.id);
-    		self.sourceOrder.client(sourceOrder.creator.businessName);
+    		self.sourceOrder.client(sourceOrder.client.businessName);
     		self.sourceOrder.status(sourceOrder.status.displayName);
     		self.sourceOrder.netTotal(sourceOrder.netTotal);
     	});

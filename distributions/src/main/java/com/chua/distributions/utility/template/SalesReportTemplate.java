@@ -70,7 +70,7 @@ public class SalesReportTemplate implements Template {
 	public String getClient() {
 		final String client;
 		if(this.client != null) {
-			client = this.client.getFormattedName();
+			client = this.client.getBusinessName();
 		} else {
 			client = "ALL CLIENTS";
 		}

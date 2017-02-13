@@ -29,7 +29,7 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     ClientOrderPage.prototype.canActivate = function(clientOrderId) {
     	return system.defer(function (dfd) {
     		clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    			dfd.resolve(clientOrder.creator.id == app.user.id);
+    			dfd.resolve(clientOrder.client.id == app.user.id || app.user.userType.authority <= 2);
         	});
         })
         .promise();
@@ -53,7 +53,7 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     	
     	clientOrderService.getClientOrder(self.clientOrder.id()).done(function(clientOrder) {
     		self.clientOrder.discount(clientOrder.additionalDiscount);
-    		self.clientOrder.clientName(clientOrder.creator.formattedName);
+    		self.clientOrder.clientName(clientOrder.client.formattedName);
     		self.clientOrder.formattedGrossTotal(clientOrder.formattedGrossTotal);
     		self.clientOrder.formattedDiscountTotal(clientOrder.formattedDiscountTotal);
     		self.clientOrder.lessVat(clientOrder.lessVat);

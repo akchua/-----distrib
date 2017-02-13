@@ -34,7 +34,7 @@ public class ClientOrderDAOImpl
 			Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.eq("creator.id", clientId));
+		conjunction.add(Restrictions.eq("client.id", clientId));
 		
 		if(!showPaid) {
 			conjunction.add(Restrictions.ne("status", Status.PAID));
@@ -79,7 +79,7 @@ public class ClientOrderDAOImpl
 	public List<ClientOrder> findAllByClientAndStatus(Long clientId, Status[] status) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.eq("creator.id", clientId));
+		conjunction.add(Restrictions.eq("client.id", clientId));
 		
 		if(status != null && status.length > 0) {
 			final Junction disjunction = Restrictions.disjunction();
@@ -133,7 +133,7 @@ public class ClientOrderDAOImpl
 		}
 		
 		if(salesReportQuery.getClientId() != null) {
-			conjunction.add(Restrictions.eq("creator.id", salesReportQuery.getClientId()));
+			conjunction.add(Restrictions.eq("client.id", salesReportQuery.getClientId()));
 		}
 		
 		final Junction disjunction = Restrictions.disjunction();

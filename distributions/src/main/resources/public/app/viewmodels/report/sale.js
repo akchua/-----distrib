@@ -6,10 +6,6 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.clientList = ko.observable();
     	
     	this.salesReportQuery = {
-    		from: ko.observable(),
-    		to: ko.observable(),
-    		warehouse: ko.observable(),
-    		clientId: ko.observable(),
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
     		includeDispatched: ko.observable(false),

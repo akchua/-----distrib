@@ -35,12 +35,12 @@ public class ClientOrderServiceImpl
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllRequestWithPaging(int pageNumber, int resultsPerPage, boolean showAccepted) {
+	public ObjectList<ClientOrder> findAllRequestWithPagingOrderByLatest(int pageNumber, int resultsPerPage, boolean showAccepted) {
 		final Status[] status;
 		if(showAccepted) status = new Status[] { Status.SUBMITTED, Status.ACCEPTED, Status.TO_FOLLOW };
 		else status = new Status[] { Status.SUBMITTED };
 		
-		return dao.findAllWithPagingAndStatus(pageNumber, resultsPerPage, status);
+		return dao.findAllWithPagingStatusAndOrder(pageNumber, resultsPerPage, status, new Order[] { Order.desc("updatedOn") });
 	}
 	
 	@Override

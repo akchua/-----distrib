@@ -23,4 +23,6 @@ public interface UserDAO extends DAO<User, Long>, UserPrototype {
 	ObjectList<User> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Order[] orders);
 	
 	List<User> findAllByUserType(UserType userType);
+	
+	List<User> findAllByUserTypeWithOrder(UserType userType, Order[] orders);
 }

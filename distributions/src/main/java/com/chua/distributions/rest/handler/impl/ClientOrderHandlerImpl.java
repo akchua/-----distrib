@@ -76,7 +76,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		ClientOrder transferInstance = null;
 
 		if(!sourceOrder.getNetTotal().equals(0.0f)) {
-			final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getCreator().getId());
+			final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getClient().getId());
 			
 			for(ClientOrder clientOrder : toFollowOrders) {
 				if(clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
@@ -86,10 +86,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			}
 			
 			if(transferInstance == null) {
-				final User sourceOwner = clientOrderService.find(sourceId).getCreator();
+				final User sourceOwner = clientOrderService.find(sourceId).getClient();
 				final ClientOrder newClientOrder = new ClientOrder();
 				
-				newClientOrder.setCreator(sourceOwner);
+				newClientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
+				newClientOrder.setClient(sourceOwner);
 				newClientOrder.setGrossTotal(0.0f);
 				newClientOrder.setDiscountTotal(0.0f);
 				newClientOrder.setStatus(Status.TO_FOLLOW);
@@ -116,7 +117,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted) {
-		return clientOrderService.findAllRequestWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
+		return clientOrderService.findAllRequestWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
 	}
 	
 	@Override
@@ -170,6 +171,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				final ClientOrder clientOrder = new ClientOrder();
 				
 				clientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
+				clientOrder.setClient(UserContextHolder.getUser().getUserEntity());
 				clientOrder.setGrossTotal(0.0f);
 				clientOrder.setDiscountTotal(0.0f);
 				clientOrder.setStatus(Status.CREATING);
@@ -201,7 +203,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
-			if(clientOrder.getCreator().getId().equals(UserContextHolder.getUser().getId())) {
+			if(clientOrder.getClient().getId().equals(UserContextHolder.getUser().getId())) {
 				if(clientOrder.getStatus().equals(Status.CREATING)) {
 					if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
 						clientOrder.setStatus(Status.SUBMITTED);
@@ -270,7 +272,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		
 		if(clientOrder != null) {
 			if(clientOrder.getStatus().equals(Status.SUBMITTED)) {
-				result = acceptClientOrder(clientOrder);
+				if(clientOrder.getNetTotal() != 0.0f) {
+					result = acceptClientOrder(clientOrder);
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Unable to accept empty order."));
+				}
 			} else {
 				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
 						Html.line(" You are not authorized to accept order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
@@ -321,11 +327,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 		result = new ResultBean();
 		result.setSuccess(clientOrderService.update(clientOrder) &&
-				emailUtil.send(clientOrder.getCreator().getEmailAddress(), 
+				emailUtil.send(clientOrder.getClient().getEmailAddress(), 
 						null,
 						MailConstants.DEFAULT_EMAIL,
 						"Order Accepted",
-						"Thank you " + clientOrder.getCreator().getFormattedName() + "(" + clientOrder.getCreator().getBusinessName() + ") for ordering at Prime Pad."
+						"Thank you " + clientOrder.getClient().getFormattedName() + "(" + clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
 						+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
 						null));
 		if(result.getSuccess()) {

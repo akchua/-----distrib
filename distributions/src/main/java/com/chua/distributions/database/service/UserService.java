@@ -17,9 +17,11 @@ public interface UserService extends Service<User, Long>, UserPrototype {
 	
 	ObjectList<User> findAllWithPagingOrderByNameAndUserType(int pageNumber, int resultsPerPage, String searchKey);
 	
-	ObjectList<User> findAllClientsWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey);
+	ObjectList<User> findAllClientsWithPagingOrderByBusinessName(int pageNumber, int resultsPerPage, String searchKey);
 	
 	List<User> findAllClients();
+	
+	List<User> findAllClientsOrderByBusinessName();
 	
 	List<User> findAllAdministrators();
 }

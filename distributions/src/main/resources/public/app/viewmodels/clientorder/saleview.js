@@ -30,7 +30,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     	
     	self.saleViewModel.id(self.clientOrder.id);
     	self.saleViewModel.discount(self.clientOrder.additionalDiscount);
-		self.saleViewModel.clientName(self.clientOrder.creator.formattedName);
+		self.saleViewModel.clientName(self.clientOrder.client.formattedName);
 		self.saleViewModel.formattedGrossTotal(self.clientOrder.formattedGrossTotal);
 		self.saleViewModel.formattedDiscountTotal(self.clientOrder.formattedDiscountTotal);
 		self.saleViewModel.lessVat(self.clientOrder.lessVat);

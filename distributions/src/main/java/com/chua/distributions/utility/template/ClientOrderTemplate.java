@@ -55,16 +55,16 @@ public class ClientOrderTemplate implements Template {
 		return BusinessConstants.BUSINESS_NAME;
 	}
 	
-	public String getCreator() {
-		return clientOrder.getCreator().getBusinessName();
+	public String getClient() {
+		return clientOrder.getClient().getBusinessName();
 	}
 	
 	public String getAddress() {
-		return clientOrder.getCreator().getBusinessAddress();
+		return clientOrder.getClient().getBusinessAddress();
 	}
 	
 	public String getContactNumber() {
-		return clientOrder.getCreator().getBusinessContactNumber();
+		return clientOrder.getClient().getBusinessContactNumber();
 	}
 	
 	public String getDate() {

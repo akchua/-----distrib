@@ -53,13 +53,18 @@ public class UserServiceImpl
 	}
 
 	@Override
-	public ObjectList<User> findAllClientsWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey) {
-		return dao.findAllClientsWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, new Order[] { Order.asc("lastName"), Order.asc("firstName") });
+	public ObjectList<User> findAllClientsWithPagingOrderByBusinessName(int pageNumber, int resultsPerPage, String searchKey) {
+		return dao.findAllClientsWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, new Order[] { Order.asc("businessName") });
 	}
 	
 	@Override
 	public List<User> findAllClients() {
 		return dao.findAllByUserType(UserType.CLIENT);
+	}
+	
+	@Override
+	public List<User> findAllClientsOrderByBusinessName() {
+		return dao.findAllByUserTypeWithOrder(UserType.CLIENT, new Order[] { Order.asc("businessName") });
 	}
 
 	@Override

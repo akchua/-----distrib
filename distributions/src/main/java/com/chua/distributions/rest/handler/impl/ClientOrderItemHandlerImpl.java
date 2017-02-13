@@ -58,7 +58,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		if(product != null) {
 			final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 			if(clientOrder != null) {
-				if(UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId())) {
+				if(UserContextHolder.getUser().getId().equals(clientOrder.getClient().getId()) || 
+						UserContextHolder.getUser().getId().equals(clientOrder.getCreator().getId())) {
 					if(clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)) {
 						result = addItem(product, clientOrder, product.getPackaging());
 					} else {
@@ -114,7 +115,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getClient().getId()) ||
+					UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
 				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
 					result = removeItem(clientOrderItem);
 				} else {
@@ -151,7 +153,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getClient().getId()) ||
+					UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
 				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
 					result = changeQuantity(clientOrderItem, (clientOrderItem.getPackageQuantity() * clientOrderItem.getPackaging()) + pieceQuantity);
 				} else {
@@ -174,7 +177,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.find(clientOrderItemId);
 		
 		if(clientOrderItem != null) {
-			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
+			if(UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getClient().getId()) || 
+					UserContextHolder.getUser().getId().equals(clientOrderItem.getClientOrder().getCreator().getId())) {
 				if(clientOrderItem.getClientOrder().getStatus().equals(Status.CREATING) || clientOrderItem.getClientOrder().getStatus().equals(Status.SUBMITTED)) {
 					result = changeQuantity(clientOrderItem, (packageQuantity * clientOrderItem.getPackaging()) + clientOrderItem.getPieceQuantity());
 				} else {
@@ -332,7 +336,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		clientOrderItem.setProductCode(product.getProductCode());
 		clientOrderItem.setDisplayName(product.getDisplayName());
 		clientOrderItem.setPackaging(product.getPackaging());
-		clientOrderItem.setUnitPrice(product.getSellingPrice() * (100.0f + clientOrderItem.getClientOrder().getCreator().getMarkup()) / 100.0f);
+		clientOrderItem.setUnitPrice(product.getSellingPrice() * (100.0f + clientOrderItem.getClientOrder().getClient().getMarkup()) / 100.0f);
 		clientOrderItem.setDiscount(0.0f);		//PROMOTIONS UPDATE
 	}
 }

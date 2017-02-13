@@ -33,6 +33,9 @@ public class ClientOrder extends Order {
 
 	public static final String TABLE_NAME = "client_order";
 	
+	@JsonSerialize(using = UserSerializer.class)
+	private User client;
+	
 	private Float additionalDiscount;
 	
 	private Float lessVat;
@@ -41,6 +44,18 @@ public class ClientOrder extends Order {
 	private User dispatcher;
 	
 	private DateTime deliveredOn;
+	
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "client_id")
+	@Where(clause = "valid = 1")
+	@NotFound(action = NotFoundAction.IGNORE)
+	public User getClient() {
+		return client;
+	}
+
+	public void setClient(User client) {
+		this.client = client;
+	}
 	
 	@Basic
 	@Column(name = "additional_discount")

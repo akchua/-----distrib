@@ -44,8 +44,8 @@
 			<tbody data-bind="foreach: { data: dispatchItemList, as: 'dispatchItem' }">
 				<tr>
 					<td data-bind="text: dispatchItem.clientOrder.id" class = "text-center"></td>
-					<td><a data-bind="text: dispatchItem.clientOrder.creator.businessName, click: function() { $parent.viewClient(dispatchItem.clientOrder.creator.id) }"></a></td>
-						<td data-bind="text: dispatchItem.clientOrder.creator.businessArea.displayName"></td>
+					<td><a data-bind="text: dispatchItem.clientOrder.client.businessName, click: function() { $parent.viewClient(dispatchItem.clientOrder.client.id) }"></a></td>
+						<td data-bind="text: dispatchItem.clientOrder.client.businessArea.displayName"></td>
 					<td data-bind="text: dispatchItem.clientOrder.status.displayName" class = "text-center"></td>
 					<td data-bind="text: dispatchItem.clientOrder.formattedNetTotal" class = "text-right"></td>
 					

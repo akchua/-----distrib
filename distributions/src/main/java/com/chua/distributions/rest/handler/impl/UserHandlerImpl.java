@@ -60,7 +60,7 @@ public class UserHandlerImpl implements UserHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey) {
-		return userService.findAllClientsWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
+		return userService.findAllClientsWithPagingOrderByBusinessName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
 	}
 	
 	@Override
@@ -302,7 +302,7 @@ public class UserHandlerImpl implements UserHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public List<User> getClientList() {
-		return userService.findAllClients();
+		return userService.findAllClientsOrderByBusinessName();
 	}
 	
 	@Override
