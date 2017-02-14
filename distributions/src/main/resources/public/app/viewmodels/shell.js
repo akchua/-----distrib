@@ -25,7 +25,7 @@
    	];
 	
 	var reportroute = [
-		{ route: 'report', moduleRootId: 'viewmodels/report', title: 'Report', nav: true, hash: '#report',
+		{ route: 'report', moduleRootId: 'viewmodels/report', title: 'Reports', nav: true, hash: '#report',
 			childRoutes: [
 				{ route: 'purchase', moduleId: 'purchase', title: 'Purchases', nav: true, hash: 'purchase' },
    	  		    { route: 'sale', moduleId: 'sale', title: 'Sales', nav: true, hash: 'sale' },
@@ -44,7 +44,13 @@
 	];
 	
 	var requestroute = [
-		{ route: 'request', moduleId: 'viewmodels/request/request', title: 'Requests', nav: true, hash: '#request' }
+		{ route: 'request', moduleRootId: 'viewmodels/request', title: 'Requests', nav: true, hash: '#request',
+			childRoutes: [
+				{ route: 'accept', moduleId: 'request', title: 'Accept', nav: true, hash: 'accept' },
+   	  		    { route: 'create', moduleId: 'create', title: 'Create', nav: true, hash: 'create' }
+			]
+		},
+		{ route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: 'Order', nav: false, hash: '#clientorderpage' }
 	];
 	
 	var dispatchroute = [
@@ -56,7 +62,6 @@
 	    { route: 'clientorder', moduleId: 'viewmodels/clientorder/clientorder', title: 'Order', nav: true, hash: '#clientorder' },
 	    { route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: 'Order', nav: false, hash: '#clientorderpage' }
 	];
-	
 	
 	var Shell = function() {
 		this.router = router;

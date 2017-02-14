@@ -1,11 +1,11 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview', 'viewmodels/clientorder/transfer'],
-		function (router, app, ko, clientOrderService, userService, SaleView, UserView, Transfer) {
+define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview', 'viewmodels/clientorder/transfer'],
+		function (app, ko, clientOrderService, userService, SaleView, UserView, Transfer) {
     var Request = function() {
     	this.clientOrderList = ko.observable();
     	
     	this.showAccepted = ko.observable(false);
     	this.enableAccept = ko.observable(true);
-
+    	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
 		this.currentPage = ko.observable(1);
@@ -56,6 +56,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
         		});
 			}
 		})
+    };
+    
+    Request.prototype.open = function(clientOrderId) {
+    	router.navigate('#clientorderpage/' + clientOrderId);
     };
     
     Request.prototype.transfer = function(clientOrderId) {

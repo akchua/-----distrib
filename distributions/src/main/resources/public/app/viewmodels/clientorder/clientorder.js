@@ -1,7 +1,7 @@
 define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/clientorder/saleview'],
 		function (router, app, ko, clientOrderService, SaleView) {
     var ClientOrder = function() {
-    	this.clientOrderList = ko.observable();
+    	this.partialClientOrderList = ko.observable();
 
     	this.showPaid = ko.observable(false);
     	
@@ -25,8 +25,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     ClientOrder.prototype.refreshClientOrderList = function() {
     	var self = this;
     	
-    	clientOrderService.getClientOrderList(self.currentPage(), self.showPaid()).done(function(data) {
-    		self.clientOrderList(data.list);
+    	clientOrderService.getPartialClientOrderList(self.currentPage(), self.showPaid()).done(function(data) {
+    		self.partialClientOrderList(data.list);
     		self.totalItems(data.total);
     	});
     };
@@ -36,7 +36,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	clientOrderService.addClientOrder().done(function(result) {
     		if(result.success) {
-    			router.navigate('#clientorderpage/' + result.message);
+    			router.navigate('#clientorderpage/' + result.extras.clientOrderId);
     		} else {
     			app.showMessage(result.message);
     		}

@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
@@ -48,11 +49,11 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
-	@Path("/list")
+	@Path("/listpartial")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ObjectList<ClientOrder> getClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
+	public ObjectList<PartialClientOrderBean> getPartialClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("showPaid") Boolean showPaid) {
-		return clientOrderHandler.getClientOrderObjectList(pageNumber, showPaid);
+		return clientOrderHandler.getPartialClientOrderObjectList(pageNumber, showPaid);
 	}
 	
 	@GET
@@ -61,6 +62,13 @@ public class ClientOrderEndpoint {
 	public ObjectList<ClientOrder> getSubmittedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("showAccepted") Boolean showAccepted) {
 		return clientOrderHandler.getClientOrderRequestObjectList(pageNumber, showAccepted);
+	}
+	
+	@GET
+	@Path("/requestlistbycurrentuser")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<ClientOrder> getClientOrderRequestObjectListCreatedByCurrentUser(@QueryParam("pageNumber") Integer pageNumber) {
+		return clientOrderHandler.getClientOrderRequestObjectListCreatedByCurrentUser(pageNumber);
 	}
 	
 	@GET
@@ -107,6 +115,13 @@ public class ClientOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean addClientOrder() {
 		return clientOrderHandler.addClientOrder();
+	}
+	
+	@POST
+	@Path("/addfor")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean addClientOrderFor(@FormParam("clientId") Long clientId) {
+		return clientOrderHandler.addClientOrder(clientId);
 	}
 	
 	@POST

@@ -25,6 +25,8 @@ public interface ClientOrderDAO extends DAO<ClientOrder, Long>, ClientOrderProto
 	
 	ObjectList<ClientOrder> findAllWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Status[] status, Order[] orders);
 	
+	ObjectList<ClientOrder> findByCreatorWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Status[] status, Long creatorId, Order[] orders);
+	
 	ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Warehouse warehouse, Status[] status, Order[] orders);
 
 	List<ClientOrder> findAllByClientAndStatus(Long clientId, Status[] status);

@@ -1,6 +1,9 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,10 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
+import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
@@ -24,6 +29,7 @@ import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
+import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.UserType;
@@ -49,6 +55,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private SalesReportHandler salesReportHandler;
@@ -110,8 +119,26 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> getClientOrderObjectList(Integer pageNumber, Boolean showPaid) {
-		return clientOrderService.findByClientWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId(), showPaid);
+	public ObjectList<PartialClientOrderBean> getPartialClientOrderObjectList(Integer pageNumber, Boolean showPaid) {
+		final ObjectList<PartialClientOrderBean> objPartialClientOrders = new ObjectList<PartialClientOrderBean>();
+		final ObjectList<ClientOrder> objClientOrders = clientOrderService.findByClientWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId(), showPaid);
+		if(objClientOrders != null) {
+			objPartialClientOrders.setTotal(objClientOrders.getTotal());
+			final List<PartialClientOrderBean> partialClientOrders = new ArrayList<PartialClientOrderBean>(); 
+			for(ClientOrder clientOrder : objClientOrders.getList()) {
+				final PartialClientOrderBean partialClientOrder = new PartialClientOrderBean();
+				setPartialClientOrder(partialClientOrder, clientOrder);
+				partialClientOrders.add(partialClientOrder);
+			}
+			objPartialClientOrders.setList(partialClientOrders);
+		}
+		return objPartialClientOrders;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 3)
+	public ObjectList<ClientOrder> getClientOrderRequestObjectListCreatedByCurrentUser(Integer pageNumber) {
+		return clientOrderService.findAllRequestByCreatorWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId());
 	}
 	
 	@Override
@@ -165,33 +192,60 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ResultBean result;
 		
 		if(UserContextHolder.getUser().getUserType().equals(UserType.CLIENT)) {
-			final List<ClientOrder> clientOrders = clientOrderService.findAllCreatingOrSubmittedByClient(UserContextHolder.getUser().getId());
-			
-			if(clientOrders != null && clientOrders.size() < 5) {
-				final ClientOrder clientOrder = new ClientOrder();
-				
-				clientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
-				clientOrder.setClient(UserContextHolder.getUser().getUserEntity());
-				clientOrder.setGrossTotal(0.0f);
-				clientOrder.setDiscountTotal(0.0f);
-				clientOrder.setStatus(Status.CREATING);
-				clientOrder.setWarehouse(null);
-				clientOrder.setAdditionalDiscount(UserContextHolder.getUser().getDiscount());
-				clientOrder.setLessVat(UserContextHolder.getUser().getVatType().getLessVat());
-				clientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
-				
-				result = new ResultBean();
-				result.setSuccess(clientOrderService.insert(clientOrder) != null);
-				if(result.getSuccess()) {
-					result.setMessage(clientOrder.getId() + "");
-				} else {
-					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
-				}
-			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create more than 5 simultaneous order requests."));
-			}
+			result = addClientOrder(UserContextHolder.getUser().getUserEntity());
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create an order. Only " + Html.text(Color.BLUE, "Clients") + " are allowed."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 3)
+	public ResultBean addClientOrder(Long clientId) {
+		final ResultBean result;
+		final User client = userService.find(clientId);
+		
+		if(client != null) {
+			result = addClientOrder(client);
+			if(result.getSuccess()) {
+				emailUtil.send(client.getEmailAddress(),
+						null,
+						MailConstants.DEFAULT_EMAIL,
+						"Order Created",
+						UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
+							+ "The ID of the created order is " + result.getExtras().get("clientOrderId") + ". You can verify the contents of the order by logging in at distributions.primepad.net . "
+								+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
+						null);
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	private ResultBean addClientOrder(User client) {
+		final ResultBean result;
+		
+		final List<ClientOrder> clientOrders = clientOrderService.findAllCreatingOrSubmittedByClient(client.getId());
+		
+		if(clientOrders != null && clientOrders.size() < 5) {
+			final ClientOrder clientOrder = generateNewClientOrder(client);
+			
+			result = new ResultBean();
+			result.setSuccess(clientOrderService.insert(clientOrder) != null);
+			if(result.getSuccess()) {
+				Map<String, Object> extras = new HashMap<String, Object>();
+				extras.put("clientOrderId", clientOrder.getId());
+				result.setExtras(extras);
+				
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Order for " + Html.text(Color.BLUE, client.getBusinessName()) + "."));
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create more than 5 simultaneous order requests."));
 		}
 		
 		return result;
@@ -203,7 +257,8 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
 		if(clientOrder != null) {
-			if(clientOrder.getClient().getId().equals(UserContextHolder.getUser().getId())) {
+			if(clientOrder.getClient().getId().equals(UserContextHolder.getUser().getId()) ||
+					clientOrder.getCreator().getId().equals(UserContextHolder.getUser().getId())) {
 				if(clientOrder.getStatus().equals(Status.CREATING)) {
 					if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
 						clientOrder.setStatus(Status.SUBMITTED);
@@ -356,6 +411,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.update(clientOrder));
 				if(result.getSuccess()) {
+					
 					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " finalized and received payment of Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
@@ -464,6 +520,15 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		return true;
 	}*/
 	
+	private void setPartialClientOrder(PartialClientOrderBean partialClientOrder, ClientOrder clientOrder) {
+		partialClientOrder.setId(clientOrder.getId());
+		partialClientOrder.setFormattedCreatedOn(clientOrder.getFormattedCreatedOn());
+		partialClientOrder.setFormattedUpdatedOn(clientOrder.getFormattedUpdatedOn());
+		partialClientOrder.setCreatorName(clientOrder.getCreator().getFormattedName());
+		partialClientOrder.setStatus(clientOrder.getStatus());
+		partialClientOrder.setFormattedNetTotal(clientOrder.getFormattedNetTotal());
+	}
+	
 	private void refreshClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
@@ -481,5 +546,21 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			clientOrder.setDiscountTotal(discountTotal);
 			clientOrderService.update(clientOrder);
 		}
+	}
+	
+	private ClientOrder generateNewClientOrder(User client) {
+		final ClientOrder clientOrder = new ClientOrder();
+		
+		clientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
+		clientOrder.setClient(client);
+		clientOrder.setGrossTotal(0.0f);
+		clientOrder.setDiscountTotal(0.0f);
+		clientOrder.setStatus(Status.CREATING);
+		clientOrder.setWarehouse(null);
+		clientOrder.setAdditionalDiscount(client.getDiscount());
+		clientOrder.setLessVat(client.getVatType().getLessVat());
+		clientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
+		
+		return clientOrder;
 	}
 }

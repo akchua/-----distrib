@@ -9,7 +9,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
 			id: ko.observable(),
 			
 			discount: ko.observable(),
-			clientName: ko.observable(),
+			client: ko.observable(),
 			formattedGrossTotal: ko.observable(),
 			formattedDiscountTotal: ko.observable(),
 			lessVat: ko.observable(),
@@ -30,7 +30,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     	
     	self.saleViewModel.id(self.clientOrder.id);
     	self.saleViewModel.discount(self.clientOrder.additionalDiscount);
-		self.saleViewModel.clientName(self.clientOrder.client.formattedName);
+		self.saleViewModel.client(self.clientOrder.client.businessName);
 		self.saleViewModel.formattedGrossTotal(self.clientOrder.formattedGrossTotal);
 		self.saleViewModel.formattedDiscountTotal(self.clientOrder.formattedDiscountTotal);
 		self.saleViewModel.lessVat(self.clientOrder.lessVat);

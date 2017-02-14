@@ -2,6 +2,7 @@ package com.chua.distributions.rest.handler;
 
 import java.util.List;
 
+import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.StringWrapper;
@@ -26,7 +27,9 @@ public interface ClientOrderHandler {
 	 */
 	ClientOrder getTransferInstance(Long sourceId);
 	
-	ObjectList<ClientOrder> getClientOrderObjectList(Integer pageNumber, Boolean showPaid);
+	ObjectList<PartialClientOrderBean> getPartialClientOrderObjectList(Integer pageNumber, Boolean showPaid);
+	
+	ObjectList<ClientOrder> getClientOrderRequestObjectListCreatedByCurrentUser(Integer pageNumber);
 	
 	ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted);
 	
@@ -41,6 +44,8 @@ public interface ClientOrderHandler {
 	StringWrapper getFormattedTotalPayable();
 	
 	ResultBean addClientOrder();
+	
+	ResultBean addClientOrder(Long clientId);
 	
 	ResultBean submitClientOrder(Long clientOrderId);
 	

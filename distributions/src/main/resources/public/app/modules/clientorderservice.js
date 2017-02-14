@@ -18,9 +18,9 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getClientOrderList: function(currentPage, showPaid) {
+		getPartialClientOrderList: function(currentPage, showPaid) {
 			return $.ajax({
-				url: '/services/clientorder/list',
+				url: '/services/clientorder/listpartial',
 				data: {
 					pageNumber: currentPage - 1,
 					showPaid: showPaid
@@ -34,6 +34,15 @@ define(['jquery'], function ($) {
 				data: {
 					pageNumber: currentPage - 1,
 					showAccepted: showAccepted
+				}
+			});
+		},
+		
+		getClientOrderRequestByCurrentUserList: function(currentPage) {
+			return $.ajax({
+				url: '/services/clientorder/requestlistbycurrentuser',
+				data: {
+					pageNumber: currentPage - 1
 				}
 			});
 		},
@@ -89,6 +98,16 @@ define(['jquery'], function ($) {
     		return $.ajax({
     			url: '/services/clientorder/add',
     			method: 'POST'
+    		});
+    	},
+    	
+    	addClientOrderFor: function(clientId) {
+    		return $.ajax({
+    			url: '/services/clientorder/addfor',
+    			method: 'POST',
+    			data: {
+    				clientId: clientId
+    			}
     		});
     	},
     	

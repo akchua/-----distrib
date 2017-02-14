@@ -16,6 +16,8 @@ public interface ClientOrderService extends Service<ClientOrder, Long>, ClientOr
 
 	ObjectList<ClientOrder> findByClientWithPaging(int pageNumber, int resultsPerPage, Long clientId, boolean showPaid);
 	
+	ObjectList<ClientOrder> findAllRequestByCreatorWithPagingOrderByLatest(int pageNumber, int resultsPerPage, Long creatorId);
+	
 	ObjectList<ClientOrder> findAllRequestWithPagingOrderByLatest(int pageNumber, int resultsPerPage, boolean showAccepted);
 	
 	ObjectList<ClientOrder> findAllPaidWithPagingOrderByLatest(int pageNumber, int resultsPerPage, Warehouse warehouse);

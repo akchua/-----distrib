@@ -29,7 +29,7 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     ClientOrderPage.prototype.canActivate = function(clientOrderId) {
     	return system.defer(function (dfd) {
     		clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    			dfd.resolve(clientOrder.client.id == app.user.id || app.user.userType.authority <= 2);
+    			dfd.resolve(clientOrder.client.id == app.user.id || clientOrder.creator.id == app.user.id);
         	});
         })
         .promise();

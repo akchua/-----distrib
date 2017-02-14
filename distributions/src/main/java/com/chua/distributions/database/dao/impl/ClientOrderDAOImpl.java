@@ -55,6 +55,27 @@ public class ClientOrderDAOImpl
 	}
 	
 	@Override
+	public ObjectList<ClientOrder> findByCreatorWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
+			Status[] status, Long creatorId, Order[] orders) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(creatorId != null) {
+			conjunction.add(Restrictions.eq("creator.id", creatorId));
+		}
+		
+		if(status != null && status.length > 0) {
+			final Junction disjunction = Restrictions.disjunction();
+			for(Status stat : status) {
+				disjunction.add(Restrictions.eq("status", stat));
+			}
+			conjunction.add(disjunction);
+		}
+		
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
+	}
+	
+	@Override
 	public ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
 			Warehouse warehouse, Status[] status, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();

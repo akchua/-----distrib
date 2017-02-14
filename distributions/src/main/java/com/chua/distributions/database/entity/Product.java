@@ -216,20 +216,21 @@ public class Product extends BaseObject {
 	}
 	
 	@Transient
-	public Float getNetSellingPrice() {
-		final UserBean currentUser = UserContextHolder.getUser();
-		if(currentUser.getMarkup() != null && currentUser.getMarkup() != 0) return sellingPrice * (100.0f + currentUser.getMarkup()) / 100.0f;
-		else return sellingPrice;
-	}
-	
-	@Transient
-	public Float getPackageNetSellingPrice() {
-		return Math.round(getNetSellingPrice() * packaging * 100.0f) / 100.0f;
+	public Float getPackageSellingPrice() {
+		return Math.round(getSellingPrice() * packaging * 100.0f) / 100.0f;
 	}
 	
 	@Transient
 	public String getFormattedPackageNetSellingPrice() {
-		return CurrencyFormatter.pesoFormat(getPackageNetSellingPrice());
+		final UserBean currentUser = UserContextHolder.getUser();
+		
+		final Float netSellingPrice;
+		if(currentUser.getMarkup() != null && currentUser.getMarkup() != 0) netSellingPrice = sellingPrice * (100.0f + currentUser.getMarkup()) / 100.0f;
+		else netSellingPrice = sellingPrice;
+		
+		final Float packageNetSellingPrice = Math.round(netSellingPrice * packaging * 100.0f) / 100.0f;
+		
+		return CurrencyFormatter.pesoFormat(packageNetSellingPrice);
 	}
 
 	public void setSellingPrice(Float sellingPrice) {
@@ -244,7 +245,7 @@ public class Product extends BaseObject {
 	
 	@Transient
 	public Float getProfitAmount() {
-		return Math.round((getNetSellingPrice() - getNetPrice()) * 100.0f) / 100.0f;
+		return Math.round((getSellingPrice() - getNetPrice()) * 100.0f) / 100.0f;
 	}
 	
 	@Transient

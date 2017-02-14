@@ -43,7 +43,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	self.productFormModel.packageGrossPrice(self.product.packageGrossPrice);
     	self.productFormModel.discount(self.product.discount);
     	self.productFormModel.packageNetPrice(self.product.packageNetPrice);
-    	self.productFormModel.packageSellingPrice(self.product.packageNetSellingPrice);
+    	self.productFormModel.packageSellingPrice(self.product.packageSellingPrice);
     	self.productFormModel.percentProfit(self.product.percentProfit);
     	
     	self.discountAmount(self.product.packageDiscountAmount);
