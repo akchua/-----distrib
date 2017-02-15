@@ -188,16 +188,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	}
 
 	@Override
+	@CheckAuthority(authority = "10")
 	public ResultBean addClientOrder() {
-		final ResultBean result;
-		
-		if(UserContextHolder.getUser().getUserType().equals(UserType.CLIENT)) {
-			result = addClientOrder(UserContextHolder.getUser().getUserEntity());
-		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create an order. Only " + Html.text(Color.BLUE, "Clients") + " are allowed."));
-		}
-		
-		return result;
+		return addClientOrder(UserContextHolder.getUser().getUserEntity());
 	}
 	
 	@Override

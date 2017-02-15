@@ -16,11 +16,23 @@ import com.chua.distributions.annotations.CheckAuthority;
 @Aspect
 public class MethodAuthenticationAspect {
 
+	/**
+	 * Checks authority of all methods annotated with @CheckAuthority.
+	 * The value of authority will supersede the values of minimumAuthority and maximumAuthority.
+	 * The value of authority must be a regex
+	 * @param checkAuthority
+	 */
 	@Before("@annotation(checkAuthority) && execution(* *(..))")
-	public void checkUserAuthority(CheckAuthority checkAuthority) throws Exception {
+	public void checkUserAuthority(CheckAuthority checkAuthority) {
 		final Integer userAuthority = UserContextHolder.getUser().getUserType().getAuthority();
-		if(userAuthority > checkAuthority.minimumAuthority() || userAuthority < checkAuthority.maximumAuthority()) {
-			throw new NotAuthorizedException("User is not authenticated.");
+		if(checkAuthority.authority().isEmpty()) {
+			if(userAuthority > checkAuthority.minimumAuthority() || userAuthority < checkAuthority.maximumAuthority()) {
+				throw new NotAuthorizedException("User is not authenticated.");
+			}
+		} else {
+			if(!userAuthority.toString().matches(checkAuthority.authority())) {
+				throw new NotAuthorizedException("User is not authenticated.");
+			}
 		}
 	}
 }

@@ -1,3 +1,5 @@
-## Format for Client Order Item
-## Has exactly 116 columns in a line
+#**
+ * Format for Client Order Item
+ * Has exactly 116 columns in a line
+ *#
 |${t.FormattedQuantity}|${t.FormattedDisplayName}|${t.FormattedPackageUnitPrice}|${t.FormattedDiscountAmount}|${t.FormattedNetPrice}|

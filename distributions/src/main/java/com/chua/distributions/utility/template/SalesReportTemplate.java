@@ -46,7 +46,7 @@ public class SalesReportTemplate implements Template {
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "salesReport.vm", "UTF-8", model);
+		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/salesReport.vm", "UTF-8", model);
 	}
 	
 	public String getDateFrom() {

@@ -128,7 +128,9 @@
             self.routes = self.routes.concat(route.childRoutes);
         });
     	
-        self.router.map(self.routes).buildNavigationModel();
+        self.router.map(self.routes)
+        	.buildNavigationModel()
+        	.mapUnknownRoutes();
         
         return router.activate();
 	};

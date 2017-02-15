@@ -1,5 +1,7 @@
-## Template for Sales Order
-## Has a maximum of 117 Column per line
+#**
+ * Template for Sales Order
+ * Has a maximum of 117 Column per line
+ *# 
                                                    SALES ORDER                                                    
                                                    
         DISTRIBUTOR : ${t.Distributor}

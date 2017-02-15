@@ -1,5 +1,7 @@
-## Template for Sales Report
-## Has a maximum of 123 columns per line
+#**
+ * Template for Sales Report
+ * Has a maximum of 123 columns per line
+ *#
                                                       SALES REPORT                                                       
 
            Date From : ${t.DateFrom}

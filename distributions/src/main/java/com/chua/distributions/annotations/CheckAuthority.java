@@ -18,4 +18,6 @@ public @interface CheckAuthority {
 	public int minimumAuthority() default 1;
 	
 	public int maximumAuthority() default 1;
+	
+	public String authority() default "";
 }

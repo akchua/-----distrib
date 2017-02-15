@@ -26,7 +26,7 @@ public class ClientOrderItemTemplate implements Template {
 	public String merge(VelocityEngine velocityEngine) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "clientOrderItem.vm", "UTF-8", model);
+		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/clientOrderItem.vm", "UTF-8", model);
 	}
 
 	public String getFormattedQuantity() {

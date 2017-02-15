@@ -39,7 +39,7 @@ public class ClientOrderSummaryTemplate implements Template {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "clientOrderSummary.vm", "UTF-8", model);
+		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/clientOrderSummary.vm", "UTF-8", model);
 	}
 	
 	public String getFormattedStatus() {
