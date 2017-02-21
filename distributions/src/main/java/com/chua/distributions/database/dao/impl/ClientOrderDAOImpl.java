@@ -128,6 +128,20 @@ public class ClientOrderDAOImpl
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
+	
+	@Override
+	public List<ClientOrder> findAllWithStatusExemption(Status[] exemptedStatus) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(exemptedStatus != null && exemptedStatus.length > 0) {
+			for(Status stat : exemptedStatus) {
+				conjunction.add(Restrictions.ne("status", stat));
+			}
+		}
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
+	}
 
 	@Override
 	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,

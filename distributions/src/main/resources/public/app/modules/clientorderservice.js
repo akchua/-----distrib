@@ -88,9 +88,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getFormattedTotalPayable: function() {
+		getFormattedTotalCollectible: function() {
 			return $.ajax({
-				url: '/services/clientorder/formattedpayable'
+				url: '/services/clientorder/formattedcollectible'
+			});
+		},
+		
+		getOnGoingSalesCount: function() {
+			return $.ajax({
+				url: '/services/clientorder/ongoingsalescount'
 			});
 		},
 		

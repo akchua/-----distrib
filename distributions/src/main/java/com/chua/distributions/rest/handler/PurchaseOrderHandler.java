@@ -32,6 +32,8 @@ public interface PurchaseOrderHandler {
 	
 	ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(Integer pageNumber, PurchaseReportQueryBean purchaseReportQuery);
 	
+	Integer getOnGoingPurchasesCount();
+	
 	ResultBean createPurchaseOrder(PurchaseOrderFormBean purchaseOrderForm);
 	
 	ResultBean updatePurchaseOrder(PurchaseOrderFormBean purchaseOrderForm);

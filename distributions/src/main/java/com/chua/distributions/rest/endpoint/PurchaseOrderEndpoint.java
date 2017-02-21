@@ -74,6 +74,13 @@ public class PurchaseOrderEndpoint {
 		return purchaseOrderHandler.getPurchaseOrderObjectListByPurchaseReportQuery(pageNumber, new ObjectMapper().readValue(purchaseReportQueryData, PurchaseReportQueryBean.class));
 	}
 	
+	@GET
+	@Path("/ongoingpurchasescount")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Integer getOnGoingPurchasesCount() {
+		return purchaseOrderHandler.getOnGoingPurchasesCount();
+	}
+	
 	@POST
 	@Path("/save")
 	@Produces({ MediaType.APPLICATION_JSON })

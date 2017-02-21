@@ -173,7 +173,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public StringWrapper getFormattedTotalPayable() {
+	public StringWrapper getFormattedTotalCollectible() {
 		final StringWrapper sw = new StringWrapper();
 		List<ClientOrder> clientOrders = clientOrderService.findAllReceived();
 		
@@ -185,6 +185,12 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		sw.setContent(CurrencyFormatter.pesoFormat(total));
 		
 		return sw;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public Integer getOnGoingSalesCount() {
+		return clientOrderService.getOnGoingSalesCount();
 	}
 
 	@Override

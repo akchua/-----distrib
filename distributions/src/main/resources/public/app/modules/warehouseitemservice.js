@@ -19,6 +19,12 @@ define(['jquery'], function ($) {
 					warehouse: warehouse
 				}
 			});
+		},
+		
+		getWarehouseValueList: function() {
+			return $.ajax({
+				url: '/services/warehouseitem/warehousevaluelist'
+			});
 		}
 	};
 });

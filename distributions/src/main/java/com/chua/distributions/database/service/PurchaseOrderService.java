@@ -19,4 +19,6 @@ public interface PurchaseOrderService extends Service<PurchaseOrder, Long>, Purc
 	ObjectList<PurchaseOrder> findAllPaidWithPagingOrderByLatest(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse);
 
 	List<PurchaseOrder> findAllToFollowByCompanyAndWarehouse(Long companyId, Warehouse warehouse);
+	
+	Integer getOnGoingPurchasesCount();
 }

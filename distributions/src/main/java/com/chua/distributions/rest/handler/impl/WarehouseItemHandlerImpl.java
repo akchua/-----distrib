@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.beans.WarehouseValueBean;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ProductService;
@@ -45,13 +47,31 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 		final StringWrapper sw = new StringWrapper();
 		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);
 		
+		sw.setContent(getFormattedPurchaseValue(warehouseItems));
+		
+		return sw;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public List<WarehouseValueBean> getWarehouseValueList() {
+		final List<WarehouseValueBean> warehouseValues = new ArrayList<WarehouseValueBean>();
+		for(Warehouse warehouse : Warehouse.values()) {
+			final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);
+			final WarehouseValueBean warehouseValue = new WarehouseValueBean();
+			warehouseValue.setWarehouse(warehouse);
+			warehouseValue.setFormattedPurchaseValue(getFormattedPurchaseValue(warehouseItems));
+			warehouseValues.add(warehouseValue);
+		}
+		return warehouseValues;
+	}
+	
+	private String getFormattedPurchaseValue(List<WarehouseItem> warehouseItems) {
 		float total = 0.0f;
 		for(WarehouseItem item : warehouseItems) {
 			total += item.getProduct().getNetPrice() * item.getStockCount();
 		}
-		sw.setContent(CurrencyFormatter.pesoFormat(total));
-		
-		return sw;
+		return CurrencyFormatter.pesoFormat(total);
 	}
 	
 	@Override

@@ -32,4 +32,6 @@ public interface ClientOrderDAO extends DAO<ClientOrder, Long>, ClientOrderProto
 	List<ClientOrder> findAllByClientAndStatus(Long clientId, Status[] status);
 	
 	List<ClientOrder> findAllByStatus(Status[] status);
+	
+	List<ClientOrder> findAllWithStatusExemption(Status[] exemptedStatus);
 }

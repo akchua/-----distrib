@@ -1,5 +1,7 @@
 package com.chua.distributions.rest.endpoint;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -9,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.beans.WarehouseValueBean;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -39,5 +42,12 @@ public class WarehouseItemEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public StringWrapper getFormattedPurchaseValue(@QueryParam("warehouse") Warehouse warehouse) {
 		return warehouseItemHandler.getFormattedPurchaseValue(warehouse);
+	}
+	
+	@GET
+	@Path("/warehousevaluelist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<WarehouseValueBean> getWarehouseValueList() {
+		return warehouseItemHandler.getWarehouseValueList();
 	}
 }

@@ -104,10 +104,17 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
-	@Path("/formattedpayable")
+	@Path("/formattedcollectible")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public StringWrapper getFormattedTotalPayable() {
-		return clientOrderHandler.getFormattedTotalPayable();
+	public StringWrapper getFormattedTotalCollectible() {
+		return clientOrderHandler.getFormattedTotalCollectible();
+	}
+	
+	@GET
+	@Path("/ongoingsalescount")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Integer getOnGoingSalesCount() {
+		return clientOrderHandler.getOnGoingSalesCount();
 	}
 	
 	@POST

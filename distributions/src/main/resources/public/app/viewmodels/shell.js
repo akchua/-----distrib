@@ -4,6 +4,10 @@
 	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: true }
 	];
 	
+	var adminhomeroute = [
+		{ route: ['', 'adminhome'], moduleId: 'viewmodels/adminhome', title: 'Home', nav: true}
+	];
+	
 	var ourproductsroute = [
 	    { route: 'ourproducts', moduleId: 'viewmodels/ourproducts/ourproducts', title: 'Our Products', nav: true, hash: '#ourproducts' }                    
 	];
@@ -91,27 +95,29 @@
     		self.userDetails.userType(app.user.userType);
     		self.userDetails.itemsPerPage(app.user.itemsPerPage);
     		
-    		switch(app.user.userType.name) {
-	    		case 'ADMINISTRATOR':
-	    			self.routes = self.routes.concat(userroute);
-	    		case 'MANAGER':
-	    			self.routes = self.routes.concat(manageroute);
-	    			self.routes = self.routes.concat(reportroute);
-	    			self.routes = self.routes.concat(paymentroute);
-	    		case 'SECRETARY':
-	    			self.routes = self.routes.concat(purchaseorderroute);
-	    			self.routes = self.routes.concat(requestroute);
-	    			self.routes = self.routes.concat(dispatchroute);
-	    			if(app.user.userType.name == 'SECRETARY') self.routes = self.routes.concat(ourproductsroute);
-	    			break;
-	    		case 'SUPERVISOR':
-	    			self.routes = self.routes.concat(reportroute);
-	    			self.routes = self.routes.concat(ourproductsroute);
-	    			break;
-	    		case 'CLIENT':
-	    			self.routes = self.routes.concat(clientorderroute);
-	    			self.routes = self.routes.concat(ourproductsroute);
-	    			break;
+    		if(app.user.userType.name == 'CLIENT') {
+    			self.routes = self.routes.concat(clientorderroute);
+    			self.routes = self.routes.concat(ourproductsroute);
+    		} else {
+    			self.routes = adminhomeroute;
+    			switch(app.user.userType.name) {
+		    		case 'ADMINISTRATOR':
+		    			self.routes = self.routes.concat(userroute);
+		    		case 'MANAGER':
+		    			self.routes = self.routes.concat(manageroute);
+		    			self.routes = self.routes.concat(reportroute);
+		    			self.routes = self.routes.concat(paymentroute);
+		    		case 'SECRETARY':
+		    			self.routes = self.routes.concat(purchaseorderroute);
+		    			self.routes = self.routes.concat(requestroute);
+		    			self.routes = self.routes.concat(dispatchroute);
+		    			if(app.user.userType.name == 'SECRETARY') self.routes = self.routes.concat(ourproductsroute);
+		    			break;
+		    		case 'SUPERVISOR':
+		    			self.routes = self.routes.concat(reportroute);
+		    			self.routes = self.routes.concat(ourproductsroute);
+		    			break;
+    			}
     		}
 		}
     		

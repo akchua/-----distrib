@@ -80,6 +80,11 @@ public class ClientOrderServiceImpl
 	}
 
 	@Override
+	public Integer getOnGoingSalesCount() {
+		return dao.findAllWithStatusExemption(new Status[] { Status.CREATING, Status.PAID, Status.CANCELLED }).size();
+	}
+	
+	@Override
 	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,
 			SalesReportQueryBean salesReportQuery) {
 		return dao.findBySalesReportQueryWithPaging(pageNumber, resultsPerPage, salesReportQuery);

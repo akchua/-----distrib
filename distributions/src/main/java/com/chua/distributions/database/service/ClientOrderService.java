@@ -31,4 +31,6 @@ public interface ClientOrderService extends Service<ClientOrder, Long>, ClientOr
 	List<ClientOrder> findAllReceived();
 	
 	List<ClientOrder> findAllToFollowByClient(Long clientId);
+	
+	Integer getOnGoingSalesCount();
 }

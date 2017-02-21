@@ -1,6 +1,9 @@
 package com.chua.distributions.rest.handler;
 
+import java.util.List;
+
 import com.chua.distributions.beans.StringWrapper;
+import com.chua.distributions.beans.WarehouseValueBean;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -13,6 +16,8 @@ import com.chua.distributions.objects.ObjectList;
 public interface WarehouseItemHandler {
 
 	ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse);
+	
+	List<WarehouseValueBean> getWarehouseValueList();
 	
 	StringWrapper getFormattedPurchaseValue(Warehouse warehouse);
 	

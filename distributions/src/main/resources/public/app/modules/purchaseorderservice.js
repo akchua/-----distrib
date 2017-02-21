@@ -51,6 +51,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getOnGoingPurchasesCount: function() {
+			return $.ajax({
+				url: '/services/purchaseorder/ongoingpurchasescount'
+			});
+		},
+		
 		savePurchaseOrder: function(purchaseOrderFormData) {
     		return $.ajax({
     			url: '/services/purchaseorder/save',

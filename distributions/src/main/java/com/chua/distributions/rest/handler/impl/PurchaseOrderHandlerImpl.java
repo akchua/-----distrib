@@ -121,6 +121,12 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			PurchaseReportQueryBean purchaseReportQuery) {
 		return purchaseOrderService.findByPurchaseReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), purchaseReportQuery);
 	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public Integer getOnGoingPurchasesCount() {
+		return purchaseOrderService.getOnGoingPurchasesCount();
+	}
 
 	@Override
 	@CheckAuthority(minimumAuthority = 4)

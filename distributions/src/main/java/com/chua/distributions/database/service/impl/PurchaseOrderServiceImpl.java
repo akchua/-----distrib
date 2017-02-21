@@ -44,6 +44,11 @@ public class PurchaseOrderServiceImpl
 	public List<PurchaseOrder> findAllToFollowByCompanyAndWarehouse(Long companyId, Warehouse warehouse) {
 		return dao.findAllByCompanyWarehouseAndStatus(companyId, warehouse, new Status[] { Status.TO_FOLLOW });
 	}
+	
+	@Override
+	public Integer getOnGoingPurchasesCount() {
+		return dao.findAllWithStatusExemption(new Status[] { Status.CREATING, Status.PAID, Status.CANCELLED }).size();
+	}
 
 	@Override
 	public ObjectList<PurchaseOrder> findByPurchaseReportQueryWithPaging(int pageNumber, int resultsPerPage,
