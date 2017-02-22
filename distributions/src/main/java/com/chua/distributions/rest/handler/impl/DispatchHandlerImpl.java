@@ -1,11 +1,11 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.velocity.app.VelocityEngine;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -195,7 +195,8 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					flag = removeFromWareHouse(clientOrder);
 					clientOrder.setStatus(Status.RECEIVED);
 					clientOrder.setDispatcher(UserContextHolder.getUser().getUserEntity());
-					clientOrder.setDeliveredOn(new DateTime());
+					clientOrder.setDeliveredOn(new Date());
+					
 					if(!clientOrderService.update(clientOrder)) {
 						flag = false;
 						break;

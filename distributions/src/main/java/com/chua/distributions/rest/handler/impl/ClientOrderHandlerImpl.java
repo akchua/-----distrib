@@ -1,6 +1,7 @@
 package com.chua.distributions.rest.handler.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.NotAuthorizedException;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +37,7 @@ import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.chua.distributions.rest.handler.SalesReportHandler;
+import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.format.CurrencyFormatter;
@@ -106,7 +107,10 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				newClientOrder.setWarehouse(null);
 				newClientOrder.setAdditionalDiscount(sourceOwner.getDiscount());
 				newClientOrder.setLessVat(sourceOwner.getVatType().getLessVat());
-				newClientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
+				
+				newClientOrder.setRequestedOn(sourceOrder.getRequestedOn());
+				newClientOrder.setDeliveredOn(DateUtil.getDefaultDate());
+				newClientOrder.setPaidOn(DateUtil.getDefaultDate());
 				
 				clientOrderService.insert(newClientOrder);
 				transferInstance = newClientOrder;
@@ -126,8 +130,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			objPartialClientOrders.setTotal(objClientOrders.getTotal());
 			final List<PartialClientOrderBean> partialClientOrders = new ArrayList<PartialClientOrderBean>(); 
 			for(ClientOrder clientOrder : objClientOrders.getList()) {
-				final PartialClientOrderBean partialClientOrder = new PartialClientOrderBean();
-				setPartialClientOrder(partialClientOrder, clientOrder);
+				final PartialClientOrderBean partialClientOrder = new PartialClientOrderBean(clientOrder);
 				partialClientOrders.add(partialClientOrder);
 			}
 			objPartialClientOrders.setList(partialClientOrders);
@@ -255,6 +258,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				if(clientOrder.getStatus().equals(Status.CREATING)) {
 					if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
 						clientOrder.setStatus(Status.SUBMITTED);
+						clientOrder.setRequestedOn(new Date());
 						
 						result = new ResultBean();
 						result.setSuccess(clientOrderService.update(clientOrder));
@@ -400,6 +404,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		if(clientOrder != null) {
 			if(clientOrder.getStatus().equals(Status.RECEIVED)) {
 				clientOrder.setStatus(Status.PAID);
+				clientOrder.setPaidOn(new Date());
 				
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.update(clientOrder));
@@ -513,15 +518,6 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		return true;
 	}*/
 	
-	private void setPartialClientOrder(PartialClientOrderBean partialClientOrder, ClientOrder clientOrder) {
-		partialClientOrder.setId(clientOrder.getId());
-		partialClientOrder.setFormattedCreatedOn(clientOrder.getFormattedCreatedOn());
-		partialClientOrder.setFormattedUpdatedOn(clientOrder.getFormattedUpdatedOn());
-		partialClientOrder.setCreatorName(clientOrder.getCreator().getFormattedName());
-		partialClientOrder.setStatus(clientOrder.getStatus());
-		partialClientOrder.setFormattedNetTotal(clientOrder.getFormattedNetTotal());
-	}
-	
 	private void refreshClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
@@ -552,7 +548,10 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		clientOrder.setWarehouse(null);
 		clientOrder.setAdditionalDiscount(client.getDiscount());
 		clientOrder.setLessVat(client.getVatType().getLessVat());
-		clientOrder.setDeliveredOn(new DateTime(2000, 1, 1, 0, 0, 0));
+		
+		clientOrder.setRequestedOn(DateUtil.getDefaultDate());
+		clientOrder.setDeliveredOn(DateUtil.getDefaultDate());
+		clientOrder.setPaidOn(DateUtil.getDefaultDate());
 		
 		return clientOrder;
 	}

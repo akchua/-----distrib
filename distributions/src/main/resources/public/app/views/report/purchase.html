@@ -36,7 +36,6 @@
 			<thead>
 				<tr>
 					<th class = "text-center">ID</th>
-					<th class = "text-center">Last Update</th>
 					<th>Company</th>
 					<th>Warehouse</th>
 					<th class = "text-center">Status</th>
@@ -47,7 +46,6 @@
 			<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
 				<tr>
 					<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
-					<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
 					<td data-bind="text: purchaseOrder.company.name"></td>
 					<td data-bind="text: purchaseOrder.warehouse.displayName + ' - ' + purchaseOrder.warehouse.address"></td>
 					<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
@@ -55,6 +53,7 @@
 					
 					<td>
 						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.timestamp(purchaseOrder.id) } " type="button" class="btn btn-sm" title="Timestamps"><i class="fa fa-clock-o"></i></button>
 							<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
 						</div>
 					</td>

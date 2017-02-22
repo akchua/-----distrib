@@ -1,9 +1,0 @@
-#**
- * Template for Client Order Net Trail
- * Has exactly 115 columns per line
- *#
-                                                                                Gross Total : ${t.FormattedGrossTotal}
-                                                                             Total Discount : ${t.FormattedDiscountTotal}
-                                                                           Client Discpount : ${t.FormattedAdditionalDiscountAmount}
-                                                                                   Less VAT : ${t.FormattedLessVatAmount}
-                                                                                  Net Total : ${t.FormattedNetTotal}

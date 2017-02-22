@@ -1,6 +1,7 @@
 package com.chua.distributions.utility.template;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +28,13 @@ public class ClientOrderTemplate implements Template {
 	
 	private List<String> formattedOrderItems;
 	
-	private String netTrail;
+	private List<String> netTrail;
 	
 	public ClientOrderTemplate(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
 		this.clientOrder = clientOrder;
 		this.orderItems = orderItems;
 		this.formattedOrderItems = new ArrayList<String>();
-		this.netTrail = "";
+		this.netTrail = new ArrayList<String>();
 	}
 	
 	@Override
@@ -43,8 +44,8 @@ public class ClientOrderTemplate implements Template {
 			formattedOrderItems.add(orderItemTemplate.merge(velocityEngine));
 		}
 		
-		final NetTrailTemplate netTrailTemplate = new NetTrailTemplate(clientOrder);
-		netTrail = netTrailTemplate.merge(velocityEngine);
+		final ClientOrderNetTrailTemplate netTrailTemplate = new ClientOrderNetTrailTemplate(clientOrder);
+		netTrail = Arrays.asList(netTrailTemplate.merge(velocityEngine).split("\\R"));
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
@@ -79,7 +80,7 @@ public class ClientOrderTemplate implements Template {
 		return formattedOrderItems;
 	}
 	
-	public String getNetTrail() {
+	public List<String> getNetTrail() {
 		return netTrail;
 	}
 }

@@ -11,7 +11,6 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.utility.StringHelper;
-import com.chua.distributions.utility.format.DateFormatter;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -34,9 +33,9 @@ public class ClientOrderSummaryTemplate implements Template {
 	
 	@Override
 	public String merge(VelocityEngine velocityEngine) {
-		final NetTrailTemplate netTrailTemplate = new NetTrailTemplate(clientOrder);
+		final ClientOrderNetTrailTemplate netTrailTemplate = new ClientOrderNetTrailTemplate(clientOrder);
 		netTrail = Arrays.asList(netTrailTemplate.merge(velocityEngine).split("\\R"));
-
+		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
 		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/clientOrderSummary.vm", "UTF-8", model);
@@ -44,10 +43,6 @@ public class ClientOrderSummaryTemplate implements Template {
 	
 	public String getFormattedStatus() {
 		return StringHelper.center(clientOrder.getStatus().getDisplayName(), 19);
-	}
-	
-	public String getFormattedUpdatedOn() {
-		return StringHelper.center(DateFormatter.longFormat(clientOrder.getUpdatedOn()), 19);
 	}
 	
 	public String getFormattedOrderId() {

@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,6 +28,7 @@ import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
+import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
@@ -91,6 +93,10 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 				newPurchaseOrder.setCompany(sourceOrder.getCompany());
 				newPurchaseOrder.setGrossTotal(0.0f);
 				newPurchaseOrder.setDiscountTotal(0.0f);
+				
+				newPurchaseOrder.setRequestedOn(sourceOrder.getRequestedOn());
+				newPurchaseOrder.setDeliveredOn(DateUtil.getDefaultDate());
+				newPurchaseOrder.setPaidOn(DateUtil.getDefaultDate());
 				
 				purchaseOrderService.insert(newPurchaseOrder);
 				transferInstance = newPurchaseOrder;
@@ -239,6 +245,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 							new String[] { filePath });
 					
 					purchaseOrder.setStatus(Status.ACCEPTED);
+					purchaseOrder.setRequestedOn(new Date());
 					
 					result = new ResultBean();
 					result.setSuccess(flag && purchaseOrderService.update(purchaseOrder));
@@ -271,6 +278,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			if(purchaseOrder.getStatus().equals(Status.ACCEPTED) || purchaseOrder.getStatus().equals(Status.TO_FOLLOW)) {
 				if(addToWarehouse(purchaseOrder)) {
 					purchaseOrder.setStatus(Status.RECEIVED);
+					purchaseOrder.setDeliveredOn(new Date());
 					
 					result = new ResultBean();
 					result.setSuccess(purchaseOrderService.update(purchaseOrder));
@@ -302,6 +310,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.RECEIVED)) {
 				purchaseOrder.setStatus(Status.PAID);
+				purchaseOrder.setPaidOn(new Date());
 				
 				result = new ResultBean();
 				result.setSuccess(purchaseOrderService.update(purchaseOrder));
@@ -392,9 +401,16 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	
 	private void setPurchaseOrder(PurchaseOrder purchaseOrder, PurchaseOrderFormBean purchaseOrderForm) {
 		purchaseOrder.setWarehouse(purchaseOrderForm.getWarehouse());
-		purchaseOrder.setCompany(companyService.find(purchaseOrderForm.getCompanyId()));
-		if(purchaseOrder.getGrossTotal() == null) purchaseOrder.setGrossTotal(0.0f);
-		if(purchaseOrder.getDiscountTotal() == null) purchaseOrder.setDiscountTotal(0.0f);
+		
+		if(purchaseOrder.getId() == null) {
+			purchaseOrder.setCompany(companyService.find(purchaseOrderForm.getCompanyId()));
+			purchaseOrder.setGrossTotal(0.0f);
+			purchaseOrder.setDiscountTotal(0.0f);
+			
+			purchaseOrder.setRequestedOn(DateUtil.getDefaultDate());
+			purchaseOrder.setDeliveredOn(DateUtil.getDefaultDate());
+			purchaseOrder.setPaidOn(DateUtil.getDefaultDate());
+		}
 	}
 	
 	private ResultBean validatePurchaseOrderForm(PurchaseOrderFormBean purchaseOrderForm) {

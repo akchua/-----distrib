@@ -22,7 +22,6 @@
 			<thead>
 				<tr>
 					<th class = "text-center">ID</th>
-					<th class = "text-center">Last Update</th>
 					<th>Company</th>
 					<th>Warehouse</th>
 					<th class = "text-center">Status</th>
@@ -33,7 +32,6 @@
 			<tbody data-bind="foreach: { data: purchaseOrderList, as: 'purchaseOrder' }">
 				<tr>
 					<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
-					<td data-bind="text: purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
 					<td data-bind="text: purchaseOrder.company.name"></td>
 					<td data-bind="text: purchaseOrder.warehouse.displayName"></td>
 					<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
@@ -62,6 +60,7 @@
 							<!-- ko if: (purchaseOrder.status.name == 'RECEIVED' &&  $parent.isManager) -->
 							<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm" title="Pay"><i class="fa fa-money"></i></button>
 							<!-- /ko -->
+							<button data-bind="click: function() { $parent.timestamp(purchaseOrder.id) } " type="button" class="btn btn-sm" title="Timestamps"><i class="fa fa-clock-o"></i></button>
 							<button data-bind="click: function() { $parent.view(purchaseOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
 							<!-- ko ifnot: purchaseOrder.status.name == 'RECEIVED' -->
 							<button data-bind="click: function() { $parent.remove(purchaseOrder.id) }" type="button" class="btn btn-danger btn-sm" title="Remove"><i class="fa fa-times"></i></button>

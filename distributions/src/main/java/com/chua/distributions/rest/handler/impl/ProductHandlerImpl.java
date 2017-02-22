@@ -55,9 +55,10 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Override
 	public PartialProductBean getPartialProduct(Long productId, Warehouse warehouse) {
-		final PartialProductBean partialProduct = new PartialProductBean();
+		final PartialProductBean partialProduct;
 		final Product product = productService.find(productId);
-		if(product != null) setPartialProduct(partialProduct, product);
+		if(product != null) partialProduct = new PartialProductBean(product);
+		else partialProduct = null;
 		return partialProduct;
 	}
 	
@@ -77,8 +78,7 @@ public class ProductHandlerImpl implements ProductHandler {
 			objPartialProducts.setTotal(objProducts.getTotal());
 			final List<PartialProductBean> partialProducts = new ArrayList<PartialProductBean>();
 			for(Product product : objProducts.getList()) {
-				final PartialProductBean partialProduct = new PartialProductBean();
-				setPartialProduct(partialProduct, product);
+				final PartialProductBean partialProduct = new PartialProductBean(product);
 				partialProducts.add(partialProduct);
 			}
 			objPartialProducts.setList(partialProducts);
@@ -201,16 +201,6 @@ public class ProductHandlerImpl implements ProductHandler {
 		}
 		product.setStockCountCurrent(stockCountCurrent);
 		product.setStockCountAll(stockCountAll);
-	}
-	
-	private void setPartialProduct(PartialProductBean partialProduct, Product product) {
-		partialProduct.setId(product.getId());
-		partialProduct.setDisplayName(product.getDisplayName());
-		partialProduct.setProductCode(product.getProductCode());
-		partialProduct.setCompanyName(product.getCompany().getName());
-		partialProduct.setCategoryName(product.getCategory().getName());
-		partialProduct.setDescription(product.getDescription());
-		partialProduct.setFormattedPackageNetSellingPrice(product.getFormattedPackageNetSellingPrice());
 	}
 	
 	private String getDisplayName(ProductFormBean productForm) {

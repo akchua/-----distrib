@@ -3,7 +3,7 @@ package com.chua.distributions.rest.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.beans.PartialUserBean;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -14,5 +14,5 @@ public interface SecurityHandler {
 
 	void logout(HttpServletRequest request, HttpServletResponse response);
 	
-	UserBean getUser();
+	PartialUserBean getUser();
 }

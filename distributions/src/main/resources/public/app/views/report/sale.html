@@ -40,7 +40,6 @@
 				<tr>
 					<th class = "text-center">ID</th>
 					<th>Client</th>
-					<th class = "text-center">Last Status Change</th>
 					<th>Warehouse</th>
 					<th class = "text-center">Status</th>
 					<th class = "text-right">Amount (Php)</th>
@@ -51,7 +50,6 @@
 				<tr>
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
 					<td><a data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></a></td>
-					<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
 					<td>
 					<!-- ko if: clientOrder.warehouse -->
 					<span data-bind="text: clientOrder.warehouse.displayName"></span>
@@ -62,6 +60,7 @@
 					
 					<td>
 						<div class="btn-group pull-right">
+							<button data-bind="click: function() { $parent.timestamp(clientOrder.id) } " type="button" class="btn btn-sm" title="Timestamps"><i class="fa fa-clock-o"></i></button>
 							<button data-bind="click: function() { $parent.view(clientOrder.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
 						</div>
 					</td>

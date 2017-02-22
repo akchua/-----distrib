@@ -1,11 +1,13 @@
 package com.chua.distributions.beans;
 
+import com.chua.distributions.database.entity.Product;
+
 /**
  * @author	Adrian Jasper K. Chua
  * @version	1.0
  * @since	7 Feb 2017
  */
-public class PartialProductBean extends PartialEntityBean {
+public class PartialProductBean extends PartialEntityBean<Product> {
 
 	private String productCode;
 	
@@ -19,6 +21,16 @@ public class PartialProductBean extends PartialEntityBean {
 	
 	private String formattedPackageNetSellingPrice;
 
+	public PartialProductBean(Product product) {
+		super(product);
+		setDisplayName(product.getDisplayName());
+		setProductCode(product.getProductCode());
+		setCompanyName(product.getCompany().getName());
+		setCategoryName(product.getCategory().getName());
+		setDescription(product.getDescription());
+		setFormattedPackageNetSellingPrice(product.getFormattedPackageNetSellingPrice());
+	}
+	
 	public String getProductCode() {
 		return productCode;
 	}

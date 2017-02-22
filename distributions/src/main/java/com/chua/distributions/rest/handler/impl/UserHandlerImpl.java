@@ -11,11 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ClientSettingsFormBean;
-import com.chua.distributions.beans.PartialUserBean;
 import com.chua.distributions.beans.PasswordFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
 import com.chua.distributions.beans.UserFormBean;
+import com.chua.distributions.beans.UserRetrieveBean;
 import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.UserService;
@@ -64,16 +64,12 @@ public class UserHandlerImpl implements UserHandler {
 	}
 	
 	@Override
-	public PartialUserBean retrieveUser(String username, String emailAddress) {
-		final PartialUserBean partialUser;
+	public UserRetrieveBean retrieveUser(String username, String emailAddress) {
+		final UserRetrieveBean partialUser;
 		final User user = userService.findByUsernameOrEmail(username, emailAddress);
 		
 		if(user != null && user.getUserType().equals(UserType.CLIENT)) {
-			partialUser = new PartialUserBean();
-			partialUser.setId(user.getId());
-			partialUser.setFirstName(user.getFirstName());
-			partialUser.setLastName(user.getLastName());
-			partialUser.setEmailAddress(user.getEmailAddress());
+			partialUser = new UserRetrieveBean(user);
 		} else {
 			partialUser = null;
 		}

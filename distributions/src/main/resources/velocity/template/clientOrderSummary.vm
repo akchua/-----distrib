@@ -1,11 +1,9 @@
-#**
- * Template for summarized version of Client Order
- * Has a maximum of 123 columns per line
- *#
-|${t.FormattedStatus}|${t.FormattedUpdatedOn}|${t.FormattedOrderId}|${t.FormattedClient}|${t.FormattedWarehouse}|${t.FormattedNetTotal}|
+## Template for summarized version of Client Order
+## Has a maximum of 103 columns per line
+|${t.FormattedStatus}|${t.FormattedOrderId}|${t.FormattedClient}|${t.FormattedWarehouse}|${t.FormattedNetTotal}|
 #if( $t.ShowNetTrail )
 #foreach( $netTrailToken in $t.NetTrail)
-|$netTrailToken       |
+|$netTrailToken  |
 #end
-+-------------------+-------------------+---------+---------------------------------------+--------------+----------------+
++-------------------+---------+---------------------------------------+--------------+----------------+
 #end

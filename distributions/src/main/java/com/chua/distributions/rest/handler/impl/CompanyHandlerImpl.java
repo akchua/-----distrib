@@ -58,8 +58,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 		final List<PartialCompanyBean> partialCompanies = new ArrayList<PartialCompanyBean>();
 		final List<Company> companies = companyService.findAllOrderByName();
 		for(Company company : companies) {
-			final PartialCompanyBean partialCompany = new PartialCompanyBean();
-			setPartialCompany(partialCompany, company);
+			final PartialCompanyBean partialCompany = new PartialCompanyBean(company);
 			partialCompanies.add(partialCompany);
 		}
 		return partialCompanies;
@@ -154,11 +153,6 @@ public class CompanyHandlerImpl implements CompanyHandler {
 		company.setContactPerson(companyForm.getContactPerson().trim());
 		company.setContactNumber(companyForm.getContactNumber().trim());
 		company.setEmailAddress(companyForm.getEmailAddress().trim());
-	}
-	
-	private void setPartialCompany(PartialCompanyBean partialCompany, Company company) {
-		partialCompany.setId(company.getId());
-		partialCompany.setName(company.getName());
 	}
 	
 	private ResultBean validateCompanyForm(CompanyFormBean companyForm) {

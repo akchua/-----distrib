@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.beans.PartialUserBean;
 import com.chua.distributions.rest.handler.SecurityHandler;
 
 /**
@@ -34,7 +34,7 @@ public class SecurityEndpoint {
 	@GET
 	@Path("/user")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public UserBean getUser() {
+	public PartialUserBean getUser() {
 		return securityHandler.getUser();
 	}
 }

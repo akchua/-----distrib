@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseview'],
-		function (router, app, ko, purchaseOrderService, companyService, PurchaseView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/report/timestampview', 'viewmodels/purchaseorder/purchaseview'],
+		function (router, app, ko, purchaseOrderService, companyService, TimestampView, PurchaseView) {
     var Purchase = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
@@ -57,6 +57,14 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	var self = this;
     	
     	alert('not yet functional');
+    };
+    
+    Purchase.prototype.timestamp = function(purchaseOrderId) {
+    	var self = this;
+    	
+    	purchaseOrderService.getPurchaseOrder(purchaseOrderId).done(function(purchaseOrder) {
+    		TimestampView.show('Purchase Timestamps', purchaseOrder);
+    	});
     };
     
     Purchase.prototype.view = function(purchaseOrderId) {

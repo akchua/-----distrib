@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
-import com.chua.distributions.beans.UserBean;
+import com.chua.distributions.beans.PartialUserBean;
 import com.chua.distributions.rest.handler.SecurityHandler;
 
 /**
@@ -31,7 +31,7 @@ public class SecurityHandlerImpl implements SecurityHandler {
 	}
 
 	@Override
-	public UserBean getUser() {
-		return UserContextHolder.getUser();
+	public PartialUserBean getUser() {
+		return new PartialUserBean(UserContextHolder.getUser().getUserEntity());
 	}
 }

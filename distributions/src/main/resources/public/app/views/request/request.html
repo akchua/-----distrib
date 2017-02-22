@@ -11,12 +11,7 @@
 			<thead>
 				<tr>
 					<th class = "text-center">ID</th>
-					<!-- ko ifnot: showAccepted -->
 					<th class = "text-center">Request Date</th>
-					<!-- /ko -->
-					<!-- ko if: showAccepted -->
-					<th class = "text-center">Req/Accept Date</th>
-					<!-- /ko -->
 					<th>Client</th>
 					<th>Area</th>
 					<!-- ko if: showAccepted -->
@@ -29,7 +24,7 @@
 			<tbody data-bind="foreach: { data: clientOrderList, as: 'clientOrder' }">
 				<tr>
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
-					<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
+					<td data-bind="text: clientOrder.formattedRequestedOn" class = "text-center"></td>
 					<td><a data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></a></td>
 					<td data-bind="text: clientOrder.client.businessArea.displayName"></td>
 					<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>

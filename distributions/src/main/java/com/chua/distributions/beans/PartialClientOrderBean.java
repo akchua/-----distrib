@@ -1,5 +1,6 @@
 package com.chua.distributions.beans;
 
+import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.Status;
 
 /**
@@ -7,7 +8,7 @@ import com.chua.distributions.enums.Status;
  * @version	1.0
  * @since	14 Feb 2017
  */
-public class PartialClientOrderBean extends PartialEntityBean {
+public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	private String formattedCreatedOn;
 	
@@ -19,6 +20,15 @@ public class PartialClientOrderBean extends PartialEntityBean {
 	
 	private String formattedNetTotal;
 
+	public PartialClientOrderBean(ClientOrder clientOrder) {
+		super(clientOrder);
+		setFormattedCreatedOn(clientOrder.getFormattedCreatedOn());
+		setFormattedUpdatedOn(clientOrder.getFormattedUpdatedOn());
+		setCreatorName(clientOrder.getCreator().getFormattedName());
+		setStatus(clientOrder.getStatus());
+		setFormattedNetTotal(clientOrder.getFormattedNetTotal());
+	}
+	
 	public String getFormattedCreatedOn() {
 		return formattedCreatedOn;
 	}

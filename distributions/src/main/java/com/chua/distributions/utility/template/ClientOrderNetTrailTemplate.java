@@ -13,11 +13,11 @@ import com.chua.distributions.database.entity.ClientOrder;
  * @version	1.0
  * @since	7 Feb 2017
  */
-public class NetTrailTemplate implements Template {
+public class ClientOrderNetTrailTemplate implements Template {
 
 	private ClientOrder clientOrder;
 	
-	public NetTrailTemplate(ClientOrder clientOrder) {
+	public ClientOrderNetTrailTemplate(ClientOrder clientOrder) {
 		this.clientOrder = clientOrder;
 	}
 	
@@ -25,7 +25,7 @@ public class NetTrailTemplate implements Template {
 	public String merge(VelocityEngine velocityEngine) {
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/netTrail.vm", "UTF-8", model);
+		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, "template/clientOrderNetTrail.vm", "UTF-8", model);
 	}
 
 	public String getFormattedGrossTotal() {

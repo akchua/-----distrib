@@ -1,6 +1,7 @@
 package com.chua.distributions.utility;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -14,5 +15,13 @@ public class DateUtil {
 	
 	public static String getNameOfMonth(Calendar calendar) {
 		return NAME_OF_MONTH[calendar.get(Calendar.MONTH)];
+	}
+	
+	public static Date getDefaultDate() {
+		return new Date(0);
+	}
+	
+	public static Long getDefaultDateInMillis() {
+		return getDefaultDate().getTime();
 	}
 }
