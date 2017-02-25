@@ -3,6 +3,8 @@ define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules
     var AddOrder = function() {
     	this.clientList = ko.observable();
     	this.clientId = ko.observable();
+    	
+    	this.enableAdd = ko.observable(true);
     };
     
     AddOrder.prototype.activate = function() {
@@ -21,9 +23,11 @@ define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules
     	var self = this;
     	
     	clientOrderService.addClientOrderFor(self.clientId()).done(function(result) {
+    		self.enableAdd(false);
     		if(result.success) {
         		dialog.close(self);	
         	}
+    		self.enableAdd(true);
 			app.showMessage(result.message);
     	});
     };
