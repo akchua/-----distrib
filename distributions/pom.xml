@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.chua</groupId>
   <artifactId>distributions</artifactId>
-  <version>1.6.6.QUICKFIX</version>
+  <version>1.6.7</version>
   <packaging>jar</packaging>
   
   <properties>
