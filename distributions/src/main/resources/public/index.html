@@ -7,6 +7,7 @@
     	<link rel="stylesheet" href="lib/durandal/css/durandal.css" />
     	<link rel="stylesheet" href="app/css/fam-icons.css" />
     	
+    	<link rel="stylesheet" href="app/css/index.css" />
     	<link rel="stylesheet" href="app/css/shell.css" />
     	<link rel="stylesheet" href="app/css/home.css" />
     	
@@ -14,7 +15,12 @@
     	<link rel="stylesheet" href="lib/fullcalendar/css/fullcalendar.min.css" />
     </head>
     <body>
-    	<div id="applicationHost"></div>
+    	<div id="applicationHost">
+    		<div class="splash">
+				<div class="message">Loading...</div>
+				<i class="fa fa-spinner fa-spin"></i>
+			</div>
+    	</div>
     	<script src="lib/require/require.js" data-main="app/main"></script>
     </body>
 </html>
