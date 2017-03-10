@@ -7,8 +7,6 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/userservice'], fu
     	this.clientSettingsFormModel = {
     		id: ko.observable(),
     		
-    		discount: ko.observable(),
-    		markup: ko.observable(),
     		vatType: ko.observable()
 	    };
     };
@@ -17,8 +15,6 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/userservice'], fu
     	var self = this;
     	
     	self.clientSettingsFormModel.id(self.user.id);
-    	self.clientSettingsFormModel.discount(self.user.discount);
-    	self.clientSettingsFormModel.markup(self.user.markup);
     	if(self.user.vatType) self.clientSettingsFormModel.vatType(self.user.vatType.name);
     	
     	userService.getVatTypeList().done(function(vatTypeList) {

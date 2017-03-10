@@ -13,8 +13,6 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import com.chua.distributions.UserContextHolder;
-import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.serializer.json.CategorySerializer;
 import com.chua.distributions.serializer.json.CompanySerializer;
@@ -220,17 +218,10 @@ public class Product extends BaseObject {
 		return Math.round(getSellingPrice() * packaging * 100.0f) / 100.0f;
 	}
 	
+	// LEGACY SUPPORT - NetSellingPrice is used instead of SellingPrice
 	@Transient
 	public String getFormattedPackageNetSellingPrice() {
-		final UserBean currentUser = UserContextHolder.getUser();
-		
-		final Float netSellingPrice;
-		if(currentUser.getMarkup() != null && currentUser.getMarkup() != 0) netSellingPrice = sellingPrice * (100.0f + currentUser.getMarkup()) / 100.0f;
-		else netSellingPrice = sellingPrice;
-		
-		final Float packageNetSellingPrice = Math.round(netSellingPrice * packaging * 100.0f) / 100.0f;
-		
-		return CurrencyFormatter.pesoFormat(packageNetSellingPrice);
+		return CurrencyFormatter.pesoFormat(getPackageSellingPrice());
 	}
 
 	public void setSellingPrice(Float sellingPrice) {

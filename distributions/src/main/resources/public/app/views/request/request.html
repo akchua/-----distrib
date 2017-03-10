@@ -13,6 +13,7 @@
 					<th class = "text-center">ID</th>
 					<th class = "text-center">Request Date</th>
 					<th>Client</th>
+					<th>Company</th>
 					<th>Area</th>
 					<!-- ko if: showAccepted -->
 					<th class = "text-center">Status</th>
@@ -26,6 +27,7 @@
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
 					<td data-bind="text: clientOrder.formattedRequestedOn" class = "text-center"></td>
 					<td><a data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></a></td>
+					<td data-bind="text: clientOrder.company.name"></td>
 					<td data-bind="text: clientOrder.client.businessArea.displayName"></td>
 					<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>
 					<td data-bind="text: clientOrder.formattedNetTotal" class = "text-right"></td>

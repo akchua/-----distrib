@@ -22,6 +22,8 @@
 				</div>
 			</div>
 			
+			<br>
+			
 			<div class="row">
 				<div class="control-group col-xs-6">
 					<label class="control-label" for="inputWarehouse">Warehouse</label>
@@ -32,10 +34,20 @@
 				</div>
 			
 				<div class="control-group col-xs-6">
-					<label class="control-label" for="inputWarehouse">Client</label>
+					<label class="control-label" for="inputClient">Client</label>
 					<div class="controls">
-						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputWarehouse"></select>
+						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputClient"></select>
 						<p class="help-block">Include selected client only</p>
+					</div>
+				</div>
+			</div>	
+			
+			<div class="row">
+				<div class="control-group col-xs-6">
+					<label class="control-label" for="inputCompany">Company</label>
+					<div class="controls">
+						<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Companies --', value: salesReportQuery.companyId" class="form-control" id="inputCompany"></select>
+						<p class="help-block">Include orders from selected company only</p>
 					</div>
 				</div>
 			</div>

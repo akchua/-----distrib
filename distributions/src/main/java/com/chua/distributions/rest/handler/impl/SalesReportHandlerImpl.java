@@ -15,6 +15,7 @@ import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
+import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.rest.handler.SalesReportHandler;
@@ -35,6 +36,9 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CompanyService companyService;
 	
 	@Autowired
 	private ClientOrderService clientOrderService;
@@ -63,7 +67,8 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 						SimplePdfWriter.write(
 								new SalesReportTemplate(
 										salesReportQuery, 
-										(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null, 
+										(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null,
+										(salesReportQuery.getCompanyId() != null) ? companyService.find(salesReportQuery.getCompanyId()) : null,
 										clientOrders
 											).merge(velocityEngine), 
 								filePath,

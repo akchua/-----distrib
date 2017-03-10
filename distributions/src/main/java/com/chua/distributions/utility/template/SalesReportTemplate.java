@@ -11,6 +11,7 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
@@ -26,13 +27,16 @@ public class SalesReportTemplate implements Template {
 	
 	private User client;
 	
+	private Company company;
+	
 	private List<ClientOrder> clientOrders;
 	
 	private List<String> summarizedClientOrders;
 	
-	public SalesReportTemplate(SalesReportQueryBean salesReportQuery, User client, List<ClientOrder> clientOrders) {
+	public SalesReportTemplate(SalesReportQueryBean salesReportQuery, User client, Company company, List<ClientOrder> clientOrders) {
 		this.salesReportQuery = salesReportQuery;
 		this.client = client;
+		this.company = company;
 		this.clientOrders = clientOrders;
 		this.summarizedClientOrders = new ArrayList<String>();
 	}
@@ -75,6 +79,16 @@ public class SalesReportTemplate implements Template {
 			client = "ALL CLIENTS";
 		}
 		return client;
+	}
+	
+	public String getCompany() {
+		final String company;
+		if(this.company != null) {
+			company = this.company.getName();
+		} else {
+			company = "ALL COMPANIES";
+		}
+		return company;
 	}
 	
 	public String getDate() {

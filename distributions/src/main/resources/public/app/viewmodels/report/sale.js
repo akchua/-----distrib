@@ -1,11 +1,16 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/report/salereport', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, userService, SaleReport, TimestampView, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/companyservice', 'viewmodels/report/salereport', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
+		function (router, app, ko, clientOrderService, userService, companyService, SaleReport, TimestampView, SaleView, UserView) {
     var Sale = function() {
     	this.clientOrderList = ko.observable();
-    	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
+    	this.companyList = ko.observable();
+    	this.warehouseList = ko.observable();
     	
     	this.salesReportQuery = {
+    		clientId: ko.observable(),
+    		companyId: ko.observable(),
+    		warehouse: ko.observable(),
+    			
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
     		includeDispatched: ko.observable(false),
@@ -29,12 +34,16 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 			self.refreshClientOrderList();
 		});
 		
-		clientOrderService.getWarehouseList().done(function(warehouseList) {
-			self.warehouseList(warehouseList);
-		});
-		
 		userService.getFullClientList().done(function(clientList) {
 			self.clientList(clientList);
+		});
+		
+		companyService.getCompanyListByName().done(function(companyList) {
+			self.companyList(companyList);
+		});
+		
+		clientOrderService.getWarehouseList().done(function(warehouseList) {
+			self.warehouseList(warehouseList);
 		});
 		
 		self.refreshClientOrderList();

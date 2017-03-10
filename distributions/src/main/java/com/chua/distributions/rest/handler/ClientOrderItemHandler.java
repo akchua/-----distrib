@@ -1,5 +1,6 @@
 package com.chua.distributions.rest.handler;
 
+import com.chua.distributions.beans.PartialClientOrderItemBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.objects.ObjectList;
@@ -12,6 +13,8 @@ import com.chua.distributions.objects.ObjectList;
 public interface ClientOrderItemHandler {
 
 	ObjectList<ClientOrderItem> getClientOrderItemObjectList(Integer pageNumber, Long clientOrderId);
+
+	ObjectList<PartialClientOrderItemBean> getPartialClientOrderItemObjectList(Integer pageNumber, Long clientOrderId);
 	
 	ObjectList<ClientOrderItem> getClientOrderItemByProductObjectList(Integer pageNumber, Long productId);
 	

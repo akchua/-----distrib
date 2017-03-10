@@ -1,7 +1,8 @@
 define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservice', 'modules/clientorderitemservice', 'viewmodels/clientorder/additem'],
 		function (app, system, ko, clientOrderService, clientOrderItemService, AddItem) {
     var ClientOrderPage = function() {
-    	this.clientOrderItemList = ko.observable();
+    	this.partialClientOrderItemList = ko.observable();
+    	this.companyId = null;
     	
     	this.showCheckButton = ko.observable(false);
     	this.showClientDiscount = ko.observable(true);
@@ -9,15 +10,17 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     	this.clientOrder = {
 			id: ko.observable(),
 			
-			discount: ko.observable(),
+			creatorName: ko.observable(),
 			clientName: ko.observable(),
+			companyName: ko.observable(),
 			formattedGrossTotal: ko.observable(),
 			formattedDiscountTotal: ko.observable(),
 			lessVat: ko.observable(),
 			formattedLessVatAmount: ko.observable(),
+			additionalDiscount: ko.observable(),
 			formattedAdditionalDiscount: ko.observable(),
-			formattedNetTotal: ko.observable(),
-			status: ko.observable()
+			status: ko.observable(),
+			formattedNetTotal: ko.observable()
     	};
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
@@ -28,8 +31,8 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     
     ClientOrderPage.prototype.canActivate = function(clientOrderId) {
     	return system.defer(function (dfd) {
-    		clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    			dfd.resolve(clientOrder.client.id == app.user.id || clientOrder.creator.id == app.user.id);
+    		clientOrderService.getPartialClientOrder(clientOrderId).done(function(partialClientOrder) {
+    			dfd.resolve(partialClientOrder.clientId == app.user.id || partialClientOrder.creatorId == app.user.id);
         	});
         })
         .promise();
@@ -51,23 +54,27 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     ClientOrderPage.prototype.refreshClientOrderItemList = function() {
     	var self = this;
     	
-    	clientOrderService.getClientOrder(self.clientOrder.id()).done(function(clientOrder) {
-    		self.clientOrder.discount(clientOrder.additionalDiscount);
-    		self.clientOrder.clientName(clientOrder.client.formattedName);
-    		self.clientOrder.formattedGrossTotal(clientOrder.formattedGrossTotal);
-    		self.clientOrder.formattedDiscountTotal(clientOrder.formattedDiscountTotal);
-    		self.clientOrder.lessVat(clientOrder.lessVat);
-    		self.clientOrder.formattedLessVatAmount(clientOrder.formattedLessVatAmount);
-    		self.clientOrder.formattedAdditionalDiscount(clientOrder.formattedAdditionalDiscountAmount);
-    		self.clientOrder.formattedNetTotal(clientOrder.formattedNetTotal);
-    		self.clientOrder.status(clientOrder.status.displayName);
+    	clientOrderService.getPartialClientOrder(self.clientOrder.id()).done(function(partialClientOrder) {
+    		self.companyId = partialClientOrder.companyId;
     		
-    		self.showCheckButton(clientOrder.status.name == 'CREATING');
-    		self.showClientDiscount(clientOrder.additionalDiscount != 0);
+    		self.clientOrder.creatorName(partialClientOrder.creatorName);
+    		self.clientOrder.clientName(partialClientOrder.clientName);
+    		self.clientOrder.companyName(partialClientOrder.companyName);
+    		self.clientOrder.formattedGrossTotal(partialClientOrder.formattedGrossTotal);
+    		self.clientOrder.formattedDiscountTotal(partialClientOrder.formattedDiscountTotal);
+    		self.clientOrder.lessVat(partialClientOrder.lessVat);
+    		self.clientOrder.formattedLessVatAmount(partialClientOrder.formattedLessVatAmount);
+    		self.clientOrder.additionalDiscount(partialClientOrder.additionalDiscount);
+    		self.clientOrder.formattedAdditionalDiscount(partialClientOrder.formattedAdditionalDiscountAmount);
+    		self.clientOrder.status(partialClientOrder.status.displayName);
+    		self.clientOrder.formattedNetTotal(partialClientOrder.formattedNetTotal);
+    		
+    		self.showCheckButton(partialClientOrder.status.name == 'CREATING');
+    		self.showClientDiscount(partialClientOrder.additionalDiscount != 0);
     	});
     	
-    	clientOrderItemService.getClientOrderItemList(self.currentPage(), self.clientOrder.id(), true).done(function(data) {
-    		self.clientOrderItemList(data.list);
+    	clientOrderItemService.getPartialClientOrderItemList(self.currentPage(), self.clientOrder.id(), true).done(function(data) {
+    		self.partialClientOrderItemList(data.list);
     		self.totalItems(data.total);
     	});
     };
@@ -75,7 +82,7 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     ClientOrderPage.prototype.add = function() {
     	var self = this;
     	
-    	AddItem.show(self.clientOrder.id()).done(function() {
+    	AddItem.show(self.clientOrder.id(), self.companyId).done(function() {
     		self.refreshClientOrderItemList();
     	});
     };

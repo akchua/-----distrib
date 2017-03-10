@@ -12,9 +12,12 @@ import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CategoryService;
+import com.chua.distributions.database.service.ClientCompanyPriceService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.WarehouseItemService;
@@ -23,6 +26,7 @@ import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.format.CurrencyFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -45,6 +49,9 @@ public class ProductHandlerImpl implements ProductHandler {
 	@Autowired
 	private WarehouseItemService warehouseItemService;
 	
+	@Autowired
+	private ClientCompanyPriceService clientCompanyPriceService;
+	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public Product getProduct(Long productId, Warehouse warehouse) {
@@ -57,7 +64,12 @@ public class ProductHandlerImpl implements ProductHandler {
 	public PartialProductBean getPartialProduct(Long productId, Warehouse warehouse) {
 		final PartialProductBean partialProduct;
 		final Product product = productService.find(productId);
-		if(product != null) partialProduct = new PartialProductBean(product);
+		if(product != null) {
+			partialProduct = new PartialProductBean(product);
+			// For PROMOS update
+			partialProduct.setFormattedPackageSellingDiscount(CurrencyFormatter.pesoFormat(0.0f));
+			partialProduct.setFormattedPackageNetSellingPrice(CurrencyFormatter.pesoFormat(getFinalBasePackagePrice(product, UserContextHolder.getUser().getUserEntity())));
+		}
 		else partialProduct = null;
 		return partialProduct;
 	}
@@ -79,6 +91,9 @@ public class ProductHandlerImpl implements ProductHandler {
 			final List<PartialProductBean> partialProducts = new ArrayList<PartialProductBean>();
 			for(Product product : objProducts.getList()) {
 				final PartialProductBean partialProduct = new PartialProductBean(product);
+				//For PROMOS update
+				partialProduct.setFormattedPackageSellingDiscount(CurrencyFormatter.pesoFormat(0.0f));
+				partialProduct.setFormattedPackageNetSellingPrice(CurrencyFormatter.pesoFormat(getFinalBasePackagePrice(product, UserContextHolder.getUser().getUserEntity())));
 				partialProducts.add(partialProduct);
 			}
 			objPartialProducts.setList(partialProducts);
@@ -173,6 +188,25 @@ public class ProductHandlerImpl implements ProductHandler {
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public Float getFinalBaseUnitPrice(Product product, User user) {
+		final Float finalBaseUnitPrice;
+		final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(user.getId(), product.getCompany().getId());
+		
+		if(clientCompanyPrice != null) {
+			finalBaseUnitPrice = product.getSellingPrice() * (100.0f + clientCompanyPrice.getMarkup()) / 100.0f;
+		} else {
+			finalBaseUnitPrice = product.getSellingPrice();
+		}
+		
+		return finalBaseUnitPrice;
+	}
+	
+	@Override
+	public Float getFinalBasePackagePrice(Product product, User user) {
+		return Math.round(getFinalBaseUnitPrice(product, user) * product.getPackaging() * 100.0f) / 100.0f;
 	}
 	
 	private void setProduct(Product product, ProductFormBean productForm) {

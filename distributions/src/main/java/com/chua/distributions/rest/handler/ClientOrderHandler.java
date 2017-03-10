@@ -18,6 +18,8 @@ import com.chua.distributions.objects.ObjectList;
 public interface ClientOrderHandler {
 
 	ClientOrder getClientOrder(Long clientOrderId);
+	
+	PartialClientOrderBean getPartialClientOrder(Long clientOrderId);
 
 	/**
 	 * This method is used for auto generating destination instances for ClientOrderItem transfer.
@@ -43,9 +45,9 @@ public interface ClientOrderHandler {
 	
 	StringWrapper getFormattedTotalPayable();
 	
-	ResultBean addClientOrder();
+	ResultBean addClientOrder(Long companyId);
 	
-	ResultBean addClientOrder(Long clientId);
+	ResultBean addClientOrder(Long companyId, Long clientId);
 	
 	ResultBean submitClientOrder(Long clientOrderId);
 	

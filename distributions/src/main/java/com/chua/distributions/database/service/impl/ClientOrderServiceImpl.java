@@ -82,7 +82,7 @@ public class ClientOrderServiceImpl
 	@Override
 	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,
 			SalesReportQueryBean salesReportQuery) {
-		return dao.findBySalesReportQueryWithPaging(pageNumber, resultsPerPage, salesReportQuery);
+		return dao.findBySalesReportQueryWithPagingAndOrder(pageNumber, resultsPerPage, salesReportQuery, new Order[] { Order.asc("status") });
 	}
 	
 	@Override

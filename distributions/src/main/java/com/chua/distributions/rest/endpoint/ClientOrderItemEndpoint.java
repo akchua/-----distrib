@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.chua.distributions.beans.PartialClientOrderItemBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.objects.ObjectList;
@@ -31,6 +32,13 @@ public class ClientOrderItemEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrderItem> getClientOrderItemObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("clientOrderId") Long clientOrderId) {
 		return clientOrderItemHandler.getClientOrderItemObjectList(pageNumber, clientOrderId);
+	}
+	
+	@GET
+	@Path("/listpartial")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ObjectList<PartialClientOrderItemBean> getPartialClientOrderItemObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("clientOrderId") Long clientOrderId) {
+		return clientOrderItemHandler.getPartialClientOrderItemObjectList(pageNumber, clientOrderId);
 	}
 	
 	@GET

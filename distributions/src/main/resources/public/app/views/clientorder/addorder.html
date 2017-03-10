@@ -2,19 +2,11 @@
   	<form>
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
-			<h3 align="center">Add Client Order</h3>
+			<h3 align="center">Add Order</h3>
 		</div>
 	  
 		<div class="modal-body">
 			<div class="container-fluid">
-				<div class="control-group">
-					<label class="control-label" for="inputClient">Client</label>
-					<div class="controls">
-						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- Select Client --', value: clientId" class="form-control" id="inputClient"></select>
-						<p class="help-block">Client to create order for</p>
-					</div>
-				</div>
-				
 				<div class="control-group">
 					<label class="control-label" for="inputCompany">Company</label>
 					<div class="controls">

@@ -24,11 +24,15 @@ import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
+import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
+import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.database.service.ClientCompanyPriceService;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
+import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
@@ -59,6 +63,12 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
+	private ClientCompanyPriceService clientCompanyPriceService;
 
 	@Autowired
 	private SalesReportHandler salesReportHandler;
@@ -67,6 +77,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	private EmailUtil emailUtil;
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ClientOrder getClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		final UserBean currentUser = UserContextHolder.getUser();
@@ -77,6 +88,23 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			refreshClientOrder(clientOrderId);
 			return clientOrder;
 		}
+	}
+	
+	@Override
+	public PartialClientOrderBean getPartialClientOrder(Long clientOrderId) {
+		final PartialClientOrderBean partialClientOrder;
+		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
+		final UserBean currentUser = UserContextHolder.getUser();
+		
+		if(currentUser.getUserType().equals(UserType.CLIENT) && !currentUser.getId().equals(clientOrder.getCreator().getId())) {
+			throw new NotAuthorizedException("User is not authenticated.");
+		} else {
+			refreshClientOrder(clientOrderId);
+			if(clientOrder != null) partialClientOrder = new PartialClientOrderBean(clientOrder);
+			else partialClientOrder = null;
+		}
+		
+		return partialClientOrder;
 	}
 	
 	@Override
@@ -105,8 +133,8 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				newClientOrder.setDiscountTotal(0.0f);
 				newClientOrder.setStatus(Status.TO_FOLLOW);
 				newClientOrder.setWarehouse(null);
-				newClientOrder.setAdditionalDiscount(sourceOwner.getDiscount());
-				newClientOrder.setLessVat(sourceOwner.getVatType().getLessVat());
+				newClientOrder.setAdditionalDiscount(sourceOrder.getAdditionalDiscount());
+				newClientOrder.setLessVat(sourceOrder.getLessVat());
 				
 				newClientOrder.setRequestedOn(sourceOrder.getRequestedOn());
 				newClientOrder.setDeliveredOn(DateUtil.getDefaultDate());
@@ -130,8 +158,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			objPartialClientOrders.setTotal(objClientOrders.getTotal());
 			final List<PartialClientOrderBean> partialClientOrders = new ArrayList<PartialClientOrderBean>(); 
 			for(ClientOrder clientOrder : objClientOrders.getList()) {
-				final PartialClientOrderBean partialClientOrder = new PartialClientOrderBean(clientOrder);
-				partialClientOrders.add(partialClientOrder);
+				partialClientOrders.add(new PartialClientOrderBean(clientOrder));
 			}
 			objPartialClientOrders.setList(partialClientOrders);
 		}
@@ -192,42 +219,56 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Override
 	@CheckAuthority(authority = "10")
-	public ResultBean addClientOrder() {
-		return addClientOrder(UserContextHolder.getUser().getUserEntity());
-	}
-	
-	@Override
-	@CheckAuthority(minimumAuthority = 3)
-	public ResultBean addClientOrder(Long clientId) {
+	public ResultBean addClientOrder(Long companyId) {
 		final ResultBean result;
-		final User client = userService.find(clientId);
+		final Company company = companyService.find(companyId);
 		
-		if(client != null) {
-			result = addClientOrder(client);
-			if(result.getSuccess()) {
-				emailUtil.send(client.getEmailAddress(),
-						null,
-						MailConstants.DEFAULT_EMAIL,
-						"Order Created",
-						UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
-							+ "The ID of the created order is " + result.getExtras().get("clientOrderId") + ". You can verify the contents of the order by logging in at distributions.primepad.net . "
-								+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
-						null);
-			}
+		if(company != null) {
+			result = addClientOrder(company, UserContextHolder.getUser().getUserEntity());
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
 		}
 		
 		return result;
 	}
 	
-	private ResultBean addClientOrder(User client) {
+	@Override
+	@CheckAuthority(minimumAuthority = 3)
+	public ResultBean addClientOrder(Long companyId, Long clientId) {
+		final ResultBean result;
+		final Company company = companyService.find(companyId);
+		
+		if(company != null) {
+			final User client = userService.find(clientId);
+			if(client != null) {
+				result = addClientOrder(company, client);
+				if(result.getSuccess()) {
+					emailUtil.send(client.getEmailAddress(),
+							null,
+							MailConstants.DEFAULT_EMAIL,
+							"Order Created",
+							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
+								+ "The ID of the created order is " + result.getExtras().get("clientOrderId") + ". You can verify the contents of the order by logging in at distributions.primepad.net . "
+									+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
+							null);
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	private ResultBean addClientOrder(Company company, User client) {
 		final ResultBean result;
 		
 		final List<ClientOrder> clientOrders = clientOrderService.findAllCreatingOrSubmittedByClient(client.getId());
 		
 		if(clientOrders != null && clientOrders.size() < 5) {
-			final ClientOrder clientOrder = generateNewClientOrder(client);
+			final ClientOrder clientOrder = generateNewClientOrder(company, client);
 			
 			result = new ResultBean();
 			result.setSuccess(clientOrderService.insert(clientOrder) != null);
@@ -537,16 +578,18 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		}
 	}
 	
-	private ClientOrder generateNewClientOrder(User client) {
+	private ClientOrder generateNewClientOrder(Company company, User client) {
 		final ClientOrder clientOrder = new ClientOrder();
+		final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(client.getId(), company.getId());
 		
 		clientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
 		clientOrder.setClient(client);
+		clientOrder.setCompany(company);
 		clientOrder.setGrossTotal(0.0f);
 		clientOrder.setDiscountTotal(0.0f);
 		clientOrder.setStatus(Status.CREATING);
 		clientOrder.setWarehouse(null);
-		clientOrder.setAdditionalDiscount(client.getDiscount());
+		clientOrder.setAdditionalDiscount((clientCompanyPrice != null) ? clientCompanyPrice.getDiscount() : 0.0f);
 		clientOrder.setLessVat(client.getVatType().getLessVat());
 		
 		clientOrder.setRequestedOn(DateUtil.getDefaultDate());

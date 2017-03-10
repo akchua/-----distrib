@@ -9,28 +9,8 @@ import com.chua.distributions.enums.VatType;
  */
 public class ClientSettingsFormBean extends FormBean {
 
-	private Float discount;
-	
-	private Float markup;
-	
 	private VatType vatType;
 	
-	public Float getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(Float discount) {
-		this.discount = discount;
-	}
-	
-	public Float getMarkup() {
-		return markup;
-	}
-
-	public void setMarkup(Float markup) {
-		this.markup = markup;
-	}
-
 	public VatType getVatType() {
 		return vatType;
 	}

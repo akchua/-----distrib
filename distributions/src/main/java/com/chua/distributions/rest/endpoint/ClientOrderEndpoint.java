@@ -42,6 +42,13 @@ public class ClientOrderEndpoint {
 	}
 	
 	@GET
+	@Path("/getpartial")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public PartialClientOrderBean getPartialClientOrder(@QueryParam("clientOrderId") Long clientOrderId) {
+		return clientOrderHandler.getPartialClientOrder(clientOrderId);
+	}
+	
+	@GET
 	@Path("/gettransfer")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ClientOrder getTransferInstance(@QueryParam("sourceId") Long sourceId) {
@@ -113,15 +120,16 @@ public class ClientOrderEndpoint {
 	@POST
 	@Path("/add")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ResultBean addClientOrder() {
-		return clientOrderHandler.addClientOrder();
-	}
-	
-	@POST
-	@Path("/addfor")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public ResultBean addClientOrderFor(@FormParam("clientId") Long clientId) {
-		return clientOrderHandler.addClientOrder(clientId);
+	public ResultBean addClientOrderFor(@FormParam("companyId") Long companyId, @FormParam("clientId") Long clientId) {
+		final ResultBean result;
+		
+		if(clientId != null) {
+			result = clientOrderHandler.addClientOrder(companyId, clientId);
+		} else {
+			result = clientOrderHandler.addClientOrder(companyId);
+		}
+		
+		return result;
 	}
 	
 	@POST

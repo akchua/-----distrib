@@ -9,6 +9,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPartialClientOrder: function(clientOrderId) {
+			return $.ajax({
+				url: '/services/clientorder/getpartial',
+				data: {
+					clientOrderId: clientOrderId
+				}
+			});
+		},
+		
 		getTransferInstance: function(sourceId) {
 			return $.ajax({
 				url: '/services/clientorder/gettransfer',
@@ -94,18 +103,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		addClientOrder: function() {
+    	addClientOrder: function(companyId, clientId) {
     		return $.ajax({
     			url: '/services/clientorder/add',
-    			method: 'POST'
-    		});
-    	},
-    	
-    	addClientOrderFor: function(clientId) {
-    		return $.ajax({
-    			url: '/services/clientorder/addfor',
     			method: 'POST',
     			data: {
+    				companyId: companyId,
     				clientId: clientId
     			}
     		});

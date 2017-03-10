@@ -53,6 +53,10 @@ public class ClientOrderSummaryTemplate implements Template {
 		return StringHelper.center(clientOrder.getClient().getBusinessName(), 39);
 	}
 	
+	public String getFormattedCompany() {
+		return StringHelper.center(clientOrder.getCompany().getName(), 29);
+	}
+	
 	public String getFormattedWarehouse() {
 		return StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14);
 	}

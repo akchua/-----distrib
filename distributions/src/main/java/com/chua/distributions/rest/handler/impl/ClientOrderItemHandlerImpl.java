@@ -1,5 +1,8 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.NotAuthorizedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
+import com.chua.distributions.beans.PartialClientOrderItemBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -18,6 +23,7 @@ import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderItemHandler;
+import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.format.QuantityFormatter;
 
@@ -38,13 +44,36 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductHandler productHandler;
 
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrderItem> getClientOrderItemObjectList(Integer pageNumber, Long clientOrderId) {
 		return clientOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), clientOrderId);
 	}
 	
 	@Override
+	public ObjectList<PartialClientOrderItemBean> getPartialClientOrderItemObjectList(Integer pageNumber,
+			Long clientOrderId) {
+		final ObjectList<PartialClientOrderItemBean> objPartialClientOrderItems = new ObjectList<PartialClientOrderItemBean>();
+		final ObjectList<ClientOrderItem> objClientOrderItems = clientOrderItemService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), clientOrderId);
+		
+		if(objClientOrderItems != null) {
+			objPartialClientOrderItems.setTotal(objClientOrderItems.getTotal());
+			final List<PartialClientOrderItemBean> partialClientOrderItems = new ArrayList<PartialClientOrderItemBean>();
+			for(ClientOrderItem clientOrderItem : objClientOrderItems.getList()) {
+				partialClientOrderItems.add(new PartialClientOrderItemBean(clientOrderItem));
+			}
+			objPartialClientOrderItems.setList(partialClientOrderItems);
+		}
+		
+		return objPartialClientOrderItems;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrderItem> getClientOrderItemByProductObjectList(Integer pageNumber, Long productId) {
 		return clientOrderItemService.findByProductWithPagingOrderByLastUpdate(pageNumber, UserContextHolder.getItemsPerPage(), productId);
 	}
@@ -336,7 +365,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		clientOrderItem.setProductCode(product.getProductCode());
 		clientOrderItem.setDisplayName(product.getDisplayName());
 		clientOrderItem.setPackaging(product.getPackaging());
-		clientOrderItem.setUnitPrice(product.getSellingPrice() * (100.0f + clientOrderItem.getClientOrder().getClient().getMarkup()) / 100.0f);
+		clientOrderItem.setUnitPrice(productHandler.getFinalBaseUnitPrice(product, clientOrderItem.getClientOrder().getClient()));
 		clientOrderItem.setDiscount(0.0f);		//PROMOTIONS UPDATE
 	}
 }

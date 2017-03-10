@@ -50,6 +50,8 @@ public class SalesReportQueryDeserializer extends StdDeserializer<SalesReportQue
 		srq.setWarehouse(warehouseNode != null ? Warehouse.valueOf(warehouseNode.asText()) : null);
 		JsonNode clientIdNode = node.get("clientId");
 		srq.setClientId(clientIdNode != null ? clientIdNode.asLong() : null);
+		JsonNode companyIdNode = node.get("companyId");
+		srq.setCompanyId(companyIdNode != null ? companyIdNode.asLong() : null);
 		
 		JsonNode includePaidNode = node.get("includePaid");
 		srq.setIncludePaid(includePaidNode != null ? includePaidNode.asBoolean() : null);

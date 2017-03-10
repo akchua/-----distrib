@@ -1,20 +1,21 @@
 ## Template for Sales Report
-## Has a maximum of 103 columns per line
+## Has a maximum of 123 columns per line
                                             SALES REPORT                                                       
 
            Date From : ${t.DateFrom}
              Date To : ${t.DateTo}
            Warehouse : ${t.Warehouse}
               Client : ${t.Client}
+             Company : ${t.Company}
          Report Date : ${t.Date}
          
-+-------------------+---------+---------------------------------------+--------------+----------------+
-|      Status       |Order Id |                Client                 |  Warehouse   |     Amount     |
-+-------------------+---------+---------------------------------------+--------------+----------------+
++-------------------+---------+---------------------------------------+-----------------------------+--------------+----------------+
+|      Status       |Order Id |                Client                 |           Company           |  Warehouse   |     Amount     |
++-------------------+---------+---------------------------------------+-----------------------------+--------------+----------------+
 #foreach( $summarizedClientOrder in $t.SummarizedClientOrders )
 $summarizedClientOrder#end
 #if( !$t.ShowNetTrail )
-+-------------------+---------+---------------------------------------+--------------+----------------+
++-------------------+---------+---------------------------------------+-----------------------------+--------------+----------------+
 #end
 
-                    (${t.DateFrom} - ${t.DateTo}) Total Sales : ${t.TotalSales}
+                              (${t.DateFrom} - ${t.DateTo}) Total Sales : ${t.TotalSales}

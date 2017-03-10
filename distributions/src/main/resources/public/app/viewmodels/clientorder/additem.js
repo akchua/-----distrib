@@ -1,7 +1,8 @@
 define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/clientorderitemservice', 'viewmodels/manage/partialproductview'],
 		function (dialog, app, ko, productService, clientOrderItemService, PartialProductView) {
-    var AddItem = function(clientOrderId) {
+    var AddItem = function(clientOrderId, companyId) {
     	this.clientOrderId = clientOrderId;
+    	this.companyId = companyId;
     	this.partialProductList = ko.observable();
     	
     	this.searchKey = ko.observable();
@@ -25,14 +26,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 		self.refreshProductList();
     };
     
-    AddItem.show = function(clientOrderId) {
-    	return dialog.show(new AddItem(clientOrderId));
+    AddItem.show = function(clientOrderId, companyId) {
+    	return dialog.show(new AddItem(clientOrderId, companyId));
     };
     
     AddItem.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getPartialProductList(self.currentPage(), self.searchKey(), null, null, null, false).done(function(data) {
+    	productService.getPartialProductList(self.currentPage(), self.searchKey(), self.companyId, null, null, false).done(function(data) {
     		self.partialProductList(data.list);
     		self.totalItems(data.total);
     	});

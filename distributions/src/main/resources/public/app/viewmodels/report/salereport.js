@@ -1,8 +1,9 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/fileservice'],
-			function (dialog, app, ko, clientOrderService, userService, fileService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/companyservice', 'modules/fileservice'],
+			function (dialog, app, ko, clientOrderService, userService, companyService, fileService) {
     var SalesReport = function() {
     	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
+    	this.companyList = ko.observable();
     	
     	this.enableGenerateButton = ko.observable(true);
     	
@@ -12,6 +13,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		
     		warehouse: ko.observable(),
     		clientId: ko.observable(),
+    		companyId: ko.observable(),
     		
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
@@ -37,6 +39,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	userService.getFullClientList().done(function(clientList) {
     		self.clientList(clientList);
+    	});
+    	
+    	companyService.getCompanyListByName().done(function(companyList) {
+    		self.companyList(companyList);
     	});
     };
     

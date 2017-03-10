@@ -11,6 +11,17 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPartialClientOrderItemList: function(currentPage, clientOrderId, async) {
+			return $.ajax({
+				url: '/services/clientorderitem/listpartial',
+				async: async,
+				data: {
+					pageNumber: currentPage - 1,
+					clientOrderId: clientOrderId
+				}
+			});
+		},
+		
 		getClientOrderItemByProductList: function(currentPage, productId, async) {
 			return $.ajax({
 				url: '/services/clientorderitem/listbyproduct',

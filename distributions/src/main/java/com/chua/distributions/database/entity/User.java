@@ -51,12 +51,7 @@ public class User extends BaseObject {
 	
 	private Area businessArea;
 	
-	private Float discount;
-	
-	private Float markup;
-	
 	private VatType vatType;
-	//
 	
 	@Basic
 	@Column(name = "first_name")
@@ -181,36 +176,6 @@ public class User extends BaseObject {
 
 	public void setBusinessArea(Area businessArea) {
 		this.businessArea = businessArea;
-	}
-
-	@Basic
-	@Column(name = "discount")
-	public Float getDiscount() {
-		return discount;
-	}
-	
-	@Transient
-	public String getFormattedDiscount() {
-		return discount + "%";
-	}
-
-	public void setDiscount(Float discount) {
-		this.discount = discount;
-	}
-
-	@Basic
-	@Column(name = "markup")
-	public Float getMarkup() {
-		return markup;
-	}
-	
-	@Transient
-	public String getFormattedMarkup() {
-		return markup + "%";
-	}
-
-	public void setMarkup(Float markup) {
-		this.markup = markup;
 	}
 
 	@Enumerated(EnumType.STRING)

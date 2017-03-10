@@ -16,8 +16,8 @@
 				<tr>
 					<th class = "text-center">ID</th>
 					<th class = "text-center">Created On</th>
-					<th class = "text-center">Last Status Update</th>
 					<th>Creator</th>
+					<th>Company</th>
 					<th class = "text-center">Status</th>
 					<th class = "text-right">Amount (Php)</th>
 				</tr>
@@ -27,8 +27,8 @@
 				<tr>
 					<td data-bind="text: partialClientOrder.id" class = "text-center"></td>
 					<td data-bind="text: partialClientOrder.formattedCreatedOn" class = "text-center"></td>
-					<td data-bind="text: partialClientOrder.formattedUpdatedOn" class = "text-center"></td>
 					<td data-bind="text: partialClientOrder.creatorName"></td>
+					<td data-bind="text: partialClientOrder.companyName"></td>
 					<td data-bind="text: partialClientOrder.status.displayName" class = "text-center"></td>
 					<td data-bind="text: partialClientOrder.formattedNetTotal" class = "text-right"></td>
 					

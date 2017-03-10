@@ -19,6 +19,7 @@
 					<th class = "text-center">ID</th>
 					<th class = "text-center">Deliver Date</th>
 					<th>Client</th>
+					<th>Company</th>
 					<th>Dispatcher</th>
 					<th>Warehouse</th>
 					<th class = "text-center">Status</th>
@@ -30,7 +31,8 @@
 				<tr>
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
 					<td data-bind="text: clientOrder.formattedUpdatedOn" class = "text-center"></td>
-					<td data-bind="text: clientOrder.client.businessName"></td>
+					<td data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></td>
+					<td data-bind="text: clientOrder.company.name"></td>
 					<td data-bind="text: clientOrder.dispatcher.formattedName"></td>
 					<td data-bind="text: clientOrder.warehouse.displayName"></td>
 					<td data-bind="text: clientOrder.status.displayName" class = "text-center"></td>

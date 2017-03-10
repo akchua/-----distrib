@@ -19,6 +19,8 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 	
 	private String description;
 	
+	private String formattedPackageSellingDiscount;
+	
 	private String formattedPackageNetSellingPrice;
 
 	public PartialProductBean(Product product) {
@@ -28,7 +30,8 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		setCompanyName(product.getCompany().getName());
 		setCategoryName(product.getCategory().getName());
 		setDescription(product.getDescription());
-		setFormattedPackageNetSellingPrice(product.getFormattedPackageNetSellingPrice());
+		setFormattedPackageSellingDiscount("");
+		setFormattedPackageNetSellingPrice("");
 	}
 	
 	public String getProductCode() {
@@ -69,6 +72,14 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFormattedPackageSellingDiscount() {
+		return formattedPackageSellingDiscount;
+	}
+
+	public void setFormattedPackageSellingDiscount(String formattedPackageSellingDiscount) {
+		this.formattedPackageSellingDiscount = formattedPackageSellingDiscount;
 	}
 
 	public String getFormattedPackageNetSellingPrice() {

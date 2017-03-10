@@ -130,10 +130,9 @@ public class ClientOrderDAOImpl
 	}
 
 	@Override
-	public ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage,
-			SalesReportQueryBean salesReportQuery) {
-		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, 
-				new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
+	public ObjectList<ClientOrder> findBySalesReportQueryWithPagingAndOrder(int pageNumber, int resultsPerPage,
+			SalesReportQueryBean salesReportQuery, Order[] orders) {
+		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, generateConjunction(salesReportQuery));
 	}
 	
 	@Override
@@ -155,6 +154,10 @@ public class ClientOrderDAOImpl
 		
 		if(salesReportQuery.getClientId() != null) {
 			conjunction.add(Restrictions.eq("client.id", salesReportQuery.getClientId()));
+		}
+		
+		if(salesReportQuery.getCompanyId() != null) {
+			conjunction.add(Restrictions.eq("company.id", salesReportQuery.getCompanyId()));
 		}
 		
 		final Junction disjunction = Restrictions.disjunction();

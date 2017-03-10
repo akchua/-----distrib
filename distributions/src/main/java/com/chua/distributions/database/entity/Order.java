@@ -22,6 +22,7 @@ import org.hibernate.annotations.Where;
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.serializer.json.CompanySerializer;
 import com.chua.distributions.serializer.json.UserSerializer;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.format.CurrencyFormatter;
@@ -40,6 +41,9 @@ public class Order extends BaseObject {
 
 	@JsonSerialize(using = UserSerializer.class)
 	private User creator;
+	
+	@JsonSerialize(using = CompanySerializer.class)
+	private Company company;
 	
 	private Float grossTotal;
 	
@@ -65,6 +69,18 @@ public class Order extends BaseObject {
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+	
+	@ManyToOne(targetEntity = Company.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "company_id")
+	@Where(clause = "valid = 1")
+	@NotFound(action = NotFoundAction.IGNORE)
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	@Basic

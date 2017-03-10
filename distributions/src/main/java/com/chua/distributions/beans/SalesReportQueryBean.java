@@ -16,6 +16,8 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	
 	private Long clientId;
 	
+	private Long companyId;
+	
 	private Boolean includePaid;
 	
 	private Boolean includeDelivered;
@@ -50,6 +52,14 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	public Boolean getIncludePaid() {
