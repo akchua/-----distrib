@@ -6,6 +6,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
 
 import com.chua.distributions.rest.endpoint.CategoryEndpoint;
+import com.chua.distributions.rest.endpoint.ClientCompanyPriceEndpoint;
 import com.chua.distributions.rest.endpoint.ClientOrderEndpoint;
 import com.chua.distributions.rest.endpoint.ClientOrderItemEndpoint;
 import com.chua.distributions.rest.endpoint.CompanyEndpoint;
@@ -43,5 +44,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(StockAdjustEndpoint.class);
 		register(WarehouseItemEndpoint.class);
 		register(FileEndpoint.class);
+		register(ClientCompanyPriceEndpoint.class);
 	}
 }

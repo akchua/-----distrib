@@ -27,7 +27,7 @@ public class ClientCompanyPriceServiceImpl
 	@Override
 	public ObjectList<ClientCompanyPrice> findAllWithPagingOrderByCompanyName(int pageNumber, int resultsPerPage,
 			Long clientId) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, clientId, new Order[] {Order.asc("comp.name")});
+		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, clientId, new Order[] { Order.asc("comp.name") });
 	}
 	
 	@Override

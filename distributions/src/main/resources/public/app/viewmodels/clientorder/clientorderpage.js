@@ -65,7 +65,7 @@ define(['durandal/app', 'durandal/system', 'knockout', 'modules/clientorderservi
     		self.clientOrder.lessVat(partialClientOrder.lessVat);
     		self.clientOrder.formattedLessVatAmount(partialClientOrder.formattedLessVatAmount);
     		self.clientOrder.additionalDiscount(partialClientOrder.additionalDiscount);
-    		self.clientOrder.formattedAdditionalDiscount(partialClientOrder.formattedAdditionalDiscountAmount);
+    		self.clientOrder.formattedAdditionalDiscount(partialClientOrder.formattedAdditionalDiscount);
     		self.clientOrder.status(partialClientOrder.status.displayName);
     		self.clientOrder.formattedNetTotal(partialClientOrder.formattedNetTotal);
     		

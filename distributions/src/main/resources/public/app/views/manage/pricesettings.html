@@ -1,0 +1,9 @@
+<br />
+<div class="container-fluid">
+	<div class="row">
+		<div class="input-group pull-right col-md-3 col-xs-3">
+	   		<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: clientId" class="form-control" id="inputClient"></select>
+	    </div>
+    </div>
+    <div data-bind="compose: { model: 'viewmodels/manage/clientcompanyprice', activationData: { clientId : clientId } }"></div>
+</div>

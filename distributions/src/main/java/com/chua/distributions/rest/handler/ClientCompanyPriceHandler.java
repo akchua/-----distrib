@@ -12,6 +12,8 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface ClientCompanyPriceHandler {
 
+	ClientCompanyPrice getClientCompanyPrice(Long clientCompanyPriceId);
+	
 	ObjectList<ClientCompanyPrice> getClientCompanyPriceObjectList(Integer pageNumber, Long clientId);
 	
 	ResultBean createClientCompanyPrice(ClientCompanyPriceFormBean clientCompanyPriceForm);

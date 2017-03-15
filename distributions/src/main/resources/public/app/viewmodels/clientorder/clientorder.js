@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/clientorder/addorder', 'viewmodels/clientorder/saleview'],
-		function (app, ko, clientOrderService, AddOrder, SaleView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/clientorder/addorder', 'viewmodels/clientorder/saleview'],
+		function (router, app, ko, clientOrderService, AddOrder, SaleView) {
     var ClientOrder = function() {
     	this.partialClientOrderList = ko.observable();
 

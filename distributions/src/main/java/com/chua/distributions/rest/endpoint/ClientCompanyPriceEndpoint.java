@@ -31,6 +31,13 @@ public class ClientCompanyPriceEndpoint {
 	private ClientCompanyPriceHandler clientCompanyPriceHandler;
 	
 	@GET
+	@Path("/get")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ClientCompanyPrice getClientCompanyPrice(@QueryParam("clientCompanyPriceId") Long clientCompanyPriceId) {
+		return clientCompanyPriceHandler.getClientCompanyPrice(clientCompanyPriceId);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientCompanyPrice> getClientCompanyPriceObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("clientId") Long clientId) {

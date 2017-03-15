@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform', 'viewmodels/manage/clientsettings', 'viewmodels/manage/clientedit', 'viewmodels/user/userview'],
-		function (app, ko, userService, UserForm, ClientSettings, ClientEdit, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform', 'viewmodels/manage/clientsettings', 'viewmodels/manage/clientedit', 'viewmodels/user/userview'],
+		function (router, app, ko, userService, UserForm, ClientSettings, ClientEdit, UserView) {
     var Client = function() {
     	this.clientList = ko.observable();
     	
@@ -33,6 +33,10 @@ define(['durandal/app', 'knockout', 'modules/userservice', 'viewmodels/userform'
     
     Client.prototype.add = function() {
     	UserForm.show(new Object(), 'Add Client')
+    };
+    
+    Client.prototype.priceSettings = function() {
+    	router.navigate('#pricesettings');
     };
     
     Client.prototype.view = function(clientId) {

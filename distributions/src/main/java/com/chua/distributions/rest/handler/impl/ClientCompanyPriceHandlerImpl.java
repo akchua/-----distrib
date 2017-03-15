@@ -39,6 +39,12 @@ public class ClientCompanyPriceHandlerImpl implements ClientCompanyPriceHandler 
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 2)
+	public ClientCompanyPrice getClientCompanyPrice(Long clientCompanyPriceId) {
+		return clientCompanyPriceService.find(clientCompanyPriceId);
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ObjectList<ClientCompanyPrice> getClientCompanyPriceObjectList(Integer pageNumber, Long clientId) {
 		return clientCompanyPriceService.findAllWithPagingOrderByCompanyName(pageNumber, UserContextHolder.getItemsPerPage(), clientId);
 	}

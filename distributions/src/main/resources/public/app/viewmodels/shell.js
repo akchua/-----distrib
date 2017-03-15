@@ -21,7 +21,8 @@
    	  		    { route: 'inventory', moduleId: 'inventory', title: 'Inventory', nav: true, hash: 'inventory' },
    	  		    { route: 'product', moduleId: 'product', title: 'Products', nav: true, hash: 'product' }
    	  		]
-   	  	}
+   	  	},
+   	  	{ route: 'pricesettings', moduleId: 'viewmodels/manage/pricesettings', title: '', nav: false, hash: '#pricesettings' }
    	];
 	
 	var reportroute = [
@@ -130,7 +131,7 @@
     	
         self.router.map(self.routes)
         	.buildNavigationModel()
-        	.mapUnknownRoutes();
+        	.mapUnknownRoutes('viewmodels/home');
         
         return router.activate();
 	};

@@ -10,7 +10,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import com.chua.distributions.database.entity.base.BaseEntity;
+import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.serializer.json.CompanySerializer;
 import com.chua.distributions.serializer.json.UserSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @Entity(name = "ClientCompanyPrice")
 @Table(name = ClientCompanyPrice.TABLE_NAME)
-public class ClientCompanyPrice extends BaseEntity {
+public class ClientCompanyPrice extends BaseObject {
 
 	private static final long serialVersionUID = -5057041016830855065L;
 
