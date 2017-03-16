@@ -104,3 +104,8 @@
   border-color: #ddd #ddd #ddd transparent;
   *border-left-color: #ffffff;
 }
+
+/* Paragraph */
+p.indent {
+	text-indent: 50px
+}
