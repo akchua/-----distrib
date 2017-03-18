@@ -1,5 +1,7 @@
 package com.chua.distributions.database.dao.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -66,5 +68,10 @@ public class ProductDAOImpl
 		conjunction.add(Restrictions.eq("productCode", productCode));
 		
 		return findUniqueResult(null, null, null, conjunction);
+	}
+
+	@Override
+	public List<Product> findAllWithOrder(Order[] orders) {
+		return findAllByCriterionList(null, null, null, orders, Restrictions.eq("isValid", Boolean.TRUE));
 	}
 }

@@ -13,6 +13,7 @@ import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.ClientCompanyPriceService;
 import com.chua.distributions.database.service.CompanyService;
+import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.objects.ObjectList;
@@ -32,6 +33,9 @@ public class ClientCompanyPriceHandlerImpl implements ClientCompanyPriceHandler 
 	private ClientCompanyPriceService clientCompanyPriceService;
 
 	@Autowired
+	private ProductService productService;
+	
+	@Autowired
 	private UserService userService;
 	
 	@Autowired
@@ -41,6 +45,12 @@ public class ClientCompanyPriceHandlerImpl implements ClientCompanyPriceHandler 
 	@CheckAuthority(minimumAuthority = 2)
 	public ClientCompanyPrice getClientCompanyPrice(Long clientCompanyPriceId) {
 		return clientCompanyPriceService.find(clientCompanyPriceId);
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 2)
+	public ClientCompanyPrice getClientCompanyPriceByClientAndProduct(Long clientId, Long productId) {
+		return clientCompanyPriceService.findByClientAndCompany(clientId, productService.find(productId).getCompany().getId());
 	}
 	
 	@Override
@@ -63,16 +73,20 @@ public class ClientCompanyPriceHandlerImpl implements ClientCompanyPriceHandler 
 				final User client = userService.find(clientCompanyPriceForm.getClientId());
 				final Company company = companyService.find(clientCompanyPriceForm.getCompanyId());
 				
-				clientCompanyPrice.setClient(client);
-				clientCompanyPrice.setCompany(company);
-				setClientCompanyPrice(clientCompanyPrice, clientCompanyPriceForm);
-				
-				result = new ResultBean();
-				result.setSuccess(clientCompanyPriceService.insert(clientCompanyPrice) != null);
-				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created price setting for " + Html.text(Color.BLUE, client.getFormattedName()) + " on company " + Html.text(Color.BLUE, company.getName()) + "."));
+				if(client != null && company != null) {
+					clientCompanyPrice.setClient(client);
+					clientCompanyPrice.setCompany(company);
+					setClientCompanyPrice(clientCompanyPrice, clientCompanyPriceForm);
+					
+					result = new ResultBean();
+					result.setSuccess(clientCompanyPriceService.insert(clientCompanyPrice) != null);
+					if(result.getSuccess()) {
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created price setting for " + Html.text(Color.BLUE, client.getFormattedName()) + " on company " + Html.text(Color.BLUE, company.getName()) + "."));
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
 				} else {
-					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load client or company. Please refresh the page."));
 				}
 			}
 		} else {

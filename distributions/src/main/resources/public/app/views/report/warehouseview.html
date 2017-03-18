@@ -5,11 +5,11 @@
 	</div>
   
 	<div class="modal-body">
-		<div class="container-fluid">
+		<div class="row">
 			<h4 class="col-xs-6">Purchase Value: <span data-bind="text: formattedPurchaseValue" class="text-primary"></span></h4>
       	</div>
 		
-		<div class="container-fluid">
+		<div class="row">
 			<form role="search" class="form-inline col-md-7 col-xs-7">
 		        <div class="input-group" >
 		          	<input data-bind="value: searchKey" type="text" class="form-control" placeholder="Search">
@@ -22,7 +22,7 @@
 	      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-5 col-xs-5"></div>
       	</div>
       	
-      	<div class="container-fluid">
+      	<div class="row">
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>

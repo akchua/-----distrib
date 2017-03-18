@@ -14,6 +14,8 @@ public interface ClientCompanyPriceHandler {
 
 	ClientCompanyPrice getClientCompanyPrice(Long clientCompanyPriceId);
 	
+	ClientCompanyPrice getClientCompanyPriceByClientAndProduct(Long clientId, Long productId);
+	
 	ObjectList<ClientCompanyPrice> getClientCompanyPriceObjectList(Integer pageNumber, Long clientId);
 	
 	ResultBean createClientCompanyPrice(ClientCompanyPriceFormBean clientCompanyPriceForm);

@@ -1,5 +1,7 @@
 package com.chua.distributions.rest.handler;
 
+import java.util.List;
+
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
@@ -22,6 +24,8 @@ public interface ProductHandler {
 	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
 	
 	ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
+	
+	List<Product> getProductListOrderByName();
 	
 	ResultBean createProduct(ProductFormBean productForm);
 	

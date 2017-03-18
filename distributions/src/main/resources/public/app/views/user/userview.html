@@ -6,7 +6,7 @@
 		</div>
 	  
 		<div class="modal-body">
-			<div class="container-fluid">
+			<div class="row">
 				<div class="panel panel-info">
 					<div class="panel-heading">
 						<h3 class="panel-title"><strong>Account Information</strong></h3>
@@ -28,7 +28,7 @@
 			</div>
 			
 			<!-- ko if: showBusinessInfo -->
-			<div class="container-fluid">
+			<div class="row">
 				<div class="panel panel-danger">
 					<div class="panel-heading">
 						<h3 class="panel-title"><strong>Business Information</strong></h3>
@@ -44,10 +44,6 @@
 							<dd data-bind="text: userViewModel.businessAddress"></dd>
 							<dt>Business Contact#:</dt>
 							<dd data-bind="text: userViewModel.businessContactNumber"></dd>
-							<dt>Client Discount:</dt>
-							<dd data-bind="text: userViewModel.discount"></dd>
-							<dt>Markup:</dt>
-							<dd data-bind="text: userViewModel.markup"></dd>
 							<dt>Vat Type:</dt>
 							<dd data-bind="text: userViewModel.vatType"></dd>
 				    	</dl>

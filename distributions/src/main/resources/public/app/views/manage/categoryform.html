@@ -1,4 +1,4 @@
-<div class="modal-content modal-lg">
+<div class="modal-content">
   	<form>
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
@@ -6,20 +6,12 @@
 		</div>
 	  
 		<div class="modal-body">
-			<div class="container-fluid">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">Category Information</h3>
-					</div>
-					
-					<div class="panel-body">
-						<div class="control-group">
-							<label class="control-label" for="name">Name</label>
-							<div class="controls">
-								<input data-bind="textInput: categoryFormModel.name" type="text" id="name" name="name" placeholder="" class="form-control input-lg autofocus">
-								<p class="help-block">Name of the Category</p>
-							</div>
-						</div>
+			<div class="row">
+				<div class="control-group">
+					<label class="control-label" for="name">Name</label>
+					<div class="controls">
+						<input data-bind="textInput: categoryFormModel.name" type="text" id="name" name="name" placeholder="" class="form-control input-lg autofocus">
+						<p class="help-block">Name of the Category</p>
 					</div>
 				</div>
 			</div>

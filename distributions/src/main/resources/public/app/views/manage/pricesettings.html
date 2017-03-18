@@ -1,9 +1,24 @@
 <br />
-<div class="container-fluid">
-	<div class="row">
-		<div class="input-group pull-right col-md-3 col-xs-3">
-	   		<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: clientId" class="form-control" id="inputClient"></select>
-	    </div>
-    </div>
-    <div data-bind="compose: { model: 'viewmodels/manage/clientcompanyprice', activationData: { clientId : clientId } }"></div>
+<div class="row">
+	<div class="input-group pull-right col-md-3 col-xs-3">
+		<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: clientId" class="form-control" id="inputClient"></select>
+	</div>
+</div>
+<div class="tabbable tabs-left">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#clientcompany" data-toggle="tab">Client-Company Price</a></li>
+		<li><a href="#clientproduct" data-toggle="tab">Client-Product Price</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="clientcompany">
+			<div class="row col-xs-offset-2">
+				<div data-bind="compose: { model: 'viewmodels/manage/clientcompanyprice', activationData: { clientId : clientId } }"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="clientproduct">
+			<div class="row col-xs-offset-2">
+				<div data-bind="compose: { model: 'viewmodels/manage/clientproductprice', activationData: { clientId : clientId } }"></div>
+			</div>
+		</div>
+	</div>
 </div>

@@ -1,4 +1,4 @@
-<div class="modal-content modal-lg">
+<div class="modal-content">
   	<form>
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
@@ -6,7 +6,7 @@
 		</div>
 	  
 		<div class="modal-body">
-			<div class="container-fluid">
+			<div class="row">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Client-Company Price Details</h3>
@@ -16,7 +16,7 @@
 						<div class="control-group">
 							<label class="control-label" for="inputClient">Client</label>
 							<div class="controls">
-								<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- Select Client --', value: clientCompanyPriceFormModel.clientId" class="form-control" id="inputClient"></select>
+								<select data-bind="enable: enableSelect, options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- Select Client --', value: clientCompanyPriceFormModel.clientId" class="form-control" id="inputClient"></select>
 								<p class="help-block">Client to create price settings for</p>
 							</div>
 						</div>
@@ -24,7 +24,7 @@
 						<div class="control-group">
 							<label class="control-label" for="inputCompany">Company</label>
 							<div class="controls">
-								<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- Select Company --', value: clientCompanyPriceFormModel.companyId" class="form-control" id="inputCompany"></select>
+								<select data-bind="enable: enableSelect, options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- Select Company --', value: clientCompanyPriceFormModel.companyId" class="form-control" id="inputCompany"></select>
 								<p class="help-block">Company to create price settings for</p>
 							</div>
 						</div>

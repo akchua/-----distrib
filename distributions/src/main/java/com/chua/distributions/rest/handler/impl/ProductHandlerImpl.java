@@ -13,11 +13,13 @@ import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
+import com.chua.distributions.database.entity.ClientProductPrice;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CategoryService;
 import com.chua.distributions.database.service.ClientCompanyPriceService;
+import com.chua.distributions.database.service.ClientProductPriceService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.WarehouseItemService;
@@ -51,6 +53,9 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Autowired
 	private ClientCompanyPriceService clientCompanyPriceService;
+	
+	@Autowired
+	private ClientProductPriceService clientProductPriceService;
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -99,6 +104,11 @@ public class ProductHandlerImpl implements ProductHandler {
 			objPartialProducts.setList(partialProducts);
 		}
 		return objPartialProducts;
+	}
+	
+	@Override
+	public List<Product> getProductListOrderByName() {
+		return productService.findAllOrderByName();
 	}
 	
 	@Override
@@ -193,12 +203,18 @@ public class ProductHandlerImpl implements ProductHandler {
 	@Override
 	public Float getFinalBaseUnitPrice(Product product, User user) {
 		final Float finalBaseUnitPrice;
-		final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(user.getId(), product.getCompany().getId());
+		final ClientProductPrice clientProductPrice = clientProductPriceService.findByClientAndProduct(user.getId(), product.getId());
 		
-		if(clientCompanyPrice != null) {
-			finalBaseUnitPrice = product.getSellingPrice() * (100.0f + clientCompanyPrice.getMarkup()) / 100.0f;
+		if(clientProductPrice != null) {
+			finalBaseUnitPrice = clientProductPrice.getSellingPrice();
 		} else {
-			finalBaseUnitPrice = product.getSellingPrice();
+			final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(user.getId(), product.getCompany().getId());
+			
+			if(clientCompanyPrice != null) {
+				finalBaseUnitPrice = product.getSellingPrice() * (100.0f + clientCompanyPrice.getMarkup()) / 100.0f;
+			} else {
+				finalBaseUnitPrice = product.getSellingPrice();
+			}
 		}
 		
 		return finalBaseUnitPrice;

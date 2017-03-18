@@ -63,6 +63,7 @@
 				<value>com.chua.distributions.database.entity.StockAdjust</value>
 				
 				<value>com.chua.distributions.database.entity.ClientCompanyPrice</value>
+				<value>com.chua.distributions.database.entity.ClientProductPrice</value>
 			</list>
 		</property>
 	</bean>

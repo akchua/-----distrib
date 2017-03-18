@@ -1,6 +1,7 @@
 package com.chua.distributions.rest.endpoint;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -55,6 +56,13 @@ public class ProductEndpoint {
 				@QueryParam("categoryId") Long categoryId,
 				@QueryParam("warehouse") Warehouse warehouse) {
 		return productHandler.getProductObjectList(pageNumber, searchKey, companyId, categoryId, warehouse);
+	}
+	
+	@GET
+	@Path("listbyname")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<Product> getProductListOrderByName() {
+		return productHandler.getProductListOrderByName();
 	}
 	
 	@GET

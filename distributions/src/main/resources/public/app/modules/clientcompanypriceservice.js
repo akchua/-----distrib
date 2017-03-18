@@ -9,6 +9,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getClientCompanyPriceByClientAndProduct: function(clientId, productId) {
+			return $.ajax({
+				url: '/services/clientcompanyprice/getbyclientandproduct',
+				data: {
+					clientId: clientId,
+					productId: productId
+				}
+			});
+		},
+		
 		getClientCompanyPriceList: function(currentPage, clientId) {
 			return $.ajax({
 				url: '/services/clientcompanyprice/list',

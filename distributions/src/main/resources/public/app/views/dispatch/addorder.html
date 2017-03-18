@@ -1,19 +1,19 @@
-<div class="modal-content modal-lg">
+<div class="modal-content">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
 		<h3 align="center">Add Order</h3>
 	</div>
   
 	<div class="modal-body">
-		<div class="container-fluid">
+		<div class="row">
 	      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12 col-xs-12"></div>
       	</div>
       	
-      	<div class="container-fluid">
+      	<div class="row">
 			<span data-bind="html: log" class="text-center"></span>
 		</div>
       	
-      	<div class="container-fluid">
+      	<div class="row">
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>

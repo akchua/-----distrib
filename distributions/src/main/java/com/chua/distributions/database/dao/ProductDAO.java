@@ -1,5 +1,7 @@
 package com.chua.distributions.database.dao;
 
+import java.util.List;
+
 import org.hibernate.criterion.Order;
 
 import com.chua.distributions.database.entity.Product;
@@ -16,6 +18,8 @@ public interface ProductDAO extends DAO<Product, Long>, ProductPrototype {
 	ObjectList<Product> findAllWithPaging(int pageNumber, int resultsPerPage, String searchKey, Long companyId, Long categoryId);
 	
 	ObjectList<Product> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey, Long companyId, Long categoryId, Order[] orders);
+	
+	List<Product> findAllWithOrder(Order[] orders);
 	
 	Product findByProductCode(String productCode);
 }

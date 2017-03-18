@@ -35,23 +35,23 @@ public class ClientOrderServiceImpl
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllRequestByCreatorWithPagingOrderByLatest(int pageNumber, int resultsPerPage, Long creatorId) {
-		return dao.findByCreatorWithPagingStatusAndOrder(pageNumber, resultsPerPage, new Status[] { Status.CREATING, Status.SUBMITTED }, creatorId, new Order[] { Order.desc("updatedOn") });
+	public ObjectList<ClientOrder> findAllRequestByCreatorWithPagingOrderByRequestedOn(int pageNumber, int resultsPerPage, Long creatorId) {
+		return dao.findByCreatorWithPagingStatusAndOrder(pageNumber, resultsPerPage, new Status[] { Status.CREATING, Status.SUBMITTED }, creatorId, new Order[] { Order.asc("requestedOn") });
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllRequestWithPagingOrderByLatest(int pageNumber, int resultsPerPage, boolean showAccepted) {
+	public ObjectList<ClientOrder> findAllRequestWithPagingOrderByRequestedOn(int pageNumber, int resultsPerPage, boolean showAccepted) {
 		final Status[] status;
 		if(showAccepted) status = new Status[] { Status.SUBMITTED, Status.ACCEPTED, Status.TO_FOLLOW };
 		else status = new Status[] { Status.SUBMITTED };
 		
-		return dao.findAllWithPagingStatusAndOrder(pageNumber, resultsPerPage, status, new Order[] { Order.desc("updatedOn") });
+		return dao.findAllWithPagingStatusAndOrder(pageNumber, resultsPerPage, status, new Order[] { Order.asc("requestedOn") });
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllPaidWithPagingOrderByLatest(int pageNumber, int resultsPerPage,
+	public ObjectList<ClientOrder> findAllPaidWithPagingOrderByPaidOn(int pageNumber, int resultsPerPage,
 			Warehouse warehouse) {
-		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.PAID }, new Order[] { Order.desc("updatedOn") });
+		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.PAID }, new Order[] { Order.desc("paidOn") });
 	}
 	
 	@Override
@@ -60,8 +60,8 @@ public class ClientOrderServiceImpl
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllReceivedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse) {
-		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.RECEIVED }, null);
+	public ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse) {
+		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.RECEIVED }, new Order[] { Order.asc("deliveredOn") });
 	}
 
 	@Override

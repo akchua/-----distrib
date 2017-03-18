@@ -1,5 +1,5 @@
 <br/>
-<div class="container-fluid">
+<div class="row">
 	<form role="search" class="form-inline">
         <div class="input-group pull-right col-md-8 col-xs-8">
        		<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: search }" class="form-control" id="inputCompany"></select>
@@ -14,10 +14,10 @@
      	</form>
 </div>
 <br/>
-<div class="container-fluid">
+<div class="row">
 	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-12"></div>
 </div>
-<div class="container-fluid">
+<div class="row">
 	<div class="table-responsive">
 		<table class="table table-hover">
 			<thead>

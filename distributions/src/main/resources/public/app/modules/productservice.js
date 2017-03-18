@@ -34,6 +34,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getProductListByName: function() {
+			return $.ajax({
+				url: '/services/product/listbyname'
+			});
+		},
+		
 		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/listpartial',

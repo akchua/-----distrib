@@ -5,7 +5,7 @@
 	</div>
   
 	<div class="modal-body">
-		<div class="container-fluid">
+		<div class="row">
 			<form role="search" class="form-inline col-md-6 col-xs-6">
 		        <div class="input-group" >
 		          	<input data-bind="value: searchKey" type="text" class="form-control autofocus" placeholder="Search">
@@ -18,11 +18,11 @@
 	      	<div data-bind="widget: { kind: 'pager', config: { numberOfPagesToShow: 5, itemsPerPage: itemsPerPage, totalItems: totalItems, currentPage: currentPage } }" class="col-md-6 col-xs-6"></div>
       	</div>
      
-     	<div class="container-fluid">
+     	<div class="row">
 			<span data-bind="html: log" class="text-center"></span>
 		</div>
       	
-      	<div class="container-fluid">
+      	<div class="row">
 			<div class="table-responsive">
 				<table class="table table-hover">
 					<thead>

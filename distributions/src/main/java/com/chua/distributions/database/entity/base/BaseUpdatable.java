@@ -21,6 +21,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @version 1.0, Jan 18, 2016
  * 
@@ -35,9 +37,11 @@ public class BaseUpdatable extends BaseEntity
 	private static final long serialVersionUID = 1663731598611417574L;
 
 	/** The date when the entity is last updated. */
+	@JsonIgnore
 	private Date updatedOn;
 
 	/** The date when the entity is created. */
+	@JsonIgnore
 	private DateTime createdOn;
 
 	/**

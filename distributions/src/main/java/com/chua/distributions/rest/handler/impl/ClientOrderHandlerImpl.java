@@ -96,12 +96,16 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		final UserBean currentUser = UserContextHolder.getUser();
 		
-		if(currentUser.getUserType().equals(UserType.CLIENT) && !currentUser.getId().equals(clientOrder.getCreator().getId())) {
-			throw new NotAuthorizedException("User is not authenticated.");
+		if(clientOrder != null) {
+			if(currentUser.getId().equals(clientOrder.getCreator().getId()) ||
+					currentUser.getId().equals(clientOrder.getClient().getId())) {
+				refreshClientOrder(clientOrderId);
+				partialClientOrder = new PartialClientOrderBean(clientOrder);
+			} else {
+				throw new NotAuthorizedException("User is not authenticated.");
+			}
 		} else {
-			refreshClientOrder(clientOrderId);
-			if(clientOrder != null) partialClientOrder = new PartialClientOrderBean(clientOrder);
-			else partialClientOrder = null;
+			partialClientOrder = null;
 		}
 		
 		return partialClientOrder;
@@ -168,13 +172,13 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 3)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectListCreatedByCurrentUser(Integer pageNumber) {
-		return clientOrderService.findAllRequestByCreatorWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId());
+		return clientOrderService.findAllRequestByCreatorWithPagingOrderByRequestedOn(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId());
 	}
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted) {
-		return clientOrderService.findAllRequestWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
+		return clientOrderService.findAllRequestWithPagingOrderByRequestedOn(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
 	}
 	
 	@Override
@@ -186,13 +190,13 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
-		return clientOrderService.findAllReceivedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
-		return clientOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+		return clientOrderService.findAllPaidWithPagingOrderByPaidOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
 	
 	@Override

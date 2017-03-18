@@ -12,6 +12,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     		categoryName: ko.observable(),
     		productCode: ko.observable(),
     		description: ko.observable(),
+    		formattedPackageSellingDiscount: ko.observable(),
     		formattedPackageNetSellingPrice: ko.observable()
 	    };
     };
@@ -24,6 +25,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout'],
     	self.partialProductViewModel.productCode(self.partialProduct.productCode);
     	self.partialProductViewModel.displayName(self.partialProduct.displayName);
     	self.partialProductViewModel.description(self.partialProduct.description);
+    	
+    	self.partialProductViewModel.formattedPackageSellingDiscount(self.partialProduct.formattedPackageSellingDiscount);
     	self.partialProductViewModel.formattedPackageNetSellingPrice(self.partialProduct.formattedPackageNetSellingPrice);
     	
     	self.partialProductViewModel.companyName(self.partialProduct.companyName);

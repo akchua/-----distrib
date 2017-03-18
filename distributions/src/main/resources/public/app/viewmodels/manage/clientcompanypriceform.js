@@ -7,6 +7,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientcompanypric
     	this.clientList = ko.observable();
     	this.companyList = ko.observable();
     	
+    	this.enableSelect = ko.observable(false);
+    	
     	this.clientCompanyPriceFormModel = {
     		id: ko.observable(),
     		
@@ -19,6 +21,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientcompanypric
     
     ClientCompanyPriceForm.prototype.activate = function() {
     	var self = this;
+    	
+    	if(!self.clientCompanyPrice.id) {
+    		self.enableSelect(true);
+    	}
     	
     	self.clientCompanyPriceFormModel.id(self.clientCompanyPrice.id);
     	self.clientCompanyPriceFormModel.discount(self.clientCompanyPrice.discount);

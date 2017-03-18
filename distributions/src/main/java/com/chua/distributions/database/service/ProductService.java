@@ -1,5 +1,7 @@
 package com.chua.distributions.database.service;
 
+import java.util.List;
+
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.prototype.ProductPrototype;
 import com.chua.distributions.objects.ObjectList;
@@ -12,6 +14,8 @@ import com.chua.distributions.objects.ObjectList;
 public interface ProductService extends Service<Product, Long>, ProductPrototype {
 
 	ObjectList<Product> findAllWithPagingOrderByName(int pageNumber, int resultsPerPage, String searchKey, Long companyId, Long categoryId);
+	
+	List<Product> findAllOrderByName();
 	
 	boolean isExistsByDisplayName(String name);
 	
