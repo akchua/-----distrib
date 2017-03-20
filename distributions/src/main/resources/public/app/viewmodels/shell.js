@@ -1,7 +1,7 @@
 ﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
 		function (router, app, ko, securityService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
 	var homeroute = [
-	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: true }
+	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: false }
 	];
 	
 	var ourproductsroute = [

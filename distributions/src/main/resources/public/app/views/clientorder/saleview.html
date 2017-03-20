@@ -62,14 +62,14 @@
 										</tr>
 									</thead>
 									
-									<tbody data-bind="foreach: { data: clientOrderItemList, as: 'clientOrderItem' }">
+									<tbody data-bind="foreach: { data: partialClientOrderItemList, as: 'partialClientOrderItem' }">
 										<tr>
-											<td data-bind="text: clientOrderItem.formattedQuantity" class = "text-center"></td>
-											<td data-bind="text: clientOrderItem.productCode" class = "text-center"></td>
-											<td data-bind="text: clientOrderItem.displayName"></td>
-											<td data-bind="text: clientOrderItem.formattedPackageUnitPrice" class = "text-center"></td>
-											<td data-bind="text: clientOrderItem.formattedDiscountAmount" class = "text-center"></td>
-											<td data-bind="text: clientOrderItem.formattedNetPrice" class = "text-center"></td>
+											<td data-bind="text: partialClientOrderItem.formattedQuantity" class = "text-center"></td>
+											<td data-bind="text: partialClientOrderItem.productCode" class = "text-center"></td>
+											<td data-bind="text: partialClientOrderItem.displayName"></td>
+											<td data-bind="text: partialClientOrderItem.formattedPackageUnitPrice" class = "text-center"></td>
+											<td data-bind="text: partialClientOrderItem.formattedDiscountAmount" class = "text-center"></td>
+											<td data-bind="text: partialClientOrderItem.formattedNetPrice" class = "text-center"></td>
 										</tr>
 									</tbody>
 								</table>

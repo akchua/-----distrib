@@ -66,8 +66,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Payment.prototype.view = function(clientOrderId) {
     	var self = this;
     	
-    	clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    		SaleView.show(clientOrder)
+    	clientOrderService.getPartialClientOrder(clientOrderId).done(function(partialClientOrder) {
+    		SaleView.show(partialClientOrder)
     	});
     };
     

@@ -41,6 +41,7 @@
 			<thead>
 				<tr>
 					<th class = "text-center">ID</th>
+					<th class = "text-center">Create Date</th>
 					<th>Client</th>
 					<th>Company</th>
 					<th>Warehouse</th>
@@ -52,6 +53,7 @@
 			<tbody data-bind="foreach: { data: clientOrderList, as: 'clientOrder' }">
 				<tr>
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
+					<td data-bind="text: clientOrder.formattedCreatedOn" class = "text-center"></td>
 					<td><a data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></a></td>
 					<td>
 					<!-- <td data-bind="text: clientOrder.company.name"></td> -->

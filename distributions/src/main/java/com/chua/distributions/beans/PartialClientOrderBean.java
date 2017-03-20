@@ -12,6 +12,12 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	private String formattedCreatedOn;
 	
+	private String formattedRequestedOn;
+	
+	private String formattedDeliveredOn;
+	
+	private String formattedPaidOn;
+	
 	private Long creatorId;
 
 	private String creatorName;
@@ -19,6 +25,8 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 	private Long clientId;
 	
 	private String clientName;
+	
+	private String clientBusinessName;
 	
 	private Long companyId;
 	
@@ -43,12 +51,20 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 	public PartialClientOrderBean(ClientOrder clientOrder) {
 		super(clientOrder);
 		setFormattedCreatedOn(clientOrder.getFormattedCreatedOn());
+		setFormattedRequestedOn(clientOrder.getFormattedRequestedOn());
+		setFormattedDeliveredOn(clientOrder.getFormattedDeliveredOn());
+		setFormattedPaidOn(clientOrder.getFormattedPaidOn());
+		
 		setCreatorId(clientOrder.getCreator().getId());
 		setCreatorName(clientOrder.getCreator().getFormattedName());
+		
 		setClientId(clientOrder.getClient().getId());
 		setClientName(clientOrder.getClient().getFormattedName());
+		setClientBusinessName(clientOrder.getClient().getBusinessName());
+		
 		setCompanyId(clientOrder.getCompany().getId());
 		setCompanyName(clientOrder.getCompany().getName());
+		
 		setFormattedGrossTotal(clientOrder.getFormattedGrossTotal());
 		setFormattedDiscountTotal(clientOrder.getFormattedDiscountTotal());
 		setLessVat(clientOrder.getLessVat());
@@ -65,6 +81,30 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	public void setFormattedCreatedOn(String formattedCreatedOn) {
 		this.formattedCreatedOn = formattedCreatedOn;
+	}
+
+	public String getFormattedRequestedOn() {
+		return formattedRequestedOn;
+	}
+
+	public void setFormattedRequestedOn(String formattedRequestedOn) {
+		this.formattedRequestedOn = formattedRequestedOn;
+	}
+
+	public String getFormattedDeliveredOn() {
+		return formattedDeliveredOn;
+	}
+
+	public void setFormattedDeliveredOn(String formattedDeliveredOn) {
+		this.formattedDeliveredOn = formattedDeliveredOn;
+	}
+
+	public String getFormattedPaidOn() {
+		return formattedPaidOn;
+	}
+
+	public void setFormattedPaidOn(String formattedPaidOn) {
+		this.formattedPaidOn = formattedPaidOn;
 	}
 
 	public Long getCreatorId() {
@@ -97,6 +137,14 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
+	}
+
+	public String getClientBusinessName() {
+		return clientBusinessName;
+	}
+
+	public void setClientBusinessName(String clientBusinessName) {
+		this.clientBusinessName = clientBusinessName;
 	}
 
 	public Long getCompanyId() {

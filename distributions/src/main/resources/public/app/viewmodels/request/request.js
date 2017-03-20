@@ -83,8 +83,8 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/users
     Request.prototype.view = function(clientOrderId) {
     	var self = this;
     	
-    	clientOrderService.getClientOrder(clientOrderId).done(function(clientOrder) {
-    		SaleView.show(clientOrder)
+    	clientOrderService.getPartialClientOrder(clientOrderId).done(function(partialClientOrder) {
+    		SaleView.show(partialClientOrder)
     	});
     };
     

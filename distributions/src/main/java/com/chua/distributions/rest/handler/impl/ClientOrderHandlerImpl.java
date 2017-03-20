@@ -97,12 +97,12 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		final UserBean currentUser = UserContextHolder.getUser();
 		
 		if(clientOrder != null) {
-			if(currentUser.getId().equals(clientOrder.getCreator().getId()) ||
-					currentUser.getId().equals(clientOrder.getClient().getId())) {
+			if(currentUser.getUserType().equals(UserType.CLIENT) &&
+					!currentUser.getId().equals(clientOrder.getClient().getId())) {
+				throw new NotAuthorizedException("User is not authenticated.");
+			} else {
 				refreshClientOrder(clientOrderId);
 				partialClientOrder = new PartialClientOrderBean(clientOrder);
-			} else {
-				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
 			partialClientOrder = null;

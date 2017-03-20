@@ -1,9 +1,9 @@
 define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemservice'], 
 		function (dialog, app, ko, clientOrderItemService) {
-    var SaleView = function(clientOrder) {
-    	this.clientOrder = clientOrder;
+    var SaleView = function(partialClientOrder) {
+    	this.partialClientOrder = partialClientOrder;
     	
-    	this.clientOrderItemList = ko.observable();
+    	this.partialClientOrderItemList = ko.observable();
     	
     	this.saleViewModel = {
 			id: ko.observable(),
@@ -29,17 +29,17 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     SaleView.prototype.activate = function() {
     	var self = this;
     	
-    	self.saleViewModel.id(self.clientOrder.id);
-    	self.saleViewModel.discount(self.clientOrder.additionalDiscount);
-		self.saleViewModel.client(self.clientOrder.client.businessName);
-		self.saleViewModel.company(self.clientOrder.company.name);
-		self.saleViewModel.formattedGrossTotal(self.clientOrder.formattedGrossTotal);
-		self.saleViewModel.formattedDiscountTotal(self.clientOrder.formattedDiscountTotal);
-		self.saleViewModel.lessVat(self.clientOrder.lessVat);
-		self.saleViewModel.formattedLessVatAmount(self.clientOrder.formattedLessVatAmount);
-		self.saleViewModel.formattedAdditionalDiscount(self.clientOrder.formattedAdditionalDiscountAmount);
-		self.saleViewModel.formattedNetTotal(self.clientOrder.formattedNetTotal);
-		self.saleViewModel.status(self.clientOrder.status.displayName);
+    	self.saleViewModel.id(self.partialClientOrder.id);
+    	self.saleViewModel.discount(self.partialClientOrder.additionalDiscount);
+		self.saleViewModel.client(self.partialClientOrder.clientBusinessName);
+		self.saleViewModel.company(self.partialClientOrder.companyName);
+		self.saleViewModel.formattedGrossTotal(self.partialClientOrder.formattedGrossTotal);
+		self.saleViewModel.formattedDiscountTotal(self.partialClientOrder.formattedDiscountTotal);
+		self.saleViewModel.lessVat(self.partialClientOrder.lessVat);
+		self.saleViewModel.formattedLessVatAmount(self.partialClientOrder.formattedLessVatAmount);
+		self.saleViewModel.formattedAdditionalDiscount(self.partialClientOrder.formattedAdditionalDiscount);
+		self.saleViewModel.formattedNetTotal(self.partialClientOrder.formattedNetTotal);
+		self.saleViewModel.status(self.partialClientOrder.status.displayName);
     	
     	self.currentPage(1);
 		self.currentPageSubscription = self.currentPage.subscribe(function() {
@@ -52,14 +52,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     SaleView.prototype.refreshClientOrderItemList = function() {
     	var self = this;
     	
-    	clientOrderItemService.getClientOrderItemList(self.currentPage(), self.saleViewModel.id(), false).done(function(data) {
-    		self.clientOrderItemList(data.list);
+    	clientOrderItemService.getPartialClientOrderItemList(self.currentPage(), self.saleViewModel.id(), false).done(function(data) {
+    		self.partialClientOrderItemList(data.list);
     		self.totalItems(data.total);
     	});
     };
     
-    SaleView.show = function(clientOrder) {
-    	return dialog.show(new SaleView(clientOrder));
+    SaleView.show = function(partialClientOrder) {
+    	return dialog.show(new SaleView(partialClientOrder));
     };
     
     SaleView.prototype.cancel = function() {
