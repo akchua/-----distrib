@@ -274,7 +274,10 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					final Dispatch dispatch = dispatchService.find(dispatchId);
 					
 					if(dispatch != null) {
-						if(dispatch.getStatus().equals(Status.CREATING)) {
+						if(dispatch.getStatus().equals(Status.CREATING) || 
+								(UserContextHolder.getUser().getUserType().getAuthority() <= 2 &&
+										!dispatch.getStatus().equals(Status.RECEIVED) &&
+										!dispatch.getStatus().equals(Status.CANCELLED))) {
 							final DispatchItem dispatchItem = dispatchItemService.findByDispatchAndOrder(dispatchId, clientOrderId);
 							
 							if(dispatchItem == null) {

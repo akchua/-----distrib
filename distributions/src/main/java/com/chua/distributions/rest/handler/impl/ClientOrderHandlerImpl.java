@@ -128,11 +128,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			}
 			
 			if(transferInstance == null) {
-				final User sourceOwner = clientOrderService.find(sourceId).getClient();
 				final ClientOrder newClientOrder = new ClientOrder();
 				
 				newClientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
-				newClientOrder.setClient(sourceOwner);
+				newClientOrder.setClient(sourceOrder.getClient());
+				newClientOrder.setCompany(sourceOrder.getCompany());
 				newClientOrder.setGrossTotal(0.0f);
 				newClientOrder.setDiscountTotal(0.0f);
 				newClientOrder.setStatus(Status.TO_FOLLOW);
