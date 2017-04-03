@@ -90,8 +90,8 @@ public class ClientOrderEndpoint {
 	@Path("/receivedlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
-			@QueryParam("warehouse") Warehouse warehouse) {
-		return clientOrderHandler.getReceivedClientOrderObjectList(pageNumber, warehouse);
+			@QueryParam("warehouse") Warehouse warehouse, @QueryParam("clientId") Long clientId) {
+		return clientOrderHandler.getReceivedClientOrderObjectList(pageNumber, warehouse, clientId);
 	}
 	
 	@GET

@@ -37,7 +37,7 @@ public interface ClientOrderHandler {
 	
 	ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	
-	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
+	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse, Long clientId);
 	
 	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
 	

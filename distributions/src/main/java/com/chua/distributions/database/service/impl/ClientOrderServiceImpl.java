@@ -60,8 +60,8 @@ public class ClientOrderServiceImpl
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse) {
-		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.RECEIVED }, new Order[] { Order.asc("deliveredOn") });
+	public ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse, Long clientId) {
+		return dao.findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, clientId, new Status[] { Status.RECEIVED }, new Order[] { Order.asc("deliveredOn") });
 	}
 
 	@Override

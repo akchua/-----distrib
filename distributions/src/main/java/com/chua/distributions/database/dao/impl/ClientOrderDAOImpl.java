@@ -78,11 +78,21 @@ public class ClientOrderDAOImpl
 	@Override
 	public ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
 			Warehouse warehouse, Status[] status, Order[] orders) {
+		return findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, null, status, orders);
+	}
+	
+	@Override
+	public ObjectList<ClientOrder> findByWarehouseAndClientWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
+			Warehouse warehouse, Long clientId, Status[] status, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
 		if(warehouse != null) {
 			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		}
+		
+		if(clientId != null) {
+			conjunction.add(Restrictions.eq("client.id", clientId));
 		}
 		
 		if(status != null && status.length > 0) {

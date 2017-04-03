@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
+import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.ClientProductPriceFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientProductPrice;
@@ -37,16 +38,19 @@ public class ClientProductPriceHandlerImpl implements ClientProductPriceHandler 
 	private ProductService productService;
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ClientProductPrice getClientProductPrice(Long clientProductPriceId) {
 		return clientProductPriceService.find(clientProductPriceId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ObjectList<ClientProductPrice> getClientProductPriceObjectList(Integer pageNumber, Long clientId) {
 		return clientProductPriceService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), clientId);
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createClientProductPrice(ClientProductPriceFormBean clientProductPriceForm) {
 		final ResultBean result;
 		final ResultBean validateForm = validateClientProductPriceForm(clientProductPriceForm);
@@ -83,6 +87,7 @@ public class ClientProductPriceHandlerImpl implements ClientProductPriceHandler 
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean updateClientProductPrice(ClientProductPriceFormBean clientProductPriceForm) {
 		final ResultBean result;
 		final ClientProductPrice clientProductPrice = clientProductPriceService.find(clientProductPriceForm.getId());
@@ -110,6 +115,7 @@ public class ClientProductPriceHandlerImpl implements ClientProductPriceHandler 
 	}
 
 	@Override
+	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean removeClientProductPrice(Long clientProductPriceId) {
 		final ResultBean result;
 		final ClientProductPrice clientProductPrice = clientProductPriceService.find(clientProductPriceId);

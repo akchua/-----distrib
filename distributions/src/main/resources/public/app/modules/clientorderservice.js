@@ -67,12 +67,13 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getReceivedClientOrderList: function(currentPage, warehouse) {
+		getReceivedClientOrderList: function(currentPage, warehouse, clientId) {
 			return $.ajax({
 				url: '/services/clientorder/receivedlist',
 				data: {
 					pageNumber: currentPage - 1,
-					warehouse: warehouse
+					warehouse: warehouse,
+					clientId: clientId
 				}
 			});
 		},

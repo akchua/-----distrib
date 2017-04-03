@@ -3,8 +3,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     var Payment = function() {
     	this.clientOrderList = ko.observable();
     	this.warehouseList = ko.observable();
+    	this.clientList = ko.observable();
     	
     	this.warehouse = ko.observable();
+    	this.clientId = ko.observable();
     	this.formattedPayable = ko.observable();
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
@@ -25,6 +27,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 			self.warehouseList(warehouseList);
 		});
 		
+		userService.getFullClientList().done(function(clientList) {
+    		self.clientList(clientList);
+    	});
+		
 		self.refreshClientOrderList();
 		self.refreshTotalPayable();
     };
@@ -32,7 +38,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Payment.prototype.refreshClientOrderList = function() {
     	var self = this;
     	
-    	clientOrderService.getReceivedClientOrderList(self.currentPage(), self.warehouse()).done(function(data) {
+    	clientOrderService.getReceivedClientOrderList(self.currentPage(), self.warehouse(), self.clientId()).done(function(data) {
     		self.clientOrderList(data.list);
     		self.totalItems(data.total);
     	});

@@ -189,8 +189,8 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
-		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse, Long clientId) {
+		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse, clientId);
 	}
 	
 	@Override

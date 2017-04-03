@@ -25,7 +25,7 @@ public interface ClientOrderService extends Service<ClientOrder, Long>, ClientOr
 	
 	ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse);
 	
-	ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse);
+	ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse, Long clientId);
 	
 	ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage, SalesReportQueryBean salesReportQuery);
 	

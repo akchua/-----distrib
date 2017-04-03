@@ -64,6 +64,7 @@
 				
 				<value>com.chua.distributions.database.entity.ClientCompanyPrice</value>
 				<value>com.chua.distributions.database.entity.ClientProductPrice</value>
+				<value>com.chua.distributions.database.entity.ClientPromo</value>
 			</list>
 		</property>
 	</bean>
