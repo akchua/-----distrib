@@ -371,7 +371,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		clientOrderItem.setProductCode(product.getProductCode());
 		clientOrderItem.setDisplayName(product.getDisplayName());
 		clientOrderItem.setPackaging(product.getPackaging());
-		clientOrderItem.setUnitPrice(productHandler.getFinalBaseUnitPrice(product, clientOrderItem.getClientOrder().getClient()));
+		clientOrderItem.setUnitPrice(productHandler.getFinalBaseUnitSellingPrice(product, clientOrderItem.getClientOrder().getClient()));
 		clientOrderItem.setDiscount(0.0f);
 	}
 	

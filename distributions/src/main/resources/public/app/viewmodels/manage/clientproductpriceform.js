@@ -7,7 +7,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	this.clientList = ko.observable();
     	this.productList = ko.observable();
     	
-    	this.productFormattedPackageNetSellingPrice = ko.observable(0);
+    	this.productFormattedPackageNetSellingPrice = ko.observable('');
+    	this.productSellingDiscount = ko.observable(0);
     	this.clientCompanyPriceDiscount = ko.observable(0);
     	this.clientLessVat = ko.observable(0);
     	
@@ -87,7 +88,11 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	var self = this;
     	
     	self.netPackageSellingPrice(
-			Math.round(self.clientProductPriceFormModel.packageSellingPrice() * (100.0 - self.clientCompanyPriceDiscount()) * (100.0 - self.clientLessVat())) / 10000.0
+			Math.round(
+					self.clientProductPriceFormModel.packageSellingPrice() 
+					* ((100.0 - self.productSellingDiscount()) / 100)
+					* ((100.0 - self.clientCompanyPriceDiscount()) / 100) 
+					* ((100.0 - self.clientLessVat()) / 100) 
     	);
     };
     
@@ -95,8 +100,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	var self = this;
     	
     	if(self.clientProductPriceFormModel.productId()) {
-    		productService.getProduct(self.clientProductPriceFormModel.productId, null).done(function(product) {
-	    		self.productFormattedPackageNetSellingPrice(product.formattedPackageNetSellingPrice);
+    		productService.getPartialProductFor(self.clientProductPriceFormModel.productId, self.clientProductPriceFormModel.clientId).done(function(partialProduct) {
+	    		self.productFormattedPackageNetSellingPrice(partialProduct.formattedPackageNetSellingPrice);
+	    		self.productSellingDiscount(partialProduct.sellingDiscount);
 	    	});
     	}
     };

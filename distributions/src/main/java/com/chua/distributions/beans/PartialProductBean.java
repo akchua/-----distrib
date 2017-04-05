@@ -1,6 +1,7 @@
 package com.chua.distributions.beans;
 
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.utility.format.CurrencyFormatter;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -19,10 +20,10 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 	
 	private String description;
 	
-	private String formattedPackageSellingDiscount;
+	private Float sellingDiscount;
 	
-	private String formattedPackageNetSellingPrice;
-
+	private Float packageNetSellingPrice;
+	
 	public PartialProductBean(Product product) {
 		super(product);
 		setDisplayName(product.getDisplayName());
@@ -30,8 +31,8 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		setCompanyName(product.getCompany().getName());
 		setCategoryName(product.getCategory().getName());
 		setDescription(product.getDescription());
-		setFormattedPackageSellingDiscount("");
-		setFormattedPackageNetSellingPrice("");
+		setSellingDiscount(0.0f);
+		setPackageNetSellingPrice(0.0f);
 	}
 	
 	public String getProductCode() {
@@ -74,19 +75,23 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		this.description = description;
 	}
 
-	public String getFormattedPackageSellingDiscount() {
-		return formattedPackageSellingDiscount;
+	public Float getSellingDiscount() {
+		return sellingDiscount;
 	}
 
-	public void setFormattedPackageSellingDiscount(String formattedPackageSellingDiscount) {
-		this.formattedPackageSellingDiscount = formattedPackageSellingDiscount;
+	public void setSellingDiscount(Float sellingDiscount) {
+		this.sellingDiscount = sellingDiscount;
+	}
+
+	public Float getPackageNetSellingPrice() {
+		return packageNetSellingPrice;
+	}
+
+	public void setPackageNetSellingPrice(Float packageNetSellingPrice) {
+		this.packageNetSellingPrice = packageNetSellingPrice;
 	}
 
 	public String getFormattedPackageNetSellingPrice() {
-		return formattedPackageNetSellingPrice;
-	}
-
-	public void setFormattedPackageNetSellingPrice(String formattedPackageNetSellingPrice) {
-		this.formattedPackageNetSellingPrice = formattedPackageNetSellingPrice;
+		return CurrencyFormatter.pesoFormat(packageNetSellingPrice);
 	}
 }

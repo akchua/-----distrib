@@ -20,6 +20,8 @@ public interface ProductHandler {
 	Product getProduct(Long productId, Warehouse warehouse);
 	
 	PartialProductBean getPartialProduct(Long productId, Warehouse warehouse);
+	
+	PartialProductBean getPartialProductFor(Long productId, Long userId);
 
 	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
 	
@@ -45,7 +47,9 @@ public interface ProductHandler {
 	 * @param user The user where the price settings will be based.
 	 * @return The final base price.
 	 */
-	Float getFinalBaseUnitPrice(Product product, User user);
+	Float getFinalBaseUnitSellingPrice(Product product, User user);
 	
-	Float getFinalBasePackagePrice(Product product, User user);
+	Float getFinalBasePackageSellingPrice(Product product, User user);
+
+	Float getFinalSellingDiscount(Product product, User user);
 }

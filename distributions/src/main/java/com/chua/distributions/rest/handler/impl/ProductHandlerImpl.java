@@ -14,21 +14,23 @@ import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientProductPrice;
+import com.chua.distributions.database.entity.ClientPromo;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CategoryService;
 import com.chua.distributions.database.service.ClientCompanyPriceService;
 import com.chua.distributions.database.service.ClientProductPriceService;
+import com.chua.distributions.database.service.ClientPromoService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.ProductService;
+import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.Html;
-import com.chua.distributions.utility.format.CurrencyFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -41,6 +43,9 @@ public class ProductHandlerImpl implements ProductHandler {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	private CompanyService companyService;
@@ -57,6 +62,9 @@ public class ProductHandlerImpl implements ProductHandler {
 	@Autowired
 	private ClientProductPriceService clientProductPriceService;
 	
+	@Autowired
+	private ClientPromoService clientPromoService;
+	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public Product getProduct(Long productId, Warehouse warehouse) {
@@ -67,13 +75,21 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Override
 	public PartialProductBean getPartialProduct(Long productId, Warehouse warehouse) {
+		return getPartialProductFor(productService.find(productId), UserContextHolder.getUser().getUserEntity());
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public PartialProductBean getPartialProductFor(Long productId, Long userId) {
+		return getPartialProductFor(productService.find(productId), userService.find(userId));
+	}
+	
+	public PartialProductBean getPartialProductFor(Product product, User user) {
 		final PartialProductBean partialProduct;
-		final Product product = productService.find(productId);
-		if(product != null) {
+		if(product != null && user != null) {
 			partialProduct = new PartialProductBean(product);
-			// For PROMOS update
-			partialProduct.setFormattedPackageSellingDiscount(CurrencyFormatter.pesoFormat(0.0f));
-			partialProduct.setFormattedPackageNetSellingPrice(CurrencyFormatter.pesoFormat(getFinalBasePackagePrice(product, UserContextHolder.getUser().getUserEntity())));
+			partialProduct.setSellingDiscount(getFinalSellingDiscount(product, user));
+			partialProduct.setPackageNetSellingPrice(getFinalBasePackageSellingPrice(product, user));
 		}
 		else partialProduct = null;
 		return partialProduct;
@@ -95,11 +111,7 @@ public class ProductHandlerImpl implements ProductHandler {
 			objPartialProducts.setTotal(objProducts.getTotal());
 			final List<PartialProductBean> partialProducts = new ArrayList<PartialProductBean>();
 			for(Product product : objProducts.getList()) {
-				final PartialProductBean partialProduct = new PartialProductBean(product);
-				//For PROMOS update
-				partialProduct.setFormattedPackageSellingDiscount(CurrencyFormatter.pesoFormat(0.0f));
-				partialProduct.setFormattedPackageNetSellingPrice(CurrencyFormatter.pesoFormat(getFinalBasePackagePrice(product, UserContextHolder.getUser().getUserEntity())));
-				partialProducts.add(partialProduct);
+				partialProducts.add(getPartialProductFor(product, UserContextHolder.getUser().getUserEntity()));
 			}
 			objPartialProducts.setList(partialProducts);
 		}
@@ -201,7 +213,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
-	public Float getFinalBaseUnitPrice(Product product, User user) {
+	public Float getFinalBaseUnitSellingPrice(Product product, User user) {
 		final Float finalBaseUnitPrice;
 		final ClientProductPrice clientProductPrice = clientProductPriceService.findByClientAndProduct(user.getId(), product.getId());
 		
@@ -221,8 +233,22 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
-	public Float getFinalBasePackagePrice(Product product, User user) {
-		return Math.round(getFinalBaseUnitPrice(product, user) * product.getPackaging() * 100.0f) / 100.0f;
+	public Float getFinalBasePackageSellingPrice(Product product, User user) {
+		return Math.round(getFinalBaseUnitSellingPrice(product, user) * product.getPackaging() * 100.0f) / 100.0f;
+	}
+	
+	@Override
+	public Float getFinalSellingDiscount(Product product, User user) {
+		final Float finalSellingDiscount;
+		final ClientPromo clientPromo = clientPromoService.findByClientAndProduct(user.getId(), product.getId());
+		
+		if(clientPromo != null) {
+			finalSellingDiscount = clientPromo.getDiscount();
+		} else {
+			finalSellingDiscount = 0.0f;
+		}
+		
+		return finalSellingDiscount;
 	}
 	
 	private void setProduct(Product product, ProductFormBean productForm) {

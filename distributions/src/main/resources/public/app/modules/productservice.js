@@ -20,6 +20,16 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPartialProductFor: function(productId, clientId) {
+			return $.ajax({
+				url: '/services/product/getpartialfor',
+				data: {
+					productId: productId,
+					clientId: clientId
+				}
+			});
+		},
+		
 		getProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/list',

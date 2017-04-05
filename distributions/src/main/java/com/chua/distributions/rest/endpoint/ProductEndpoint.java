@@ -48,6 +48,13 @@ public class ProductEndpoint {
 	}
 	
 	@GET
+	@Path("/getpartialfor")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public PartialProductBean getPartialProductFor(@QueryParam("productId") Long productId, @QueryParam("clientId") Long clientId) {
+		return productHandler.getPartialProductFor(productId, clientId);
+	}
+	
+	@GET
 	@Path("/list")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<Product> getProductObjectList(@QueryParam("pageNumber") Integer pageNumber, 
