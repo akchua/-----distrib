@@ -30,6 +30,22 @@
 						</div>
 						
 						<br />
+						<dl class="dl-horizontal col-xs-12">
+							<dt>Current Price:</dt>
+							<dd data-bind="text: productFormattedPackageNetSellingPrice"></dd>
+				    	</dl>
+						<br />
+						
+						<div class="control-group">
+							<label class="control-label" for="discount">New Price (Php)</label>
+							<div class="controls">
+								<input data-bind="textInput: clientProductPriceFormModel.packageSellingPrice" type="number" step="any" id="discount" name="discount" placeholder="" class="form-control input-lg">
+								<p class="help-block">The price to override the current price.
+									<p class="text-danger">*Product promo, client discount and less vat still applies on top of the given selling price.</p>
+								</p>
+							</div>
+						</div>
+						
 						<div class="panel panel-primary">
 							<div class="panel-body">
 								<dl class="dl-horizontal col-xs-12">
@@ -39,22 +55,9 @@
 									<dd><span data-bind="text: clientCompanyPriceDiscount"></span>%</dd>
 									<dt>Client Less Vat:</dt>
 									<dd><span data-bind="text: clientLessVat"></span>%</dd>
-									<hr />
-									<dt>Current Price:</dt>
-									<dd data-bind="text: productFormattedPackageNetSellingPrice"></dd>
+									<dt>Net Price:</dt>
+									<dd data-bind="text: netPackageSellingPrice"></dd>
 						    	</dl>
-							</div>
-						</div>
-						<br />
-						
-						<div class="control-group">
-							<label class="control-label" for="discount">New Price (Php)</label>
-							<div class="controls">
-								<input data-bind="textInput: clientProductPriceFormModel.packageSellingPrice" type="number" step="any" id="discount" name="discount" placeholder="" class="form-control input-lg">
-								<p class="help-block">The base selling price that the selected client will see for the selected product.
-									<p>Net Of Override Package Selling Price : <span data-bind="text: netPackageSellingPrice" class="text-primary"></span></p>
-									<p class="text-danger">*Product promo, client discount and less vat still applies on top of the given selling price.</p>
-								</p>
 							</div>
 						</div>
 					</div>

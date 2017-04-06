@@ -8,6 +8,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#clientcompany" data-toggle="tab">Client-Company Price</a></li>
 		<li><a href="#clientproduct" data-toggle="tab">Client-Product Price</a></li>
+		<li><a href="#clientpromo" data-toggle="tab">Client Promo Discount</a></li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="clientcompany">
@@ -18,6 +19,11 @@
 		<div class="tab-pane" id="clientproduct">
 			<div class="row col-xs-offset-2">
 				<div data-bind="compose: { model: 'viewmodels/manage/clientproductprice', activationData: { clientId : clientId } }"></div>
+			</div>
+		</div>
+		<div class="tab-pane" id="clientpromo">
+			<div class="row col-xs-offset-2">
+				<div data-bind="compose: { model: 'viewmodels/manage/clientpromo', activationData: { clientId : clientId } }"></div>
 			</div>
 		</div>
 	</div>

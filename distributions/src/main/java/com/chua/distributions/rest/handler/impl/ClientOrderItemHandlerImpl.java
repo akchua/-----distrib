@@ -15,11 +15,9 @@ import com.chua.distributions.beans.PartialClientOrderItemBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
-import com.chua.distributions.database.entity.ClientPromo;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
-import com.chua.distributions.database.service.ClientPromoService;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
@@ -46,9 +44,6 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 	
 	@Autowired
 	private ProductService productService;
-	
-	@Autowired
-	private ClientPromoService clientPromoService;
 	
 	@Autowired
 	private ProductHandler productHandler;
@@ -125,7 +120,6 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 				clientOrderItemm.setClientOrder(clientOrder);
 				clientOrderItemm.setQuantity(quantity);
 				setClientOrderItem(clientOrderItemm, product);
-				applyPromo(clientOrderItemm, product);
 				
 				result = new ResultBean();
 				result.setSuccess(clientOrderItemService.insert(clientOrderItemm) != null);
@@ -372,14 +366,6 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		clientOrderItem.setDisplayName(product.getDisplayName());
 		clientOrderItem.setPackaging(product.getPackaging());
 		clientOrderItem.setUnitPrice(productHandler.getFinalBaseUnitSellingPrice(product, clientOrderItem.getClientOrder().getClient()));
-		clientOrderItem.setDiscount(0.0f);
-	}
-	
-	private void applyPromo(ClientOrderItem clientOrderItem, Product product) {
-		final ClientPromo clientPromo = clientPromoService.findByClientAndProduct(clientOrderItem.getClientOrder().getClient().getId(), product.getId());
-		
-		if(clientPromo != null) {
-			clientOrderItem.setDiscount(clientPromo.getDiscount());
-		}
+		clientOrderItem.setDiscount(productHandler.getFinalSellingDiscount(product, clientOrderItem.getClientOrder().getClient()));
 	}
 }

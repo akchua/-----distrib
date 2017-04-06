@@ -60,6 +60,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	self.clientProductPriceFormModel.clientId.subscribe(function(newClientId) {
     		self.refreshClientCompanyPrice();
     		self.refreshClient();
+    		self.refreshProduct();
     	});
     	
     	self.clientProductPriceFormModel.productId.subscribe(function(newProductId) {
