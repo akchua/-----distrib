@@ -93,7 +93,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
 					self.clientProductPriceFormModel.packageSellingPrice() 
 					* ((100.0 - self.productSellingDiscount()) / 100)
 					* ((100.0 - self.clientCompanyPriceDiscount()) / 100) 
-					* ((100.0 - self.clientLessVat()) / 100) 
+					* ((100.0 - self.clientLessVat()) / 100))
     	);
     };
     
@@ -115,6 +115,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
 	    	clientCompanyPriceService.getClientCompanyPriceByClientAndProduct(self.clientProductPriceFormModel.clientId, self.clientProductPriceFormModel.productId).done(function(clientCompanyPrice) {
 	    		if(clientCompanyPrice) {
 	    			self.clientCompanyPriceDiscount(clientCompanyPrice.discount);
+	    		} else {
+	    			self.clientCompanyPriceDiscount(0);
 	    		}
 	    	});
     	}

@@ -20,9 +20,9 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 	
 	private String description;
 	
-	private Float sellingDiscount;
-	
 	private Float packageNetSellingPrice;
+	
+	private Float sellingDiscount;
 	
 	public PartialProductBean(Product product) {
 		super(product);
@@ -31,8 +31,8 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		setCompanyName(product.getCompany().getName());
 		setCategoryName(product.getCategory().getName());
 		setDescription(product.getDescription());
-		setSellingDiscount(0.0f);
 		setPackageNetSellingPrice(0.0f);
+		setSellingDiscount(0.0f);
 	}
 	
 	public String getProductCode() {
@@ -75,23 +75,31 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		this.description = description;
 	}
 
-	public Float getSellingDiscount() {
-		return sellingDiscount;
-	}
-
-	public void setSellingDiscount(Float sellingDiscount) {
-		this.sellingDiscount = sellingDiscount;
-	}
-
 	public Float getPackageNetSellingPrice() {
 		return packageNetSellingPrice;
+	}
+	
+	public String getFormattedPackageNetSellingPrice() {
+		return CurrencyFormatter.pesoFormat(packageNetSellingPrice);
 	}
 
 	public void setPackageNetSellingPrice(Float packageNetSellingPrice) {
 		this.packageNetSellingPrice = packageNetSellingPrice;
 	}
+	
+	public Float getSellingDiscount() {
+		return sellingDiscount;
+	}
+	
+	public Float getDiscountAmount() {
+		return (getPackageNetSellingPrice() * sellingDiscount) / 100.0f;
+	}
+	
+	public String getFormattedPackageSellingDiscount() {
+		return CurrencyFormatter.pesoFormat(getDiscountAmount()) + " (" + sellingDiscount + "%)";
+	}
 
-	public String getFormattedPackageNetSellingPrice() {
-		return CurrencyFormatter.pesoFormat(packageNetSellingPrice);
+	public void setSellingDiscount(Float sellingDiscount) {
+		this.sellingDiscount = sellingDiscount;
 	}
 }

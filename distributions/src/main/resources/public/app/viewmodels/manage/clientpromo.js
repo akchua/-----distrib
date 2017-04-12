@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'modules/clientproductpriceservice', 'modules/userservice', 'viewmodels/manage/clientproductpriceform', 'viewmodels/user/userview'], 
+define(['durandal/app', 'knockout', 'modules/clientpromoservice', 'modules/userservice', 'viewmodels/manage/clientpromoform', 'viewmodels/user/userview'], 
 			function (app, ko, clientPromoService, userService, ClientPromoForm, UserView) {
     var ClientPromo = function() {
     	this.clientPromoList = ko.observable();

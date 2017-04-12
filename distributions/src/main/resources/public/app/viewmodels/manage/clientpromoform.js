@@ -1,5 +1,5 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpriceservice', 'modules/clientcompanypriceservice', 'modules/userservice', 'modules/productservice'], 
-			function (dialog, app, ko, clientPromoService, clientCompanyPriceService, userService, productService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientpromoservice', 'modules/userservice', 'modules/productservice'], 
+			function (dialog, app, ko, clientPromoService, userService, productService) {
     var ClientPromoForm = function(clientPromo, title) {
     	this.clientPromo = clientPromo;
     	this.title = title;
@@ -53,7 +53,6 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	var self = this;
     	
     	self.refreshProduct();
-		self.refreshClient();
     	
     	self.clientPromoFormModel.clientId.subscribe(function(newClientId) {
     		self.refreshProduct();
@@ -82,7 +81,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	self.discountedPackageSellingPrice(
 			Math.round(
 					self.productPackageNetSellingPrice() 
-					* ((100.0 - self.clientPromoFormModel.discount()) / 100)
+					* ((100.0 - self.clientPromoFormModel.discount()) / 100))
     	);
     };
     
