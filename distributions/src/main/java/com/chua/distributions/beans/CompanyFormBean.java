@@ -15,6 +15,8 @@ public class CompanyFormBean extends FormBean {
 	
 	private String emailAddress;
 
+	private String reportReceiver;
+	
 	public String getName() {
 		return name;
 	}
@@ -45,5 +47,13 @@ public class CompanyFormBean extends FormBean {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public String getReportReceiver() {
+		return reportReceiver;
+	}
+
+	public void setReportReceiver(String reportReceiver) {
+		this.reportReceiver = reportReceiver;
 	}
 }

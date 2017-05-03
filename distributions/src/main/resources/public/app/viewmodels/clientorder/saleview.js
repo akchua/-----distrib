@@ -5,6 +5,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     	
     	this.partialClientOrderItemList = ko.observable();
     	
+    	this.showClientDiscount = ko.observable(true);
+    	
     	this.saleViewModel = {
 			id: ko.observable(),
 			
@@ -40,6 +42,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
 		self.saleViewModel.formattedAdditionalDiscount(self.partialClientOrder.formattedAdditionalDiscount);
 		self.saleViewModel.formattedNetTotal(self.partialClientOrder.formattedNetTotal);
 		self.saleViewModel.status(self.partialClientOrder.status.displayName);
+		
+		self.showClientDiscount(self.partialClientOrder.additionalDiscount != 0);
     	
     	self.currentPage(1);
 		self.currentPageSubscription = self.currentPage.subscribe(function() {

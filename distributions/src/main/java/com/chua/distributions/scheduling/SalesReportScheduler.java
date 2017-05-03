@@ -16,7 +16,9 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.MailConstants;
+import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.SalesReportHandler;
@@ -40,6 +42,9 @@ public class SalesReportScheduler {
 	private UserService userService;
 	
 	@Autowired
+	private CompanyService companyService;
+	
+	@Autowired
 	private SalesReportHandler salesReportHandler;
 	
 	@Autowired
@@ -53,7 +58,7 @@ public class SalesReportScheduler {
 	 */
 	@Scheduled(cron = "0 0 1 * * SAT")
 	public void weeklyWarehouseSalesReport() {
-		LOG.info("Creating Weekly Warehouse Sales Report");
+		LOG.info("### Creating weekly warehouse sales report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -77,34 +82,49 @@ public class SalesReportScheduler {
 		salesReportQuery.setSendMail(true);
 		salesReportQuery.setDownloadFile(false);
 		
-		for(Warehouse warehouse : Warehouse.values()) {
-			salesReportQuery.setWarehouse(warehouse);
+		final List<Company> companies = companyService.findAllList();
+		
+		for(Company company : companies) {
+			LOG.info("### Starting weekly warehouse sales report for " + company.getName() + ".");
 			
-			final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
+			salesReportQuery.setCompanyId(company.getId());
 			
-			if(result.getSuccess()) {
-				LOG.info(result.getMessage());
-				emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
-						null,
-						MailConstants.DEFAULT_EMAIL,
-						"Weekly Warehouse Sales Report",
-						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-						new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
+			for(Warehouse warehouse : Warehouse.values()) {
+				salesReportQuery.setWarehouse(warehouse);
+				
+				final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
+				
+				if(result.getSuccess()) {
+					LOG.info(result.getMessage());
+					emailUtil.send(company.getReportReceiver(),
+							null,
+							MailConstants.DEFAULT_EMAIL + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
+							"Weekly Warehouse Sales Report",
+							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+							new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
+				}
+				else {
+					// NOTIFY ADMINS
+					String recipient = "";
+					final List<User> administrators = userService.findAllAdministrators();
+					
+					for(User admin : administrators) {
+						recipient += admin.getEmailAddress() + ", ";
+					}
+					
+					LOG.error(result.getMessage());
+					emailUtil.send(recipient,
+							"Weekly Warehouse Sales Report",
+							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + "." + "\n"
+							+ "\n"
+							+ result.getMessage());
+				}
 			}
-			else {
-				LOG.error(result.getMessage());
-				emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER, 
-						null,
-						MailConstants.DEFAULT_EMAIL,
-						"Weekly Warehouse Sales Report",
-						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + "." + "\n"
-						+ "\n"
-						+ result.getMessage(),
-						null);
-			}
+			
+			LOG.info("### Weekly warehouse sales report for " + company.getName() + " complete...");
 		}
 		
-		LOG.info("Weekly Warehouse Sales Report complete...");
+		LOG.info("### Weekly warehouse sales report complete...");
 	}
 	
 	/**
@@ -115,7 +135,7 @@ public class SalesReportScheduler {
 	 */
 	@Scheduled(cron = "0 0 1 1 * ?")
 	public void monthlyClientSalesReport() {
-		LOG.info("Creating Monthly Warehouse Sales Report");
+		LOG.info("### Creating monthly client sales report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -140,41 +160,51 @@ public class SalesReportScheduler {
 		salesReportQuery.setSendMail(true);
 		salesReportQuery.setDownloadFile(false);
 		
+		final List<Company> companies = companyService.findAllList();
 		final List<User> clients = userService.findAllClients();
-		final List<String> filePaths = new ArrayList<String>();
 		
-		for(User client : clients) {
-			salesReportQuery.setClientId(client.getId());
+		for(Company company : companies) {
+			LOG.info("### Starting monthly client sales report for " + company.getName() + ".");
 			
-			final ResultBean result = salesReportHandler.generateReport(salesReportQuery, 
-					client.getFormattedName() + "_-_" + DateUtil.getNameOfMonth(firstDayOfLastMonth) + "_Sales_Report.pdf");
-			if(result.getSuccess()) {
-				filePaths.add(FileConstants.SALES_HOME + (String) result.getExtras().get("fileName"));
-			} else {
-				LOG.error(client.getFormattedName() + " : " + result.getMessage());
+			salesReportQuery.setCompanyId(company.getId());
+			
+			final List<String> filePaths = new ArrayList<String>();
+			
+			for(User client : clients) {
+				salesReportQuery.setClientId(client.getId());
+				
+				final ResultBean result = salesReportHandler.generateReport(salesReportQuery, 
+						client.getFormattedName() + "_-_" + DateUtil.getNameOfMonth(firstDayOfLastMonth) + "_Sales_Report.pdf");
+				if(result.getSuccess()) {
+					filePaths.add(FileConstants.SALES_HOME + (String) result.getExtras().get("fileName"));
+				} else {
+					LOG.error(client.getFormattedName() + " : " + result.getMessage());
+				}
 			}
+			
+			final String attachment;
+			
+			if(filePaths.size() > 1) {
+				attachment = FileConstants.SALES_HOME + "MonthlyClientSales_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
+				FileZipUtil.zipFile(filePaths, attachment);
+			} else if(filePaths.size() == 1) {
+				attachment = filePaths.get(1);
+			} else {
+				attachment = "";
+			}
+			
+			if(!attachment.isEmpty()) {
+				emailUtil.send(company.getReportReceiver(),
+						null,
+						MailConstants.DEFAULT_EMAIL + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
+						"Monthly Client Sales Report",
+						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+						new String[] { attachment });
+			}
+			
+			LOG.info("### Monthly client sales report for " + company.getName() + " complete...");
 		}
 		
-		final String attachment;
-		
-		if(filePaths.size() > 1) {
-			attachment = FileConstants.SALES_HOME + "MonthlyClientSales_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
-			FileZipUtil.zipFile(filePaths, attachment);
-		} else if(filePaths.size() == 1) {
-			attachment = filePaths.get(1);
-		} else {
-			attachment = "";
-		}
-		
-		if(!attachment.isEmpty()) {
-			emailUtil.send(MailConstants.DEFAULT_REPORT_RECEIVER,
-					null,
-					MailConstants.DEFAULT_EMAIL,
-					"Monthly Client Sales Report",
-					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-					new String[] { attachment });
-		}
-		
-		LOG.info("Monthly Warehouse Sales Report complete...");
+		LOG.info("### Monthly client sales report complete...");
 	}
 }

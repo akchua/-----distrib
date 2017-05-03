@@ -31,7 +31,7 @@ public class PurchaseOrderServiceImpl
 
 	@Override
 	public ObjectList<PurchaseOrder> findAllWithPagingOrderByStatus(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, showPaid, new Order[] { Order.asc("status") });
+		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, showPaid, null);
 	}
 
 	@Override

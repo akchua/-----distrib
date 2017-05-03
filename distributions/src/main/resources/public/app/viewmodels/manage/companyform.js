@@ -10,7 +10,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     		
     		contactPerson: ko.observable(),
     		contactNumber: ko.observable(),
-    		emailAddress: ko.observable()
+    		emailAddress: ko.observable(),
+    		reportReceiver: ko.observable()
 	    };
     };
     
@@ -22,6 +23,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     	self.companyFormModel.contactPerson(self.company.contactPerson);
     	self.companyFormModel.contactNumber(self.company.contactNumber);
     	self.companyFormModel.emailAddress(self.company.emailAddress);
+    	self.companyFormModel.reportReceiver(self.company.reportReceiver);
     };
     
     CompanyForm.show = function(company, title) {

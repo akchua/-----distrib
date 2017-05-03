@@ -28,6 +28,8 @@ public class Company extends BaseObject {
 	
 	private String emailAddress;
 	
+	private String reportReceiver;
+	
 	@Basic
 	@Column(name = "name")
 	public String getName() {
@@ -66,5 +68,15 @@ public class Company extends BaseObject {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	@Basic
+	@Column(name = "report_receiver")
+	public String getReportReceiver() {
+		return reportReceiver;
+	}
+
+	public void setReportReceiver(String reportReceiver) {
+		this.reportReceiver = reportReceiver;
 	}
 }

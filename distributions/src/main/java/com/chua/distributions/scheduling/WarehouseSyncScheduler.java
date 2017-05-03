@@ -40,5 +40,7 @@ public class WarehouseSyncScheduler {
 				LOG.error(result.getMessage());
 			}
 		}
+		
+		LOG.info("Weekly warehouse sync complete...");
 	}
 }

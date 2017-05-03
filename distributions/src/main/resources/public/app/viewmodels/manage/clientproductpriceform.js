@@ -89,11 +89,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientproductpric
     	var self = this;
     	
     	self.netPackageSellingPrice(
-			Math.round(
-					self.clientProductPriceFormModel.packageSellingPrice() 
-					* ((100.0 - self.productSellingDiscount()) / 100)
-					* ((100.0 - self.clientCompanyPriceDiscount()) / 100) 
-					* ((100.0 - self.clientLessVat()) / 100))
+			parseFloat(
+					Math.round(
+						self.clientProductPriceFormModel.packageSellingPrice() 
+						* ((100 - self.productSellingDiscount()) / 100)
+						* ((100 - self.clientCompanyPriceDiscount()) / 100) 
+						/ ((100 + self.clientLessVat()) / 100)
+						* 100) / 100 // for decimal place
+					).toFixed(2)
     	);
     };
     

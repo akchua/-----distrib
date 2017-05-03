@@ -30,10 +30,12 @@
 							<dd data-bind="text: saleViewModel.formattedGrossTotal"></dd>
 							<dt>Total Discount:</dt>
 							<dd data-bind="text: saleViewModel.formattedDiscountTotal"></dd>
-							<dt>Less VAT(<span data-bind="text: saleViewModel.lessVat"></span>%):</dt>
-							<dd data-bind="text: saleViewModel.formattedLessVatAmount"></dd>
+							<!-- ko if: showClientDiscount -->
 							<dt>Client Discount(<span data-bind="text: saleViewModel.discount"></span>%):</dt>
 							<dd data-bind="text: saleViewModel.formattedAdditionalDiscount"></dd>
+							<!-- /ko -->
+							<dt>Less VAT(<span data-bind="text: saleViewModel.lessVat"></span>%):</dt>
+							<dd data-bind="text: saleViewModel.formattedLessVatAmount"></dd>
 							<dt class="h3">Net Total:</dt>
 							<dd data-bind="text: saleViewModel.formattedNetTotal" class="h3"></dd>
 				    	</dl>

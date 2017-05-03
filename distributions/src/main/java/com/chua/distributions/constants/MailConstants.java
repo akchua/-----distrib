@@ -19,5 +19,5 @@ public class MailConstants {
 	
 	public static final String DEFAULT_EMAIL = "pat_great@yahoo.com, firecrash@gmail.com, jchua3508@gmail.com";
 	
-	public static final String DEFAULT_REPORT_RECEIVER = "primepad.reports@gmail.com, ariane.miranda@sealedair.com";
+	public static final String DEFAULT_REPORT_RECEIVER = "primepad.reports@gmail.com";
 }

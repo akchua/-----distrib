@@ -79,9 +79,12 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientpromoservic
     	var self = this;
     	
     	self.discountedPackageSellingPrice(
-			Math.round(
+			parseFloat(
+				Math.round(
 					self.productPackageNetSellingPrice() 
-					* ((100.0 - self.clientPromoFormModel.discount()) / 100))
+					* ((100.0 - self.clientPromoFormModel.discount()) / 100.0)
+					* 100) / 100 // for decimal place
+				).toFixed(2)	
     	);
     };
     
