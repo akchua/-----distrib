@@ -373,7 +373,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private void refreshPurchaseOrder(Long purchaseOrderId) {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
 		
-		if(purchaseOrder != null) {
+		if(purchaseOrder != null && !purchaseOrder.getStatus().equals(Status.PAID)) {
 			Float grossTotal = 0.0f;
 			Float discountTotal = 0.0f;
 			List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrderId);

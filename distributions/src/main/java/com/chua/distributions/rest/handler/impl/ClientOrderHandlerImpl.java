@@ -566,7 +566,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	private void refreshClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		
-		if(clientOrder != null) {
+		if(clientOrder != null && !clientOrder.getStatus().equals(Status.PAID)) {
 			Float grossTotal = 0.0f;
 			Float discountTotal = 0.0f;
 			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrderId);
