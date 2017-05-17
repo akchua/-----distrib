@@ -1,1 +1,1 @@
-mysqldump -uroot distributions > back_20170126_1.sql
+mysqldump -uroot distributions > /usr/local/primepad/db_backup/back_20170517_1.sql

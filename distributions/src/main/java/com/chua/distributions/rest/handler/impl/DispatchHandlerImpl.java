@@ -29,6 +29,7 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
+import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
@@ -58,6 +59,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 
 	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
+	
+	@Autowired
+	private UserHandler userHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
@@ -148,7 +152,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						// SENDING PRINTABLE DISPATCH TO THIS USER
 						flag = emailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
 								null,
-								MailConstants.DEFAULT_EMAIL,
+								MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 								"Dispatch",
 								"Dispatch #" + dispatch.getId(),
 								new String[] { filePath });

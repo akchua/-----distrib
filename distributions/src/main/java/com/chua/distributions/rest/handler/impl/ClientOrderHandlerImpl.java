@@ -41,6 +41,7 @@ import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.chua.distributions.rest.handler.SalesReportHandler;
+import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
@@ -72,6 +73,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Autowired
 	private SalesReportHandler salesReportHandler;
+	
+	@Autowired
+	private UserHandler userHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
@@ -247,9 +251,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			if(client != null) {
 				result = addClientOrder(company, client);
 				if(result.getSuccess()) {
+					
+					
 					emailUtil.send(client.getEmailAddress(),
 							null,
-							MailConstants.DEFAULT_EMAIL,
+							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 							"Order Created",
 							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
 								+ "The ID of the created order is " + result.getExtras().get("clientOrderId") + ". You can verify the contents of the order by logging in at distributions.primepad.net . "
@@ -426,7 +432,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		result.setSuccess(clientOrderService.update(clientOrder) &&
 				emailUtil.send(clientOrder.getClient().getEmailAddress(), 
 						null,
-						MailConstants.DEFAULT_EMAIL,
+						MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 						"Order Accepted",
 						"Thank you " + clientOrder.getClient().getFormattedName() + "(" + clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
 						+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
@@ -511,7 +517,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		if(result.getSuccess() && salesReportQuery.getSendMail()) {
 			emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
 					null,
-					MailConstants.DEFAULT_EMAIL,
+					MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 					"Sales Report",
 					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });

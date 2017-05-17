@@ -24,4 +24,6 @@ public interface UserService extends Service<User, Long>, UserPrototype {
 	List<User> findAllClientsOrderByBusinessName();
 	
 	List<User> findAllAdministrators();
+	
+	List<User> findAllManagers();
 }

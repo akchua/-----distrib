@@ -27,6 +27,7 @@ import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
+import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
@@ -54,6 +55,9 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	
 	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
+	
+	@Autowired
+	private UserHandler userHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
@@ -239,7 +243,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 							filePath, false);
 					boolean flag = emailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 							null,
-							MailConstants.DEFAULT_EMAIL,
+							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 							"Purchase Order",
 							"Purchase Order #" + purchaseOrder.getId(),
 							new String[] { filePath });

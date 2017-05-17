@@ -227,7 +227,7 @@ public class UserHandlerImpl implements UserHandler {
 			result.setSuccess(userService.update(user) &&
 					emailUtil.send(user.getEmailAddress(),
 					null,
-					MailConstants.DEFAULT_EMAIL,
+					MailConstants.DEFAULT_EMAIL + ", " +  getEmailOfAllAdminAndManagers(),
 					"Prime Pad Reset Password",
 					"Hi " + user.getFirstName() + " " + user.getLastName() + ", your Prime Pad account password has just been reset."
 						+ "\nYour new credentials are : "
@@ -320,6 +320,24 @@ public class UserHandlerImpl implements UserHandler {
 	public List<VatType> getVatTypeList() {
 		return Stream.of(VatType.values())
 					.collect(Collectors.toList());
+	}
+	
+	@Override
+	public String getEmailOfAllAdminAndManagers() {
+		String emailOfAllAdminAndManagers = "";
+		
+		final List<User> administrators = userService.findAllAdministrators();
+		final List<User> managers = userService.findAllManagers();
+		
+		for(User admin : administrators) {
+			emailOfAllAdminAndManagers += admin.getEmailAddress() + ", ";
+		}
+		
+		for(User manager : managers) {
+			emailOfAllAdminAndManagers += manager.getEmailAddress() + ", ";
+		}
+		
+		return emailOfAllAdminAndManagers;
 	}
 	
 	private void setUser(User user, UserFormBean userForm) {

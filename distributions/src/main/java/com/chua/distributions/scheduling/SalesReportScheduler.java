@@ -22,6 +22,7 @@ import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.SalesReportHandler;
+import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.FileZipUtil;
@@ -46,6 +47,9 @@ public class SalesReportScheduler {
 	
 	@Autowired
 	private SalesReportHandler salesReportHandler;
+	
+	@Autowired
+	private UserHandler userHandler;
 	
 	@Autowired
 	private EmailUtil emailUtil;
@@ -98,7 +102,7 @@ public class SalesReportScheduler {
 					LOG.info(result.getMessage());
 					emailUtil.send(company.getReportReceiver(),
 							null,
-							MailConstants.DEFAULT_EMAIL + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
+							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers() + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
 							"Weekly Warehouse Sales Report",
 							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 							new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
@@ -196,7 +200,7 @@ public class SalesReportScheduler {
 			if(!attachment.isEmpty()) {
 				emailUtil.send(company.getReportReceiver(),
 						null,
-						MailConstants.DEFAULT_EMAIL + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
+						MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers() + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
 						"Monthly Client Sales Report",
 						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 						new String[] { attachment });
