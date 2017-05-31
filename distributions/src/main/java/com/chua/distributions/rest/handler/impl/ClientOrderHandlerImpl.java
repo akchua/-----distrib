@@ -252,7 +252,6 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				result = addClientOrder(company, client);
 				if(result.getSuccess()) {
 					
-					
 					emailUtil.send(client.getEmailAddress(),
 							null,
 							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),

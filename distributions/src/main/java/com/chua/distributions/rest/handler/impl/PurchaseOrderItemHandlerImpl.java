@@ -84,7 +84,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.findByProductAndPurchaseOrder(product.getId(), purchaseOrder.getId());
 		
 		if(purchaseOrderItem == null) {
-			if(quantity > 0) {
+			if(!quantity.equals(0)) {
 				final PurchaseOrderItem purchaseOrderItemm = new PurchaseOrderItem();
 				
 				purchaseOrderItemm.setPurchaseOrder(purchaseOrder);
@@ -99,7 +99,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity must be greater than 0."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity equal to 0 is removed."));
 			}
 		} else {
 			result = changeQuantity(purchaseOrderItem, purchaseOrderItem.getQuantity() + quantity);

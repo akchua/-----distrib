@@ -83,7 +83,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.TURQUOISE, "No sales found within the given restrictions."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.TURQUOISE, "No sales found between " + DateFormatter.longFormat(salesReportQuery.getFrom()) + " and " + DateFormatter.longFormat(salesReportQuery.getTo()) + "."));
 			}
 		} else {
 			result = validateQuery;

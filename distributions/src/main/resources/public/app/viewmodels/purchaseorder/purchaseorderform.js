@@ -1,11 +1,13 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice'], 
-		function (dialog, app, ko, purchaseOrderService, companyService) {
+define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice'], 
+		function (router, dialog, app, ko, purchaseOrderService, companyService) {
     var PurchaseOrderForm = function(purchaseOrder, title) {
     	this.purchaseOrder = purchaseOrder;
     	this.title = title;
     	
     	this.companyList = ko.observable();
     	this.warehouseList = ko.observable();
+    	
+    	this.enableSave = ko.observable(true);
     	
     	this.purchaseOrderFormModel = {
     		id: ko.observable(),
@@ -39,11 +41,15 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     PurchaseOrderForm.prototype.save = function() {
     	var self = this;
     	
+    	self.enableSave(false);
         purchaseOrderService.savePurchaseOrder(ko.toJSON(self.purchaseOrderFormModel)).done(function(result) {
         	if(result.success) {
-        		dialog.close(self);	
-        	} 
-        	app.showMessage(result.message);
+        		dialog.close(self);
+        		router.navigate('#purchaseorderpage/' + result.extras.purchaseOrderId);
+        	} else {
+         		self.enableSave(true);
+         		app.showMessage(result.message);
+        	}
         });
     };
     

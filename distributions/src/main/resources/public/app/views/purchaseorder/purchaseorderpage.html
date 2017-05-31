@@ -50,6 +50,7 @@
 					<th>Name</th>
 					<th class = "text-right">Unit Price (Php)</th>
 					<th class = "text-right">Discount</th>
+					<th class = "text-right">Gross Price</th>
 					<th class = "text-right">Net Price (Php)</th>
 				</tr>
 			</thead>
@@ -68,6 +69,7 @@
 					<td data-bind="text: purchaseOrderItem.displayName"></td>
 					<td data-bind="text: purchaseOrderItem.formattedPackageUnitPrice" class = "text-right"></td>
 					<td data-bind="text: purchaseOrderItem.formattedDiscountAmount" class = "text-right"></td>
+					<td data-bind="text: purchaseOrderItem.formattedGrossPrice" class = "text-right"></td>
 					<td data-bind="text: purchaseOrderItem.formattedNetPrice" class = "text-right"></td>
 					
 					<td>

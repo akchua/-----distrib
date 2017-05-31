@@ -3,7 +3,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/users
     var Request = function() {
     	this.clientOrderList = ko.observable();
     	
-    	this.showAccepted = ko.observable(false);
+    	this.showAccepted = ko.observable(true);
     	this.enableAccept = ko.observable(true);
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);

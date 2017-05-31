@@ -29,14 +29,15 @@ define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules
     AddOrder.prototype.add = function() {
     	var self = this;
     	
+    	self.enableAdd(false);
     	clientOrderService.addClientOrder(self.companyId(), self.clientId()).done(function(result) {
-    		self.enableAdd(false);
     		if(result.success) {
         		dialog.close(self);	
         		router.navigate('#clientorderpage/' + result.extras.clientOrderId);
+        	} else {
+	    		self.enableAdd(true);
+				app.showMessage(result.message);
         	}
-    		self.enableAdd(true);
-			app.showMessage(result.message);
     	});
     };
     

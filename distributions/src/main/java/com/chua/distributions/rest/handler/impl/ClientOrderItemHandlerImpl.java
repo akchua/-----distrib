@@ -114,7 +114,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ClientOrderItem clientOrderItem = clientOrderItemService.findByProductAndClientOrder(product.getId(), clientOrder.getId());
 		
 		if(clientOrderItem == null) {
-			if(quantity > 0) {
+			if(!quantity.equals(0)) {
 				final ClientOrderItem clientOrderItemm = new ClientOrderItem();
 				
 				clientOrderItemm.setClientOrder(clientOrder);
@@ -129,7 +129,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity must be greater than 0."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Item quantity equal to 0 is removed."));
 			}
 		} else {
 			result = changeQuantity(clientOrderItem, clientOrderItem.getQuantity() + quantity);
@@ -227,7 +227,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 	private ResultBean changeQuantity(ClientOrderItem clientOrderItem, Integer quantity) {
 		final ResultBean result;
 		
-		if(quantity > 0) {
+		if(!quantity.equals(0)) {
 			if(quantity / clientOrderItem.getPackaging() < Integer.valueOf(1000) && quantity % clientOrderItem.getPackaging() < Integer.valueOf(1000)
 					&& quantity / clientOrderItem.getPackaging() > Integer.valueOf(-1000) && quantity % clientOrderItem.getPackaging() > Integer.valueOf(-1000) ) {
 				clientOrderItem.setQuantity(quantity);

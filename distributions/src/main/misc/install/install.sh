@@ -1,3 +1,6 @@
+# Backup database before every installation
+mysqldump -uroot distributions > /usr/local/primepad/db_backup/back_distributions-1.3.12.sql
+
 # Shutdown running application
 # Manual Mode - "jps" command to get the running PID, use the PID to run the command "kill -15 ${PID}"
 # kill -15 option is gracefully shutdown, kill -9 option is instant kill 

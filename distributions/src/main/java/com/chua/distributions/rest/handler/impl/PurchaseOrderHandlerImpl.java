@@ -1,7 +1,9 @@
 package com.chua.distributions.rest.handler.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,6 +150,10 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 			result = new ResultBean();
 			result.setSuccess(purchaseOrderService.insert(purchaseOrder) != null);
 			if(result.getSuccess()) {
+				Map<String, Object> extras = new HashMap<String, Object>();
+				extras.put("purchaseOrderId", purchaseOrder.getId());
+				result.setExtras(extras);
+				
 				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Purchase Order of " + Html.text(Color.BLUE, "ID #" + purchaseOrder.getId()) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
