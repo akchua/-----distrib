@@ -4,6 +4,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
     	this.companyList = ko.observable();
+    	this.clientSalesReportTypes = ko.observable();
+    	
+    	this.showInclude = ko.observable(true);
     	
     	this.enableGenerateButton = ko.observable(true);
     	
@@ -15,6 +18,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		clientId: ko.observable(),
     		companyId: ko.observable(),
     		
+    		clientSalesReportType: ko.observable('STATUS_BASED'),  //HARDCODE FOR NOW
+    		
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
     		includeDispatched: ko.observable(false),
@@ -23,10 +28,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		includeSubmitted: ko.observable(false),
     		includeCreating: ko.observable(false),
     		
-    		showNetTrail: ko.observable(true),
-    		
     		sendMail: ko.observable(true),
-    		downloadFile: ko.observable(false)
+    		downloadFile: ko.observable(true)
 	    };
     };
     
@@ -37,12 +40,20 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
 			self.warehouseList(warehouseList);
 		});
     	
+    	clientOrderService.getClientSalesReportType().done(function(clientSalesReportTypes) {
+			self.clientSalesReportTypes(clientSalesReportTypes);
+		});
+    	
     	userService.getFullClientList().done(function(clientList) {
     		self.clientList(clientList);
     	});
     	
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
+    	});
+    	
+    	self.salesReportQuery.clientSalesReportType.subscribe(function(salesReportType) {
+    		self.showInclude(salesReportType == 'STATUS_BASED');
     	});
     };
     

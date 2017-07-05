@@ -48,7 +48,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	var self = this;
     	
     	clientOrderService.getFormattedTotalPayable().done(function(formattedPayable) {
-    		self.formattedPayable(formattedPayable.content);
+    		self.formattedPayable(formattedPayable);
     	});
     };
     

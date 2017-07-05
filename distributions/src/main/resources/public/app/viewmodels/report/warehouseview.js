@@ -22,7 +22,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 		});
 		
 		warehouseItemService.getFormattedPurchaseValue(self.warehouse).done(function(formattedPurchaseValue) {
-			self.formattedPurchaseValue(formattedPurchaseValue.content);
+			self.formattedPurchaseValue(formattedPurchaseValue);
 		});
 		
 		self.refreshWarehouseItemList();

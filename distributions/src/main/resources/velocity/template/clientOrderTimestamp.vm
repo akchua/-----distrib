@@ -1,0 +1,7 @@
+## Template for Client Order Net Trail
+## Has exactly 50 columns per line
+                                                  
+                Created on : ${t.FormattedCreatedOn}           
+              Requested on : ${t.FormattedRequestedOn}           
+              Delivered on : ${t.FormattedDeliveredOn}           
+                   Paid on : ${t.FormattedPaidOn}           

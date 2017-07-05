@@ -1,5 +1,5 @@
-﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
-		function (router, app, ko, securityService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
+﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'modules/constantsservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
+		function (router, app, ko, securityService, constantsService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
 	var homeroute = [
 	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: false }
 	];
@@ -198,10 +198,14 @@
 	
 	Shell.prototype.register = function() {
 		/*UserForm.show(new Object(), 'Registration');*/
-		app.showMessage('<p>To register please email us at <span class="text-primary">primepad.pampanga@gmail.com</span> or Call/Text <span class="text-primary">+63 926 615 9373</span>.'
-				+ ' Make sure to include <span class="text-primary">Contact Person, Contact Number, Business Name and Business Address</span> in your message.</p>'
-				+ '<p/>'
-				+ '<p>To ensure the quality of our service, we make sure to meet up with new clients before accepting any order requests.</p>');
+		constantsService.getBusinessOfficialEmail().done(function(officialEmail) {
+			constantsService.getBusinessPrimaryContactNumber().done(function(primaryContact) {
+				app.showMessage('<p>To register please email us at <span class="text-primary">' + officialEmail + '</span> or Call/Text <span class="text-primary">' + primaryContact + '</span>.'
+						+ ' Make sure to include <span class="text-primary">Contact Person, Contact Number, Business Name and Business Address</span> in your message.</p>'
+						+ '<p/>'
+						+ '<p>To ensure the quality of our service, we make sure to meet up with new clients before accepting any order requests.</p>');
+			});
+		});
 	};
 	
 	return Shell;

@@ -44,7 +44,7 @@ public class SalesReportTemplate implements Template {
 	@Override
 	public String merge(VelocityEngine velocityEngine) {
 		for(ClientOrder clientOrder : clientOrders) {
-			final ClientOrderSummaryTemplate orderSummaryTemplate = new ClientOrderSummaryTemplate(clientOrder, salesReportQuery.getShowNetTrail());
+			final ClientOrderSummaryTemplate orderSummaryTemplate = new ClientOrderSummaryTemplate(clientOrder);
 			summarizedClientOrders.add(orderSummaryTemplate.merge(velocityEngine));
 		}
 		
@@ -97,10 +97,6 @@ public class SalesReportTemplate implements Template {
 	
 	public List<String> getSummarizedClientOrders() {
 		return summarizedClientOrders;
-	}
-	
-	public Boolean getShowNetTrail() {
-		return salesReportQuery.getShowNetTrail();
 	}
 	
 	public String getTotalSales() {

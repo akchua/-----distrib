@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import com.chua.distributions.constants.BusinessConstants;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -61,7 +62,7 @@ public class SimplePdfWriter {
                 table.setTotalWidth(document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
                 table.getDefaultCell().setFixedHeight(20);
                 table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                table.addCell(new Phrase("Prime Pad Pampanga", font));
+                table.addCell(new Phrase(BusinessConstants.BUSINESS_SHORT_NAME, font));
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), font));
                 PdfPCell cell = new PdfPCell(total);

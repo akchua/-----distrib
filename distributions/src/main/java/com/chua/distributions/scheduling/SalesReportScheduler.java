@@ -20,6 +20,7 @@ import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.rest.handler.UserHandler;
@@ -55,14 +56,53 @@ public class SalesReportScheduler {
 	private EmailUtil emailUtil;
 	
 	/**
-	 * Weekly Warehouse Sales Report.
-	 * Includes report for each warehouse
-	 * fires at 1:00AM every Saturday
-	 * includes: all paid and delivered, all clients, all warehouses
+	 * Weekly Delivery Report (Generic).
+	 * fires at 1:00AM every Monday
+	 * includes: all delivered orders during the week
 	 */
-	@Scheduled(cron = "0 0 1 * * SAT")
-	public void weeklyWarehouseSalesReport() {
-		LOG.info("### Creating weekly warehouse sales report");
+	@Scheduled(cron = "0 0 1 * * MON")
+	public void weeklyDeliveryReport() {
+		weeklySalesReport(ClientSalesReportType.DELIVERY);
+	}
+	
+	/**
+	 * Weekly Payments Report (Generic).
+	 * fires at 1:05AM every Monday
+	 * includes: all paid orders during the week
+	 */
+	@Scheduled(cron = "0 5 1 * * MON")
+	public void weeklyPaymentsReport() {
+		weeklySalesReport(ClientSalesReportType.PAYMENTS);
+	}
+	
+	/**
+	 * Monthly Delivery Report (Generic).
+	 * fires at 1:00AM every 1st day of the month
+	 * includes: all delivered orders during the month; for each client
+	 */
+	@Scheduled(cron = "0 0 1 1 * ?")
+	public void monthlyDeliveryReport() {
+		monthlySalesReport(ClientSalesReportType.DELIVERY);
+	}
+	
+	/**
+	 * Monthly Payments Report (Generic).
+	 * fires at 1:05AM every 1st day of the month
+	 * includes: all delivered orders during the month; for each client
+	 */
+	@Scheduled(cron = "0 5 1 1 * ?")
+	public void monthlyPaymentsReport() {
+		monthlySalesReport(ClientSalesReportType.DELIVERY);
+	}
+	
+	/**
+	 * Generic weekly sales report that can be adjusted to the given report type
+	 * Creates 1 report for each company in each warehouse
+	 * 
+	 * @param clientSalesReportType The given report type
+	 */
+	public void weeklySalesReport(ClientSalesReportType clientSalesReportType) {
+		LOG.info("### Creating weekly " + clientSalesReportType.getDisplayName() + " report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -74,14 +114,16 @@ public class SalesReportScheduler {
 		
 		salesReportQuery.setFrom(lastWeek.getTime());
 		salesReportQuery.setTo(yesterday.getTime());
-		salesReportQuery.setIncludePaid(true);
-		salesReportQuery.setIncludeDelivered(true);
-		salesReportQuery.setIncludeDispatched(false);
-		salesReportQuery.setIncludeAccepted(false);
-		salesReportQuery.setIncludeToFollow(false);
-		salesReportQuery.setIncludeSubmitted(false);
-		salesReportQuery.setIncludeCreating(false);
-		salesReportQuery.setShowNetTrail(true);
+		salesReportQuery.setClientSalesReportType(clientSalesReportType);
+		if(clientSalesReportType.equals(ClientSalesReportType.STATUS_BASED)) {
+			salesReportQuery.setIncludePaid(true);
+			salesReportQuery.setIncludeDelivered(true);
+			salesReportQuery.setIncludeDispatched(false);
+			salesReportQuery.setIncludeAccepted(false);
+			salesReportQuery.setIncludeToFollow(false);
+			salesReportQuery.setIncludeSubmitted(false);
+			salesReportQuery.setIncludeCreating(false);
+		}
 		salesReportQuery.setClientId(null);
 		salesReportQuery.setSendMail(true);
 		salesReportQuery.setDownloadFile(false);
@@ -89,7 +131,7 @@ public class SalesReportScheduler {
 		final List<Company> companies = companyService.findAllList();
 		
 		for(Company company : companies) {
-			LOG.info("### Starting weekly warehouse sales report for " + company.getName() + ".");
+			LOG.info("### Starting weekly " + clientSalesReportType.getDisplayName() + " report for " + company.getName() + ".");
 			
 			salesReportQuery.setCompanyId(company.getId());
 			
@@ -103,8 +145,8 @@ public class SalesReportScheduler {
 					emailUtil.send(company.getReportReceiver(),
 							null,
 							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers() + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
-							"Weekly Warehouse Sales Report",
-							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+							"Weekly " + clientSalesReportType.getDisplayName() + " Report",
+							clientSalesReportType.getDisplayName() + " Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 							new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
 				}
 				else {
@@ -118,28 +160,27 @@ public class SalesReportScheduler {
 					
 					LOG.error(result.getMessage());
 					emailUtil.send(recipient,
-							"Weekly Warehouse Sales Report",
-							"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + "." + "\n"
+							"Weekly " + clientSalesReportType.getDisplayName() + " Report",
+							clientSalesReportType.getDisplayName() + " Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + "." + "\n"
 							+ "\n"
 							+ result.getMessage());
 				}
 			}
 			
-			LOG.info("### Weekly warehouse sales report for " + company.getName() + " complete...");
+			LOG.info("### Weekly " + clientSalesReportType.getDisplayName() + " report for " + company.getName() + " complete...");
 		}
 		
-		LOG.info("### Weekly warehouse sales report complete...");
+		LOG.info("### Weekly " + clientSalesReportType.getDisplayName() + " report complete...");
 	}
 	
 	/**
-	 * Monthly Client Sales Report.
-	 * Includes report for each client
-	 * fires at 1:00AM every 1st day of the month
-	 * includes: all paid and delivered, all clients, all warehouses
+	 * Generic monthly sales report that can be adjusted to the given report type
+	 * Creates 1 report for each company in each warehouse
+	 * 
+	 * @param clientSalesReportType The given report type
 	 */
-	@Scheduled(cron = "0 0 1 1 * ?")
-	public void monthlyClientSalesReport() {
-		LOG.info("### Creating monthly client sales report");
+	public void monthlySalesReport(ClientSalesReportType clientSalesReportType) {
+		LOG.info("### Creating monthly client " + clientSalesReportType.getDisplayName() + " report");
 		
 		SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -152,14 +193,16 @@ public class SalesReportScheduler {
 		
 		salesReportQuery.setFrom(firstDayOfLastMonth.getTime());
 		salesReportQuery.setTo(yesterday.getTime());
-		salesReportQuery.setIncludePaid(true);
-		salesReportQuery.setIncludeDelivered(true);
-		salesReportQuery.setIncludeDispatched(false);
-		salesReportQuery.setIncludeAccepted(false);
-		salesReportQuery.setIncludeToFollow(false);
-		salesReportQuery.setIncludeSubmitted(false);
-		salesReportQuery.setIncludeCreating(false);
-		salesReportQuery.setShowNetTrail(true);
+		salesReportQuery.setClientSalesReportType(clientSalesReportType);
+		if(clientSalesReportType.equals(ClientSalesReportType.STATUS_BASED)) {
+			salesReportQuery.setIncludePaid(true);
+			salesReportQuery.setIncludeDelivered(true);
+			salesReportQuery.setIncludeDispatched(false);
+			salesReportQuery.setIncludeAccepted(false);
+			salesReportQuery.setIncludeToFollow(false);
+			salesReportQuery.setIncludeSubmitted(false);
+			salesReportQuery.setIncludeCreating(false);
+		}
 		salesReportQuery.setWarehouse(null);
 		salesReportQuery.setSendMail(true);
 		salesReportQuery.setDownloadFile(false);
@@ -168,7 +211,7 @@ public class SalesReportScheduler {
 		final List<User> clients = userService.findAllClients();
 		
 		for(Company company : companies) {
-			LOG.info("### Starting monthly client sales report for " + company.getName() + ".");
+			LOG.info("### Starting monthly client " + clientSalesReportType.getDisplayName() + " report for " + company.getName() + ".");
 			
 			salesReportQuery.setCompanyId(company.getId());
 			
@@ -189,7 +232,7 @@ public class SalesReportScheduler {
 			final String attachment;
 			
 			if(filePaths.size() > 1) {
-				attachment = FileConstants.SALES_HOME + "MonthlyClientSales_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
+				attachment = FileConstants.SALES_HOME + "MonthlyClient" + clientSalesReportType.getDisplayName() + "Report_" + DateFormatter.fileSafeFormat(new Date()) + ".zip";
 				FileZipUtil.zipFile(filePaths, attachment);
 			} else if(filePaths.size() == 1) {
 				attachment = filePaths.get(1);
@@ -201,14 +244,14 @@ public class SalesReportScheduler {
 				emailUtil.send(company.getReportReceiver(),
 						null,
 						MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers() + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
-						"Monthly Client Sales Report",
-						"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
+						"Monthly Client " + clientSalesReportType.getDisplayName() + " Report",
+						clientSalesReportType.getDisplayName() + " Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 						new String[] { attachment });
 			}
 			
-			LOG.info("### Monthly client sales report for " + company.getName() + " complete...");
+			LOG.info("### Monthly client " + clientSalesReportType.getDisplayName() + " report for " + company.getName() + " complete...");
 		}
 		
-		LOG.info("### Monthly client sales report complete...");
+		LOG.info("### Monthly client " + clientSalesReportType.getDisplayName() + " report complete...");
 	}
 }

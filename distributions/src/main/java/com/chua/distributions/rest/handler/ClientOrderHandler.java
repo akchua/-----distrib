@@ -5,8 +5,8 @@ import java.util.List;
 import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
-import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
@@ -43,7 +43,7 @@ public interface ClientOrderHandler {
 	
 	ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery);
 	
-	StringWrapper getFormattedTotalPayable();
+	String getFormattedTotalPayable();
 	
 	ResultBean addClientOrder(Long companyId);
 	
@@ -60,4 +60,6 @@ public interface ClientOrderHandler {
 	ResultBean generateReport(SalesReportQueryBean salesReportQuery);
 	
 	List<Warehouse> getWarehouseList();
+	
+	List<ClientSalesReportType> getClientSalesReportTypes();
 }

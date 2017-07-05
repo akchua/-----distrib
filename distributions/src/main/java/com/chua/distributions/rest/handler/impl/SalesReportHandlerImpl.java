@@ -17,6 +17,7 @@ import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.utility.Html;
@@ -97,9 +98,12 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 		
 		if(salesReportQuery.getFrom() == null || salesReportQuery.getTo() == null) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Date from and to cannot be empty."));
-		} else if(!(salesReportQuery.getIncludePaid() || salesReportQuery.getIncludeDelivered() 
+		} else if(salesReportQuery.getClientSalesReportType() == null) {
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "You must choose a report type."));
+		} else if(salesReportQuery.getClientSalesReportType() == ClientSalesReportType.STATUS_BASED &&
+				(!(salesReportQuery.getIncludePaid() || salesReportQuery.getIncludeDelivered() 
 				|| salesReportQuery.getIncludeDispatched() || salesReportQuery.getIncludeAccepted()
-				|| salesReportQuery.getIncludeSubmitted() || salesReportQuery.getIncludeCreating())) {
+				|| salesReportQuery.getIncludeSubmitted() || salesReportQuery.getIncludeCreating()))) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "You must include at least 1 Status."));
 		} else if(!salesReportQuery.getSendMail() && !salesReportQuery.getDownloadFile()) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Please select how you will receive the report."));

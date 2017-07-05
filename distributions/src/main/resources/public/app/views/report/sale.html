@@ -55,8 +55,8 @@
 					<td data-bind="text: clientOrder.id" class = "text-center"></td>
 					<td data-bind="text: clientOrder.formattedCreatedOn" class = "text-center"></td>
 					<td><a data-bind="text: clientOrder.client.businessName, click: function() { $parent.viewClient(clientOrder.client.id) }"></a></td>
+					<td data-bind="text: clientOrder.company.name"></td>
 					<td>
-					<!-- <td data-bind="text: clientOrder.company.name"></td> -->
 					<!-- ko if: clientOrder.warehouse -->
 					<span data-bind="text: clientOrder.warehouse.displayName"></span>
 					<!-- /ko -->

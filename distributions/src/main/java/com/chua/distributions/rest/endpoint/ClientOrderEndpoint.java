@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
-import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
@@ -112,8 +112,8 @@ public class ClientOrderEndpoint {
 	
 	@GET
 	@Path("/formattedpayable")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public StringWrapper getFormattedTotalPayable() {
+	@Produces({ MediaType.TEXT_PLAIN })
+	public String getFormattedTotalPayable() {
 		return clientOrderHandler.getFormattedTotalPayable();
 	}
 	
@@ -189,5 +189,12 @@ public class ClientOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Warehouse> getWarehouseList() {
 		return clientOrderHandler.getWarehouseList();
+	}
+	
+	@GET
+	@Path("/clientreporttypes")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<ClientSalesReportType> getClientSalesReportTypes() {
+		return clientOrderHandler.getClientSalesReportTypes();
 	}
 }

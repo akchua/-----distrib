@@ -1,6 +1,7 @@
 package com.chua.distributions.beans;
 
 import com.chua.distributions.deserializer.json.SalesReportQueryDeserializer;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Warehouse;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -18,6 +19,8 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	
 	private Long companyId;
 	
+	private ClientSalesReportType clientSalesReportType;
+	
 	private Boolean includePaid;
 	
 	private Boolean includeDelivered;
@@ -31,8 +34,6 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	private Boolean includeSubmitted;
 	
 	private Boolean includeCreating;
-	
-	private Boolean showNetTrail;
 	
 	private Boolean sendMail;
 	
@@ -60,6 +61,14 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
+	}
+
+	public ClientSalesReportType getClientSalesReportType() {
+		return clientSalesReportType;
+	}
+
+	public void setClientSalesReportType(ClientSalesReportType clientSalesReportType) {
+		this.clientSalesReportType = clientSalesReportType;
 	}
 
 	public Boolean getIncludePaid() {
@@ -116,14 +125,6 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setIncludeCreating(Boolean includeCreating) {
 		this.includeCreating = includeCreating;
-	}
-
-	public Boolean getShowNetTrail() {
-		return showNetTrail;
-	}
-
-	public void setShowNetTrail(Boolean showNetTrail) {
-		this.showNetTrail = showNetTrail;
 	}
 
 	public Boolean getSendMail() {

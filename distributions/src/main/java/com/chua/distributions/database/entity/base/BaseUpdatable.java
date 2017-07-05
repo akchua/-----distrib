@@ -5,8 +5,6 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,9 +16,8 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import com.chua.distributions.utility.format.DateFormatter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -68,8 +65,7 @@ public class BaseUpdatable extends BaseEntity
 	
 	@Transient
 	public String getFormattedUpdatedOn() {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		return dateFormat.format(updatedOn);
+		return DateFormatter.shortFormat(updatedOn);
 	}
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -86,8 +82,7 @@ public class BaseUpdatable extends BaseEntity
 	
 	@Transient
 	public String getFormattedCreatedOn() {
-		DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
-		return createdOn.toString(dtf);
+		return DateFormatter.shortFormat(createdOn);
 	}
 
 	@Override

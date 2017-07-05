@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -36,8 +35,8 @@ public class WarehouseItemEndpoint {
 	
 	@GET
 	@Path("/formattedpurchasevalue")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public StringWrapper getFormattedPurchaseValue(@QueryParam("warehouse") Warehouse warehouse) {
+	@Produces({ MediaType.TEXT_PLAIN })
+	public String getFormattedPurchaseValue(@QueryParam("warehouse") Warehouse warehouse) {
 		return warehouseItemHandler.getFormattedPurchaseValue(warehouse);
 	}
 }

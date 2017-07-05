@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.chua.distributions.beans.SalesReportQueryBean;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Warehouse;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,6 +54,9 @@ public class SalesReportQueryDeserializer extends StdDeserializer<SalesReportQue
 		JsonNode companyIdNode = node.get("companyId");
 		srq.setCompanyId(companyIdNode != null ? companyIdNode.asLong() : null);
 		
+		JsonNode clientSalesReportTypeNode = node.get("clientSalesReportType");
+		srq.setClientSalesReportType(clientSalesReportTypeNode != null ? ClientSalesReportType.valueOf(clientSalesReportTypeNode.asText()) : ClientSalesReportType.STATUS_BASED);
+		
 		JsonNode includePaidNode = node.get("includePaid");
 		srq.setIncludePaid(includePaidNode != null ? includePaidNode.asBoolean() : null);
 		JsonNode includeDeliveredNode = node.get("includeDelivered");
@@ -67,8 +71,6 @@ public class SalesReportQueryDeserializer extends StdDeserializer<SalesReportQue
 		srq.setIncludeSubmitted(includeSubmittedNode != null ? includeSubmittedNode.asBoolean() : null);
 		JsonNode includeCreatingNode = node.get("includeCreating");
 		srq.setIncludeCreating(includeCreatingNode != null ? includeCreatingNode.asBoolean() : null);
-		JsonNode showNetTrailNode = node.get("showNetTrail");
-		srq.setShowNetTrail(showNetTrailNode != null ? showNetTrailNode.asBoolean() : null);
 		JsonNode sendMailNode = node.get("sendMail");
 		srq.setSendMail(sendMailNode != null ? sendMailNode.asBoolean() : null);
 		JsonNode downloadFileNode = node.get("downloadFile");

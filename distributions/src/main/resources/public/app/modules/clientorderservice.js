@@ -193,6 +193,12 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	getClientSalesReportType: function() {
+    		return $.ajax({
+    			url: '/services/clientorder/clientreporttypes'
+    		});
+    	},
+    	
     	getClientList: function() {
     		return $.ajax({
     			url: '/services/clientorder/client'

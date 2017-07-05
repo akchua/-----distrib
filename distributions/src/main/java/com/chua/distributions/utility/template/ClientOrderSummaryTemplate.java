@@ -21,13 +21,13 @@ public class ClientOrderSummaryTemplate implements Template {
 
 	private ClientOrder clientOrder;
 	
-	private Boolean showNetTrail;
+	private List<String> timestamp;
 	
 	private List<String> netTrail;
 	
-	public ClientOrderSummaryTemplate(ClientOrder clientOrder, Boolean showNetTrail) {
+	public ClientOrderSummaryTemplate(ClientOrder clientOrder) {
 		this.clientOrder = clientOrder;
-		this.showNetTrail = showNetTrail;
+		this.timestamp = new ArrayList<String>();
 		this.netTrail = new ArrayList<String>();
 	}
 	
@@ -35,6 +35,9 @@ public class ClientOrderSummaryTemplate implements Template {
 	public String merge(VelocityEngine velocityEngine) {
 		final ClientOrderNetTrailTemplate netTrailTemplate = new ClientOrderNetTrailTemplate(clientOrder);
 		netTrail = Arrays.asList(netTrailTemplate.merge(velocityEngine).split("\\R"));
+		
+		final ClientOrderTimestampTemplate timestampTemplate = new ClientOrderTimestampTemplate(clientOrder);
+		timestamp = Arrays.asList(timestampTemplate.merge(velocityEngine).split("\\R"));
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("t", this);
@@ -65,8 +68,8 @@ public class ClientOrderSummaryTemplate implements Template {
 		return " " + String.format("%14s", clientOrder.getFormattedNetTotal()) + " ";
 	}
 	
-	public Boolean getShowNetTrail() {
-		return showNetTrail;
+	public List<String> getTimestamp() {
+		return timestamp;
 	}
 	
 	public List<String> getNetTrail() {

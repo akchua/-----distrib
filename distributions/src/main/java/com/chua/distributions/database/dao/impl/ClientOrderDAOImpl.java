@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -155,7 +156,19 @@ public class ClientOrderDAOImpl
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
 		if(salesReportQuery.getFrom() != null && salesReportQuery.getTo() != null) {
-			conjunction.add(Restrictions.between("updatedOn", salesReportQuery.getFrom(), salesReportQuery.getTo()));
+			String dateBasis = "";
+			switch(salesReportQuery.getClientSalesReportType()) {
+			case STATUS_BASED:
+				dateBasis = "updatedOn";
+				break;
+			case DELIVERY:
+				dateBasis = "deliveredOn";
+				break;
+			case PAYMENTS:
+				dateBasis = "paidOn";
+				break;
+			}
+			conjunction.add(Restrictions.between(dateBasis, salesReportQuery.getFrom(), salesReportQuery.getTo()));
 		}
 		
 		if(salesReportQuery.getWarehouse() != null) {
@@ -170,15 +183,17 @@ public class ClientOrderDAOImpl
 			conjunction.add(Restrictions.eq("company.id", salesReportQuery.getCompanyId()));
 		}
 		
-		final Junction disjunction = Restrictions.disjunction();
-		if(salesReportQuery.getIncludePaid()) disjunction.add(Restrictions.eq("status", Status.PAID));
-		if(salesReportQuery.getIncludeDelivered()) disjunction.add(Restrictions.eq("status", Status.RECEIVED));
-		if(salesReportQuery.getIncludeDispatched()) disjunction.add(Restrictions.eq("status", Status.DISPATCHED));
-		if(salesReportQuery.getIncludeToFollow()) disjunction.add(Restrictions.eq("status", Status.TO_FOLLOW));
-		if(salesReportQuery.getIncludeAccepted()) disjunction.add(Restrictions.eq("status", Status.ACCEPTED));
-		if(salesReportQuery.getIncludeSubmitted()) disjunction.add(Restrictions.eq("status", Status.SUBMITTED));
-		if(salesReportQuery.getIncludeCreating()) disjunction.add(Restrictions.eq("status", Status.CREATING));
-		conjunction.add(disjunction);
+		if(salesReportQuery.getClientSalesReportType().equals(ClientSalesReportType.STATUS_BASED)) {
+			final Junction disjunction = Restrictions.disjunction();
+			if(salesReportQuery.getIncludePaid()) disjunction.add(Restrictions.eq("status", Status.PAID));
+			if(salesReportQuery.getIncludeDelivered()) disjunction.add(Restrictions.eq("status", Status.RECEIVED));
+			if(salesReportQuery.getIncludeDispatched()) disjunction.add(Restrictions.eq("status", Status.DISPATCHED));
+			if(salesReportQuery.getIncludeToFollow()) disjunction.add(Restrictions.eq("status", Status.TO_FOLLOW));
+			if(salesReportQuery.getIncludeAccepted()) disjunction.add(Restrictions.eq("status", Status.ACCEPTED));
+			if(salesReportQuery.getIncludeSubmitted()) disjunction.add(Restrictions.eq("status", Status.SUBMITTED));
+			if(salesReportQuery.getIncludeCreating()) disjunction.add(Restrictions.eq("status", Status.CREATING));
+			conjunction.add(disjunction);
+		}
 		
 		return conjunction;
 	}

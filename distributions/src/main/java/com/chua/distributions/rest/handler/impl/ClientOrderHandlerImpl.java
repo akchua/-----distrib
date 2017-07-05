@@ -19,7 +19,6 @@ import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
-import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
@@ -34,6 +33,7 @@ import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.UserType;
@@ -211,8 +211,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public StringWrapper getFormattedTotalPayable() {
-		final StringWrapper sw = new StringWrapper();
+	public String getFormattedTotalPayable() {
 		List<ClientOrder> clientOrders = clientOrderService.findAllReceived();
 		
 		float total = 0.0f;
@@ -220,9 +219,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 			total += clientOrder.getNetTotal();
 		}
 		
-		sw.setContent(CurrencyFormatter.pesoFormat(total));
-		
-		return sw;
+		return CurrencyFormatter.pesoFormat(total);
 	}
 
 	@Override
@@ -257,8 +254,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 							"Order Created",
 							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
-								+ "The ID of the created order is " + result.getExtras().get("clientOrderId") + ". You can verify the contents of the order by logging in at distributions.primepad.net . "
-									+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
+								+ "The ID of the created order is " + result.getExtras().get("clientOrderId") 
+								+ ". You can verify the contents of the order by logging in at " + BusinessConstants.SERVER_DOMAIN + ". "
+								+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
 							null);
 				}
 			} else {
@@ -528,6 +526,12 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@CheckAuthority(minimumAuthority = 5)
 	public List<Warehouse> getWarehouseList() {
 		return Stream.of(Warehouse.values())
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<ClientSalesReportType> getClientSalesReportTypes() {
+		return Stream.of(ClientSalesReportType.values())
 				.collect(Collectors.toList());
 	}
 	

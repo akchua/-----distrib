@@ -10,7 +10,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     		clientId: ko.observable(),
     		companyId: ko.observable(),
     		warehouse: ko.observable(),
-    			
+    		
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
     		includeDispatched: ko.observable(false),

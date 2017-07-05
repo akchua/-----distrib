@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
-import com.chua.distributions.beans.StringWrapper;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ProductService;
@@ -41,17 +40,15 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public StringWrapper getFormattedPurchaseValue(Warehouse warehouse) {
-		final StringWrapper sw = new StringWrapper();
+	public String getFormattedPurchaseValue(Warehouse warehouse) {
 		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);
 		
 		float total = 0.0f;
 		for(WarehouseItem item : warehouseItems) {
 			total += item.getProduct().getNetPrice() * item.getStockCount();
 		}
-		sw.setContent(CurrencyFormatter.pesoFormat(total));
 		
-		return sw;
+		return CurrencyFormatter.pesoFormat(total);
 	}
 	
 	@Override
