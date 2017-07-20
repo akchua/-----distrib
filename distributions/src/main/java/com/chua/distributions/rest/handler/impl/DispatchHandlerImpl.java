@@ -31,6 +31,7 @@ import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
 import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
+import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.SimplePdfWriter;
@@ -79,7 +80,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<Dispatch> getDispatchObjectList(Integer pageNumber, Boolean showReceived) {
-		return dispatchService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), showReceived);
+		return dispatchService.findAllWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), showReceived);
 	}
 	
 	@Override
@@ -98,6 +99,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 			final Dispatch dispatch = new Dispatch();
 			setDispatch(dispatch, dispatchForm);
 			dispatch.setStatus(Status.CREATING);
+			dispatch.setDeliveredOn(DateUtil.getDefaultDate());
 			
 			result = new ResultBean();
 			result.setSuccess(dispatchService.insert(dispatch) != null);
@@ -208,6 +210,8 @@ public class DispatchHandlerImpl implements DispatchHandler {
 				}
 				
 				dispatch.setStatus(Status.RECEIVED);
+				dispatch.setDeliveredOn(new Date());
+				
 				result = new ResultBean();
 				result.setSuccess(flag && dispatchService.update(dispatch));
 				if(result.getSuccess()) {

@@ -15,11 +15,8 @@
 			<thead>
 				<tr>
 					<th class = "text-center">ID</th>
-					<!-- ko ifnot: showReceived -->
-					<th class = "text-center">Accept Date</th>
-					<!-- /ko -->
 					<!-- ko if: showReceived -->
-					<th class = "text-center">Accept/Deliver Date</th>
+					<th class = "text-center">Deliver Date</th>
 					<!-- /ko -->
 					<th>Warehouse</th>
 					<th class = "text-center">Order Count</th>
@@ -31,7 +28,9 @@
 			<tbody data-bind="foreach: { data: dispatchList, as: 'dispatch' }">
 				<tr>
 					<td data-bind="text: dispatch.id" class = "text-center"></td>
-					<td data-bind="text: dispatch.formattedUpdatedOn" class = "text-center"></td>
+					<!-- ko if: $parent.showReceived -->
+					<td data-bind="text: dispatch.formattedDeliveredOn" class = "text-center"></td>
+					<!-- /ko -->
 					<td data-bind="text: dispatch.warehouse.displayName + ' - ' + dispatch.warehouse.address"></td>
 					<td data-bind="text: dispatch.orderCount" class = "text-center"></td>
 					<td data-bind="text: dispatch.formattedTotalAmount" class = "text-center"></td>

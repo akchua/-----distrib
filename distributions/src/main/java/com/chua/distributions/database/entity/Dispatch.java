@@ -1,17 +1,24 @@
 package com.chua.distributions.database.entity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.format.CurrencyFormatter;
+import com.chua.distributions.utility.format.DateFormatter;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -33,6 +40,8 @@ public class Dispatch extends BaseObject {
 	private Float totalAmount;
 	
 	private Status status;
+	
+	private Date deliveredOn;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "warehouse", length = 50)
@@ -77,5 +86,29 @@ public class Dispatch extends BaseObject {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	@Temporal(value = TemporalType.TIMESTAMP)
+	@Column(name = "delivered_on")
+	public Date getDeliveredOn() {
+		return deliveredOn;
+	}
+	
+	@Transient
+	public String getFormattedDeliveredOn() {
+		final String formattedDeliveredOn;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(deliveredOn);
+		
+		if(cal.getTimeInMillis() == DateUtil.getDefaultDateInMillis()) {
+			formattedDeliveredOn = "n/a";
+		} else {
+			formattedDeliveredOn = DateFormatter.shortFormat(deliveredOn);
+		}
+		return formattedDeliveredOn;
+	}
+
+	public void setDeliveredOn(Date deliveredOn) {
+		this.deliveredOn = deliveredOn;
 	}
 }

@@ -11,5 +11,5 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface DispatchService extends Service<Dispatch, Long>, DispatchPrototype {
 
-	ObjectList<Dispatch> findAllWithPagingOrderByStatus(int pageNumber, int resultsPerPage, boolean showReceived);
+	ObjectList<Dispatch> findAllWithPaging(int pageNumber, int resultsPerPage, boolean showReceived);
 }

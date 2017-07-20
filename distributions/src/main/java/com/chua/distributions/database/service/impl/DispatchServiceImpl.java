@@ -1,6 +1,5 @@
 package com.chua.distributions.database.service.impl;
 
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class DispatchServiceImpl
 	}
 
 	@Override
-	public ObjectList<Dispatch> findAllWithPagingOrderByStatus(int pageNumber, int resultsPerPage, boolean showReceived) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, showReceived, new Order[] { Order.asc("status") });
+	public ObjectList<Dispatch> findAllWithPaging(int pageNumber, int resultsPerPage, boolean showReceived) {
+		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, showReceived, null);
 	}
 }
