@@ -7,6 +7,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     		id: ko.observable(),
     		
     		name: ko.observable(),
+    		shortName: ko.observable(),
     		
     		contactPerson: ko.observable(),
     		contactNumber: ko.observable(),
@@ -20,6 +21,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/companyservice'],
     	
     	self.companyFormModel.id(self.company.id);
     	self.companyFormModel.name(self.company.name);
+    	self.companyFormModel.shortName(self.company.shortName);
     	self.companyFormModel.contactPerson(self.company.contactPerson);
     	self.companyFormModel.contactNumber(self.company.contactNumber);
     	self.companyFormModel.emailAddress(self.company.emailAddress);

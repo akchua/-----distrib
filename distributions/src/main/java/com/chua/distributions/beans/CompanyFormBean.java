@@ -9,6 +9,8 @@ public class CompanyFormBean extends FormBean {
 
 	private String name;
 	
+	private String shortName;
+	
 	private String contactPerson;
 	
 	private String contactNumber;
@@ -23,6 +25,14 @@ public class CompanyFormBean extends FormBean {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 	public String getContactPerson() {

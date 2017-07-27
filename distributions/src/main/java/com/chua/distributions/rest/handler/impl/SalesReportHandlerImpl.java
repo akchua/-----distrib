@@ -1,6 +1,5 @@
 package com.chua.distributions.rest.handler.impl;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
@@ -49,7 +49,25 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	
 	@Override
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
-		return generateReport(salesReportQuery, "SalesReport_" + DateFormatter.fileSafeFormat(new Date()) + ".pdf");
+		final ResultBean validateQuery = validateSalesReportQuery(salesReportQuery);
+		
+		if(validateQuery.getSuccess()) {
+			final Company company = companyService.find(salesReportQuery.getCompanyId());
+			String fileName = "";
+			
+			// DIVERSEY_PAYMENTS_MAIN_DateFROM_DateTO.pdf
+			if(company != null) fileName += company.getShortName() + "_";
+			fileName += salesReportQuery.getClientSalesReportType().getDisplayName() + "_";
+			if(salesReportQuery.getWarehouse() != null) fileName += salesReportQuery.getWarehouse().getDisplayName() + "_";
+			
+			fileName += DateFormatter.shortFormat(salesReportQuery.getFrom()) + "_to_";
+			fileName += DateFormatter.shortFormat(salesReportQuery.getTo());
+			fileName += ".pdf";
+			
+			return generateReport(salesReportQuery, fileName);
+		} else {
+			return validateQuery;
+		}
 	}
 
 	@Override
@@ -84,7 +102,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.TURQUOISE, "No sales found between " + DateFormatter.longFormat(salesReportQuery.getFrom()) + " and " + DateFormatter.longFormat(salesReportQuery.getTo()) + "."));
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.TURQUOISE, "No sales found for the given restriction."));
 			}
 		} else {
 			result = validateQuery;

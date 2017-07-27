@@ -35,12 +35,13 @@ public class WarehouseItemDAOImpl
 			Warehouse warehouse, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.ne("stockCount", Integer.valueOf(0)));
 		
 		if(StringUtils.isNotBlank(searchKey))
 		{
 			conjunction.add(Restrictions.disjunction()
 					.add(Restrictions.ilike("prod.displayName", searchKey, MatchMode.ANYWHERE)));
+		} else {
+			conjunction.add(Restrictions.ne("stockCount", Integer.valueOf(0)));
 		}
 		
 		if(warehouse != null) {

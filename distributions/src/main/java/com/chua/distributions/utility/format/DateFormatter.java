@@ -19,13 +19,13 @@ public class DateFormatter {
 
 	private static final DateFormat LONG_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 	
-	private static final DateFormat FILE_SAFE_DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy-HH-mm-ss");
+	private static final DateFormat FILE_SAFE_DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy-HH-mm");
 	
 	private static final DateTimeFormatter SHORT_DATETIME_FORMAT = DateTimeFormat.forPattern("MM/dd/yyyy");
 	
 	private static final DateTimeFormatter LONG_DATETIME_FORMAT = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
 	
-	private static final DateTimeFormatter FILE_SAFE_DATETIME_FORMAT = DateTimeFormat.forPattern("MM-dd-yyyy-HH-mm-ss");
+	private static final DateTimeFormatter FILE_SAFE_DATETIME_FORMAT = DateTimeFormat.forPattern("MM-dd-yyyy-HH-mm");
 	
 	private DateFormatter() {
 		

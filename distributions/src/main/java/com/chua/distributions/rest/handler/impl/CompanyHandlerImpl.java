@@ -150,6 +150,9 @@ public class CompanyHandlerImpl implements CompanyHandler {
 	
 	private void setCompany(Company company, CompanyFormBean companyForm) {
 		company.setName(companyForm.getName().trim());
+		company.setShortName(companyForm.getShortName() != null && !companyForm.getShortName().isEmpty() 
+				? companyForm.getShortName()
+				: companyForm.getName());
 		company.setContactPerson(companyForm.getContactPerson().trim());
 		company.setContactNumber(companyForm.getContactNumber().trim());
 		company.setEmailAddress(companyForm.getEmailAddress().trim());

@@ -22,6 +22,8 @@ public class Company extends BaseObject {
 	
 	private String name;
 	
+	private String shortName;
+	
 	private String contactPerson;
 	
 	private String contactNumber;
@@ -38,6 +40,16 @@ public class Company extends BaseObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Basic
+	@Column(name = "short_name")
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 	@Basic
