@@ -23,6 +23,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
+					<th> </th>
 					<th class = "text-center">Code</th>
 					<th>Name</th>
 					<th>Category</th>
@@ -32,6 +33,7 @@
 			
 			<tbody data-bind="foreach: { data: productList, as: 'product' }">
 				<tr>
+					<td><img data-bind="attr: { src : product.imagePath }" class="img-circle text-center" width="28px" height="28px"></td>
 					<td data-bind="text: product.productCode" class = "text-center"></td>
 					<td data-bind="text: product.displayName"></td>
 					<td data-bind="text: product.category.name"></td>

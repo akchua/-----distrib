@@ -39,6 +39,9 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     	var self = this;
     	
     	productService.getPartialProductList(self.currentPage(), self.searchKey(), self.companyId(), self.categoryId(), null, true).done(function(data) {
+    		for(i = 0; i < data.list.length; i++) {
+    			data.list[i].imagePath = productService.getProductImageByFileName(data.list[i].image);
+    		}
     		self.partialProductList(data.list);
     		self.totalItems(data.total);
     	});

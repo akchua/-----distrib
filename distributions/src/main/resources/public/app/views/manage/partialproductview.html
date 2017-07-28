@@ -7,27 +7,36 @@
 	  
 		<div class="modal-body">
 			<div class="row">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						<h3 class="panel-title"><strong data-bind="text: partialProductViewModel.displayName"></strong></h3>
-						<p data-bind="text: partialProductViewModel.description"></p>
-					</div>
-					
-					<div class="panel-body">
-						<dl class="dl-horizontal">
-							<dt>Company:</dt>
-							<dd data-bind="text: partialProductViewModel.companyName"></dd>
-							<dt>Category:</dt>
-							<dd data-bind="text: partialProductViewModel.categoryName"></dd>
-							<dt>Code:</dt>
-							<dd data-bind="text: partialProductViewModel.productCode"></dd>
-							<dt>Selling Price:</dt>
-							<dd data-bind="text: partialProductViewModel.formattedPackageNetSellingPrice"></dd>
-							<dt>Promo Discount:</dt>
-							<dd data-bind="text: partialProductViewModel.formattedPackageSellingDiscount"></dd>
-				    	</dl>
-					</div>
+				<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+					<h3 class="text-info"><strong data-bind="text: partialProductViewModel.displayName"></strong></h3>
+					<p data-bind="text: partialProductViewModel.description"></p>
 				</div>
+				<div class="col-xs-4 col-sm-8 col-md-3 col-lg-3">
+					<img data-bind="attr: { src : partialProductViewModel.image }" class="img-rounded img-responsive col-xs-12 text-center">
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<dl class="dl-horizontal">
+					<dt>Company:</dt>
+					<dd data-bind="text: partialProductViewModel.companyName"></dd>
+					<dt>Category:</dt>
+					<dd data-bind="text: partialProductViewModel.categoryName"></dd>
+					<dt>Code:</dt>
+					<dd data-bind="text: partialProductViewModel.productCode"></dd>
+					<dt>Selling Price:</dt>
+					<dd data-bind="text: partialProductViewModel.formattedPackageNetSellingPrice"></dd>
+					<dt>Promo Discount:</dt>
+					<dd data-bind="text: partialProductViewModel.formattedPackageSellingDiscount"></dd>
+		    	</dl>
+			</div>
+			<hr>
+			<div class="row">
+				<!-- ko foreach: { data: partialProductImageList, as: 'partialProductImage' } -->
+				<div class="thumbnail col-xs-3">
+		        	<img data-bind="attr: { src: partialProductImage.filePath }" class="img-rounded">
+		        </div>	
+		        <!-- /ko -->
 			</div>
 		</div>
   

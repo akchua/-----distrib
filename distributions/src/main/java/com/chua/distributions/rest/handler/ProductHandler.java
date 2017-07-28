@@ -8,6 +8,7 @@ import java.util.List;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import com.chua.distributions.beans.PartialProductBean;
+import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
@@ -38,6 +39,8 @@ public interface ProductHandler {
 	List<Product> getProductListOrderByName();
 	
 	List<ProductImage> getProductImageList(Long productId);
+	
+	List<PartialProductImageBean> getPartialProductImageList(Long productId);
 	
 	ResultBean createProduct(ProductFormBean productForm);
 	

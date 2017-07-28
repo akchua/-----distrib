@@ -22,6 +22,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.PartialProductBean;
+import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
@@ -97,6 +98,13 @@ public class ProductEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ProductImage> getProductImageList(@QueryParam("productId") Long productId) {
 		return productHandler.getProductImageList(productId);
+	}
+	
+	@GET
+	@Path("/partialimagelist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<PartialProductImageBean> getPartialProductImageList(@QueryParam("productId") Long productId) {
+		return productHandler.getPartialProductImageList(productId);
 	}
 	
 	@GET

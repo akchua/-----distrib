@@ -54,15 +54,6 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getProductImageList: function(productId) {
-			return $.ajax({
-				url: '/services/product/imagelist',
-				data: {
-					productId: productId
-				}
-			});
-		},
-		
 		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/listpartial',
@@ -73,6 +64,24 @@ define(['jquery'], function ($) {
 					companyId: companyId,
 					categoryId: categoryId,
 					warehouse, warehouse
+				}
+			});
+		},
+		
+		getProductImageList: function(productId) {
+			return $.ajax({
+				url: '/services/product/imagelist',
+				data: {
+					productId: productId
+				}
+			});
+		},
+		
+		getPartialProductImageList: function(productId) {
+			return $.ajax({
+				url: '/services/product/partialimagelist',
+				data: {
+					productId: productId
 				}
 			});
 		},

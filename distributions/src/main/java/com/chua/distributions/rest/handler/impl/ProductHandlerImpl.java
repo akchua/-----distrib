@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PartialProductBean;
+import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.constants.FileConstants;
@@ -143,8 +145,16 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
+	@CheckAuthority(minimumAuthority = 5)
 	public List<ProductImage> getProductImageList(Long productId) {
 		return productImageService.findAllByProductId(productId);
+	}
+	
+	@Override
+	public List<PartialProductImageBean> getPartialProductImageList(Long productId) {
+		return productImageService.findAllByProductId(productId).stream()
+				.map(productImage -> new PartialProductImageBean((ProductImage) productImage))
+				.collect(Collectors.toList());
 	}
 	
 	@Override

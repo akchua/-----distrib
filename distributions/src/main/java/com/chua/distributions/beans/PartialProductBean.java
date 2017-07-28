@@ -14,6 +14,8 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 	
 	private String displayName;
 	
+	private String image;
+	
 	private String companyName;
 	
 	private String categoryName;
@@ -28,6 +30,7 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 		super(product);
 		setDisplayName(product.getDisplayName());
 		setProductCode(product.getProductCode());
+		setImage(product.getImage());
 		setCompanyName(product.getCompany().getName());
 		setCategoryName(product.getCategory().getName());
 		setDescription(product.getDescription());
@@ -49,6 +52,14 @@ public class PartialProductBean extends PartialEntityBean<Product> {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	public String getCompanyName() {
