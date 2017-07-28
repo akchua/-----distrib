@@ -19,14 +19,18 @@ public class StringHelper {
 	 * @return The centered string.
 	 */
 	public static String center(String s, int length) {
+		return center(s, length, ' ');
+	}
+	
+	public static String center(String s, int length, char fill) {
 		if(s == null || length <= s.length()) return s;
 		
 		String centered = "";
 		int temp = (length - s.length()) / 2;
-		for(int i = 0; i < temp; i++) centered += " ";
+		for(int i = 0; i < temp; i++) centered += fill;
 		centered += s;
-		for(int i = 0; i < temp; i++) centered += " ";
-		if((length - s.length()) % 2 == 1) centered += " ";
+		for(int i = 0; i < temp; i++) centered += fill;
+		if((length - s.length()) % 2 == 1) centered += fill;
 		
 		return centered;
 	}

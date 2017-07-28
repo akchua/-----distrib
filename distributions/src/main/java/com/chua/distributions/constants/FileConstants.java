@@ -13,6 +13,8 @@ public class FileConstants {
 
 	public static String FILE_HOME;
 	
+	public static String PRICE_LIST_HOME;
+	
 	public static String SALES_HOME;
 
 	public static String PURCHASES_HOME;
@@ -24,6 +26,7 @@ public class FileConstants {
 	@Value("${file.home}")
     public void setFileHome(String home) {
         FileConstants.FILE_HOME = home;
+        FileConstants.PRICE_LIST_HOME = home + "files/price_list/";
         FileConstants.SALES_HOME = home + "files/sales_report/";
         FileConstants.PURCHASES_HOME = home + "files/purchase_order/";
         FileConstants.DISPATCH_HOME = home + "files/dispatch/";

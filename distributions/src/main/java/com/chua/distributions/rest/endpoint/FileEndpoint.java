@@ -36,4 +36,16 @@ public class FileEndpoint {
 				.build();
 		else return null;
 	}
+	
+	@GET
+	@Path("/pricelist/{fileName}")
+	@Produces({ MediaType.APPLICATION_OCTET_STREAM })
+	public Response getPriceListByFileName(@PathParam("fileName") String fileName) throws IOException {
+		File priceList = fileHandler.findPriceListByFileName(fileName);
+		if(priceList.exists())
+			return Response.ok(priceList, MediaType.APPLICATION_OCTET_STREAM)
+				.header("Content-Disposition", "attachment; filename=\"" + priceList.getName() + "\"" )
+				.build();
+		else return null;
+	}
 }

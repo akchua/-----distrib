@@ -1,0 +1,6 @@
+## Template for Per Category Price List
+## Has a maximum of 96 columns per line
+${t.CategoryName}
+#foreach( $productPrice in $t.ProductPrices)
+$productPrice
+#end

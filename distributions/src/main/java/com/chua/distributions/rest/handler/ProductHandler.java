@@ -71,4 +71,6 @@ public interface ProductHandler {
 	Float getFinalBasePackageSellingPrice(Product product, User user);
 
 	Float getFinalSellingDiscount(Product product, User user);
+	
+	ResultBean generatePriceList(Long companyId, Boolean sendEmail);
 }

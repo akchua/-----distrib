@@ -1,0 +1,10 @@
+## Template for Price List
+## Has a maximum of 96 columns per line
+                                         PRICE LIST                                         
+
+     COMPANY : ${t.CompanyName}
+       AS OF : ${t.Date}
+
+#foreach( $perCategoryPriceList in $t.PerCategoryPriceLists)
+$perCategoryPriceList
+#end

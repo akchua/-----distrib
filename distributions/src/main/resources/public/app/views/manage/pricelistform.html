@@ -1,0 +1,45 @@
+<div class="modal-content modal-md">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 align="center">Generate Price List</h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="row">
+				<div class="control-group">
+					<label class="control-label" for="inputCompany">Company</label>
+					<div class="controls">
+						<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- Select Company --', value: companyId" class="form-control" id="inputCompany"></select>
+						<p class="help-block">Company to create price list for</p>
+					</div>
+				</div>
+			</div>
+			
+			<hr>
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<label for="receive">Receive Via:</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<label class="checkbox">
+						<input data-bind="checked: sendEmail" type="checkbox" name="receiveViaMail">Mail
+					</label>
+				</div>
+				<div class="col-xs-6">
+					<label class="checkbox">
+						<input data-bind="checked: downloadFile" type="checkbox" name="receiveViaFileDownload">File Download
+					</label>
+				</div>
+			</div>
+		</div>
+	  
+		<div class="modal-footer">
+			<button class="btn btn-primary" data-bind="click: generate, enable: enableGenerateButton">Generate</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+	</form>
+</div>

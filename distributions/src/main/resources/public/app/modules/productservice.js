@@ -139,6 +139,17 @@ define(['jquery'], function ($) {
     				productImageId: productImageId
     			}
     		});
+    	},
+    	
+    	generatePriceList: function(companyId, sendEmail) {
+    		return $.ajax({
+    			url: '/services/product/generatepricelist',
+    			method: 'POST',
+    			data: {
+    				companyId: companyId,
+    				sendEmail: sendEmail
+    			}
+    		});
     	}
 	};
 });

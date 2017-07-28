@@ -17,6 +17,8 @@ public interface ProductService extends Service<Product, Long>, ProductPrototype
 	
 	List<Product> findAllOrderByName();
 	
+	List<Product> findAllByCompanyOrderByCategory(Long companyId);
+	
 	boolean isExistsByDisplayName(String name);
 	
 	boolean isExistsByProductCode(String productCode);

@@ -28,7 +28,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		includeSubmitted: ko.observable(false),
     		includeCreating: ko.observable(false),
     		
-    		sendMail: ko.observable(true),
+    		sendMail: ko.observable(false),
     		downloadFile: ko.observable(true)
 	    };
     };

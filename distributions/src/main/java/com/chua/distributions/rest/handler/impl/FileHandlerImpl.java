@@ -21,4 +21,10 @@ public class FileHandlerImpl implements FileHandler {
 	public File findSalesReportByFileName(String fileName) {
 		return new File(FileConstants.SALES_HOME + fileName);
 	}
+
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public File findPriceListByFileName(String fileName) {
+		return new File(FileConstants.PRICE_LIST_HOME + fileName);
+	}
 }

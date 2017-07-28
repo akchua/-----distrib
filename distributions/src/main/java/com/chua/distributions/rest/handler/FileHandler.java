@@ -10,4 +10,6 @@ import java.io.File;
 public interface FileHandler {
 
 	File findSalesReportByFileName(String fileName);
+	
+	File findPriceListByFileName(String fileName);
 }

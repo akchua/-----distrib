@@ -48,9 +48,9 @@ import com.chua.distributions.utility.Html;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 
 /**
- * @author  Adrian Jasper K. Chua
+ * @author Adrian Jasper K. Chua
  * @version 1.0
- * @since   Dec 12, 2016
+ * @since Dec 12, 2016
  */
 @Transactional
 @Component
@@ -58,51 +58,52 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Autowired
 	private ClientOrderService clientOrderService;
-	
+
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private ClientCompanyPriceService clientCompanyPriceService;
 
 	@Autowired
 	private SalesReportHandler salesReportHandler;
-	
+
 	@Autowired
 	private UserHandler userHandler;
-	
+
 	@Autowired
 	private EmailUtil emailUtil;
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ClientOrder getClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		final UserBean currentUser = UserContextHolder.getUser();
-		
-		if(currentUser.getUserType().equals(UserType.CLIENT) && !currentUser.getId().equals(clientOrder.getCreator().getId())) {
+
+		if (currentUser.getUserType().equals(UserType.CLIENT)
+				&& !currentUser.getId().equals(clientOrder.getCreator().getId())) {
 			throw new NotAuthorizedException("User is not authenticated.");
 		} else {
 			refreshClientOrder(clientOrderId);
 			return clientOrder;
 		}
 	}
-	
+
 	@Override
 	public PartialClientOrderBean getPartialClientOrder(Long clientOrderId) {
 		final PartialClientOrderBean partialClientOrder;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
 		final UserBean currentUser = UserContextHolder.getUser();
-		
-		if(clientOrder != null) {
-			if(currentUser.getUserType().equals(UserType.CLIENT) &&
-					!currentUser.getId().equals(clientOrder.getClient().getId())) {
+
+		if (clientOrder != null) {
+			if (currentUser.getUserType().equals(UserType.CLIENT)
+					&& !currentUser.getId().equals(clientOrder.getClient().getId())) {
 				throw new NotAuthorizedException("User is not authenticated.");
 			} else {
 				refreshClientOrder(clientOrderId);
@@ -111,29 +112,30 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		} else {
 			partialClientOrder = null;
 		}
-		
+
 		return partialClientOrder;
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 4)
 	public ClientOrder getTransferInstance(Long sourceId) {
 		final ClientOrder sourceOrder = clientOrderService.find(sourceId);
 		ClientOrder transferInstance = null;
 
-		if(!sourceOrder.getNetTotal().equals(0.0f)) {
-			final List<ClientOrder> toFollowOrders = clientOrderService.findAllToFollowByClient(sourceOrder.getClient().getId());
-			
-			for(ClientOrder clientOrder : toFollowOrders) {
-				if(clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
+		if (!sourceOrder.getNetTotal().equals(0.0f)) {
+			final List<ClientOrder> toFollowOrders = clientOrderService
+					.findAllToFollowByClient(sourceOrder.getClient().getId());
+
+			for (ClientOrder clientOrder : toFollowOrders) {
+				if (clientOrder.getNetTotal().equals(0.0f) && !clientOrder.getId().equals(sourceId)) {
 					transferInstance = clientOrder;
 					break;
 				}
 			}
-			
-			if(transferInstance == null) {
+
+			if (transferInstance == null) {
 				final ClientOrder newClientOrder = new ClientOrder();
-				
+
 				newClientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
 				newClientOrder.setClient(sourceOrder.getClient());
 				newClientOrder.setCompany(sourceOrder.getCompany());
@@ -143,82 +145,90 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				newClientOrder.setWarehouse(null);
 				newClientOrder.setAdditionalDiscount(sourceOrder.getAdditionalDiscount());
 				newClientOrder.setLessVat(sourceOrder.getLessVat());
-				
+
 				newClientOrder.setRequestedOn(sourceOrder.getRequestedOn());
 				newClientOrder.setDeliveredOn(DateUtil.getDefaultDate());
 				newClientOrder.setPaidOn(DateUtil.getDefaultDate());
-				
+
 				clientOrderService.insert(newClientOrder);
 				transferInstance = newClientOrder;
 			}
 		} else {
 			transferInstance = sourceOrder;
 		}
-		
+
 		return transferInstance;
 	}
-	
+
 	@Override
 	public ObjectList<PartialClientOrderBean> getPartialClientOrderObjectList(Integer pageNumber, Boolean showPaid) {
 		final ObjectList<PartialClientOrderBean> objPartialClientOrders = new ObjectList<PartialClientOrderBean>();
-		final ObjectList<ClientOrder> objClientOrders = clientOrderService.findByClientWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId(), showPaid);
-		if(objClientOrders != null) {
+		final ObjectList<ClientOrder> objClientOrders = clientOrderService.findByClientWithPaging(pageNumber,
+				UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId(), showPaid);
+		if (objClientOrders != null) {
 			objPartialClientOrders.setTotal(objClientOrders.getTotal());
-			final List<PartialClientOrderBean> partialClientOrders = new ArrayList<PartialClientOrderBean>(); 
-			for(ClientOrder clientOrder : objClientOrders.getList()) {
+			final List<PartialClientOrderBean> partialClientOrders = new ArrayList<PartialClientOrderBean>();
+			for (ClientOrder clientOrder : objClientOrders.getList()) {
 				partialClientOrders.add(new PartialClientOrderBean(clientOrder));
 			}
 			objPartialClientOrders.setList(partialClientOrders);
 		}
 		return objPartialClientOrders;
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 3)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectListCreatedByCurrentUser(Integer pageNumber) {
-		return clientOrderService.findAllRequestByCreatorWithPagingOrderByRequestedOn(pageNumber, UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId());
+		return clientOrderService.findAllRequestByCreatorWithPagingOrderByRequestedOn(pageNumber,
+				UserContextHolder.getItemsPerPage(), UserContextHolder.getUser().getId());
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted) {
-		return clientOrderService.findAllRequestWithPagingOrderByRequestedOn(pageNumber, UserContextHolder.getItemsPerPage(), showAccepted);
+		return clientOrderService.findAllRequestWithPagingOrderByRequestedOn(pageNumber,
+				UserContextHolder.getItemsPerPage(), showAccepted);
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
 		return clientOrderService.findAllAcceptedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse, Long clientId) {
-		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse, clientId);
+	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse,
+			Long clientId) {
+		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber,
+				UserContextHolder.getItemsPerPage(), warehouse, clientId);
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
-		return clientOrderService.findAllPaidWithPagingOrderByPaidOn(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+		return clientOrderService.findAllPaidWithPagingOrderByPaidOn(pageNumber, UserContextHolder.getItemsPerPage(),
+				warehouse);
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery) {
-		return clientOrderService.findBySalesReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), salesReportQuery);
+	public ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber,
+			SalesReportQueryBean salesReportQuery) {
+		return clientOrderService.findBySalesReportQueryWithPaging(pageNumber, UserContextHolder.getItemsPerPage(),
+				salesReportQuery);
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public String getFormattedTotalPayable() {
 		List<ClientOrder> clientOrders = clientOrderService.findAllReceived();
-		
+
 		float total = 0.0f;
-		for(ClientOrder clientOrder : clientOrders) {
+		for (ClientOrder clientOrder : clientOrders) {
 			total += clientOrder.getNetTotal();
 		}
-		
+
 		return CurrencyFormatter.pesoFormat(total);
 	}
 
@@ -227,249 +237,265 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	public ResultBean addClientOrder(Long companyId) {
 		final ResultBean result;
 		final Company company = companyService.find(companyId);
-		
-		if(company != null) {
+
+		if (company != null) {
 			result = addClientOrder(company, UserContextHolder.getUser().getUserEntity());
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 3)
 	public ResultBean addClientOrder(Long companyId, Long clientId) {
 		final ResultBean result;
 		final Company company = companyService.find(companyId);
-		
-		if(company != null) {
+
+		if (company != null) {
 			final User client = userService.find(clientId);
-			if(client != null) {
+			if (client != null) {
 				result = addClientOrder(company, client);
-				if(result.getSuccess()) {
-					
-					emailUtil.send(client.getEmailAddress(),
-							null,
+				if (result.getSuccess()) {
+
+					emailUtil.send(client.getEmailAddress(), null,
 							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
 							"Order Created",
-							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME + " has just created an order on your behalf." + "\n\n"
-								+ "The ID of the created order is " + result.getExtras().get("clientOrderId") 
-								+ ". You can verify the contents of the order by logging in at " + BusinessConstants.SERVER_DOMAIN + ". "
-								+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
+							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME
+									+ " has just created an order on your behalf." + "\n\n"
+									+ "The ID of the created order is " + result.getExtras().get("clientOrderId")
+									+ ". You can verify the contents of the order by logging in at "
+									+ BusinessConstants.SERVER_DOMAIN + ". "
+									+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
 							null);
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
+				result = new ResultBean(Boolean.FALSE,
+						Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
-	
+
 	private ResultBean addClientOrder(Company company, User client) {
 		final ResultBean result;
-		
+
 		final List<ClientOrder> clientOrders = clientOrderService.findAllCreatingOrSubmittedByClient(client.getId());
-		
-		if(clientOrders != null && clientOrders.size() < 5) {
+
+		if (clientOrders != null && clientOrders.size() < 5) {
 			final ClientOrder clientOrder = generateNewClientOrder(company, client);
-			
+
 			result = new ResultBean();
 			result.setSuccess(clientOrderService.insert(clientOrder) != null);
-			if(result.getSuccess()) {
+			if (result.getSuccess()) {
 				Map<String, Object> extras = new HashMap<String, Object>();
 				extras.put("clientOrderId", clientOrder.getId());
 				result.setExtras(extras);
-				
-				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Order for " + Html.text(Color.BLUE, client.getBusinessName()) + "."));
+
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Order for "
+						+ Html.text(Color.BLUE, client.getBusinessName()) + "."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED") + " to create more than 5 simultaneous order requests."));
+			result = new ResultBean(Boolean.FALSE, Html.line("You are " + Html.text(Color.RED, "NOT ALLOWED")
+					+ " to create more than 5 simultaneous order requests."));
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public ResultBean submitClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null) {
-			if(clientOrder.getClient().getId().equals(UserContextHolder.getUser().getId()) ||
-					clientOrder.getCreator().getId().equals(UserContextHolder.getUser().getId())) {
-				if(clientOrder.getStatus().equals(Status.CREATING)) {
-					if(!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
+
+		if (clientOrder != null) {
+			if (clientOrder.getClient().getId().equals(UserContextHolder.getUser().getId())
+					|| clientOrder.getCreator().getId().equals(UserContextHolder.getUser().getId())) {
+				if (clientOrder.getStatus().equals(Status.CREATING)) {
+					if (!clientOrder.getNetTotal().equals(Float.valueOf(0.0f))) {
 						clientOrder.setStatus(Status.SUBMITTED);
 						clientOrder.setRequestedOn(new Date());
-						
+
 						result = new ResultBean();
 						result.setSuccess(clientOrderService.update(clientOrder));
-						if(result.getSuccess()) {
-							result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " submitted Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+						if (result.getSuccess()) {
+							result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " submitted Order of "
+									+ Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
 						} else {
-							result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+							result.setMessage(
+									Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 						}
 					} else {
-						result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Submit Failed.") + " Please submit a non-empty form."));
+						result = new ResultBean(Boolean.FALSE,
+								Html.line(Html.text(Color.RED, "Submit Failed.") + " Please submit a non-empty form."));
 					}
 				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-							Html.line(" You are not authorized to submit order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+					result = new ResultBean(Boolean.FALSE,
+							Html.line(Color.RED, "Request Denied!")
+									+ Html.line(" You are not authorized to submit order with status "
+											+ Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 				}
 			} else {
 				throw new NotAuthorizedException("User is not authenticated.");
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
-	
-	/*@Override
-	public ResultBean testAcceptClientOrder(Long clientOrderId, Warehouse warehouse) {
-		final ResultBean result;
-		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null && warehouse != null && (clientOrder.getWarehouse() == null || !clientOrder.getWarehouse().equals(warehouse))) {
-			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrderId);
-			int itemCount = clientOrderItems.size();
-			
-			result = new ResultBean();
-			result.setSuccess(Boolean.TRUE);
-			result.setMessage(Html.line(Color.RED, "Missing Items: "));
-			for(ClientOrderItem orderItem : clientOrderItems) {
-				WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(orderItem.getProductId(), warehouse);
-				if(warehouseItem == null || warehouseItem.getStockCount() < orderItem.getQuantity()) {
-					result.setSuccess(Boolean.FALSE);
-					if(warehouseItem == null) result.setMessage(result.getMessage() + Html.line(Color.BLUE, QuantityFormatter.format((orderItem.getQuantity()), orderItem.getPackaging()) + " " + orderItem.getDisplayName()));
-					else result.setMessage(result.getMessage() + Html.line(Color.BLUE, QuantityFormatter.format((orderItem.getQuantity() - warehouseItem.getStockCount()), orderItem.getPackaging()) + " " + orderItem.getDisplayName()));
-					itemCount--;
-				}
-			}
-			
-			if(itemCount == 0) {
-				result.setMessage(Html.line(Color.RED, "All items are missing. Adjusting will result to the cancellation of the order."));
-			}
-		} else {
-			result = new ResultBean(Boolean.FALSE, "");
-		}
-		
-		return result;
-	}*/
+
+	/*
+	 * @Override public ResultBean testAcceptClientOrder(Long clientOrderId,
+	 * Warehouse warehouse) { final ResultBean result; final ClientOrder
+	 * clientOrder = clientOrderService.find(clientOrderId);
+	 * 
+	 * if(clientOrder != null && warehouse != null &&
+	 * (clientOrder.getWarehouse() == null ||
+	 * !clientOrder.getWarehouse().equals(warehouse))) { List<ClientOrderItem>
+	 * clientOrderItems =
+	 * clientOrderItemService.findAllByClientOrder(clientOrderId); int itemCount
+	 * = clientOrderItems.size();
+	 * 
+	 * result = new ResultBean(); result.setSuccess(Boolean.TRUE);
+	 * result.setMessage(Html.line(Color.RED, "Missing Items: "));
+	 * for(ClientOrderItem orderItem : clientOrderItems) { WarehouseItem
+	 * warehouseItem =
+	 * warehouseItemService.findByProductAndWarehouse(orderItem.getProductId(),
+	 * warehouse); if(warehouseItem == null || warehouseItem.getStockCount() <
+	 * orderItem.getQuantity()) { result.setSuccess(Boolean.FALSE);
+	 * if(warehouseItem == null) result.setMessage(result.getMessage() +
+	 * Html.line(Color.BLUE, QuantityFormatter.format((orderItem.getQuantity()),
+	 * orderItem.getPackaging()) + " " + orderItem.getDisplayName())); else
+	 * result.setMessage(result.getMessage() + Html.line(Color.BLUE,
+	 * QuantityFormatter.format((orderItem.getQuantity() -
+	 * warehouseItem.getStockCount()), orderItem.getPackaging()) + " " +
+	 * orderItem.getDisplayName())); itemCount--; } }
+	 * 
+	 * if(itemCount == 0) { result.setMessage(Html.line(Color.RED,
+	 * "All items are missing. Adjusting will result to the cancellation of the order."
+	 * )); } } else { result = new ResultBean(Boolean.FALSE, ""); }
+	 * 
+	 * return result; }
+	 */
 
 	@Override
 	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean acceptClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.SUBMITTED)) {
-				if(clientOrder.getNetTotal() != 0.0f) {
+
+		if (clientOrder != null) {
+			if (clientOrder.getStatus().equals(Status.SUBMITTED)) {
+				if (clientOrder.getNetTotal() != 0.0f) {
 					result = acceptClientOrder(clientOrder);
 				} else {
 					result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Unable to accept empty order."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to accept order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+				result = new ResultBean(Boolean.FALSE,
+						Html.line(Color.RED, "Request Denied!")
+								+ Html.line(" You are not authorized to accept order with status "
+										+ Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
 
-	/*@Override
-	public ResultBean adjustAndAcceptClientOrder(Long clientOrderId, Warehouse warehouse) {
-		final ResultBean result;
-		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.SUBMITTED) || clientOrder.getStatus().equals(Status.ACCEPTED)) {
-				boolean flag = true;
-				if(clientOrder.getWarehouse() != null) {
-					flag = addToWarehouse(clientOrder, clientOrder.getWarehouse());
-				}
-				if(flag) {
-					adjustClientOrder(clientOrder, warehouse);
-					if(clientOrder.getNetTotal() != 0.0f) {
-						result = acceptClientOrder(clientOrder, warehouse);
-					} else {
-						result = removeClientOrder(clientOrder.getId());
-					}
-				} else {
-					result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
-				}
-			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to accept order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
-			}
-		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
-		}
-		
-		return result;
-	}*/
-	
+	/*
+	 * @Override public ResultBean adjustAndAcceptClientOrder(Long
+	 * clientOrderId, Warehouse warehouse) { final ResultBean result; final
+	 * ClientOrder clientOrder = clientOrderService.find(clientOrderId);
+	 * 
+	 * if(clientOrder != null) {
+	 * if(clientOrder.getStatus().equals(Status.SUBMITTED) ||
+	 * clientOrder.getStatus().equals(Status.ACCEPTED)) { boolean flag = true;
+	 * if(clientOrder.getWarehouse() != null) { flag =
+	 * addToWarehouse(clientOrder, clientOrder.getWarehouse()); } if(flag) {
+	 * adjustClientOrder(clientOrder, warehouse); if(clientOrder.getNetTotal()
+	 * != 0.0f) { result = acceptClientOrder(clientOrder, warehouse); } else {
+	 * result = removeClientOrder(clientOrder.getId()); } } else { result = new
+	 * ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") +
+	 * " to load order. Please refresh the page.")); } } else { result = new
+	 * ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
+	 * Html.line(" You are not authorized to accept order with status " +
+	 * Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+	 * } } else { result = new ResultBean(Boolean.FALSE,
+	 * Html.line(Html.text(Color.RED, "Failed") +
+	 * " to load order. Please refresh the page.")); }
+	 * 
+	 * return result; }
+	 */
+
 	private ResultBean acceptClientOrder(ClientOrder clientOrder) {
 		final ResultBean result;
-		
+
 		clientOrder.setStatus(Status.ACCEPTED);
 
 		result = new ResultBean();
-		result.setSuccess(clientOrderService.update(clientOrder) &&
-				emailUtil.send(clientOrder.getClient().getEmailAddress(), 
-						null,
-						MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
-						"Order Accepted",
-						"Thank you " + clientOrder.getClient().getFormattedName() + "(" + clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
+		result.setSuccess(clientOrderService.update(clientOrder) && emailUtil.send(
+				clientOrder.getClient().getEmailAddress(), null,
+				MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(), "Order Accepted",
+				"Thank you " + clientOrder.getClient().getFormattedName() + "("
+						+ clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
 						+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
-						null));
-		if(result.getSuccess()) {
-			result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + ". An email notification has been sent to the client."));
+				null));
+		if (result.getSuccess()) {
+			result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted Order of "
+					+ Html.text(Color.BLUE, "ID #" + clientOrder.getId())
+					+ ". An email notification has been sent to the client."));
 		} else {
 			result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean payClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.RECEIVED)) {
+
+		if (clientOrder != null) {
+			if (clientOrder.getStatus().equals(Status.RECEIVED)) {
 				clientOrder.setStatus(Status.PAID);
 				clientOrder.setPaidOn(new Date());
-				
+
 				result = new ResultBean();
 				result.setSuccess(clientOrderService.update(clientOrder));
-				if(result.getSuccess()) {
-					
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " finalized and received payment of Order " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+				if (result.getSuccess()) {
+
+					result.setMessage(Html
+							.line(Html.text(Color.GREEN, "Successfully") + " finalized and received payment of Order "
+									+ Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to accept payment of order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+				result = new ResultBean(Boolean.FALSE,
+						Html.line(Color.RED, "Request Denied!")
+								+ Html.line(" You are not authorized to accept payment of order with status "
+										+ Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
 
@@ -477,124 +503,124 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	public ResultBean removeClientOrder(Long clientOrderId) {
 		final ResultBean result;
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null) {
-			if(clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED) 
+
+		if (clientOrder != null) {
+			if (clientOrder.getStatus().equals(Status.CREATING) || clientOrder.getStatus().equals(Status.SUBMITTED)
 					|| (UserContextHolder.getUser().getUserType().getAuthority() <= Integer.valueOf(2))
-						&& (clientOrder.getStatus().equals(Status.ACCEPTED)
-							|| clientOrder.getStatus().equals(Status.TO_FOLLOW))) {
+							&& (clientOrder.getStatus().equals(Status.ACCEPTED)
+									|| clientOrder.getStatus().equals(Status.TO_FOLLOW))) {
 				result = new ResultBean();
-				
+
 				clientOrder.setStatus(Status.CANCELLED);
-				
+
 				result.setSuccess(clientOrderService.delete(clientOrder));
-				if(result.getSuccess()) {
-					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " removed Order of " + Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
+				if (result.getSuccess()) {
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " removed Order of "
+							+ Html.text(Color.BLUE, "ID #" + clientOrder.getId()) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Request Denied!") +
-						Html.line(" You are not authorized to remove order with status " + Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
+				result = new ResultBean(Boolean.FALSE,
+						Html.line(Color.RED, "Request Denied!")
+								+ Html.line(" You are not authorized to remove order with status "
+										+ Html.text(Color.BLUE, clientOrder.getStatus().getDisplayName()) + "."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE,
+					Html.line(Html.text(Color.RED, "Failed") + " to load order. Please refresh the page."));
 		}
-		
+
 		return result;
 	}
-	
-	/**
-	 * Handles both machine and user generated reports
-	 */
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
-		if(result.getSuccess() && salesReportQuery.getSendMail()) {
-			emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
-					null,
-					MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
-					"Sales Report",
+		if (result.getSuccess() && salesReportQuery.getSendMail()) {
+			emailUtil.send(UserContextHolder.getUser().getEmailAddress(), null,
+					MailConstants.DEFAULT_EMAIL, "Sales Report",
 					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
 					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
 		}
 		return result;
 	}
-	
+
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public List<Warehouse> getWarehouseList() {
-		return Stream.of(Warehouse.values())
-				.collect(Collectors.toList());
+		return Stream.of(Warehouse.values()).collect(Collectors.toList());
 	}
-	
+
 	@Override
 	public List<ClientSalesReportType> getClientSalesReportTypes() {
-		return Stream.of(ClientSalesReportType.values())
-				.collect(Collectors.toList());
+		return Stream.of(ClientSalesReportType.values()).collect(Collectors.toList());
 	}
-	
-	/*private void adjustClientOrder(ClientOrder clientOrder, Warehouse warehouse) {
-		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-		for(ClientOrderItem clientOrderItem : clientOrderItems) {
-			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
-			if(warehouseItem == null || warehouseItem.getStockCount() <= 0) {
-				clientOrderItemService.delete(clientOrderItem);
-			} else if(warehouseItem.getStockCount() < clientOrderItem.getQuantity()) {
-				clientOrderItem.setQuantity(warehouseItem.getStockCount());
-				clientOrderItemService.update(clientOrderItem);
-			}
-		}
-		refreshClientOrder(clientOrder.getId());
-	}*/
-	
-	/*private boolean addToWarehouse(ClientOrder clientOrder, Warehouse warehouse) {
-		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-		for(ClientOrderItem clientOrderItem : clientOrderItems) {
-			final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(clientOrderItem.getProductId(), warehouse);
-			if(warehouseItem == null) {
-				final Product product = productService.find(clientOrderItem.getProductId());
-				final WarehouseItem warehouzeItem = new WarehouseItem();
-				
-				warehouzeItem.setProduct(product);
-				warehouzeItem.setWarehouse(warehouse);
-				warehouzeItem.setStockCount(clientOrderItem.getQuantity());
-				
-				if(warehouseItemService.insert(warehouzeItem) == null) return false;
-			} else {
-				warehouseItem.setStockCount(warehouseItem.getStockCount() + clientOrderItem.getQuantity());
-				
-				if(!warehouseItemService.update(warehouseItem)) return false;;
-			}
-		}
-		
-		return true;
-	}*/
-	
+
+	/*
+	 * private void adjustClientOrder(ClientOrder clientOrder, Warehouse
+	 * warehouse) { List<ClientOrderItem> clientOrderItems =
+	 * clientOrderItemService.findAllByClientOrder(clientOrder.getId());
+	 * for(ClientOrderItem clientOrderItem : clientOrderItems) { final
+	 * WarehouseItem warehouseItem =
+	 * warehouseItemService.findByProductAndWarehouse(clientOrderItem.
+	 * getProductId(), warehouse); if(warehouseItem == null ||
+	 * warehouseItem.getStockCount() <= 0) {
+	 * clientOrderItemService.delete(clientOrderItem); } else
+	 * if(warehouseItem.getStockCount() < clientOrderItem.getQuantity()) {
+	 * clientOrderItem.setQuantity(warehouseItem.getStockCount());
+	 * clientOrderItemService.update(clientOrderItem); } }
+	 * refreshClientOrder(clientOrder.getId()); }
+	 */
+
+	/*
+	 * private boolean addToWarehouse(ClientOrder clientOrder, Warehouse
+	 * warehouse) { List<ClientOrderItem> clientOrderItems =
+	 * clientOrderItemService.findAllByClientOrder(clientOrder.getId());
+	 * for(ClientOrderItem clientOrderItem : clientOrderItems) { final
+	 * WarehouseItem warehouseItem =
+	 * warehouseItemService.findByProductAndWarehouse(clientOrderItem.
+	 * getProductId(), warehouse); if(warehouseItem == null) { final Product
+	 * product = productService.find(clientOrderItem.getProductId()); final
+	 * WarehouseItem warehouzeItem = new WarehouseItem();
+	 * 
+	 * warehouzeItem.setProduct(product); warehouzeItem.setWarehouse(warehouse);
+	 * warehouzeItem.setStockCount(clientOrderItem.getQuantity());
+	 * 
+	 * if(warehouseItemService.insert(warehouzeItem) == null) return false; }
+	 * else { warehouseItem.setStockCount(warehouseItem.getStockCount() +
+	 * clientOrderItem.getQuantity());
+	 * 
+	 * if(!warehouseItemService.update(warehouseItem)) return false;; } }
+	 * 
+	 * return true; }
+	 */
+
 	private void refreshClientOrder(Long clientOrderId) {
 		final ClientOrder clientOrder = clientOrderService.find(clientOrderId);
-		
-		if(clientOrder != null && !clientOrder.getStatus().equals(Status.PAID)) {
+
+		if (clientOrder != null && !clientOrder.getStatus().equals(Status.PAID)) {
 			Float grossTotal = 0.0f;
 			Float discountTotal = 0.0f;
 			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrderId);
-			
-			for(ClientOrderItem clientOrderItem : clientOrderItems) {
+
+			for (ClientOrderItem clientOrderItem : clientOrderItems) {
 				grossTotal += clientOrderItem.getGrossPrice();
 				discountTotal += clientOrderItem.getDiscountAmount();
 			}
-			
+
 			clientOrder.setGrossTotal(grossTotal);
 			clientOrder.setDiscountTotal(discountTotal);
 			clientOrderService.update(clientOrder);
 		}
 	}
-	
+
 	private ClientOrder generateNewClientOrder(Company company, User client) {
 		final ClientOrder clientOrder = new ClientOrder();
-		final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(client.getId(), company.getId());
-		
+		final ClientCompanyPrice clientCompanyPrice = clientCompanyPriceService.findByClientAndCompany(client.getId(),
+				company.getId());
+
 		clientOrder.setCreator(UserContextHolder.getUser().getUserEntity());
 		clientOrder.setClient(client);
 		clientOrder.setCompany(company);
@@ -604,11 +630,11 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		clientOrder.setWarehouse(null);
 		clientOrder.setAdditionalDiscount((clientCompanyPrice != null) ? clientCompanyPrice.getDiscount() : 0.0f);
 		clientOrder.setLessVat(client.getVatType().getLessVat());
-		
+
 		clientOrder.setRequestedOn(DateUtil.getDefaultDate());
 		clientOrder.setDeliveredOn(DateUtil.getDefaultDate());
 		clientOrder.setPaidOn(DateUtil.getDefaultDate());
-		
+
 		return clientOrder;
 	}
 }

@@ -164,4 +164,12 @@ public class ProductEndpoint {
 	public ResultBean removeProductImage(@FormParam("productImageId") Long productImageId) {
 		return productHandler.removeProductImage(productImageId);
 	}
+	
+	@POST
+	@Path("/generatepricelist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean generatePriceList(@FormParam("companyId") Long companyId,
+					@FormParam("sendEmail") Boolean sendEmail) throws IOException {
+		return productHandler.generatePriceList(companyId, sendEmail);
+	}
 }

@@ -7,6 +7,7 @@ import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.ProductDAO;
@@ -73,5 +74,18 @@ public class ProductDAOImpl
 	@Override
 	public List<Product> findAllWithOrder(Order[] orders) {
 		return findAllByCriterionList(null, null, null, orders, Restrictions.eq("isValid", Boolean.TRUE));
+	}
+	
+	@Override
+	public List<Product> findAllByCompanyWithOrder(Long companyId, Order[] orders) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		conjunction.add(Restrictions.eq("company.id", companyId));
+		
+		String[] associatedPaths = { "category" };
+		String[] aliasNames = { "categoryy" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, orders, conjunction);
 	}
 }

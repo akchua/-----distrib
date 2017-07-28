@@ -1,8 +1,9 @@
 <br/>
 <div class="row">
 	<button data-bind="click: add" type="button" class="btn btn-success col-md-2 col-xs-3"><i class="fa fa-plus-circle"></i> Add Product</button>
+	<button data-bind="click: generatePriceList" type="button" class="btn btn-warning col-md-2 col-xs-3"><i class="fa fa-list"></i> Generate Price List</button>
 	<form role="search" class="form-inline">
-        <div class="input-group pull-right col-md-8 col-xs-8">
+        <div class="input-group pull-right col-md-7 col-xs-7">
        		<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: search }" class="form-control" id="inputCompany"></select>
 			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
 			<select data-bind="options: categoryList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Category --', value: categoryId, event: { change: search }" class="form-control" id="inputCategory"></select>

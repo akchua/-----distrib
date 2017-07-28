@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,9 +26,11 @@ import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.constants.ImageConstants;
+import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientProductPrice;
 import com.chua.distributions.database.entity.ClientPromo;
+import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.ProductImage;
 import com.chua.distributions.database.entity.User;
@@ -42,8 +48,12 @@ import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
+import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.StringHelper;
+import com.chua.distributions.utility.format.DateFormatter;
+import com.chua.distributions.utility.template.PriceListTemplate;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -80,6 +90,12 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Autowired
 	private ClientPromoService clientPromoService;
+	
+	@Autowired
+	private EmailUtil emailUtil;
+	
+	@Autowired
+	private VelocityEngine velocityEngine;
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -370,6 +386,63 @@ public class ProductHandlerImpl implements ProductHandler {
 		}
 		
 		return finalSellingDiscount;
+	}
+	
+	@Override
+	public ResultBean generatePriceList(Long companyId, Boolean sendEmail) {
+		final ResultBean result;
+		
+		if(companyId != null) {
+			final Company company = companyService.find(companyId);
+			
+			if(company != null) {
+				final List<Product> products = productService.findAllByCompanyOrderByCategory(companyId);
+				
+				if(products != null && !products.isEmpty()) {
+					String fileName = "";		// Diversey_PriceList_07-28-2017.pdf
+					fileName += company.getShortName() + "_";
+					fileName += "PriceList" + "_";
+					fileName += DateFormatter.fileSafeShortFormat(new Date());
+					fileName += ".pdf";
+					
+					final String filePath = FileConstants.PRICE_LIST_HOME + fileName;
+					result = new ResultBean();
+					
+					result.setSuccess(
+							SimplePdfWriter.write(
+									new PriceListTemplate(company, products).merge(velocityEngine), 
+									filePath,
+									false)
+							);
+					
+					if(result.getSuccess()) {
+						final Map<String, Object> extras = new HashMap<String, Object>();
+						extras.put("fileName", fileName);
+						result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created price list for " + Html.text(Color.BLUE,company.getName()) + "."));
+						result.setExtras(extras);
+						
+						if(sendEmail) {
+							emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
+									null,
+									MailConstants.DEFAULT_EMAIL,
+									"Price List",
+									"Price list for " + company.getName() + ".",
+									new String[] { filePath });
+						}
+					} else {
+						result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE, Html.line(Color.TURQUOISE, "No product found for the given company."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.YELLOW, "Please select a company."));
+		}
+		
+		return result;
 	}
 	
 	private void setProduct(Product product, ProductFormBean productForm) {

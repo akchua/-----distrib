@@ -1,5 +1,5 @@
 ## Template for Purchase Order
-## Has a maximum of 97 columns per line
+## Has a maximum of 96 columns per line
                                        PURCHASE ORDER                                       
 
     SUPPLIER : ${t.Supplier}
