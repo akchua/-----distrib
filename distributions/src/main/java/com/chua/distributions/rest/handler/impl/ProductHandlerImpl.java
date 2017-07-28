@@ -1,8 +1,14 @@
 package com.chua.distributions.rest.handler.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +18,13 @@ import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.FileConstants;
+import com.chua.distributions.constants.ImageConstants;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientProductPrice;
 import com.chua.distributions.database.entity.ClientPromo;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.ProductImage;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.CategoryService;
@@ -23,6 +32,7 @@ import com.chua.distributions.database.service.ClientCompanyPriceService;
 import com.chua.distributions.database.service.ClientProductPriceService;
 import com.chua.distributions.database.service.ClientPromoService;
 import com.chua.distributions.database.service.CompanyService;
+import com.chua.distributions.database.service.ProductImageService;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
@@ -31,6 +41,7 @@ import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.StringHelper;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -43,6 +54,9 @@ public class ProductHandlerImpl implements ProductHandler {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductImageService productImageService;
 	
 	@Autowired
 	private UserService userService;
@@ -71,6 +85,11 @@ public class ProductHandlerImpl implements ProductHandler {
 		final Product product = productService.find(productId);
 		if(product != null) setProductStock(product, warehouse);
 		return product;
+	}
+	
+	@Override
+	public File findProductImageByFileName(String fileName) {
+		return new File(FileConstants.PRODUCT_IMAGE_HOME + fileName);
 	}
 	
 	@Override
@@ -124,6 +143,11 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
+	public List<ProductImage> getProductImageList(Long productId) {
+		return productImageService.findAllByProductId(productId);
+	}
+	
+	@Override
 	@CheckAuthority(minimumAuthority = 2)
 	public ResultBean createProduct(ProductFormBean productForm) {
 		final ResultBean result;
@@ -138,6 +162,7 @@ public class ProductHandlerImpl implements ProductHandler {
 			} else {
 				final Product product = new Product();
 				product.setDisplayName(displayName);
+				product.setImage(ImageConstants.DEFAULT_IMAGE);
 				setProduct(product, productForm);
 				
 				result = new ResultBean();
@@ -150,6 +175,39 @@ public class ProductHandlerImpl implements ProductHandler {
 			}
 		} else {
 			result = validateForm;
+		}
+		
+		return result;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public ResultBean saveProductImage(Long productId, InputStream in, FormDataContentDisposition info) throws IOException {
+		final ResultBean result;
+		final String fileName = UUID.randomUUID().toString() + "." + StringHelper.getFileExtension(info.getFileName());
+		File imageFile = new File(FileConstants.PRODUCT_IMAGE_HOME + fileName);
+		
+		if(!imageFile.exists()) {
+			Files.copy(in, imageFile.toPath());
+			final Product product = productService.find(productId);
+			if(product != null) {
+				result = new ResultBean();
+				
+				final ProductImage productImage = new ProductImage();
+				productImage.setProduct(product);
+				productImage.setFileName(fileName);
+				
+				result.setSuccess(productImageService.insert(productImage) != null);
+				if(result.getSuccess()) {
+					result.setMessage(Html.line(Color.GREEN, "Upload Successful."));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product. Please refresh the page."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, "Error please try uploading again.");
 		}
 		
 		return result;
@@ -189,6 +247,30 @@ public class ProductHandlerImpl implements ProductHandler {
 		
 		return result;
 	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public ResultBean setProductImageAsThumbnail(Long productImageId) {
+		final ResultBean result;
+		final ProductImage productImage = productImageService.find(productImageId);
+		
+		if(productImage != null) {
+			result = new ResultBean();
+			final Product product = productImage.getProduct();
+			
+			product.setImage(productImage.getFileName());
+			result.setSuccess(productService.update(product));
+			if(result.getSuccess()) {
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " set Product Image as thumbnail for " + Html.text(Color.BLUE, product.getName()) + "."));
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product image. Please refresh the page."));
+		}
+		
+		return result;
+	}
 
 	@Override
 	@CheckAuthority(minimumAuthority = 2)
@@ -207,6 +289,35 @@ public class ProductHandlerImpl implements ProductHandler {
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public ResultBean removeProductImage(Long productImageId) {
+		final ResultBean result;
+		final ProductImage productImage = productImageService.find(productImageId);
+		
+		if(productImage != null) {
+			result = new ResultBean();
+			final Product product = productImage.getProduct();
+			
+			// REMOVE AS THUMBNAIL IF DELETED
+			if(product.getImage().equals(productImage.getFileName())) {
+				product.setImage(ImageConstants.DEFAULT_IMAGE);
+				productService.update(product);
+			}
+			
+			result.setSuccess(productImageService.delete(productImage));
+			if(result.getSuccess()) {
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " removed Product Image."));
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product image. Please refresh the page."));
 		}
 		
 		return result;

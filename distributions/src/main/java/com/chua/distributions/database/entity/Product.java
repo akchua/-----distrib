@@ -45,6 +45,8 @@ public class Product extends BaseObject {
 	
 	private String displayName;
 	
+	private String image;
+	
 	private String size;
 	
 	private Integer packaging;
@@ -120,6 +122,16 @@ public class Product extends BaseObject {
 	
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+
+	@Basic
+	@Column(name = "image")
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	@Basic

@@ -10,6 +10,10 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getProductImageByFileName: function(fileName) {
+			return '/services/product/getimage/' + fileName;
+		},
+		
 		getPartialProduct: function(productId, warehouse) {
 			return $.ajax({
 				url: '/services/product/getpartial',
@@ -50,6 +54,15 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getProductImageList: function(productId) {
+			return $.ajax({
+				url: '/services/product/imagelist',
+				data: {
+					productId: productId
+				}
+			});
+		},
+		
 		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
 			return $.ajax({
 				url: '/services/product/listpartial',
@@ -74,12 +87,47 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	uploadProductImage: function(productId, imageFile) {
+    		var formData = new FormData();
+    		formData.append('imageFile', imageFile);
+    		formData.append('productId', productId);
+    		
+    		return $.ajax({
+    			url: '/services/product/uploadimage',
+    			method: 'POST',
+    			data: formData,
+    			cache: false,
+    			contentType: false,
+    			processData: false
+    		});
+    	},
+    	
+    	setProductImageAsThumbnail: function(productImageId) {
+    		return $.ajax({
+    			url: '/services/product/setthumbnail',
+    			method: 'POST',
+    			data: {
+    				productImageId: productImageId
+    			}
+    		});
+    	},
+    	
     	removeProduct: function(productId) {
     		return $.ajax({
     			url: '/services/product/remove',
     			method: 'POST',
     			data: {
     				productId: productId
+    			}
+    		});
+    	},
+    	
+    	removeProductImage: function(productImageId) {
+    		return $.ajax({
+    			url: '/services/product/removeimage',
+    			method: 'POST',
+    			data: {
+    				productImageId: productImageId
     			}
     		});
     	}

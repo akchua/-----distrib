@@ -48,4 +48,14 @@ public class StringHelper {
 		}
 		return convertedString;
 	}
+	
+	/**
+	 * Extracts the file extension from a given string (if any)
+	 * @param fileName The file name where extension is to be extracted from
+	 * @return The extracted file extension without the dot (ex. jpg, pdf ...)
+	 */
+	public static String getFileExtension(String fileName) {
+		String[] tokens = fileName.split("\\.");
+		return tokens[tokens.length - 1];
+	}
 }

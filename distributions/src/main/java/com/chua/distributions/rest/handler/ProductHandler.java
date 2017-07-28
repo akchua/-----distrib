@@ -1,11 +1,17 @@
 package com.chua.distributions.rest.handler;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.ProductImage;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
@@ -19,6 +25,8 @@ public interface ProductHandler {
 
 	Product getProduct(Long productId, Warehouse warehouse);
 	
+	File findProductImageByFileName(String fileName);
+	
 	PartialProductBean getPartialProduct(Long productId, Warehouse warehouse);
 	
 	PartialProductBean getPartialProductFor(Long productId, Long userId);
@@ -29,11 +37,19 @@ public interface ProductHandler {
 	
 	List<Product> getProductListOrderByName();
 	
+	List<ProductImage> getProductImageList(Long productId);
+	
 	ResultBean createProduct(ProductFormBean productForm);
+	
+	ResultBean saveProductImage(Long productId, InputStream in, FormDataContentDisposition info) throws IOException;
 	
 	ResultBean updateProduct(ProductFormBean productForm);
 	
+	ResultBean setProductImageAsThumbnail(Long productImageId);
+	
 	ResultBean removeProduct(Long productId);
+	
+	ResultBean removeProductImage(Long productImageId);
 	
 	/**
 	 * Method used to get the final base price of a single piece of the given product based on the price settings of the given user.

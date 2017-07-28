@@ -1,22 +1,31 @@
 package com.chua.distributions.rest.endpoint;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.ProductImage;
 import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
@@ -38,6 +47,17 @@ public class ProductEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Product getProduct(@QueryParam("productId") Long productId, @QueryParam("warehouse") Warehouse warehouse) {
 		return productHandler.getProduct(productId, warehouse);
+	}
+	
+	@GET
+	@Path("/getimage/{fileName}")
+	@Produces("image/*")
+	public Response getProductImageByFileName(@PathParam("fileName") String fileName) throws IOException {
+		File productImage = productHandler.findProductImageByFileName(fileName);
+		if(productImage.exists())
+			return Response.ok(productImage, new MimetypesFileTypeMap().getContentType(productImage))
+				.build();
+		else return null;
 	}
 	
 	@GET
@@ -66,10 +86,17 @@ public class ProductEndpoint {
 	}
 	
 	@GET
-	@Path("listbyname")
+	@Path("/listbyname")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<Product> getProductListOrderByName() {
 		return productHandler.getProductListOrderByName();
+	}
+	
+	@GET
+	@Path("/imagelist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<ProductImage> getProductImageList(@QueryParam("productId") Long productId) {
+		return productHandler.getProductImageList(productId);
 	}
 	
 	@GET
@@ -100,9 +127,33 @@ public class ProductEndpoint {
 	}
 	
 	@POST
+	@Path("/uploadimage")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)	
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean uploadProductImage(@FormDataParam("productId") Long productId,
+			@FormDataParam("imageFile") InputStream in,
+			@FormDataParam("imageFile") FormDataContentDisposition info) throws IOException {
+		return productHandler.saveProductImage(productId, in, info);
+	}
+	
+	@POST
+	@Path("/setthumbnail")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean setProductImageAsThumbnail(@FormParam("productImageId") Long productImageId) {
+		return productHandler.setProductImageAsThumbnail(productImageId);
+	}
+	
+	@POST
 	@Path("/remove")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removeProduct(@FormParam("productId") Long productId) {
 		return productHandler.removeProduct(productId);
+	}
+	
+	@POST
+	@Path("/removeimage")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean removeProductImage(@FormParam("productImageId") Long productImageId) {
+		return productHandler.removeProductImage(productImageId);
 	}
 }

@@ -1,5 +1,5 @@
-define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/productform', 'viewmodels/manage/productview'],
-		function (app, ko, productService, companyService, categoryService, ProductForm, ProductView) {
+define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyservice', 'modules/categoryservice', 'viewmodels/manage/productform', 'viewmodels/manage/productview', 'viewmodels/manage/productgallery'],
+		function (app, ko, productService, companyService, categoryService, ProductForm, ProductView, ProductGallery) {
     var Product = function() {
     	this.productList = ko.observable();
     	this.companyList = ko.observable();
@@ -58,6 +58,10 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     	productService.getProduct(productId, null).done(function(product) {
     		ProductView.show(product, true)
     	});
+    };
+    
+    Product.prototype.gallery = function(productId) {
+		ProductGallery.show(productId)
     };
     
     Product.prototype.edit = function(productId) {

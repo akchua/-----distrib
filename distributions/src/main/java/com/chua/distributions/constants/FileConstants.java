@@ -19,11 +19,15 @@ public class FileConstants {
 
 	public static String DISPATCH_HOME;
 	
+	public static String PRODUCT_IMAGE_HOME;
+	
 	@Value("${file.home}")
     public void setFileHome(String home) {
         FileConstants.FILE_HOME = home;
         FileConstants.SALES_HOME = home + "files/sales_report/";
         FileConstants.PURCHASES_HOME = home + "files/purchase_order/";
         FileConstants.DISPATCH_HOME = home + "files/dispatch/";
+        
+        FileConstants.PRODUCT_IMAGE_HOME = home + "program_data/product_image/";
     }
 }

@@ -50,6 +50,7 @@
 				<value>com.chua.distributions.database.entity.Category</value>
 				<value>com.chua.distributions.database.entity.Company</value>
 				<value>com.chua.distributions.database.entity.Product</value>
+				<value>com.chua.distributions.database.entity.ProductImage</value>
 				
 				<value>com.chua.distributions.database.entity.Dispatch</value>
 				<value>com.chua.distributions.database.entity.DispatchItem</value>

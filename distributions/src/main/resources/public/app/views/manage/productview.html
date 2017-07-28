@@ -7,33 +7,42 @@
 	  
 		<div class="modal-body">
 			<div class="row">
-				<div class="panel panel-info">
-					<div class="panel-heading">
-						<h3 class="panel-title"><strong data-bind="text: productViewModel.displayName"></strong></h3>
-						<p data-bind="text: productViewModel.description"></p>
-					</div>
-					
-					<div class="panel-body">
-						<dl class="dl-horizontal">
-							<dt>Company:</dt>
-							<dd data-bind="text: productViewModel.companyName"></dd>
-							<dt>Category:</dt>
-							<dd data-bind="text: productViewModel.categoryName"></dd>
-							<dt>Code:</dt>
-							<dd data-bind="text: productViewModel.productCode"></dd>
-							<dt>Selling Price:</dt>
-							<dd data-bind="text: productViewModel.formattedPackageNetSellingPrice"></dd>
-							<!-- ko if: showStock -->
-							<!-- ko if: showHere -->
-							<dt>Stock Here:</dt>
-							<dd data-bind="text: productViewModel.stockCountCurrent"></dd>
-							<!-- /ko -->
-							<dt>All Stock:</dt>
-							<dd data-bind="text: productViewModel.stockCountAll"></dd>
-							<!-- /ko -->
-				    	</dl>
-					</div>
+				<div class="col-xs-8 col-sm-8 col-md-9 col-lg-9">
+					<h3 class="text-info"><strong data-bind="text: productViewModel.displayName"></strong></h3>
+					<p data-bind="text: productViewModel.description"></p>
 				</div>
+				<div class="col-xs-4 col-sm-8 col-md-3 col-lg-3">
+					<img data-bind="attr: { src : productViewModel.image }" class="img-rounded img-responsive col-xs-12 text-center">
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<dl class="dl-horizontal">
+					<dt>Company:</dt>
+					<dd data-bind="text: productViewModel.companyName"></dd>
+					<dt>Category:</dt>
+					<dd data-bind="text: productViewModel.categoryName"></dd>
+					<dt>Code:</dt>
+					<dd data-bind="text: productViewModel.productCode"></dd>
+					<dt>Selling Price:</dt>
+					<dd data-bind="text: productViewModel.formattedPackageNetSellingPrice"></dd>
+					<!-- ko if: showStock -->
+					<!-- ko if: showHere -->
+					<dt>Stock Here:</dt>
+					<dd data-bind="text: productViewModel.stockCountCurrent"></dd>
+					<!-- /ko -->
+					<dt>All Stock:</dt>
+					<dd data-bind="text: productViewModel.stockCountAll"></dd>
+					<!-- /ko -->
+		    	</dl>
+			</div>
+			<hr>
+			<div class="row">
+				<!-- ko foreach: { data: productImageList, as: 'productImage' } -->
+				<div class="thumbnail col-xs-3">
+		        	<img data-bind="attr: { src: productImage.filePath }" class="img-rounded">
+		        </div>	
+		        <!-- /ko -->
 			</div>
 		</div>
   
