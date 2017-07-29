@@ -169,7 +169,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters."));
 		} else if(!emailUtil.validateEmail(companyForm.getEmailAddress().trim())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Email Address!"));
-		} else if(!emailUtil.validateEmail(companyForm.getReportReceiver().trim())) {
+		} else if(companyForm.getReportReceiver() != null && !emailUtil.validateEmail(companyForm.getReportReceiver().trim())) {
 			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Invalid Email at Report Receiver!"));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");

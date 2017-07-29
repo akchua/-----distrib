@@ -68,7 +68,11 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
     };
     
     Product.prototype.gallery = function(productId) {
-		ProductGallery.show(productId)
+		var self = this;
+    	
+    	ProductGallery.show(productId).done(function() {
+			self.refreshProductList();
+		});
     };
     
     Product.prototype.edit = function(productId) {

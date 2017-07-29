@@ -211,7 +211,9 @@ public class ProductHandlerImpl implements ProductHandler {
 	public ResultBean saveProductImage(Long productId, InputStream in, FormDataContentDisposition info) throws IOException {
 		final ResultBean result;
 		final String fileName = UUID.randomUUID().toString() + "." + StringHelper.getFileExtension(info.getFileName());
+		
 		File imageFile = new File(FileConstants.PRODUCT_IMAGE_HOME + fileName);
+		if(imageFile.getParentFile() != null) imageFile.getParentFile().mkdirs();
 		
 		if(!imageFile.exists()) {
 			Files.copy(in, imageFile.toPath());
