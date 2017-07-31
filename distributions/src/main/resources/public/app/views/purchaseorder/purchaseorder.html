@@ -55,7 +55,7 @@
 							<!-- /ko -->
 							<!-- ko if: purchaseOrder.status.name == 'TO_FOLLOW' -->
 							<button data-bind="click: function() { $parent.receive(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0  " type="button" class="btn btn-success btn-sm" title="Receive"><i class="fa fa-check"></i></button>
-							<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Receive"><i class="fa fa-exchange"></i></button>
+							<button data-bind="click: function() { $parent.transfer(purchaseOrder.id) }, enable: purchaseOrder.netTotal != 0 " type="button" class="btn btn-warning btn-sm" title="Transfer"><i class="fa fa-exchange"></i></button>
 							<!-- /ko -->
 							<!-- ko if: (purchaseOrder.status.name == 'RECEIVED' &&  $parent.isManager) -->
 							<button data-bind="click: function() { $parent.pay(purchaseOrder.id, purchaseOrder.formattedNetTotal) } " type="button" class="btn btn-success btn-sm" title="Pay"><i class="fa fa-money"></i></button>
