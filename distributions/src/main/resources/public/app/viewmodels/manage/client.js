@@ -19,6 +19,12 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/userservice', 'vi
 			self.refreshClientList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		self.refreshClientList();
     };
     

@@ -37,9 +37,11 @@ public class ProductDAOImpl
 		
 		if(StringUtils.isNotBlank(searchKey))
 		{
-			conjunction.add(Restrictions.disjunction()
-					.add(Restrictions.ilike("displayName", searchKey, MatchMode.ANYWHERE))
-					.add(Restrictions.ilike("productCode", searchKey, MatchMode.ANYWHERE)));
+			for(String s : searchKey.split("\\s+")) {
+				conjunction.add(Restrictions.disjunction()
+						.add(Restrictions.ilike("displayName", s, MatchMode.ANYWHERE))
+						.add(Restrictions.ilike("productCode", s, MatchMode.ANYWHERE)));
+			}
 		}
 		
 		if(companyId != null) {

@@ -19,6 +19,12 @@ define(['durandal/app', 'knockout', 'modules/companyservice', 'viewmodels/manage
 			self.refreshCompanyList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		self.refreshCompanyList();
     };
     

@@ -23,6 +23,12 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 			self.refreshProductList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		self.refreshProductList();
     };
     

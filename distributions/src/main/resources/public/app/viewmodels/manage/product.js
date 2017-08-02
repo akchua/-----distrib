@@ -24,6 +24,12 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
 			self.refreshProductList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		categoryService.getCategoryListByName().done(function(categoryList) {
     		self.categoryList(categoryList);
     	});

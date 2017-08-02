@@ -19,6 +19,12 @@ define(['durandal/app', 'knockout', 'modules/categoryservice', 'viewmodels/manag
 			self.refreshCategoryList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		self.refreshCategoryList();
     };
     
