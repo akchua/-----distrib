@@ -156,7 +156,7 @@ public class CompanyHandlerImpl implements CompanyHandler {
 		company.setContactPerson(companyForm.getContactPerson().trim());
 		company.setContactNumber(companyForm.getContactNumber().trim());
 		company.setEmailAddress(companyForm.getEmailAddress().trim());
-		company.setReportReceiver(companyForm.getReportReceiver().trim());
+		company.setReportReceiver((companyForm != null) ? companyForm.getReportReceiver().trim() : null);
 	}
 	
 	private ResultBean validateCompanyForm(CompanyFormBean companyForm) {
