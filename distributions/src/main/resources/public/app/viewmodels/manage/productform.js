@@ -10,6 +10,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	this.discountAmount = ko.observable();
     	this.profitAmount = ko.observable();
     	
+    	this.enableAllowRetailCheckBox = ko.observable(true);
+    	
     	this.productFormModel = {
     		id: ko.observable(),
     		
@@ -51,6 +53,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	self.discountAmount(self.product.packageDiscountAmount);
     	self.profitAmount(self.product.packageProfitAmount);
     	
+    	if(self.productFormModel.packaging() <= 1) {
+    		self.enableAllowRetailCheckBox(false);
+    	}
+    	
     	categoryService.getCategoryListByName().done(function(categoryList) {
     		self.categoryList(categoryList);
     		self.productFormModel.categoryId(self.product.category.id);
@@ -64,6 +70,15 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     
     ProductForm.prototype.compositionComplete = function() {
     	var self = this;
+    	
+    	self.productFormModel.packaging.subscribe(function(newPackaging) {
+    		if(newPackaging <= 1) {
+    			self.productFormModel.allowRetail(false);
+    			self.enableAllowRetailCheckBox(false);
+    		} else {
+    			self.enableAllowRetailCheckBox(true);
+    		}
+    	});
     	
     	self.productFormModel.packageGrossPrice.subscribe(function(newPackageGrossPrice) {
     		self.productFormModel.packageNetPrice((newPackageGrossPrice * (100 - self.productFormModel.discount()) / 100).toFixed(2));
