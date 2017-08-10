@@ -494,7 +494,7 @@ public class ProductHandlerImpl implements ProductHandler {
 				productForm.getPackaging() == null || productForm.getPackaging() <= 0 ||
 				productForm.getDescription() == null || productForm.getDescription().trim().length() < 3 ||
 				productForm.getPackageGrossPrice() == null || productForm.getPackageGrossPrice() <= 0 ||
-				productForm.getDiscount() == null || productForm.getDiscount() <= 0 ||
+				productForm.getDiscount() == null || productForm.getDiscount() < 0 ||
 				productForm.getPackageNetPrice() == null || productForm.getPackageNetPrice() <= 0 ||
 				productForm.getPackageSellingPrice() == null || productForm.getPackageSellingPrice() <= 0||
 				productForm.getPercentProfit() == null || productForm.getPercentProfit() <= 0) {
