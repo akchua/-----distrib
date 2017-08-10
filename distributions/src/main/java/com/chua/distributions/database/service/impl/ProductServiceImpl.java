@@ -38,7 +38,7 @@ public class ProductServiceImpl
 	
 	@Override
 	public List<Product> findAllByCompanyOrderByCategory(Long companyId) {
-		return dao.findAllByCompanyWithOrder(companyId, new Order[] { Order.asc("categoryy.name"), Order.asc("displayName"), Order.desc("packaging"), Order.asc("grossPrice") });
+		return dao.findAllByCompanyWithOrder(companyId, new Order[] { Order.asc("categoryy.name"), Order.asc("name"), Order.desc("packaging"), Order.asc("grossPrice") });
 	}
 
 	@Override

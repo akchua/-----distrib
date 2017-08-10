@@ -62,6 +62,7 @@ public class PriceListTemplate implements Template {
 			productsInCategory.add(product);
 		}
 		
+		if(!productsInCategory.isEmpty()) productsPerCategory.add(productsInCategory);
 		return productsPerCategory;
 	}
 	
