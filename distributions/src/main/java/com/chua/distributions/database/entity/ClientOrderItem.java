@@ -1,5 +1,7 @@
 package com.chua.distributions.database.entity;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -28,6 +30,8 @@ public class ClientOrderItem extends OrderItem {
 	
 	@JsonSerialize(using = ClientOrderSerializer.class)
 	private ClientOrder clientOrder;
+	
+	private Boolean allowRetail;
 
 	@ManyToOne(targetEntity = ClientOrder.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_order_id")
@@ -39,5 +43,15 @@ public class ClientOrderItem extends OrderItem {
 
 	public void setClientOrder(ClientOrder clientOrder) {
 		this.clientOrder = clientOrder;
+	}
+
+	@Basic
+	@Column(name = "allow_retail")
+	public Boolean getAllowRetail() {
+		return allowRetail;
+	}
+
+	public void setAllowRetail(Boolean allowRetail) {
+		this.allowRetail = allowRetail;
 	}
 }

@@ -57,7 +57,14 @@
 							<label class="control-label" for="packaging">Packaging</label>
 							<div class="controls">
 								<input data-bind="textInput: productFormModel.packaging" type="number" step="any" id="packaging" name="packaging" placeholder="" class="form-control input-lg">
-								<p class="help-block">Number of <span data-bind="text: productFormModel.size" class="text-primary"></span> per package</p>
+								<p class="help-block">Number of 
+									<span data-bind="text: productFormModel.size" class="text-primary"></span> per package
+									<span class="pull-right">
+										<label class="checkbox">
+											<input data-bind="checked: productFormModel.allowRetail" type="checkbox" name="allowRetailCheckbox">Allow Retail
+										</label>
+									</span>
+								</p>
 								<!-- ko if: title == 'Edit Product' -->
 								<p class="help-block text-danger">Warning! Make sure that all existing old packaging stocks are sold or returned before changing the packaging.</p>
 								<!-- /ko -->

@@ -454,6 +454,7 @@ public class ProductHandlerImpl implements ProductHandler {
 		product.setName(productForm.getName().trim());
 		product.setSize(productForm.getSize().trim());
 		product.setPackaging(productForm.getPackaging());
+		product.setAllowRetail(productForm.getAllowRetail() != null ? productForm.getAllowRetail() : Boolean.TRUE);
 		product.setDescription(productForm.getDescription().trim());
 		product.setGrossPrice(productForm.getPackageGrossPrice() / productForm.getPackaging());
 		product.setDiscount(productForm.getDiscount());

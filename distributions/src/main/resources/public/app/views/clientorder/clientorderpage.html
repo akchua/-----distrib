@@ -65,9 +65,11 @@
 					<td>
 						<div class="input-group">
 							<input data-bind="value: partialClientOrderItem.packageQuantity, event: { change: function() { $parent.changePackageQuantity(partialClientOrderItem.id, partialClientOrderItem.packageQuantity) } }" type="text" class="form-control text-center" placeholder="">
+							<!-- ko if:  partialClientOrderItem.allowRetail-->
 							<span class="input-group-addon">&amp</span>
 							<input data-bind="value: partialClientOrderItem.pieceQuantity, event: { change: function() { $parent.changePieceQuantity(partialClientOrderItem.id, partialClientOrderItem.pieceQuantity) } }" type="text" class="form-control text-center" placeholder="">
 							<span class="input-group-addon">of <span data-bind="text: partialClientOrderItem.packaging"></span></span>
+							<!-- /ko -->
 						</div>
 					</td>
 					<td data-bind="text: partialClientOrderItem.productCode" class = "text-center"></td>

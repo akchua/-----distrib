@@ -19,6 +19,8 @@ public class ProductFormBean extends FormBean {
 	
 	private Integer packaging;
 	
+	private Boolean allowRetail;
+	
 	private String description;
 	
 	private Float packageGrossPrice;
@@ -77,6 +79,14 @@ public class ProductFormBean extends FormBean {
 
 	public void setPackaging(Integer packaging) {
 		this.packaging = packaging;
+	}
+
+	public Boolean getAllowRetail() {
+		return allowRetail;
+	}
+
+	public void setAllowRetail(Boolean allowRetail) {
+		this.allowRetail = allowRetail;
 	}
 
 	public String getDescription() {

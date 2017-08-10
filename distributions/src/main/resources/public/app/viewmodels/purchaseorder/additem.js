@@ -9,6 +9,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	this.searchKey = ko.observable();
     	this.log = ko.observable('<p class="text-info">Click the cart beside the product to add ONE PACKAGE of that product.</p>');
     	this.enableAdd = ko.observable(true);
+    	this.searchFocus = ko.observable(true);
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -53,6 +54,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	purchaseOrderItemService.addItem(productId, self.purchaseOrderId).done(function(result) {
     		if(result.success) {
     			self.log(result.message);
+    			self.searchKey('');
+				self.searchFocus(true);
         	} else {
         		app.showMessage(result.message);
         	}

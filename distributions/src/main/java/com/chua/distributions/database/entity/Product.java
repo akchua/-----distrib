@@ -51,6 +51,8 @@ public class Product extends BaseObject {
 	
 	private Integer packaging;
 	
+	private Boolean allowRetail;
+	
 	private String description;
 	
 	private Float grossPrice;
@@ -152,6 +154,16 @@ public class Product extends BaseObject {
 
 	public void setPackaging(Integer packaging) {
 		this.packaging = packaging;
+	}
+
+	@Basic
+	@Column(name = "allow_retail")
+	public Boolean getAllowRetail() {
+		return allowRetail;
+	}
+
+	public void setAllowRetail(Boolean allowRetail) {
+		this.allowRetail = allowRetail;
 	}
 
 	@Basic

@@ -15,6 +15,8 @@ public class PartialClientOrderItemBean extends PartialEntityBean<ClientOrderIte
 	
 	private Integer packaging;
 	
+	private Boolean allowRetail;
+	
 	private String formattedQuantity;
 	
 	private String productCode;
@@ -32,6 +34,7 @@ public class PartialClientOrderItemBean extends PartialEntityBean<ClientOrderIte
 		setPackageQuantity(clientOrderItem.getPackageQuantity());
 		setPieceQuantity(clientOrderItem.getPieceQuantity());
 		setPackaging(clientOrderItem.getPackaging());
+		setAllowRetail(clientOrderItem.getAllowRetail());
 		setFormattedQuantity(clientOrderItem.getFormattedQuantity());
 		setProductCode(clientOrderItem.getProductCode());
 		setDisplayName(clientOrderItem.getDisplayName());
@@ -62,6 +65,14 @@ public class PartialClientOrderItemBean extends PartialEntityBean<ClientOrderIte
 
 	public void setPackaging(Integer packaging) {
 		this.packaging = packaging;
+	}
+
+	public Boolean getAllowRetail() {
+		return allowRetail;
+	}
+
+	public void setAllowRetail(Boolean allowRetail) {
+		this.allowRetail = allowRetail;
 	}
 
 	public String getFormattedQuantity() {
