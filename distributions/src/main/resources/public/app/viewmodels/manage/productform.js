@@ -41,7 +41,9 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	self.productFormModel.name(self.product.name);
     	self.productFormModel.size(self.product.size);
     	self.productFormModel.packaging(self.product.packaging);
-    	self.productFormModel.allowRetail(self.product.allowRetail);
+    	if(self.product.allowRetail) {
+    		self.productFormModel.allowRetail(self.product.allowRetail);
+    	}
     	self.productFormModel.description(self.product.description);
     	
     	self.productFormModel.packageGrossPrice(self.product.packageGrossPrice);
