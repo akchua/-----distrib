@@ -502,8 +502,8 @@ public class ProductHandlerImpl implements ProductHandler {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + " and must contain at least 3 characters or must have a value greater than 0."));
 		} else if(productForm.getPackaging() > 999) {
 			result = new ResultBean(Boolean.FALSE, Html.line("Packaging " + Html.text(Color.RED, "cannot exceed") + " the value of 999."));
-		} else if(productForm.getName().length() > 40) {
-			result = new ResultBean(Boolean.FALSE, Html.line("Name of product exceeds " + Html.text(Color.RED, "maximum (40) characters") + "."));
+		} else if(getDisplayName(productForm).length() > 48) {
+			result = new ResultBean(Boolean.FALSE, Html.line("Dispaly name of product (combined name, size and packaging) exceeds " + Html.text(Color.RED, "maximum (46) characters") + "."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");
 		}
