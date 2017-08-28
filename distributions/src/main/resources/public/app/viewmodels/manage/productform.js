@@ -21,7 +21,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     		name: ko.observable(),
     		size: ko.observable(),
     		packaging: ko.observable(),
-    		allowRetail: ko.observable(true),
+    		allowRetail: ko.observable(false),
     		description: ko.observable(),
     		
     		packageGrossPrice: ko.observable(),
@@ -41,9 +41,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	self.productFormModel.name(self.product.name);
     	self.productFormModel.size(self.product.size);
     	self.productFormModel.packaging(self.product.packaging);
-    	if(self.product.allowRetail) {
-    		self.productFormModel.allowRetail(self.product.allowRetail);
-    	}
+    	self.productFormModel.allowRetail(self.product.allowRetail);
     	self.productFormModel.description(self.product.description);
     	
     	self.productFormModel.packageGrossPrice(self.product.packageGrossPrice);
