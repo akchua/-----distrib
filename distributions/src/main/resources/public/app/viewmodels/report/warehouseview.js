@@ -21,6 +21,12 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 			self.refreshWarehouseItemList();
 		});
 		
+		self.searchKey.subscribe(function(searchKey) {
+			if(searchKey.length >= 3) {
+				self.search();
+			}
+		});
+		
 		warehouseItemService.getFormattedPurchaseValue(self.warehouse).done(function(formattedPurchaseValue) {
 			self.formattedPurchaseValue(formattedPurchaseValue);
 		});

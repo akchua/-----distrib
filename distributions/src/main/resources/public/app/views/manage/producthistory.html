@@ -31,7 +31,7 @@
 													<th>Warehouse</th>
 													<th>Client</th>
 													<th class = "text-center">Order ID</th>
-													<th class = "text-center">Date</th>
+													<th class = "text-center">Delivery Date</th>
 												</tr>
 											</thead>
 											
@@ -68,7 +68,7 @@
 													<th>Warehouse</th>
 													<th>Purchaser</th>
 													<th class = "text-center">P.O. ID</th>
-													<th class = "text-center">Date</th>
+													<th class = "text-center">Delivery Date</th>
 												</tr>
 											</thead>
 											
@@ -78,7 +78,7 @@
 													<td data-bind="text: purchaseOrderItem.purchaseOrder.warehouse.displayName"></td>
 													<td data-bind="text: purchaseOrderItem.purchaseOrder.creator.formattedName"></td>
 													<td data-bind="text: purchaseOrderItem.purchaseOrder.id" class = "text-center"></td>
-													<td data-bind="text: purchaseOrderItem.purchaseOrder.formattedUpdatedOn" class = "text-center"></td>
+													<td data-bind="text: purchaseOrderItem.purchaseOrder.formattedDeliveredOn" class = "text-center"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -115,7 +115,7 @@
 													<td data-bind="text: stockAdjust.warehouse.displayName"></td>
 													<td data-bind="text: stockAdjust.creator.formattedName"></td>
 													<td data-bind="text: stockAdjust.description"></td>
-													<td data-bind="text: stockAdjust.formattedUpdatedOn" class = "text-center"></td>
+													<td data-bind="text: stockAdjust.formattedCreatedOn" class = "text-center"></td>
 													
 													<!-- ko if: $parent.enableEdit -->
 													<td>
