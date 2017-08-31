@@ -14,8 +14,8 @@ import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.entity.Dispatch;
@@ -66,6 +66,12 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
 	
 	@Autowired
 	private VelocityEngine velocityEngine;
@@ -135,7 +141,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 						
 						// GENERATING PRINTABLE CLIENT ORDER
 						final List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
-						printableDispatch += new ClientOrderTemplate(clientOrder, clientOrderItems)
+						printableDispatch += new ClientOrderTemplate(clientOrder, clientOrderItems, businessConstants)
 												.merge(velocityEngine) + "\n";
 						//
 						
@@ -147,14 +153,14 @@ public class DispatchHandlerImpl implements DispatchHandler {
 					
 					if(flag) {
 						// CREATING PRINTABLE DISPATCH FILE
-						final String filePath = FileConstants.DISPATCH_HOME + "Dispatch_#" + dispatch.getId() + ".pdf";
-						SimplePdfWriter.write(printableDispatch, filePath, true);
+						final String filePath = fileConstants.getDispatchHome() + "Dispatch_#" + dispatch.getId() + ".pdf";
+						SimplePdfWriter.write(printableDispatch, businessConstants.getBusinessShortName(), filePath, true);
 						//
 						
 						// SENDING PRINTABLE DISPATCH TO THIS USER
 						flag = emailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
 								null,
-								MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
+								userHandler.getEmailOfAllAdminAndManagers(),
 								"Dispatch",
 								"Dispatch #" + dispatch.getId(),
 								new String[] { filePath });

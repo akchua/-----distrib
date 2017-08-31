@@ -1,5 +1,6 @@
 package com.chua.distributions.constants;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,26 +12,57 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileConstants {
 
-	public static String FILE_HOME;
+	private final String fileHome;
 	
-	public static String PRICE_LIST_HOME;
+	private final String priceListHome;
 	
-	public static String SALES_HOME;
+	private final String salesHome;
 
-	public static String PURCHASES_HOME;
+	private final String purchasesHome;
 
-	public static String DISPATCH_HOME;
+	private final String dispatchHome;
 	
-	public static String PRODUCT_IMAGE_HOME;
+	private final String productImageHome;
 	
-	@Value("${file.home}")
-    public void setFileHome(String home) {
-        FileConstants.FILE_HOME = home;
-        FileConstants.PRICE_LIST_HOME = home + "files/price_list/";
-        FileConstants.SALES_HOME = home + "files/sales_report/";
-        FileConstants.PURCHASES_HOME = home + "files/purchase_order/";
-        FileConstants.DISPATCH_HOME = home + "files/dispatch/";
-        
-        FileConstants.PRODUCT_IMAGE_HOME = home + "program_data/product_image/";
-    }
+	private final String imageDefaultFileName;
+	
+	@Autowired
+	public FileConstants(@Value("${file.home}") String fileHome,
+						@Value("${file.image.defaultFileName}") String imageDefaultFileName) {
+		this.fileHome = fileHome;
+		this.priceListHome = fileHome + "files/price_list/";
+		this.salesHome = fileHome + "files/sales_report/";
+		this.purchasesHome = fileHome + "files/purchase_order/";
+		this.dispatchHome = fileHome + "files/dispatch/";
+		this.productImageHome = fileHome + "program_data/product_image/";
+		this.imageDefaultFileName = imageDefaultFileName;
+	}
+
+	public String getFileHome() {
+		return fileHome;
+	}
+
+	public String getPriceListHome() {
+		return priceListHome;
+	}
+
+	public String getSalesHome() {
+		return salesHome;
+	}
+
+	public String getPurchasesHome() {
+		return purchasesHome;
+	}
+
+	public String getDispatchHome() {
+		return dispatchHome;
+	}
+
+	public String getProductImageHome() {
+		return productImageHome;
+	}
+
+	public String getImageDefaultFileName() {
+		return imageDefaultFileName;
+	}
 }

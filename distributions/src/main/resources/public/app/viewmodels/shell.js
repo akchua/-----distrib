@@ -1,5 +1,5 @@
-﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'modules/constantsservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
-		function (router, app, ko, securityService, constantsService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
+﻿define(['plugins/router', 'durandal/app', 'knockout', 'modules/securityservice', 'modules/publicconstantsservice', 'viewmodels/userform', 'viewmodels/profile', 'viewmodels/passwordform', 'viewmodels/forgotpassword', 'viewmodels/settings'], 
+		function (router, app, ko, securityService, publicConstantsService, UserForm, Profile, PasswordForm, ForgotPasswordForm, Settings) {
 	var homeroute = [
 	    { route: ['', 'home'], moduleId: 'viewmodels/home', title: 'Home', nav: false }
 	];
@@ -69,6 +69,7 @@
 		
 		this.routes = homeroute;
 		this.errorMessage = ko.observable();
+		this.systemVersion = ko.observable();
 		
 		this.userDetails = {
 			id: ko.observable(),
@@ -85,6 +86,10 @@
 	
 	Shell.prototype.activate = function() {
 		var self = this;
+		
+		publicConstantsService.getSystemVersion().done(function(systemVersion) {
+			self.systemVersion(systemVersion);
+		});
 		
 		if(app.user) {
 			self.userDetails.id(app.user.id);
@@ -198,8 +203,8 @@
 	
 	Shell.prototype.register = function() {
 		/*UserForm.show(new Object(), 'Registration');*/
-		constantsService.getBusinessOfficialEmail().done(function(officialEmail) {
-			constantsService.getBusinessPrimaryContactNumber().done(function(primaryContact) {
+		publicConstantsService.getBusinessOfficialEmail().done(function(officialEmail) {
+			publicConstantsService.getBusinessPrimaryContactNumber().done(function(primaryContact) {
 				app.showMessage('<p>To register please email us at <span class="text-primary">' + officialEmail + '</span> or Call/Text <span class="text-primary">' + primaryContact + '</span>.'
 						+ ' Make sure to include <span class="text-primary">Contact Person, Contact Number, Business Name and Business Address</span> in your message.</p>'
 						+ '<p/>'

@@ -13,10 +13,10 @@ import com.chua.distributions.rest.endpoint.ClientOrderItemEndpoint;
 import com.chua.distributions.rest.endpoint.ClientProductPriceEndpoint;
 import com.chua.distributions.rest.endpoint.ClientPromoEndpoint;
 import com.chua.distributions.rest.endpoint.CompanyEndpoint;
-import com.chua.distributions.rest.endpoint.ConstantsEndpoint;
 import com.chua.distributions.rest.endpoint.DispatchEndpoint;
 import com.chua.distributions.rest.endpoint.FileEndpoint;
 import com.chua.distributions.rest.endpoint.ProductEndpoint;
+import com.chua.distributions.rest.endpoint.PublicConstantsEndpoint;
 import com.chua.distributions.rest.endpoint.PurchaseOrderEndpoint;
 import com.chua.distributions.rest.endpoint.PurchaseOrderItemEndpoint;
 import com.chua.distributions.rest.endpoint.SecurityEndpoint;
@@ -53,6 +53,6 @@ public class JerseyConfig extends ResourceConfig {
 		register(ClientCompanyPriceEndpoint.class);
 		register(ClientProductPriceEndpoint.class);
 		register(ClientPromoEndpoint.class);
-		register(ConstantsEndpoint.class);
+		register(PublicConstantsEndpoint.class);
 	}
 }

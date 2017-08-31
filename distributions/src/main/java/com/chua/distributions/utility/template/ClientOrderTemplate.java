@@ -22,6 +22,8 @@ import com.chua.distributions.utility.format.DateFormatter;
  */
 public class ClientOrderTemplate implements Template {
 
+	private BusinessConstants businessConstants;
+	
 	private ClientOrder clientOrder;
 	
 	private List<ClientOrderItem> orderItems;
@@ -30,9 +32,10 @@ public class ClientOrderTemplate implements Template {
 	
 	private List<String> netTrail;
 	
-	public ClientOrderTemplate(ClientOrder clientOrder, List<ClientOrderItem> orderItems) {
+	public ClientOrderTemplate(ClientOrder clientOrder, List<ClientOrderItem> orderItems, BusinessConstants businessConstants) {
 		this.clientOrder = clientOrder;
 		this.orderItems = orderItems;
+		this.businessConstants = businessConstants;
 		this.formattedOrderItems = new ArrayList<String>();
 		this.netTrail = new ArrayList<String>();
 	}
@@ -53,7 +56,7 @@ public class ClientOrderTemplate implements Template {
 	}
 
 	public String getDistributor() {
-		return BusinessConstants.BUSINESS_NAME;
+		return businessConstants.getBusinessName();
 	}
 	
 	public String getCompany() {

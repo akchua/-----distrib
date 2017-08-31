@@ -21,15 +21,18 @@ import com.chua.distributions.utility.format.DateFormatter;
  */
 public class PurchaseOrderTemplate implements Template {
 
+	private BusinessConstants businessConstants;
+	
 	private PurchaseOrder purchaseOrder;
 	
 	private List<PurchaseOrderItem> orderItems;
 	
 	private List<String> formattedOrderItems;
 	
-	public PurchaseOrderTemplate(PurchaseOrder purchaseOrder, List<PurchaseOrderItem> orderItems) {
+	public PurchaseOrderTemplate(PurchaseOrder purchaseOrder, List<PurchaseOrderItem> orderItems, BusinessConstants businessConstants) {
 		this.purchaseOrder = purchaseOrder;
 		this.orderItems = orderItems;
+		this.businessConstants = businessConstants;
 		this.formattedOrderItems = new ArrayList<String>();
 	}
 	
@@ -49,7 +52,7 @@ public class PurchaseOrderTemplate implements Template {
 	}
 	
 	public String getBusinessName() {
-		return BusinessConstants.BUSINESS_NAME;
+		return businessConstants.getBusinessName();
 	}
 	
 	public String getAddress() {
@@ -77,6 +80,6 @@ public class PurchaseOrderTemplate implements Template {
 	}
 	
 	public String getApprover() {
-		return BusinessConstants.BUSINESS_CHIEF_OFFICER;
+		return businessConstants.getBusinessChiefOfficer();
 	}
 }

@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.CompanyService;
@@ -54,6 +54,12 @@ public class SalesReportScheduler {
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
 	
 	/**
 	 * Weekly Report (Generic).
@@ -141,7 +147,7 @@ public class SalesReportScheduler {
 						
 						final ResultBean result = salesReportHandler.generateReport(salesReportQuery, fileName);
 						if(result.getSuccess()) {
-							filePaths.add(FileConstants.SALES_HOME + (String) result.getExtras().get("fileName"));
+							filePaths.add(fileConstants.getSalesHome() + (String) result.getExtras().get("fileName"));
 						} else {
 							LOG.error(fileName + " : " + result.getMessage());
 						}
@@ -154,7 +160,7 @@ public class SalesReportScheduler {
 			if(filePaths.size() > 3) {
 				attachments = new ArrayList<String>();
 				
-				final String zipFileName = FileConstants.SALES_HOME + company.getShortName() + "_Sales_Report" + ".zip";
+				final String zipFileName = fileConstants.getSalesHome() + company.getShortName() + "_Sales_Report" + ".zip";
 				FileZipUtil.zipFile(filePaths, zipFileName);
 				
 				attachments.add(zipFileName);
@@ -174,7 +180,7 @@ public class SalesReportScheduler {
 			
 			emailUtil.send(company.getReportReceiver(),
 					null,
-					MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers() + ", " + MailConstants.DEFAULT_REPORT_RECEIVER,
+					userHandler.getEmailOfAllAdminAndManagers() + ", " + businessConstants.getDefaultReportReceiver(),
 					company.getShortName() + " Client Sales Report",
 					message,
 					attachments.isEmpty() ? null : attachments.toArray(new String[0]));

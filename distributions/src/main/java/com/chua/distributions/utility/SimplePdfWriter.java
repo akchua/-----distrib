@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.chua.distributions.constants.BusinessConstants;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -38,9 +37,17 @@ public class SimplePdfWriter {
 	 * This internal class is used for paging
 	 */
 	static class Pager extends PdfPageEventHelper {
-        Font font;
+		
+		private String footnote;
+		
+		Font font;
         PdfTemplate t;
         Image total;
+        
+        public Pager(String footnote) {
+        	super();
+        	this.footnote = footnote;
+        }
  
         @Override
         public void onOpenDocument(PdfWriter writer, Document document) {
@@ -62,7 +69,7 @@ public class SimplePdfWriter {
                 table.setTotalWidth(document.getPageSize().getWidth() - document.leftMargin() - document.rightMargin());
                 table.getDefaultCell().setFixedHeight(20);
                 table.getDefaultCell().setBorder(Rectangle.BOTTOM);
-                table.addCell(new Phrase(BusinessConstants.BUSINESS_SHORT_NAME, font));
+                table.addCell(new Phrase(footnote, font));
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
                 table.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()), font));
                 PdfPCell cell = new PdfPCell(total);
@@ -84,7 +91,7 @@ public class SimplePdfWriter {
                 2, 4, 0);
         }
     }
-
+	
 	/**
 	 * The default font
 	 * 
@@ -111,7 +118,7 @@ public class SimplePdfWriter {
 	 * @param path The path where the file will be created
 	 * @param landscape True if orientation is landscape
 	 */
-	public static boolean write(String message, String path, boolean landscape) {
+	public static boolean write(String message, String footnote, String path, boolean landscape) {
 		boolean success = true;
 		
 		try {
@@ -124,7 +131,7 @@ public class SimplePdfWriter {
 			PdfWriter writer;
 				writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 			
-			Pager pager = new Pager();
+			Pager pager = new Pager(footnote);
 			writer.setPageEvent(pager);
 			
 			document.open();

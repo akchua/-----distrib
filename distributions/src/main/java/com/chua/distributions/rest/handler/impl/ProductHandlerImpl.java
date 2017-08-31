@@ -24,9 +24,8 @@ import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.ImageConstants;
-import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientProductPrice;
 import com.chua.distributions.database.entity.ClientPromo;
@@ -95,6 +94,12 @@ public class ProductHandlerImpl implements ProductHandler {
 	private EmailUtil emailUtil;
 	
 	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
+	
+	@Autowired
 	private VelocityEngine velocityEngine;
 	
 	@Override
@@ -107,7 +112,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Override
 	public File findProductImageByFileName(String fileName) {
-		return new File(FileConstants.PRODUCT_IMAGE_HOME + fileName);
+		return new File(fileConstants.getProductImageHome() + fileName);
 	}
 	
 	@Override
@@ -188,7 +193,7 @@ public class ProductHandlerImpl implements ProductHandler {
 			} else {
 				final Product product = new Product();
 				product.setDisplayName(displayName);
-				product.setImage(ImageConstants.DEFAULT_IMAGE);
+				product.setImage(fileConstants.getImageDefaultFileName());
 				setProduct(product, productForm);
 				
 				result = new ResultBean();
@@ -212,7 +217,7 @@ public class ProductHandlerImpl implements ProductHandler {
 		final ResultBean result;
 		final String fileName = UUID.randomUUID().toString() + "." + StringHelper.getFileExtension(info.getFileName());
 		
-		File imageFile = new File(FileConstants.PRODUCT_IMAGE_HOME + fileName);
+		File imageFile = new File(fileConstants.getProductImageHome() + fileName);
 		if(imageFile.getParentFile() != null) imageFile.getParentFile().mkdirs();
 		
 		if(!imageFile.exists()) {
@@ -334,7 +339,7 @@ public class ProductHandlerImpl implements ProductHandler {
 			
 			// REMOVE AS THUMBNAIL IF DELETED
 			if(product.getImage().equals(productImage.getFileName())) {
-				product.setImage(ImageConstants.DEFAULT_IMAGE);
+				product.setImage(fileConstants.getImageDefaultFileName());
 				productService.update(product);
 			}
 			
@@ -407,12 +412,13 @@ public class ProductHandlerImpl implements ProductHandler {
 					fileName += DateFormatter.fileSafeShortFormat(new Date());
 					fileName += ".pdf";
 					
-					final String filePath = FileConstants.PRICE_LIST_HOME + fileName;
+					final String filePath = fileConstants.getPriceListHome() + fileName;
 					result = new ResultBean();
 					
 					result.setSuccess(
 							SimplePdfWriter.write(
 									new PriceListTemplate(company, products).merge(velocityEngine), 
+									businessConstants.getBusinessShortName(),
 									filePath,
 									false)
 							);
@@ -425,8 +431,6 @@ public class ProductHandlerImpl implements ProductHandler {
 						
 						if(sendEmail) {
 							emailUtil.send(UserContextHolder.getUser().getEmailAddress(),
-									null,
-									MailConstants.DEFAULT_EMAIL,
 									"Price List",
 									"Price list for " + company.getName() + ".",
 									new String[] { filePath });
@@ -454,7 +458,7 @@ public class ProductHandlerImpl implements ProductHandler {
 		product.setName(productForm.getName().trim());
 		product.setSize(productForm.getSize().trim());
 		product.setPackaging(productForm.getPackaging());
-		product.setAllowRetail(productForm.getAllowRetail() != null ? productForm.getAllowRetail() : Boolean.TRUE);
+		product.setAllowRetail(productForm.getAllowRetail() != null ? productForm.getAllowRetail() : Boolean.FALSE);
 		product.setDescription(productForm.getDescription().trim());
 		product.setGrossPrice(productForm.getPackageGrossPrice() / productForm.getPackaging());
 		product.setDiscount(productForm.getDiscount());

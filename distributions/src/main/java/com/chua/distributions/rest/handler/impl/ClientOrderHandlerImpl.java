@@ -22,7 +22,7 @@ import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.beans.UserBean;
 import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.MailConstants;
+import com.chua.distributions.constants.SystemConstants;
 import com.chua.distributions.database.entity.ClientCompanyPrice;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.ClientOrderItem;
@@ -79,6 +79,15 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private SystemConstants systemConstants;
+	
+	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -260,14 +269,15 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				result = addClientOrder(company, client);
 				if (result.getSuccess()) {
 
-					emailUtil.send(client.getEmailAddress(), null,
-							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
+					emailUtil.send(client.getEmailAddress(), 
+							null,
+							userHandler.getEmailOfAllAdminAndManagers(),
 							"Order Created",
-							UserContextHolder.getUser().getFullName() + " of " + BusinessConstants.BUSINESS_NAME
+							UserContextHolder.getUser().getFullName() + " of " + businessConstants.getBusinessName()
 									+ " has just created an order on your behalf." + "\n\n"
 									+ "The ID of the created order is " + result.getExtras().get("clientOrderId")
 									+ ". You can verify the contents of the order by logging in at "
-									+ BusinessConstants.SERVER_DOMAIN + ". "
+									+ systemConstants.getServerDomain() + ". "
 									+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
 							null);
 				}
@@ -446,13 +456,14 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		clientOrder.setStatus(Status.ACCEPTED);
 
 		result = new ResultBean();
-		result.setSuccess(clientOrderService.update(clientOrder) && emailUtil.send(
-				clientOrder.getClient().getEmailAddress(), null,
-				MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(), "Order Accepted",
-				"Thank you " + clientOrder.getClient().getFormattedName() + "("
-						+ clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
-						+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
-				null));
+		result.setSuccess(clientOrderService.update(clientOrder) && 
+				emailUtil.send(clientOrder.getClient().getEmailAddress(), 
+						null,
+						userHandler.getEmailOfAllAdminAndManagers(), "Order Accepted",
+						"Thank you " + clientOrder.getClient().getFormattedName() + "("
+								+ clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
+								+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
+						null));
 		if (result.getSuccess()) {
 			result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " accepted Order of "
 					+ Html.text(Color.BLUE, "ID #" + clientOrder.getId())
@@ -539,10 +550,10 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	public ResultBean generateReport(SalesReportQueryBean salesReportQuery) {
 		final ResultBean result = salesReportHandler.generateReport(salesReportQuery);
 		if (result.getSuccess() && salesReportQuery.getSendMail()) {
-			emailUtil.send(UserContextHolder.getUser().getEmailAddress(), null,
-					MailConstants.DEFAULT_EMAIL, "Sales Report",
+			emailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
+					"Sales Report",
 					"Sales Report for " + salesReportQuery.getFrom() + " - " + salesReportQuery.getTo() + ".",
-					new String[] { FileConstants.SALES_HOME + (String) result.getExtras().get("fileName") });
+					new String[] { fileConstants.getSalesHome() + (String) result.getExtras().get("fileName") });
 		}
 		return result;
 	}

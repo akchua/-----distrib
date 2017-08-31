@@ -2,6 +2,7 @@ package com.chua.distributions.rest.handler.impl;
 
 import java.io.File;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.chua.distributions.annotations.CheckAuthority;
@@ -16,15 +17,18 @@ import com.chua.distributions.rest.handler.FileHandler;
 @Component
 public class FileHandlerImpl implements FileHandler {
 
+	@Autowired
+	private FileConstants fileConstants;
+	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public File findSalesReportByFileName(String fileName) {
-		return new File(FileConstants.SALES_HOME + fileName);
+		return new File(fileConstants.getSalesHome() + fileName);
 	}
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public File findPriceListByFileName(String fileName) {
-		return new File(FileConstants.PRICE_LIST_HOME + fileName);
+		return new File(fileConstants.getPriceListHome() + fileName);
 	}
 }

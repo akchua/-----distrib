@@ -1,23 +1,65 @@
 package com.chua.distributions.constants;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * @author  Adrian Jasper K. Chua
  * @version 1.0
  * @since   Dec 11, 2016
  */
+@Component
 public class BusinessConstants {
 
-	public static final String BUSINESS_NAME = "Prime Pad Industrial Corporation Pampanga";
+	private final String businessName;
 	
-	public static final String BUSINESS_SHORT_NAME = "Prime Pad Pampanga";
+	private final String businessShortName;
 	
-	public static final String BUSINESS_CHIEF_OFFICER = "Ms. Noemi Pineda";
+	private final String businessChiefOfficer;
 	
-	public static final String BUSINESS_OFFICIAL_EMAIL = "primepad.pampanga@gmail.com";
+	private final String businessOfficialEmail;
 	
-	public static final String BUSINESS_PRIMARY_CONTACT_NUMBER = "+63 926 615 9373";
+	private final String businessPrimaryContactNumber;
 	
-	public static final String SERVER_DOMAIN = "distributions.primepad.net";
+	private final String defaultReportReceiver;
 	
-	public static final Float REGULAR_VAT = 12.0f;
+	@Autowired
+	public BusinessConstants(@Value("${business.name}") String businessName,
+							@Value("${business.shortName}") String businessShortName,
+							@Value("${business.chiefOfficer}") String businessChiefOfficer,
+							@Value("${business.officialEmail") String businessOfficialEmail,
+							@Value("${business.primaryContactNumber") String businessPrimaryContactNumber,
+							@Value("${business.defaultReportReceiver}") String defaultReportReceiver) {
+		this.businessName = businessName;
+		this.businessShortName = businessShortName;
+		this.businessChiefOfficer = businessChiefOfficer;
+		this.businessOfficialEmail = businessOfficialEmail;
+		this.businessPrimaryContactNumber = businessPrimaryContactNumber;
+		this.defaultReportReceiver = defaultReportReceiver;
+	}
+
+	public String getBusinessName() {
+		return businessName;
+	}
+
+	public String getBusinessShortName() {
+		return businessShortName;
+	}
+
+	public String getBusinessChiefOfficer() {
+		return businessChiefOfficer;
+	}
+
+	public String getBusinessOfficialEmail() {
+		return businessOfficialEmail;
+	}
+
+	public String getBusinessPrimaryContactNumber() {
+		return businessPrimaryContactNumber;
+	}
+
+	public String getDefaultReportReceiver() {
+		return defaultReportReceiver;
+	}
 }

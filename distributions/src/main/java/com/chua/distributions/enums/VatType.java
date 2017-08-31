@@ -1,6 +1,5 @@
 package com.chua.distributions.enums;
 
-import com.chua.distributions.constants.BusinessConstants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -11,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum VatType {
 
-	VAT("VAT (" + BusinessConstants.REGULAR_VAT + "%)", 0.0f),
+	VAT("VAT (12%)", 0.0f),
 	
-	NON_VAT("Non-VAT (0%)", BusinessConstants.REGULAR_VAT);
+	NON_VAT("Non-VAT (0%)", 12.0f);
 	
 	private final String displayName;
 	

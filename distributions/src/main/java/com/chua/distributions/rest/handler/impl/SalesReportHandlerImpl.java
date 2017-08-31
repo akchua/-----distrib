@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.Company;
@@ -43,6 +44,12 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	
 	@Autowired
 	private ClientOrderService clientOrderService;
+	
+	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
 
 	@Autowired
 	private VelocityEngine velocityEngine;
@@ -80,7 +87,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			
 			if(clientOrders != null && !clientOrders.isEmpty()) {
 				fileName = StringHelper.convertToFileSafeFormat(fileName);
-				final String filePath = FileConstants.SALES_HOME + fileName;
+				final String filePath = fileConstants.getSalesHome() + fileName;
 				result = new ResultBean();
 				result.setSuccess(
 						SimplePdfWriter.write(
@@ -90,6 +97,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 										(salesReportQuery.getCompanyId() != null) ? companyService.find(salesReportQuery.getCompanyId()) : null,
 										clientOrders
 											).merge(velocityEngine), 
+								businessConstants.getBusinessShortName(),
 								filePath,
 								true)
 						);

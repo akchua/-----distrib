@@ -9,14 +9,12 @@
 						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
 						http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd">
 
+	<context:property-placeholder location="classpath:project.properties" ignore-unresolvable="true" />
 	<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true" />
 
 	<bean id="methodAuthenticationAspect" class="com.chua.distributions.aspects.MethodAuthenticationAspect" />
-	
-	<!-- <bean id="emailUtilConnect" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass" value="com.chua.distributions.utility.EmailUtil"/>
-		<property name="targetMethod" value="connect"/>
-	</bean> -->
-	
 	<bean id="emailUtil" class="com.chua.distributions.utility.EmailUtil" scope="singleton"></bean>
+	<bean id="systemConstants" class="com.chua.distributions.constants.SystemConstants" scope="singleton"></bean>
+	<bean id="fileConstants" class="com.chua.distributions.constants.FileConstants" scope="singleton"></bean>
+	<bean id="businessConstants" class="com.chua.distributions.constants.BusinessConstants" scope="singleton"></bean>
 </beans>

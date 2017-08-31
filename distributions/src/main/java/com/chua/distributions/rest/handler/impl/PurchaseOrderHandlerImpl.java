@@ -17,8 +17,8 @@ import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
+import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
-import com.chua.distributions.constants.MailConstants;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.database.service.CompanyService;
@@ -63,6 +63,12 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private FileConstants fileConstants;
+	
+	@Autowired
+	private BusinessConstants businessConstants;
 	
 	@Autowired
 	private VelocityEngine velocityEngine;
@@ -239,17 +245,18 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		if(purchaseOrder != null) {
 			if(purchaseOrder.getStatus().equals(Status.SUBMITTED)) {
 				if(!purchaseOrder.getNetTotal().equals(0.0f)) {
-					final String filePath = FileConstants.PURCHASES_HOME + "PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
+					final String filePath = fileConstants.getPurchasesHome() + "PurchaseOrder_#" + purchaseOrder.getId() + ".pdf";
 					
 					SimplePdfWriter.write(
 							new PurchaseOrderTemplate(
 									purchaseOrder, 
-									purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()))
+									purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId()),
+									businessConstants)
 							.merge(velocityEngine), 
-							filePath, false);
+							businessConstants.getBusinessShortName(), filePath, false);
 					boolean flag = emailUtil.send(purchaseOrder.getCompany().getEmailAddress(), 
 							null,
-							MailConstants.DEFAULT_EMAIL + ", " + userHandler.getEmailOfAllAdminAndManagers(),
+							userHandler.getEmailOfAllAdminAndManagers(),
 							"Purchase Order",
 							"Purchase Order #" + purchaseOrder.getId(),
 							new String[] { filePath });

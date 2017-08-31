@@ -14,10 +14,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.chua.distributions.constants.MailConstants;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -30,10 +29,46 @@ public class EmailUtil {
 	@Value("${enable.send.email}")
 	private Boolean enableSendEmail;
 	
+	private final String smtpHost;
+	
+	private final String smtpPort;
+	
+	private final String smtpFromAddress;
+	
+	private final String smtpUsername;
+	
+	private final String smtpPassword;
+	
+	private final String defaultEmail;
+	
 	private Session session = null;
 	
-	public EmailUtil() {
+	@Autowired
+	public EmailUtil(@Value("${mail.smtp.host}") String smtpHost,
+			@Value("${mail.smtp.port}") String smtpPort,
+			@Value("${mail.smtp.fromAddress}") String smtpFromAddress,
+			@Value("${mail.smtp.username}") String smtpUsername,
+			@Value("${mail.smtp.password}") String smtpPassword,
+			@Value("${mail.defaultEmail}") String defaultEmail) {
+		validateEmailValue(smtpFromAddress, "SMTP From Address", true);
+		validateEmailValue(smtpUsername, "SMTP Username", true);
+		validateEmailValue(defaultEmail, "Default Email", false);
+		
+		this.smtpHost = smtpHost;
+		this.smtpPort = smtpPort;
+		this.smtpFromAddress = smtpFromAddress;
+		this.smtpUsername = smtpUsername;
+		this.smtpPassword = smtpPassword;
+		this.defaultEmail = defaultEmail;
 		connect();
+	}
+	
+	private void validateEmailValue(String email, String emailField, boolean notNull) {
+		if(notNull && (email == null || email.isEmpty())) {
+			throw new IllegalArgumentException(emailField + ": " + " cannot be null.");
+		} else if(!email.isEmpty() && !validateEmail(email)) {
+			throw new IllegalArgumentException(emailField + ": " + email + " is not a valid email.");
+		}
 	}
 	
 	public boolean send(String to, String subject, String content) {
@@ -52,10 +87,10 @@ public class EmailUtil {
 				Message message = new MimeMessage(session);
 				Multipart multipart = new MimeMultipart();
 				
-				message.setFrom(new InternetAddress(MailConstants.SMTP_FROM_ADDRESS));
+				message.setFrom(new InternetAddress(smtpFromAddress));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 				if(cc != null) message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(cc));
-				if(bcc != null) message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcc));
+				if(bcc != null) message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(bcc + ", " + defaultEmail));
 				message.setSubject(subject);
 				
 				MimeBodyPart messageBodyPart = new MimeBodyPart();
@@ -89,15 +124,15 @@ public class EmailUtil {
 	public void connect() {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.socketFactory.port", MailConstants.SMTP_PORT);
+		props.put("mail.smtp.socketFactory.port", smtpPort);
 		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.host", MailConstants.SMTP_HOST);
-		props.put("mail.smtp.port", MailConstants.SMTP_PORT);
+		props.put("mail.smtp.host", smtpHost);
+		props.put("mail.smtp.port", smtpPort);
 		
 		session = Session.getInstance(props,
 			new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(MailConstants.SMTP_USERNAME, MailConstants.SMTP_PASSWORD);
+					return new PasswordAuthentication(smtpUsername, smtpPassword);
 				}
 			});
 	}

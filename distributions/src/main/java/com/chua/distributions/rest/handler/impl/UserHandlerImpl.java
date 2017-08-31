@@ -16,7 +16,7 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
 import com.chua.distributions.beans.UserFormBean;
 import com.chua.distributions.beans.UserRetrieveBean;
-import com.chua.distributions.constants.MailConstants;
+import com.chua.distributions.constants.SystemConstants;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.enums.Area;
@@ -44,6 +44,9 @@ public class UserHandlerImpl implements UserHandler {
 	
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private SystemConstants systemConstants;
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
@@ -227,13 +230,13 @@ public class UserHandlerImpl implements UserHandler {
 			result.setSuccess(userService.update(user) &&
 					emailUtil.send(user.getEmailAddress(),
 					null,
-					MailConstants.DEFAULT_EMAIL + ", " +  getEmailOfAllAdminAndManagers(),
+					getEmailOfAllAdminAndManagers(),
 					"Prime Pad Reset Password",
 					"Hi " + user.getFirstName() + " " + user.getLastName() + ", your Prime Pad account password has just been reset."
 						+ "\nYour new credentials are : "
 						+ "\n\nUsername - " + user.getUsername()
 						+ "\nPasswrod - " + randomPassword
-						+ "\n\nPlease login at distributions.primepad.net and change your password as soon as possible.",
+						+ "\n\nPlease login at " + systemConstants.getServerDomain() + " and change your password as soon as possible.",
 					null));
 			
 			if(result.getSuccess()) {
