@@ -44,7 +44,6 @@ import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
 import com.chua.distributions.enums.Color;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ProductHandler;
 import com.chua.distributions.utility.EmailUtil;
@@ -104,9 +103,9 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public Product getProduct(Long productId, Warehouse warehouse) {
+	public Product getProduct(Long productId, Long warehouseId) {
 		final Product product = productService.find(productId);
-		if(product != null) setProductStock(product, warehouse);
+		if(product != null) setProductStock(product, warehouseId);
 		return product;
 	}
 	
@@ -116,7 +115,7 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
-	public PartialProductBean getPartialProduct(Long productId, Warehouse warehouse) {
+	public PartialProductBean getPartialProduct(Long productId) {
 		return getPartialProductFor(productService.find(productId), UserContextHolder.getUser().getUserEntity());
 	}
 	
@@ -139,14 +138,14 @@ public class ProductHandlerImpl implements ProductHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse) {
+	public ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Long warehouseId) {
 		ObjectList<Product> objProducts = productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
-		for(Product product : objProducts.getList()) setProductStock(product, warehouse);
+		for(Product product : objProducts.getList()) setProductStock(product, warehouseId);
 		return objProducts;
 	}
 	
 	@Override
-	public ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse) {
+	public ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId) {
 		ObjectList<PartialProductBean> objPartialProducts = new ObjectList<PartialProductBean>();
 		ObjectList<Product> objProducts = productService.findAllWithPagingOrderByName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, companyId, categoryId);
 		if(objProducts != null) {
@@ -466,13 +465,13 @@ public class ProductHandlerImpl implements ProductHandler {
 		product.setPercentProfit(productForm.getPercentProfit());
 	}
 	
-	private void setProductStock(Product product, Warehouse warehouse) {
+	private void setProductStock(Product product, Long warehouseId) {
 		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByProduct(product.getId());
 		Integer stockCountAll = 0;
 		Integer stockCountCurrent = 0;
 		for(WarehouseItem warehouseItem : warehouseItems) {
 			stockCountAll += warehouseItem.getStockCount();
-			if(warehouse != null && warehouseItem.getWarehouse().equals(warehouse)) {
+			if(warehouseId != null && warehouseItem.getWarehouse().getId().equals(warehouseId)) {
 				stockCountCurrent = warehouseItem.getStockCount();
 			}
 		}

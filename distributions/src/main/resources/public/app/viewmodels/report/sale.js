@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/companyservice', 'viewmodels/report/salereport', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, userService, companyService, SaleReport, TimestampView, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/warehouseservice', 'modules/userservice', 'modules/companyservice', 'viewmodels/report/salereport', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
+		function (router, app, ko, clientOrderService, warehouseService, userService, companyService, SaleReport, TimestampView, SaleView, UserView) {
     var Sale = function() {
     	this.clientOrderList = ko.observable();
     	this.clientList = ko.observable();
@@ -9,7 +9,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.salesReportQuery = {
     		clientId: ko.observable(),
     		companyId: ko.observable(),
-    		warehouse: ko.observable(),
+    		warehouseId: ko.observable(),
     		
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
@@ -42,7 +42,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 			self.companyList(companyList);
 		});
 		
-		clientOrderService.getWarehouseList().done(function(warehouseList) {
+		warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
 		

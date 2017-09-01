@@ -1,11 +1,11 @@
 define(['jquery'], function ($) {
 	return {
-		getProduct: function(productId, warehouse) {
+		getProduct: function(productId, warehouseId) {
 			return $.ajax({
 				url: '/services/product/get',
 				data: {
 					productId: productId,
-					warehouse: warehouse
+					warehouseId: warehouseId
 				}
 			});
 		},
@@ -14,12 +14,11 @@ define(['jquery'], function ($) {
 			return '/services/product/getimage/' + fileName;
 		},
 		
-		getPartialProduct: function(productId, warehouse) {
+		getPartialProduct: function(productId) {
 			return $.ajax({
 				url: '/services/product/getpartial',
 				data: {
-					productId: productId,
-					warehouse: warehouse
+					productId: productId
 				}
 			});
 		},
@@ -34,7 +33,7 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
+		getProductList: function(currentPage, searchKey, companyId, categoryId, warehouseId, async) {
 			return $.ajax({
 				url: '/services/product/list',
 				async: async,
@@ -43,7 +42,7 @@ define(['jquery'], function ($) {
 					searchKey: searchKey,
 					companyId: companyId,
 					categoryId: categoryId,
-					warehouse, warehouse
+					warehouseId, warehouseId
 				}
 			});
 		},
@@ -54,7 +53,7 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, warehouse, async) {
+		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, async) {
 			return $.ajax({
 				url: '/services/product/listpartial',
 				async: async,
@@ -62,8 +61,7 @@ define(['jquery'], function ($) {
 					pageNumber: currentPage - 1,
 					searchKey: searchKey,
 					companyId: companyId,
-					categoryId: categoryId,
-					warehouse, warehouse
+					categoryId: categoryId
 				}
 			});
 		},

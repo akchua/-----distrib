@@ -7,7 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.chua.distributions.beans.ResultBean;
-import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.database.entity.Warehouse;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.rest.handler.WarehouseSyncHandler;
 
 /**
@@ -21,6 +22,9 @@ public class WarehouseSyncScheduler {
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
+	private WarehouseService warehouseService;
+	
+	@Autowired
 	private WarehouseSyncHandler warehouseSyncHandler;
 	
 	/**
@@ -32,7 +36,7 @@ public class WarehouseSyncScheduler {
 	public void weeklyWarehouseSync() {
 		LOG.info("Starting weekly warehouse sync.");
 		
-		for(Warehouse warehouse : Warehouse.values()) {
+		for(Warehouse warehouse : warehouseService.findAllList()) {
 			ResultBean result = warehouseSyncHandler.syncExisting(warehouse);
 			if(result.getSuccess()) {
 				LOG.info(result.getMessage());

@@ -9,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.database.entity.WarehouseItem;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 
@@ -29,14 +28,14 @@ public class WarehouseItemEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<WarehouseItem> getWarehouseItemObjectList(@QueryParam("pageNumber") Integer pageNumber, 
 				@QueryParam("searchKey") String searchKey,
-				@QueryParam("warehouse") Warehouse warehouse) {
-		return warehouseItemHandler.getWarehouseItemObjectList(pageNumber, searchKey, warehouse);
+				@QueryParam("warehouseId") Long warehouseId) {
+		return warehouseItemHandler.getWarehouseItemObjectList(pageNumber, searchKey, warehouseId);
 	}
 	
 	@GET
 	@Path("/formattedpurchasevalue")
 	@Produces({ MediaType.TEXT_PLAIN })
-	public String getFormattedPurchaseValue(@QueryParam("warehouse") Warehouse warehouse) {
-		return warehouseItemHandler.getFormattedPurchaseValue(warehouse);
+	public String getFormattedPurchaseValue(@QueryParam("warehouseId") Long warehouseId) {
+		return warehouseItemHandler.getFormattedPurchaseValue(warehouseId);
 	}
 }

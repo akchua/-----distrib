@@ -10,7 +10,6 @@ import com.chua.distributions.database.dao.PurchaseOrderItemDAO;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -51,7 +50,7 @@ public class PurchaseOrderItemServiceImpl
 	}
 
 	@Override
-	public List<PurchaseOrderItem> findAllStockedByProductAndWarehouse(Long productId, Warehouse warehouse) {
-		return dao.findAllByProductWarehouseAndStatus(productId, warehouse, new Status[] { Status.PAID, Status.RECEIVED });
+	public List<PurchaseOrderItem> findAllStockedByProductAndWarehouse(Long productId, Long warehouseId) {
+		return dao.findAllByProductWarehouseAndStatus(productId, warehouseId, new Status[] { Status.PAID, Status.RECEIVED });
 	}
 }

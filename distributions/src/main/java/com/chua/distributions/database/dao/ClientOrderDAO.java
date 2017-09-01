@@ -8,7 +8,6 @@ import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.prototype.ClientOrderPrototype;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -28,9 +27,9 @@ public interface ClientOrderDAO extends DAO<ClientOrder, Long>, ClientOrderProto
 	
 	ObjectList<ClientOrder> findByCreatorWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Status[] status, Long creatorId, Order[] orders);
 	
-	ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Warehouse warehouse, Status[] status, Order[] orders);
+	ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Long warehouseId, Status[] status, Order[] orders);
 
-	ObjectList<ClientOrder> findByWarehouseAndClientWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Warehouse warehouse, Long clientId, Status[] status, Order[] orders);
+	ObjectList<ClientOrder> findByWarehouseAndClientWithPagingStatusAndOrder(int pageNumber, int resultsPerPage, Long warehouseId, Long clientId, Status[] status, Order[] orders);
 	
 	ObjectList<ClientOrder> findBySalesReportQueryWithPagingAndOrder(int pageNumber, int resultsPerPage, SalesReportQueryBean salesReportQuery, Order[] orders);
 

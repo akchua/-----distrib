@@ -31,7 +31,7 @@
 					<!-- ko if: $parent.showReceived -->
 					<td data-bind="text: dispatch.formattedDeliveredOn" class = "text-center"></td>
 					<!-- /ko -->
-					<td data-bind="text: dispatch.warehouse.displayName + ' - ' + dispatch.warehouse.address"></td>
+					<td data-bind="text: dispatch.warehouse.name + ' - ' + dispatch.warehouse.address"></td>
 					<td data-bind="text: dispatch.orderCount" class = "text-center"></td>
 					<td data-bind="text: dispatch.status.displayName" class = "text-center"></td>
 					<td data-bind="text: dispatch.formattedTotalAmount" class = "text-center"></td>

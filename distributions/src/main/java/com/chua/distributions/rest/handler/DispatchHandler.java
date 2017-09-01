@@ -1,12 +1,9 @@
 package com.chua.distributions.rest.handler;
 
-import java.util.List;
-
 import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Dispatch;
 import com.chua.distributions.database.entity.DispatchItem;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -33,6 +30,4 @@ public interface DispatchHandler {
 	ResultBean addItem(Long clientOrderId, Long dispatchId);
 	
 	ResultBean removeItem(Long dispatchItemId);
-	
-	List<Warehouse> getWarehouseList();
 }

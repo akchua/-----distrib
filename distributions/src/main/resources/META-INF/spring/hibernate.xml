@@ -60,6 +60,7 @@
 				<value>com.chua.distributions.database.entity.ClientOrder</value>
 				<value>com.chua.distributions.database.entity.ClientOrderItem</value>
 				
+				<value>com.chua.distributions.database.entity.Warehouse</value>
 				<value>com.chua.distributions.database.entity.WarehouseItem</value>
 				<value>com.chua.distributions.database.entity.StockAdjust</value>
 				

@@ -1,22 +1,22 @@
 define(['jquery'], function ($) {
 	return {
-		getWarehouseItemList: function(currentPage, searchKey, warehouse, async) {
+		getWarehouseItemList: function(currentPage, searchKey, warehouseId, async) {
 			return $.ajax({
 				url: '/services/warehouseitem/warehouseitemlist',
 				async: async,
 				data: {
 					pageNumber: currentPage - 1,
 					searchKey: searchKey,
-					warehouse, warehouse
+					warehouseId, warehouseId
 				}
 			});
 		},
 		
-		getFormattedPurchaseValue: function(warehouse) {
+		getFormattedPurchaseValue: function(warehouseId) {
 			return $.ajax({
 				url: '/services/warehouseitem/formattedpurchasevalue',
 				data: {
-					warehouse: warehouse
+					warehouseId: warehouseId
 				}
 			});
 		}

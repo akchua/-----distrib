@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'viewmodels/report/warehouseview'],
-		function (router, app, ko, clientOrderService, WarehouseView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/warehouseservice', 'viewmodels/report/warehouseview'],
+		function (router, app, ko, warehouseService, WarehouseView) {
     var Warehouse = function() {
     	this.warehouseList = ko.observable();
     };
@@ -7,7 +7,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Warehouse.prototype.activate = function() {
     	var self = this;
 		
-		clientOrderService.getWarehouseList().done(function(warehouseList) {
+		warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     };
@@ -18,10 +18,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	alert('not yet functional');
     };
     
-    Warehouse.prototype.view = function(warehouse) {
+    Warehouse.prototype.view = function(warehouseId) {
     	var self = this;
     	
-    	WarehouseView.show(warehouse)
+    	WarehouseView.show(warehouseId)
     };
     
     return Warehouse;

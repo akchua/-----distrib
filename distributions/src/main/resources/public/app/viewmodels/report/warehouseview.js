@@ -1,11 +1,16 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/warehouseitemservice', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
-		function (dialog, app, ko, productService, warehouseItemService, ProductView, ProductHistory) {
-    var WarehouseView = function(warehouse) {
-    	this.warehouse = warehouse;
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/warehouseservice', 'modules/warehouseitemservice', 'viewmodels/manage/productview', 'viewmodels/manage/producthistory'],
+		function (dialog, app, ko, productService, warehouseService, warehouseItemService, ProductView, ProductHistory) {
+    var WarehouseView = function(warehouseId) {
+    	this.warehouseId = warehouseId;
     	this.warehouseItemList = ko.observable();
     	
     	this.formattedPurchaseValue = ko.observable();
     	this.searchKey = ko.observable();
+    	
+    	this.warehouse = {
+    		name: ko.observable(),
+    		address: ko.observable()
+    	}
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -27,21 +32,26 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 			}
 		});
 		
-		warehouseItemService.getFormattedPurchaseValue(self.warehouse).done(function(formattedPurchaseValue) {
+		warehouseItemService.getFormattedPurchaseValue(self.warehouseId).done(function(formattedPurchaseValue) {
 			self.formattedPurchaseValue(formattedPurchaseValue);
+		});
+		
+		warehouseService.getWarehouse(self.warehouseId).done(function(warehouse) {
+			self.warehouse.name(warehouse.name);
+			self.warehouse.address(warehouse.address);
 		});
 		
 		self.refreshWarehouseItemList();
     };
     
-    WarehouseView.show = function(warehouse) {
-    	return dialog.show(new WarehouseView(warehouse));
+    WarehouseView.show = function(warehouseId) {
+    	return dialog.show(new WarehouseView(warehouseId));
     };
     
     WarehouseView.prototype.refreshWarehouseItemList = function() {
     	var self = this;
     	
-    	warehouseItemService.getWarehouseItemList(self.currentPage(), self.searchKey(), self.warehouse, false).done(function(data) {
+    	warehouseItemService.getWarehouseItemList(self.currentPage(), self.searchKey(), self.warehouseId, false).done(function(data) {
     		self.warehouseItemList(data.list);
     		self.totalItems(data.total);
     	});
@@ -58,7 +68,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     WarehouseView.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId, self.warehouse).done(function(product) {
+    	productService.getProduct(productId, self.warehouseId).done(function(product) {
     		ProductView.show(product, true)
     	});
     };

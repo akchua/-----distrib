@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.chua.distributions.enums.Warehouse;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -47,8 +46,8 @@ public class SalesReportQueryDeserializer extends StdDeserializer<SalesReportQue
 			e.printStackTrace();
 		}
 		
-		JsonNode warehouseNode = node.get("warehouse");
-		srq.setWarehouse(warehouseNode != null ? Warehouse.valueOf(warehouseNode.asText()) : null);
+		JsonNode warehouseIdNode = node.get("warehouse");
+		srq.setWarehouseId(warehouseIdNode != null ? warehouseIdNode.asLong() : null);
 		JsonNode clientIdNode = node.get("clientId");
 		srq.setClientId(clientIdNode != null ? clientIdNode.asLong() : null);
 		JsonNode companyIdNode = node.get("companyId");

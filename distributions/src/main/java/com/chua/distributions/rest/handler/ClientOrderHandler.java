@@ -7,7 +7,6 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -35,11 +34,11 @@ public interface ClientOrderHandler {
 	
 	ObjectList<ClientOrder> getClientOrderRequestObjectList(Integer pageNumber, Boolean showAccepted);
 	
-	ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
+	ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Long warehouseId);
 	
-	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse, Long clientId);
+	ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Long warehouseId, Long clientId);
 	
-	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse);
+	ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Long warehouseId);
 	
 	ObjectList<ClientOrder> getClientOrderObjectListBySalesReportQuery(Integer pageNumber, SalesReportQueryBean salesReportQuery);
 	
@@ -58,8 +57,6 @@ public interface ClientOrderHandler {
 	ResultBean removeClientOrder(Long clientOrderId);
 	
 	ResultBean generateReport(SalesReportQueryBean salesReportQuery);
-	
-	List<Warehouse> getWarehouseList();
 	
 	List<ClientSalesReportType> getClientSalesReportTypes();
 }

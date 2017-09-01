@@ -14,7 +14,6 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.ProductImage;
 import com.chua.distributions.database.entity.User;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -24,17 +23,17 @@ import com.chua.distributions.objects.ObjectList;
  */
 public interface ProductHandler {
 
-	Product getProduct(Long productId, Warehouse warehouse);
+	Product getProduct(Long productId, Long warehouseId);
 	
 	File findProductImageByFileName(String fileName);
 	
-	PartialProductBean getPartialProduct(Long productId, Warehouse warehouse);
+	PartialProductBean getPartialProduct(Long productId);
 	
 	PartialProductBean getPartialProductFor(Long productId, Long userId);
 
-	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
+	ObjectList<Product> getProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Long warehouseId);
 	
-	ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId, Warehouse warehouse);
+	ObjectList<PartialProductBean> getPartialProductObjectList(Integer pageNumber, String searchKey, Long companyId, Long categoryId);
 	
 	List<Product> getProductListOrderByName();
 	

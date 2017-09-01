@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.StockAdjustDAO;
 import com.chua.distributions.database.entity.StockAdjust;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -33,13 +32,13 @@ public class StockAdjustDAOImpl
 	}
 
 	@Override
-	public List<StockAdjust> findAllByProductAndWarehouse(Long productId, Warehouse warehouse) {
+	public List<StockAdjust> findAllByProductAndWarehouse(Long productId, Long warehouseId) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("productId", productId));
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);

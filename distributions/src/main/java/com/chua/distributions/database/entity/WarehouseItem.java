@@ -3,8 +3,6 @@ package com.chua.distributions.database.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,8 +14,8 @@ import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
 import com.chua.distributions.database.entity.base.BaseObject;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.serializer.json.ProductSerializer;
+import com.chua.distributions.serializer.json.WarehouseSerializer;
 import com.chua.distributions.utility.format.QuantityFormatter;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -34,6 +32,7 @@ public class WarehouseItem extends BaseObject {
 
 	public static final String TABLE_NAME = "warehouse_item";
 	
+	@JsonSerialize(using = WarehouseSerializer.class)
 	private Warehouse warehouse;
 	
 	@JsonSerialize(using = ProductSerializer.class)
@@ -41,8 +40,10 @@ public class WarehouseItem extends BaseObject {
 	
 	private Integer stockCount;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "warehouse", length = 50)
+	@ManyToOne(targetEntity = Warehouse.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "warehouse_id")
+	@Where(clause = "valid = 1")
+	@NotFound(action = NotFoundAction.IGNORE)
 	public Warehouse getWarehouse() {
 		return warehouse;
 	}

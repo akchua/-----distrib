@@ -1,9 +1,9 @@
 define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 'modules/purchaseorderitemservice', 'viewmodels/manage/productview'],
 		function (dialog, app, ko, productService, purchaseOrderItemService, ProductView) {
-    var AddItem = function(purchaseOrderId, companyId, warehouse) {
+    var AddItem = function(purchaseOrderId, companyId, warehouseId) {
     	this.purchaseOrderId = purchaseOrderId;
     	this.companyId = companyId;
-    	this.warehouse = warehouse;
+    	this.warehouseId = warehouseId;
     	this.productList = ko.observable();
     	
     	this.searchKey = ko.observable();
@@ -34,14 +34,14 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
 		self.refreshProductList();
     };
     
-    AddItem.show = function(purchaseOrderId, companyId, warehouse) {
-    	return dialog.show(new AddItem(purchaseOrderId, companyId, warehouse));
+    AddItem.show = function(purchaseOrderId, companyId, warehouseId) {
+    	return dialog.show(new AddItem(purchaseOrderId, companyId, warehouseId));
     };
     
     AddItem.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId, null, self.warehouse, false).done(function(data) {
+    	productService.getProductList(self.currentPage(), self.searchKey(), self.companyId, null, self.warehouseId, false).done(function(data) {
     		self.productList(data.list);
     		self.totalItems(data.total);
     	});
@@ -66,7 +66,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getProduct(productId, self.warehouse).done(function(product) {
+    	productService.getProduct(productId, self.warehouseId).done(function(product) {
     		ProductView.show(product, true)
     	});
     };

@@ -1,7 +1,5 @@
 package com.chua.distributions.beans;
 
-import com.chua.distributions.enums.Warehouse;
-
 /**
  * @author	Adrian Jasper K. Chua
  * @version	1.0
@@ -9,7 +7,7 @@ import com.chua.distributions.enums.Warehouse;
  */
 public class StockAdjustFormBean {
 
-	private Warehouse warehouse;
+	private Long warehouseId;
 	
 	private String description;
 	
@@ -19,12 +17,12 @@ public class StockAdjustFormBean {
 	
 	private Long productId;
 
-	public Warehouse getWarehouse() {
-		return warehouse;
+	public Long getWarehouseId() {
+		return warehouseId;
 	}
 
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
+	public void setWarehouseId(Long warehouseId) {
+		this.warehouseId = warehouseId;
 	}
 
 	public String getDescription() {

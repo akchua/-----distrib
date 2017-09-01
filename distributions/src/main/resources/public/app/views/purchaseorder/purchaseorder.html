@@ -5,7 +5,7 @@
 		<div class="input-group pull-right col-md-5 col-sm-6 col-xs-7">
 			<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: companyId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputCompany"></select>
 			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
-			<select data-bind="options: warehouseList, optionsValue: 'name', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: warehouse, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
+			<select data-bind="options: warehouseList, optionsValue: 'id', optionsText: function(warehouse) { return ko.unwrap(warehouse.name) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: warehouseId, event: { change: refreshPurchaseOrderList }" class="form-control" id="inputWarehouse"></select>
         </div>
      	</form>
 </div>
@@ -33,7 +33,7 @@
 				<tr>
 					<td data-bind="text: purchaseOrder.id" class = "text-center"></td>
 					<td data-bind="text: purchaseOrder.company.name"></td>
-					<td data-bind="text: purchaseOrder.warehouse.displayName"></td>
+					<td data-bind="text: purchaseOrder.warehouse.name"></td>
 					<td data-bind="text: purchaseOrder.status.displayName" class = "text-center"></td>
 					<td data-bind="text: purchaseOrder.formattedNetTotal" class = "text-right"></td>
 					

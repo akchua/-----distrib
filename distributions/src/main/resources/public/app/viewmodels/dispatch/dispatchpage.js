@@ -6,12 +6,11 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     	this.showDispatchButton = ko.observable(false);
     	this.enableDispatch = ko.observable(true);
     	
-    	this.warehouseEntity = null;
-    	
     	this.dispatch = {
 			id: ko.observable(),
 			
-			warehouse: ko.observable(),
+			warehouseId: ko.observable(),
+			warehouseName: ko.observable(),
 			orderCount: ko.observable(),
 			totalAmount: ko.observable(),
 			status: ko.observable()
@@ -40,14 +39,14 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     	var self = this;
     	
     	dispatchService.getDispatch(self.dispatch.id()).done(function(dispatch) {
-    		self.dispatch.warehouse(dispatch.warehouse.displayName + ' - ' + dispatch.warehouse.address);
+    		self.dispatch.warehouseId(dispatch.warehouse.id);
+    		self.dispatch.warehouseName(dispatch.warehouse.name + ' - ' + dispatch.warehouse.address);
     		self.dispatch.orderCount(dispatch.orderCount);
     		self.dispatch.totalAmount(dispatch.formattedTotalAmount);
     		self.dispatch.status(dispatch.status.displayName);
     		
     		if(dispatch.status.name == 'CREATING') self.showDispatchButton(true);
     		else self.showDispatchButton(false);
-    		self.warehouseEntity = dispatch.warehouse.name;
     	});
     	
     	dispatchService.getDispatchItemList(self.currentPage(), self.dispatch.id()).done(function(data) {
@@ -59,7 +58,7 @@ define(['durandal/app', 'knockout', 'modules/clientorderservice', 'modules/dispa
     DispatchPage.prototype.add = function() {
     	var self = this;
     	
-    	AddOrder.show(self.dispatch.id(), self.warehouseEntity).done(function() {
+    	AddOrder.show(self.dispatch.id(), self.dispatch.warehouseId()).done(function() {
     		self.refreshDispatchItemList();
     	});
     };

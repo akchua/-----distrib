@@ -61,7 +61,7 @@ public class ClientOrderSummaryTemplate implements Template {
 	}
 	
 	public String getFormattedWarehouse() {
-		return StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getDisplayName() : "", 14);
+		return StringHelper.center((clientOrder.getWarehouse() != null) ? clientOrder.getWarehouse().getName() : "", 14);
 	}
 	
 	public String getFormattedNetTotal() {

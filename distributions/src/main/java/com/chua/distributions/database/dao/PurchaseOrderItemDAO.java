@@ -7,7 +7,6 @@ import org.hibernate.criterion.Order;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.database.prototype.PurchaseOrderItemPrototype;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -30,5 +29,5 @@ public interface PurchaseOrderItemDAO extends DAO<PurchaseOrderItem, Long>, Purc
 	 * @param status The status of the purchase order it belongs to. Any Status if null.
 	 * @return A list of purchase order items belonging to the group.
 	 */
-	List<PurchaseOrderItem> findAllByProductWarehouseAndStatus(Long productId, Warehouse warehouse, Status[] status);
+	List<PurchaseOrderItem> findAllByProductWarehouseAndStatus(Long productId, Long warehouseId, Status[] status);
 }

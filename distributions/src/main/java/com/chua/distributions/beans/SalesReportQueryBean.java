@@ -2,7 +2,6 @@ package com.chua.distributions.beans;
 
 import com.chua.distributions.deserializer.json.SalesReportQueryDeserializer;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.chua.distributions.enums.Warehouse;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
@@ -13,7 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = SalesReportQueryDeserializer.class)
 public class SalesReportQueryBean extends ReportQueryBean {
 
-	private Warehouse warehouse;
+	private Long warehouseId;
 	
 	private Long clientId;
 	
@@ -38,13 +37,13 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	private Boolean sendMail;
 	
 	private Boolean downloadFile;
-	
-	public Warehouse getWarehouse() {
-		return warehouse;
+
+	public Long getWarehouseId() {
+		return warehouseId;
 	}
 
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
+	public void setWarehouseId(Long warehouseId) {
+		this.warehouseId = warehouseId;
 	}
 
 	public Long getClientId() {

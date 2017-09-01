@@ -11,7 +11,6 @@ import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -50,18 +49,18 @@ public class ClientOrderServiceImpl
 	
 	@Override
 	public ObjectList<ClientOrder> findAllPaidWithPagingOrderByPaidOn(int pageNumber, int resultsPerPage,
-			Warehouse warehouse) {
-		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.PAID }, new Order[] { Order.desc("paidOn") });
+			Long warehouseId) {
+		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouseId, new Status[] { Status.PAID }, new Order[] { Order.desc("paidOn") });
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse) {
-		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, new Status[] { Status.ACCEPTED, Status.TO_FOLLOW }, null);
+	public ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Long warehouseId) {
+		return dao.findByWarehouseWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouseId, new Status[] { Status.ACCEPTED, Status.TO_FOLLOW }, null);
 	}
 	
 	@Override
-	public ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse, Long clientId) {
-		return dao.findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, clientId, new Status[] { Status.RECEIVED }, new Order[] { Order.asc("deliveredOn") });
+	public ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Long warehouseId, Long clientId) {
+		return dao.findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouseId, clientId, new Status[] { Status.RECEIVED }, new Order[] { Order.asc("deliveredOn") });
 	}
 
 	@Override

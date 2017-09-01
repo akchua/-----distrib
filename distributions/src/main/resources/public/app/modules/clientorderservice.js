@@ -56,34 +56,34 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getAcceptedClientOrderList: function(currentPage, warehouse, async) {
+		getAcceptedClientOrderList: function(currentPage, warehouseId, async) {
 			return $.ajax({
 				url: '/services/clientorder/acceptedlist',
 				async: async,
 				data: {
 					pageNumber: currentPage - 1,
-					warehouse: warehouse
+					warehouseId: warehouseId
 				}
 			});
 		},
 		
-		getReceivedClientOrderList: function(currentPage, warehouse, clientId) {
+		getReceivedClientOrderList: function(currentPage, warehouseId, clientId) {
 			return $.ajax({
 				url: '/services/clientorder/receivedlist',
 				data: {
 					pageNumber: currentPage - 1,
-					warehouse: warehouse,
+					warehouseId: warehouseId,
 					clientId: clientId
 				}
 			});
 		},
 		
-		getPaidClientOrderList: function(currentPage, warehouse) {
+		getPaidClientOrderList: function(currentPage, warehouseId) {
 			return $.ajax({
 				url: '/services/clientorder/paidlist',
 				data: {
 					pageNumber: currentPage - 1,
-					warehouse: warehouse
+					warehouseId: warehouseId
 				}
 			});
 		},
@@ -187,21 +187,9 @@ define(['jquery'], function ($) {
     		});
     	},
     	
-    	getWarehouseList: function() {
-    		return $.ajax({
-    			url: '/services/clientorder/warehouse'
-    		});
-    	},
-    	
     	getClientSalesReportType: function() {
     		return $.ajax({
     			url: '/services/clientorder/clientreporttypes'
-    		});
-    	},
-    	
-    	getClientList: function() {
-    		return $.ajax({
-    			url: '/services/clientorder/client'
     		});
     	}
 	};

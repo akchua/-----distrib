@@ -40,7 +40,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.refreshProductList = function() {
     	var self = this;
     	
-    	productService.getPartialProductList(self.currentPage(), self.searchKey(), self.companyId, null, null, false).done(function(data) {
+    	productService.getPartialProductList(self.currentPage(), self.searchKey(), self.companyId, null, false).done(function(data) {
     		self.partialProductList(data.list);
     		self.totalItems(data.total);
     	});
@@ -65,7 +65,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     AddItem.prototype.view = function(productId) {
     	var self = this;
     	
-    	productService.getPartialProduct(productId, null).done(function(partialProduct) {
+    	productService.getPartialProduct(productId).done(function(partialProduct) {
     		PartialProductView.show(partialProduct)
     	});
     };

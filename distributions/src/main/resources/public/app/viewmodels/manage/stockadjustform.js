@@ -1,5 +1,5 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/stockadjustservice', 'modules/productservice'], 
-		function (dialog, app, ko, stockAdjustService, productService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/stockadjustservice', 'modules/productservice', 'modules/warehouseservice'], 
+		function (dialog, app, ko, stockAdjustService, productService, warehouseService) {
     var StockAdjustForm = function(product) {
     	this.product = product;
     	
@@ -28,7 +28,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/stockadjustservic
     	
     	self.stockAdjustFormModel.productId(self.product.id);
     	
-    	stockAdjustService.getWarehouseList().done(function(warehouseList) {
+    	warehouseService.getWarehouseListByName().done(function(warehouseList) {
     		self.warehouseList(warehouseList);
     	});
     };

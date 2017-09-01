@@ -13,6 +13,7 @@ import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
 
@@ -29,14 +30,17 @@ public class SalesReportTemplate implements Template {
 	
 	private Company company;
 	
+	private Warehouse warehouse;
+	
 	private List<ClientOrder> clientOrders;
 	
 	private List<String> summarizedClientOrders;
 	
-	public SalesReportTemplate(SalesReportQueryBean salesReportQuery, User client, Company company, List<ClientOrder> clientOrders) {
+	public SalesReportTemplate(SalesReportQueryBean salesReportQuery, User client, Company company, Warehouse warehouse, List<ClientOrder> clientOrders) {
 		this.salesReportQuery = salesReportQuery;
 		this.client = client;
 		this.company = company;
+		this.warehouse = warehouse;
 		this.clientOrders = clientOrders;
 		this.summarizedClientOrders = new ArrayList<String>();
 	}
@@ -63,8 +67,8 @@ public class SalesReportTemplate implements Template {
 	
 	public String getWarehouse() {
 		final String warehouse;
-		if(salesReportQuery.getWarehouse() != null) {
-			warehouse = salesReportQuery.getWarehouse().getDisplayName();
+		if(this.warehouse != null) {
+			warehouse = this.warehouse.getName();
 		} else {
 			warehouse = "ALL WAREHOUSES";
 		}

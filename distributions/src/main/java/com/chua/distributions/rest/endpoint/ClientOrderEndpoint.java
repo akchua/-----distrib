@@ -18,7 +18,6 @@ import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,24 +81,24 @@ public class ClientOrderEndpoint {
 	@Path("/acceptedlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
-			@QueryParam("warehouse") Warehouse warehouse) {
-		return clientOrderHandler.getAcceptedClientOrderObjectList(pageNumber, warehouse);
+			@QueryParam("warehouseId") Long warehouseId) {
+		return clientOrderHandler.getAcceptedClientOrderObjectList(pageNumber, warehouseId);
 	}
 	
 	@GET
 	@Path("/receivedlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
-			@QueryParam("warehouse") Warehouse warehouse, @QueryParam("clientId") Long clientId) {
-		return clientOrderHandler.getReceivedClientOrderObjectList(pageNumber, warehouse, clientId);
+			@QueryParam("warehouseId") Long warehouseId, @QueryParam("clientId") Long clientId) {
+		return clientOrderHandler.getReceivedClientOrderObjectList(pageNumber, warehouseId, clientId);
 	}
 	
 	@GET
 	@Path("/paidlist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<ClientOrder> getPaidClientOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
-					@QueryParam("warehouse") Warehouse warehouse) {
-		return clientOrderHandler.getPaidClientOrderObjectList(pageNumber, warehouse);
+					@QueryParam("warehouseId") Long warehouseId) {
+		return clientOrderHandler.getPaidClientOrderObjectList(pageNumber, warehouseId);
 	}
 	
 	@GET
@@ -182,13 +181,6 @@ public class ClientOrderEndpoint {
 	public ResultBean generateReport(@FormParam("salesReportQueryData") String salesReportQueryData) throws IOException {
 		final SalesReportQueryBean salesReportQuery = new ObjectMapper().readValue(salesReportQueryData, SalesReportQueryBean.class);
 		return clientOrderHandler.generateReport(salesReportQuery);
-	}
-	
-	@GET
-	@Path("/warehouse")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Warehouse> getWarehouseList() {
-		return clientOrderHandler.getWarehouseList();
 	}
 	
 	@GET

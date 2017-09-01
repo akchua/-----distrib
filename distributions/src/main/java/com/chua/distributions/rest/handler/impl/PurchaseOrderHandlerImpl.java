@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,9 @@ import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.database.service.PurchaseOrderService;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.chua.distributions.rest.handler.UserHandler;
@@ -54,6 +52,9 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
@@ -87,7 +88,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		PurchaseOrder transferInstance = null;
 		
 		if(!sourceOrder.getNetTotal().equals(0.0f)) {
-			final List<PurchaseOrder> toFollowOrders = purchaseOrderService.findAllToFollowByCompanyAndWarehouse(sourceOrder.getCompany().getId(), sourceOrder.getWarehouse());
+			final List<PurchaseOrder> toFollowOrders = purchaseOrderService.findAllToFollowByCompanyAndWarehouse(sourceOrder.getCompany().getId(), sourceOrder.getWarehouse().getId());
 			
 			for(PurchaseOrder purchaseOrder : toFollowOrders) {
 				if(purchaseOrder.getNetTotal().equals(0.0f) && !purchaseOrder.getId().equals(sourceId)) {
@@ -122,15 +123,14 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid) {
-		return purchaseOrderService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse, showPaid);
+	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Long warehouseId, Boolean showPaid) {
+		return purchaseOrderService.findAllWithPagingOrderByStatus(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouseId, showPaid);
 	}
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId,
-			Warehouse warehouse) {
-		return purchaseOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouse);
+	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Long warehouseId) {
+		return purchaseOrderService.findAllPaidWithPagingOrderByLatest(pageNumber, UserContextHolder.getItemsPerPage(), companyId, warehouseId);
 	}
 	
 	@Override
@@ -379,13 +379,6 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		
 		return result;
 	}
-
-	@Override
-	@CheckAuthority(minimumAuthority = 5)
-	public List<Warehouse> getWarehouseList() {
-		return Stream.of(Warehouse.values())
-				.collect(Collectors.toList());
-	}
 	
 	private void refreshPurchaseOrder(Long purchaseOrderId) {
 		final PurchaseOrder purchaseOrder = purchaseOrderService.find(purchaseOrderId);
@@ -409,7 +402,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private boolean addToWarehouse(PurchaseOrder purchaseOrder) {
 		List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllByPurchaseOrder(purchaseOrder.getId());
 		for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
-			if(!warehouseItemHandler.addToWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse(), purchaseOrderItem.getQuantity()))
+			if(!warehouseItemHandler.addToWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse().getId(), purchaseOrderItem.getQuantity()))
 				return false;
 		}
 		
@@ -417,7 +410,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	}
 	
 	private void setPurchaseOrder(PurchaseOrder purchaseOrder, PurchaseOrderFormBean purchaseOrderForm) {
-		purchaseOrder.setWarehouse(purchaseOrderForm.getWarehouse());
+		purchaseOrder.setWarehouse(warehouseService.find(purchaseOrderForm.getWarehouseId()));
 		
 		if(purchaseOrder.getId() == null) {
 			purchaseOrder.setCompany(companyService.find(purchaseOrderForm.getCompanyId()));
@@ -433,7 +426,7 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 	private ResultBean validatePurchaseOrderForm(PurchaseOrderFormBean purchaseOrderForm) {
 		final ResultBean result;
 		
-		if(purchaseOrderForm.getCompanyId() == null || purchaseOrderForm.getWarehouse() == null) {
+		if(purchaseOrderForm.getCompanyId() == null || purchaseOrderForm.getWarehouseId() == null) {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + "."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");

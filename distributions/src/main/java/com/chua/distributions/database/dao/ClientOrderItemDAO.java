@@ -7,7 +7,6 @@ import org.hibernate.criterion.Order;
 import com.chua.distributions.database.entity.ClientOrderItem;
 import com.chua.distributions.database.prototype.ClientOrderItemPrototype;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -30,5 +29,5 @@ public interface ClientOrderItemDAO extends DAO<ClientOrderItem, Long>, ClientOr
 	 * @param status The status of the client order it belongs to. Any Status if null.
 	 * @return A list of client order items belonging to the group.
 	 */
-	List<ClientOrderItem> findAllByProductWarehouseAndStatus(Long productId, Warehouse warehouse, Status[] status);
+	List<ClientOrderItem> findAllByProductWarehouseAndStatus(Long productId, Long warehouseId, Status[] status);
 }

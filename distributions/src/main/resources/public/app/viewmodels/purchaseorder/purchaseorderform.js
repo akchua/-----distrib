@@ -1,5 +1,5 @@
-define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice'], 
-		function (router, dialog, app, ko, purchaseOrderService, companyService) {
+define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/warehouseservice', 'modules/companyservice'], 
+		function (router, dialog, app, ko, purchaseOrderService, warehouseService, companyService) {
     var PurchaseOrderForm = function(purchaseOrder, title) {
     	this.purchaseOrder = purchaseOrder;
     	this.title = title;
@@ -13,7 +13,7 @@ define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules
     		id: ko.observable(),
     		
     		companyId: ko.observable(),
-    		warehouse: ko.observable()
+    		warehouseId: ko.observable()
 	    };
     };
     
@@ -21,16 +21,15 @@ define(['plugins/router', 'plugins/dialog', 'durandal/app', 'knockout', 'modules
     	var self = this;
     	
     	self.purchaseOrderFormModel.id(self.purchaseOrder.id);
-    	if(self.purchaseOrder.warehouse) self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse.name);
     	
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
     		self.purchaseOrderFormModel.companyId(self.purchaseOrder.company.id);
     	});
     	
-    	purchaseOrderService.getWarehouseList().done(function(warehouseList) {
+    	warehouseService.getWarehouseListByName().done(function(warehouseList) {
     		self.warehouseList(warehouseList);
-    		if(self.purchaseOrder.warehouse) self.purchaseOrderFormModel.warehouse(self.purchaseOrder.warehouse.name);
+    		self.purchaseOrderFormModel.warehouseId(self.purchaseOrder.warehouse.id);
     	});
     };
     

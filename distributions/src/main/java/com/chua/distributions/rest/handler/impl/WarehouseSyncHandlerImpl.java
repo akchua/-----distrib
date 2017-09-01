@@ -15,13 +15,13 @@ import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.database.entity.StockAdjust;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.PurchaseOrderItemService;
 import com.chua.distributions.database.service.StockAdjustService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseItemService;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.WarehouseSyncHandler;
 import com.chua.distributions.utility.EmailUtil;
 
@@ -58,17 +58,17 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 	public ResultBean syncExisting(Warehouse warehouse) {
 		final ResultBean result = new ResultBean();
 		result.setSuccess(Boolean.TRUE);
-		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);
+		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse.getId());
 		
 		List<String> errorList = new ArrayList<String>();
 		
-		LOG.info("Starting sync of warehouse " + warehouse.getDisplayName() + ".");
+		LOG.info("Starting sync of warehouse " + warehouse.getName() + ".");
 		
 		for(WarehouseItem warehouseItem : warehouseItems) {
 			Product product = warehouseItem.getProduct();
-			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllUnstockedByProductAndWarehouse(product.getId(), warehouse);
-			List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllStockedByProductAndWarehouse(product.getId(), warehouse);
-			List<StockAdjust> stockAdjusts = stockAdjustService.findAllByProductAndWarehouse(product.getId(), warehouse);
+			List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllUnstockedByProductAndWarehouse(product.getId(), warehouse.getId());
+			List<PurchaseOrderItem> purchaseOrderItems = purchaseOrderItemService.findAllStockedByProductAndWarehouse(product.getId(), warehouse.getId());
+			List<StockAdjust> stockAdjusts = stockAdjustService.findAllByProductAndWarehouse(product.getId(), warehouse.getId());
 			if(clientOrderItems != null && purchaseOrderItems != null) {
 				Integer stockCount = warehouseItem.getStockCount();
 				Integer actualCount = 0;
@@ -82,7 +82,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 					actualCount += stockAdjust.getQuantity();
 				}
 				if(!stockCount.equals(actualCount)) {
-					String error = "Adjust " + product.getDisplayName() + " at " + warehouse.getDisplayName() + " from " + stockCount + " to " + actualCount;
+					String error = "Adjust " + product.getDisplayName() + " at " + warehouse.getName() + " from " + stockCount + " to " + actualCount;
 					errorList.add(error);
 					LOG.info(error);
 				}
@@ -94,7 +94,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 		
 		if(result.getSuccess()) {
 			if(errorList.size() == 0) {
-				result.setMessage("Sync for " + warehouse.getDisplayName() + " complete. No errors found.");
+				result.setMessage("Sync for " + warehouse.getName() + " complete. No errors found.");
 			} else {
 				// NOTIFY ADMINS
 					String recipient = "";
@@ -104,7 +104,7 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 						recipient += admin.getEmailAddress() + ", ";
 					}
 					
-					String message = "Sync for " + warehouse.getDisplayName() + " complete. " + errorList.size() + " error/s found." + "\n\n";
+					String message = "Sync for " + warehouse.getName() + " complete. " + errorList.size() + " error/s found." + "\n\n";
 					
 					for(String s : errorList) {
 						message += s + "\n";
@@ -113,10 +113,10 @@ public class WarehouseSyncHandlerImpl implements WarehouseSyncHandler {
 					emailUtil.send(recipient, "Warehouse Sync", message);
 				//
 				
-				result.setMessage("Sync for " + warehouse.getDisplayName() + " complete. " + errorList.size() + " error/s found.");
+				result.setMessage("Sync for " + warehouse.getName() + " complete. " + errorList.size() + " error/s found.");
 			}
 		} else {
-			result.setMessage("Sync for " + warehouse.getDisplayName() + " failed.");
+			result.setMessage("Sync for " + warehouse.getName() + " failed.");
 		}
 		
 		return result;

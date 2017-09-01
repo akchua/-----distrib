@@ -1,7 +1,5 @@
 package com.chua.distributions.beans;
 
-import com.chua.distributions.enums.Warehouse;
-
 /**
  * @author	Adrian Jasper K. Chua
  * @version	1.0
@@ -9,7 +7,7 @@ import com.chua.distributions.enums.Warehouse;
  */
 public class PurchaseReportQueryBean extends ReportQueryBean {
 
-	private Warehouse warehouse;
+	private Long warehouseId;
 	
 	private Long companyId;
 	
@@ -27,12 +25,12 @@ public class PurchaseReportQueryBean extends ReportQueryBean {
 	
 	private Boolean showNetTrail;
 
-	public Warehouse getWarehouse() {
-		return warehouse;
+	public Long getWarehouseId() {
+		return warehouseId;
 	}
 
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
+	public void setWarehouseId(Long warehouseId) {
+		this.warehouseId = warehouseId;
 	}
 
 	public Long getCompanyId() {

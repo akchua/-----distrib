@@ -8,17 +8,25 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
+
 import com.chua.distributions.database.entity.base.BaseObject;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.serializer.json.WarehouseSerializer;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -33,6 +41,7 @@ public class Dispatch extends BaseObject {
 
 	public static final String TABLE_NAME = "dispatch";
 	
+	@JsonSerialize(using = WarehouseSerializer.class)
 	private Warehouse warehouse;
 	
 	private Integer orderCount;
@@ -43,8 +52,10 @@ public class Dispatch extends BaseObject {
 	
 	private Date deliveredOn;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "warehouse", length = 50)
+	@ManyToOne(targetEntity = Warehouse.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "warehouse_id")
+	@Where(clause = "valid = 1")
+	@NotFound(action = NotFoundAction.IGNORE)
 	public Warehouse getWarehouse() {
 		return warehouse;
 	}

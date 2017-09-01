@@ -2,8 +2,6 @@ package com.chua.distributions.rest.handler.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,9 @@ import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.DispatchItemService;
 import com.chua.distributions.database.service.DispatchService;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
 import com.chua.distributions.rest.handler.UserHandler;
@@ -57,6 +55,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	
 	@Autowired
 	private ClientOrderItemService clientOrderItemService;
+	
+	@Autowired
+	private WarehouseService warehouseService;
 
 	@Autowired
 	private WarehouseItemHandler warehouseItemHandler;
@@ -110,7 +111,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 			result = new ResultBean();
 			result.setSuccess(dispatchService.insert(dispatch) != null);
 			if(result.getSuccess()) {
-				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created Dispatch for warehouse " + Html.text(Color.BLUE, dispatchForm.getWarehouse().getDisplayName()) + "."));
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created dispatch."));
 			} else {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}
@@ -366,19 +367,11 @@ public class DispatchHandlerImpl implements DispatchHandler {
 		return result;
 	}
 	
-	@Override
-	@CheckAuthority(minimumAuthority = 5)
-	public List<Warehouse> getWarehouseList() {
-		return Stream.of(Warehouse.values())
-				.collect(Collectors.toList());
-	}
-	
 	private boolean removeFromWareHouse(ClientOrder clientOrder) {
-		final Warehouse warehouse = clientOrder.getWarehouse();
 		List<ClientOrderItem> clientOrderItems = clientOrderItemService.findAllByClientOrder(clientOrder.getId());
 		
 		for(ClientOrderItem clientOrderItem : clientOrderItems) {
-			if(!warehouseItemHandler.removeFromWarehouse(clientOrderItem.getProductId(), warehouse, clientOrderItem.getQuantity())) 
+			if(!warehouseItemHandler.removeFromWarehouse(clientOrderItem.getProductId(), clientOrder.getWarehouse().getId(), clientOrderItem.getQuantity())) 
 				return false;
 		}
 		
@@ -403,7 +396,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	}
 	
 	private void setDispatch(Dispatch dispatch, DispatchFormBean dispatchForm) {
-		dispatch.setWarehouse(dispatchForm.getWarehouse());
+		dispatch.setWarehouse(warehouseService.find(dispatchForm.getWarehouseId()));
 		if(dispatch.getOrderCount() == null) dispatch.setOrderCount(Integer.valueOf(0));
 		if(dispatch.getTotalAmount() == null) dispatch.setTotalAmount(0.0f);
 	}
@@ -411,7 +404,7 @@ public class DispatchHandlerImpl implements DispatchHandler {
 	private ResultBean validateDispatchForm(DispatchFormBean dispatchForm) {
 		final ResultBean result;
 		
-		if(dispatchForm.getWarehouse() == null) {
+		if(dispatchForm.getWarehouseId() == null) {
 			result = new ResultBean(Boolean.FALSE, Html.line("All fields are " + Html.text(Color.RED, "required") + "."));
 		} else {
 			result = new ResultBean(Boolean.TRUE, "");

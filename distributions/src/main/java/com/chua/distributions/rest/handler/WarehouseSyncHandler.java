@@ -1,7 +1,7 @@
 package com.chua.distributions.rest.handler;
 
 import com.chua.distributions.beans.ResultBean;
-import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.database.entity.Warehouse;
 
 /**
  * @author	Adrian Jasper K. Chua

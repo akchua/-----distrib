@@ -3,7 +3,6 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     var PurchaseOrderPage = function() {
     	this.purchaseOrderItemList = ko.observable();
     	
-    	this.warehouseEntity = null;
     	this.showCheckButton = ko.observable(false);
     	
     	this.purchaseOrder = {
@@ -11,7 +10,8 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
 			
 			companyId: ko.observable(),
 			companyName: ko.observable(),
-			warehouse: ko.observable(),
+			warehouseId: ko.observable(),
+			warehouseName: ko.observable(),
 			creatorName: ko.observable(),
 			formattedGrossTotal: ko.observable(),
 			formattedDiscountTotal: ko.observable(),
@@ -44,7 +44,8 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     	purchaseOrderService.getPurchaseOrder(self.purchaseOrder.id()).done(function(purchaseOrder) {
     		self.purchaseOrder.companyId(purchaseOrder.company.id);
     		self.purchaseOrder.companyName(purchaseOrder.company.name);
-    		self.purchaseOrder.warehouse(purchaseOrder.warehouse.displayName + ' - ' + purchaseOrder.warehouse.address);
+    		self.purchaseOrder.warehouseId(purchaseOrder.warehouse.id);
+    		self.purchaseOrder.warehouseName(purchaseOrder.warehouse.name + ' - ' + purchaseOrder.warehouse.address);
     		self.purchaseOrder.creatorName(purchaseOrder.creator.formattedName);
     		self.purchaseOrder.formattedGrossTotal(purchaseOrder.formattedGrossTotal);
     		self.purchaseOrder.formattedDiscountTotal(purchaseOrder.formattedDiscountTotal);
@@ -53,7 +54,6 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     		
     		if(purchaseOrder.status.name == 'CREATING') self.showCheckButton(true);
     		else self.showCheckButton(false);
-    		self.warehouseEntity = purchaseOrder.warehouse.name;
     	});
     	
     	purchaseOrderItemService.getPurchaseOrderItemList(self.currentPage(), self.purchaseOrder.id(), true).done(function(data) {
@@ -65,7 +65,7 @@ define(['durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/pur
     PurchaseOrderPage.prototype.add = function() {
     	var self = this;
     	
-    	AddItem.show(self.purchaseOrder.id(), self.purchaseOrder.companyId(), self.warehouseEntity).done(function() {
+    	AddItem.show(self.purchaseOrder.id(), self.purchaseOrder.companyId(), self.purchaseOrder.warehouseId()).done(function() {
     		self.refreshPurchaseOrderItemList();
     	});
     };

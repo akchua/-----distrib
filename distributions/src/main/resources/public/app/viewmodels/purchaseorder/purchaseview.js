@@ -10,7 +10,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderitem
 			
 			companyId: ko.observable(),
 			companyName: ko.observable(),
-			warehouse: ko.observable(),
+			warehouseName: ko.observable(),
 			creatorName: ko.observable(),
 			formattedGrossTotal: ko.observable(),
 			formattedDiscountTotal: ko.observable(),
@@ -30,7 +30,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderitem
     	self.purchaseViewModel.id(self.purchaseOrder.id);
     	self.purchaseViewModel.companyId(self.purchaseOrder.company.id);
 		self.purchaseViewModel.companyName(self.purchaseOrder.company.name);
-		self.purchaseViewModel.warehouse(self.purchaseOrder.warehouse.displayName + ' - ' + self.purchaseOrder.warehouse.address);
+		self.purchaseViewModel.warehouseName(self.purchaseOrder.warehouse.name + ' - ' + self.purchaseOrder.warehouse.address);
 		self.purchaseViewModel.creatorName(self.purchaseOrder.creator.formattedName);
 		self.purchaseViewModel.formattedGrossTotal(self.purchaseOrder.formattedGrossTotal);
 		self.purchaseViewModel.formattedDiscountTotal(self.purchaseOrder.formattedDiscountTotal);

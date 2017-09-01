@@ -10,8 +10,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	
     	this.sourceOrder = {
 			id: ko.observable(),
-			company: ko.observable(),
-			warehouse: ko.observable(),
+			companyName: ko.observable(),
 			status: ko.observable(),
 			netTotal: ko.observable()
     	};
@@ -62,8 +61,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	
     	purchaseOrderService.getPurchaseOrder(self.sourceId).done(function(sourceOrder) {
     		self.sourceOrder.id(sourceOrder.id);
-    		self.sourceOrder.company(sourceOrder.company.name);
-    		self.sourceOrder.warehouse(sourceOrder.warehouse.displayName);
+    		self.sourceOrder.companyName(sourceOrder.company.name);
     		self.sourceOrder.status(sourceOrder.status.displayName);
     		self.sourceOrder.netTotal(sourceOrder.netTotal);
     	});

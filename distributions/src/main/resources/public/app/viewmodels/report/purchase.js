@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/report/timestampview', 'viewmodels/purchaseorder/purchaseview'],
-		function (router, app, ko, purchaseOrderService, companyService, TimestampView, PurchaseView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/warehouseservice', 'modules/companyservice', 'viewmodels/report/timestampview', 'viewmodels/purchaseorder/purchaseview'],
+		function (router, app, ko, purchaseOrderService, warehouseService, companyService, TimestampView, PurchaseView) {
     var Purchase = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
@@ -8,7 +8,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	this.purchaseReportQuery = {
     		from: ko.observable(),
     		to: ko.observable(),
-    		warehouse: ko.observable(),
+    		warehouseId: ko.observable(),
     		companyId: ko.observable(),
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
@@ -33,7 +33,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 			self.refreshPurchaseOrderList();
 		});
 		
-		purchaseOrderService.getWarehouseList().done(function(warehouseList) {
+		warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     	

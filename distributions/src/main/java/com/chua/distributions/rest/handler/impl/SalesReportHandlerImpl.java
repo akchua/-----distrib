@@ -15,9 +15,11 @@ import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.Company;
+import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.rest.handler.SalesReportHandler;
@@ -43,6 +45,9 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 	private CompanyService companyService;
 	
 	@Autowired
+	private WarehouseService warehouseService;
+	
+	@Autowired
 	private ClientOrderService clientOrderService;
 	
 	@Autowired
@@ -60,12 +65,13 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 		
 		if(validateQuery.getSuccess()) {
 			final Company company = companyService.find(salesReportQuery.getCompanyId());
+			final Warehouse warehouse = warehouseService.find(salesReportQuery.getWarehouseId());
 			String fileName = "";
 			
 			// DIVERSEY_PAYMENTS_MAIN_DateFROM_DateTO.pdf
 			if(company != null) fileName += company.getShortName() + "_";
 			fileName += salesReportQuery.getClientSalesReportType().getDisplayName() + "_";
-			if(salesReportQuery.getWarehouse() != null) fileName += salesReportQuery.getWarehouse().getDisplayName() + "_";
+			if(warehouse != null) fileName += warehouse.getName() + "_";
 			
 			fileName += DateFormatter.shortFormat(salesReportQuery.getFrom()) + "_to_";
 			fileName += DateFormatter.shortFormat(salesReportQuery.getTo());
@@ -95,6 +101,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 										salesReportQuery, 
 										(salesReportQuery.getClientId() != null) ? userService.find(salesReportQuery.getClientId()) : null,
 										(salesReportQuery.getCompanyId() != null) ? companyService.find(salesReportQuery.getCompanyId()) : null,
+										(salesReportQuery.getWarehouseId() != null) ? warehouseService.find(salesReportQuery.getWarehouseId()) : null,
 										clientOrders
 											).merge(velocityEngine), 
 								businessConstants.getBusinessShortName(),

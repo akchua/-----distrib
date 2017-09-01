@@ -1,11 +1,11 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, userService, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/warehouseservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
+		function (router, app, ko, clientOrderService, userService, warehouseService, SaleView, UserView) {
     var Payment = function() {
     	this.clientOrderList = ko.observable();
     	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
     	
-    	this.warehouse = ko.observable();
+    	this.warehouseId = ko.observable();
     	this.clientId = ko.observable();
     	this.formattedPayable = ko.observable();
     	
@@ -23,7 +23,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
 			self.refreshClientOrderList();
 		});
 		
-		clientOrderService.getWarehouseList().done(function(warehouseList) {
+		warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
 		
@@ -38,7 +38,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     Payment.prototype.refreshClientOrderList = function() {
     	var self = this;
     	
-    	clientOrderService.getReceivedClientOrderList(self.currentPage(), self.warehouse(), self.clientId()).done(function(data) {
+    	clientOrderService.getReceivedClientOrderList(self.currentPage(), self.warehouseId(), self.clientId()).done(function(data) {
     		self.clientOrderList(data.list);
     		self.totalItems(data.total);
     	});

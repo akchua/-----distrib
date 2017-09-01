@@ -29,12 +29,6 @@ define(['jquery'], function ($) {
     				stockAdjustId: stockAdjustId
     			}
     		});
-    	},
-    	
-    	getWarehouseList: function() {
-    		return $.ajax({
-    			url: '/services/stockadjust/warehouse'
-    		});
     	}
 	};
 });

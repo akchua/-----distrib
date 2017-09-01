@@ -12,7 +12,6 @@ import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -78,18 +77,18 @@ public class ClientOrderDAOImpl
 	
 	@Override
 	public ObjectList<ClientOrder> findByWarehouseWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
-			Warehouse warehouse, Status[] status, Order[] orders) {
-		return findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouse, null, status, orders);
+			Long warehouseId, Status[] status, Order[] orders) {
+		return findByWarehouseAndClientWithPagingStatusAndOrder(pageNumber, resultsPerPage, warehouseId, null, status, orders);
 	}
 	
 	@Override
 	public ObjectList<ClientOrder> findByWarehouseAndClientWithPagingStatusAndOrder(int pageNumber, int resultsPerPage,
-			Warehouse warehouse, Long clientId, Status[] status, Order[] orders) {
+			Long warehouseId, Long clientId, Status[] status, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		if(clientId != null) {
@@ -171,8 +170,8 @@ public class ClientOrderDAOImpl
 			conjunction.add(Restrictions.between(dateBasis, salesReportQuery.getFrom(), salesReportQuery.getTo()));
 		}
 		
-		if(salesReportQuery.getWarehouse() != null) {
-			conjunction.add(Restrictions.eq("warehouse", salesReportQuery.getWarehouse()));
+		if(salesReportQuery.getWarehouseId() != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", salesReportQuery.getWarehouseId()));
 		}
 		
 		if(salesReportQuery.getClientId() != null) {

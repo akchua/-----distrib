@@ -1,12 +1,12 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'viewmodels/purchaseorder/purchaseorderform', 'viewmodels/purchaseorder/purchaseview', 'viewmodels/purchaseorder/transfer', 'viewmodels/report/timestampview'],
-		function (router, app, ko, purchaseOrderService, companyService, PurchaseOrderForm, PurchaseView, Transfer, TimestampView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderservice', 'modules/companyservice', 'modules/warehouseservice', 'viewmodels/purchaseorder/purchaseorderform', 'viewmodels/purchaseorder/purchaseview', 'viewmodels/purchaseorder/transfer', 'viewmodels/report/timestampview'],
+		function (router, app, ko, purchaseOrderService, companyService, warehouseService, PurchaseOrderForm, PurchaseView, Transfer, TimestampView) {
     var PurchaseOrder = function() {
     	this.purchaseOrderList = ko.observable();
     	this.companyList = ko.observable();
     	this.warehouseList = ko.observable();
     	
     	this.companyId = ko.observable();
-    	this.warehouse = ko.observable();
+    	this.warehouseId = ko.observable();
     	
     	this.enableSend = ko.observable(true);
     	this.isManager = ko.observable(app.user.userType.authority <= 2);
@@ -27,7 +27,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
 			self.refreshPurchaseOrderList();
 		});
 		
-		purchaseOrderService.getWarehouseList().done(function(warehouseList) {
+		warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     	
@@ -41,7 +41,7 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     PurchaseOrder.prototype.refreshPurchaseOrderList = function() {
     	var self = this;
     	
-    	purchaseOrderService.getPurchaseOrderList(self.currentPage(), self.companyId(), self.warehouse(), self.showPaid()).done(function(data) {
+    	purchaseOrderService.getPurchaseOrderList(self.currentPage(), self.companyId(), self.warehouseId(), self.showPaid()).done(function(data) {
     		self.purchaseOrderList(data.list);
     		self.totalItems(data.total);
     	});

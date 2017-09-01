@@ -9,10 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
 import com.chua.distributions.database.entity.Product;
+import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.ProductService;
 import com.chua.distributions.database.service.WarehouseItemService;
-import com.chua.distributions.enums.Warehouse;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.WarehouseItemHandler;
 import com.chua.distributions.utility.format.CurrencyFormatter;
@@ -32,16 +33,19 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 	@Autowired
 	private ProductService productService;
 	
+	@Autowired
+	private WarehouseService warehouseService;
+	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Warehouse warehouse) {
-		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, warehouse);
+	public ObjectList<WarehouseItem> getWarehouseItemObjectList(Integer pageNumber, String searchKey, Long warehouseId) {
+		return warehouseItemService.findAllWithPagingOrderByProductName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, warehouseId);
 	}
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public String getFormattedPurchaseValue(Warehouse warehouse) {
-		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouse);
+	public String getFormattedPurchaseValue(Long warehouseId) {
+		final List<WarehouseItem> warehouseItems = warehouseItemService.findAllByWarehouse(warehouseId);
 		
 		float total = 0.0f;
 		for(WarehouseItem item : warehouseItems) {
@@ -52,10 +56,11 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 	}
 	
 	@Override
-	public boolean addToWarehouse(Long productId, Warehouse warehouse, Integer quantity) {
-		final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(productId, warehouse);
+	public boolean addToWarehouse(Long productId, Long warehouseId, Integer quantity) {
+		final WarehouseItem warehouseItem = warehouseItemService.findByProductAndWarehouse(productId, warehouseId);
 		if(warehouseItem == null) {
 			final Product product = productService.find(productId);
+			final Warehouse warehouse = warehouseService.find(warehouseId);
 			final WarehouseItem warehouzeItem = new WarehouseItem();
 			
 			warehouzeItem.setProduct(product);
@@ -73,7 +78,7 @@ public class WarehouseItemHandlerImpl implements WarehouseItemHandler {
 	}
 
 	@Override
-	public boolean removeFromWarehouse(Long productId, Warehouse warehouse, Integer quantity) {
-		return addToWarehouse(productId, warehouse, 0 - quantity);
+	public boolean removeFromWarehouse(Long productId, Long warehouseId, Integer quantity) {
+		return addToWarehouse(productId, warehouseId, 0 - quantity);
 	}
 }

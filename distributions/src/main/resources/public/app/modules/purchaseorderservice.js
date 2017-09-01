@@ -18,25 +18,25 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getPurchaseOrderList: function(currentPage, companyId, warehouse, showPaid) {
+		getPurchaseOrderList: function(currentPage, companyId, warehouseId, showPaid) {
 			return $.ajax({
 				url: '/services/purchaseorder/list',
 				data: {
 					pageNumber: currentPage - 1,
 					companyId: companyId,
-					warehouse: warehouse,
+					warehouseId: warehouseId,
 					showPaid: showPaid
 				}
 			});
 		},
 		
-		getPaidPurchaseOrderList: function(currentPage, companyId, warehouse) {
+		getPaidPurchaseOrderList: function(currentPage, companyId, warehouseId) {
 			return $.ajax({
 				url: '/services/purchaseorder/paidlist',
 				data: {
 					pageNumber: currentPage - 1,
 					companyId: companyId,
-					warehouse: warehouse
+					warehouseId: warehouseId
 				}
 			});
 		},
@@ -108,12 +108,6 @@ define(['jquery'], function ($) {
     			data: {
     				purchaseOrderId: purchaseOrderId
     			}
-    		});
-    	},
-    	
-    	getWarehouseList: function() {
-    		return $.ajax({
-    			url: '/services/purchaseorder/warehouse'
     		});
     	}
 	};

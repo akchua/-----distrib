@@ -3,7 +3,6 @@ package com.chua.distributions.database.prototype;
 import java.util.List;
 
 import com.chua.distributions.database.entity.StockAdjust;
-import com.chua.distributions.enums.Warehouse;
 
 /**
  * @author	Adrian Jasper K. Chua
@@ -12,5 +11,5 @@ import com.chua.distributions.enums.Warehouse;
  */
 public interface StockAdjustPrototype extends Prototype<StockAdjust, Long> {
 
-	List<StockAdjust> findAllByProductAndWarehouse(Long productId, Warehouse warehouse);
+	List<StockAdjust> findAllByProductAndWarehouse(Long productId, Long warehouseId);
 }

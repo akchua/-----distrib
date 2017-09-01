@@ -1,18 +1,19 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice'], function (dialog, app, ko, dispatchService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice', 'modules/warehouseservice'], 
+		function (dialog, app, ko, dispatchService, warehouseService) {
     var DispatchForm = function() {
     	this.warehouseList = ko.observable();
     	
     	this.dispatchFormModel = {
     		id: ko.observable(),
     		
-    		warehouse: ko.observable()
+    		warehouseId: ko.observable()
 	    };
     };
     
     DispatchForm.prototype.activate = function() {
     	var self = this;
     	
-    	dispatchService.getWarehouseList().done(function(warehouseList) {
+    	warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     };

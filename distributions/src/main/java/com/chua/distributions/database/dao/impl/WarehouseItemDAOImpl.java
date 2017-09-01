@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.WarehouseItemDAO;
 import com.chua.distributions.database.entity.WarehouseItem;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -26,13 +25,13 @@ public class WarehouseItemDAOImpl
 		implements WarehouseItemDAO {
 
 	@Override
-	public ObjectList<WarehouseItem> findAllWithPaging(int pageNumber, int resultsPerPage, String searchKey, Warehouse warehouse) {
-		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, warehouse, null);
+	public ObjectList<WarehouseItem> findAllWithPaging(int pageNumber, int resultsPerPage, String searchKey, Long warehouseId) {
+		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, warehouseId, null);
 	}
 
 	@Override
 	public ObjectList<WarehouseItem> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey,
-			Warehouse warehouse, Order[] orders) {
+			Long warehouseId, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
@@ -44,8 +43,8 @@ public class WarehouseItemDAOImpl
 			conjunction.add(Restrictions.ne("stockCount", Integer.valueOf(0)));
 		}
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, new String[] { "product" }, new String[] { "prod" }, new JoinType[] { JoinType.INNER_JOIN }, orders, conjunction);
@@ -61,20 +60,20 @@ public class WarehouseItemDAOImpl
 	}
 	
 	@Override
-	public List<WarehouseItem> findAllByWarehouse(Warehouse warehouse) {
+	public List<WarehouseItem> findAllByWarehouse(Long warehouseId) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
-		conjunction.add(Restrictions.eq("warehouse", warehouse));
+		conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		
 		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
 	
 	@Override
-	public WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse) {
+	public WarehouseItem findByProductAndWarehouse(Long productId, Long warehouseId) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("product.id", productId));
-		conjunction.add(Restrictions.eq("warehouse", warehouse));
+		conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		
 		return findUniqueResult(null, null, null, conjunction);
 	}

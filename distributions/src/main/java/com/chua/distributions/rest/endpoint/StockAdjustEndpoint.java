@@ -2,7 +2,6 @@
 package com.chua.distributions.rest.endpoint;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.StockAdjustFormBean;
 import com.chua.distributions.database.entity.StockAdjust;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.StockAdjustHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,12 +51,5 @@ public class StockAdjustEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removeAdjustment(@FormParam("stockAdjustId") Long stockAdjustId) {
 		return stockAdjustHandler.removeAdjustment(stockAdjustId);
-	}
-	
-	@GET
-	@Path("/warehouse")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Warehouse> getWarehouseList() {
-		return stockAdjustHandler.getWarehouseList();
 	}
 }

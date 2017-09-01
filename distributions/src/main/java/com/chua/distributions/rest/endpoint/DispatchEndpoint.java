@@ -1,7 +1,6 @@
 package com.chua.distributions.rest.endpoint;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,7 +16,6 @@ import com.chua.distributions.beans.DispatchFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.Dispatch;
 import com.chua.distributions.database.entity.DispatchItem;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.DispatchHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -97,12 +95,5 @@ public class DispatchEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removeItem(@FormParam("dispatchItemId") Long dispatchItemId) {
 		return dispatchHandler.removeItem(dispatchItemId);
-	}
-	
-	@GET
-	@Path("/warehouse")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Warehouse> getWarehouseList() {
-		return dispatchHandler.getWarehouseList();
 	}
 }

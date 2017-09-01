@@ -1,7 +1,6 @@
 package com.chua.distributions.rest.endpoint;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,7 +16,6 @@ import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.PurchaseOrderHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,9 +50,9 @@ public class PurchaseOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<PurchaseOrder> getPurchaseOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("companyId") Long companyId,
-					@QueryParam("warehouse") Warehouse warehouse,
+					@QueryParam("warehouseId") Long warehouseId,
 					@QueryParam("showPaid") Boolean showPaid) {
-		return purchaseOrderHandler.getPurchaseOrderObjectList(pageNumber, companyId, warehouse, showPaid);
+		return purchaseOrderHandler.getPurchaseOrderObjectList(pageNumber, companyId, warehouseId, showPaid);
 	}
 	
 	@GET
@@ -62,8 +60,8 @@ public class PurchaseOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(@QueryParam("pageNumber") Integer pageNumber,
 					@QueryParam("companyId") Long companyId,
-					@QueryParam("warehouse") Warehouse warehouse) {
-		return purchaseOrderHandler.getPaidPurchaseOrderObjectList(pageNumber, companyId, warehouse);
+					@QueryParam("warehouseId") Long warehouseId) {
+		return purchaseOrderHandler.getPaidPurchaseOrderObjectList(pageNumber, companyId, warehouseId);
 	}
 	
 	@GET
@@ -123,12 +121,5 @@ public class PurchaseOrderEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removePurchaseOrder(@FormParam("purchaseOrderId") Long purchaseOrderId) {
 		return purchaseOrderHandler.removePurchaseOrder(purchaseOrderId);
-	}
-	
-	@GET
-	@Path("/warehouse")
-	@Produces({ MediaType.APPLICATION_JSON })
-	public List<Warehouse> getWarehouseList() {
-		return purchaseOrderHandler.getWarehouseList();
 	}
 }

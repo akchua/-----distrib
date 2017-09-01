@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.chua.distributions.database.dao.WarehouseItemDAO;
 import com.chua.distributions.database.entity.WarehouseItem;
 import com.chua.distributions.database.service.WarehouseItemService;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -29,8 +28,8 @@ public class WarehouseItemServiceImpl
 	
 	@Override
 	public ObjectList<WarehouseItem> findAllWithPagingOrderByProductName(int pageNumber, int resultsPerPage,
-			String searchKey, Warehouse warehouse) {
-		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, warehouse, new Order[] { Order.asc("prod.displayName") });
+			String searchKey, Long warehouseId) {
+		return dao.findAllWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, warehouseId, new Order[] { Order.asc("prod.displayName") });
 	}
 	
 	@Override
@@ -39,12 +38,12 @@ public class WarehouseItemServiceImpl
 	}
 	
 	@Override
-	public List<WarehouseItem> findAllByWarehouse(Warehouse warehouse) {
-		return dao.findAllByWarehouse(warehouse);
+	public List<WarehouseItem> findAllByWarehouse(Long warehouseId) {
+		return dao.findAllByWarehouse(warehouseId);
 	}
 
 	@Override
-	public WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse) {
-		return dao.findByProductAndWarehouse(productId, warehouse);
+	public WarehouseItem findByProductAndWarehouse(Long productId, Long warehouseId) {
+		return dao.findByProductAndWarehouse(productId, warehouseId);
 	}
 }

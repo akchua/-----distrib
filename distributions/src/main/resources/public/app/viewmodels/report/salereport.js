@@ -1,5 +1,5 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/userservice', 'modules/companyservice', 'modules/fileservice'],
-			function (dialog, app, ko, clientOrderService, userService, companyService, fileService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/warehouseservice', 'modules/userservice', 'modules/companyservice', 'modules/fileservice'],
+			function (dialog, app, ko, clientOrderService, warehouseService, userService, companyService, fileService) {
     var SalesReport = function() {
     	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
@@ -14,7 +14,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		from: ko.observable(),
     		to: ko.observable(),
     		
-    		warehouse: ko.observable(),
+    		warehouseId: ko.observable(),
     		clientId: ko.observable(),
     		companyId: ko.observable(),
     		
@@ -36,7 +36,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     SalesReport.prototype.activate = function() {
     	var self = this;
     	
-    	clientOrderService.getWarehouseList().done(function(warehouseList) {
+    	warehouseService.getWarehouseList().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     	

@@ -37,7 +37,6 @@ import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.enums.UserType;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
 import com.chua.distributions.rest.handler.SalesReportHandler;
@@ -201,23 +200,23 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
-		return clientOrderService.findAllAcceptedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouse);
+	public ObjectList<ClientOrder> getAcceptedClientOrderObjectList(Integer pageNumber, Long warehouseId) {
+		return clientOrderService.findAllAcceptedWithPaging(pageNumber, UserContextHolder.getItemsPerPage(), warehouseId);
 	}
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Warehouse warehouse,
+	public ObjectList<ClientOrder> getReceivedClientOrderObjectList(Integer pageNumber, Long warehouseId,
 			Long clientId) {
 		return clientOrderService.findAllReceivedWithPagingOrderByDeliveredOn(pageNumber,
-				UserContextHolder.getItemsPerPage(), warehouse, clientId);
+				UserContextHolder.getItemsPerPage(), warehouseId, clientId);
 	}
 
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Warehouse warehouse) {
+	public ObjectList<ClientOrder> getPaidClientOrderObjectList(Integer pageNumber, Long warehouseId) {
 		return clientOrderService.findAllPaidWithPagingOrderByPaidOn(pageNumber, UserContextHolder.getItemsPerPage(),
-				warehouse);
+				warehouseId);
 	}
 
 	@Override
@@ -556,12 +555,6 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 					new String[] { fileConstants.getSalesHome() + (String) result.getExtras().get("fileName") });
 		}
 		return result;
-	}
-
-	@Override
-	@CheckAuthority(minimumAuthority = 5)
-	public List<Warehouse> getWarehouseList() {
-		return Stream.of(Warehouse.values()).collect(Collectors.toList());
 	}
 
 	@Override

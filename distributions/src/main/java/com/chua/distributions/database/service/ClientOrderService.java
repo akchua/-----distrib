@@ -5,7 +5,6 @@ import java.util.List;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.prototype.ClientOrderPrototype;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -21,11 +20,11 @@ public interface ClientOrderService extends Service<ClientOrder, Long>, ClientOr
 	
 	ObjectList<ClientOrder> findAllRequestWithPagingOrderByRequestedOn(int pageNumber, int resultsPerPage, boolean showAccepted);
 	
-	ObjectList<ClientOrder> findAllPaidWithPagingOrderByPaidOn(int pageNumber, int resultsPerPage, Warehouse warehouse);
+	ObjectList<ClientOrder> findAllPaidWithPagingOrderByPaidOn(int pageNumber, int resultsPerPage, Long warehouseId);
 	
-	ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Warehouse warehouse);
+	ObjectList<ClientOrder> findAllAcceptedWithPaging(int pageNumber, int resultsPerPage, Long warehouseId);
 	
-	ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Warehouse warehouse, Long clientId);
+	ObjectList<ClientOrder> findAllReceivedWithPagingOrderByDeliveredOn(int pageNumber, int resultsPerPage, Long warehouseId, Long clientId);
 	
 	ObjectList<ClientOrder> findBySalesReportQueryWithPaging(int pageNumber, int resultsPerPage, SalesReportQueryBean salesReportQuery);
 	

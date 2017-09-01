@@ -1,8 +1,8 @@
 define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice', 'modules/clientorderservice', 'modules/userservice', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview', 'viewmodels/clientorder/transfer'],
 		function (dialog, app, ko, dispatchService, clientOrderService, userService, SaleView, UserView, Transfer) {
-    var AddOrder = function(dispatchId, warehouse) {
+    var AddOrder = function(dispatchId, warehouseId) {
     	this.dispatchId = dispatchId;
-    	this.warehouse = warehouse;
+    	this.warehouseId = warehouseId;
     	
     	this.clientOrderList = ko.observable();
     	
@@ -25,8 +25,8 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/dispatchservice',
 		self.refreshClientOrderList();
     };
     
-    AddOrder.show = function(dispatchId, warehouse) {
-    	return dialog.show(new AddOrder(dispatchId, warehouse));
+    AddOrder.show = function(dispatchId, warehouseId) {
+    	return dialog.show(new AddOrder(dispatchId, warehouseId));
     };
     
     AddOrder.prototype.refreshClientOrderList = function() {

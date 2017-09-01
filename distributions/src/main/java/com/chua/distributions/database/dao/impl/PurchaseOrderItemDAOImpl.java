@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.chua.distributions.database.dao.PurchaseOrderItemDAO;
 import com.chua.distributions.database.entity.PurchaseOrderItem;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -74,13 +73,13 @@ public class PurchaseOrderItemDAOImpl
 	}
 	
 	@Override
-	public List<PurchaseOrderItem> findAllByProductWarehouseAndStatus(Long productId, Warehouse warehouse, Status[] status) {
+	public List<PurchaseOrderItem> findAllByProductWarehouseAndStatus(Long productId, Long warehouseId, Status[] status) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("productId", productId));
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("purchase.warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("purchase.warehouse.id", warehouseId));
 		}
 		
 		if(status != null && status.length > 0) {

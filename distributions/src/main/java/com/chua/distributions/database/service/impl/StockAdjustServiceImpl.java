@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.chua.distributions.database.dao.StockAdjustDAO;
 import com.chua.distributions.database.entity.StockAdjust;
 import com.chua.distributions.database.service.StockAdjustService;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -34,7 +33,7 @@ public class StockAdjustServiceImpl
 	}
 
 	@Override
-	public List<StockAdjust> findAllByProductAndWarehouse(Long productId, Warehouse warehouse) {
-		return dao.findAllByProductAndWarehouse(productId, warehouse);
+	public List<StockAdjust> findAllByProductAndWarehouse(Long productId, Long warehouseId) {
+		return dao.findAllByProductAndWarehouse(productId, warehouseId);
 	}
 }

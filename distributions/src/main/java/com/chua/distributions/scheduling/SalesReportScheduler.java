@@ -1,7 +1,6 @@
 package com.chua.distributions.scheduling;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,10 +18,11 @@ import com.chua.distributions.constants.BusinessConstants;
 import com.chua.distributions.constants.FileConstants;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.database.service.WarehouseService;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.utility.EmailUtil;
@@ -45,6 +45,9 @@ public class SalesReportScheduler {
 	
 	@Autowired
 	private CompanyService companyService;
+	
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	@Autowired
 	private SalesReportHandler salesReportHandler;
@@ -82,7 +85,7 @@ public class SalesReportScheduler {
 		reportsIncluded.add(ClientSalesReportType.PAYMENTS);
 		
 		generateSalesReport(lastWeek.getTime(), yesterday.getTime(), companyService.findAllList(), null, 
-				Arrays.asList(Warehouse.values()), reportsIncluded);
+				warehouseService.findAllList(), reportsIncluded);
 		
 		LOG.info("### Weekly sales report complete...");
 	}
@@ -135,7 +138,7 @@ public class SalesReportScheduler {
 				salesReportQuery.setClientId((client != null) ? client.getId() : null);
 				
 				for(Warehouse warehouse : warehouses) {
-					salesReportQuery.setWarehouse(warehouse);
+					salesReportQuery.setWarehouseId((warehouse != null) ? warehouse.getId() : null);
 					
 					for(ClientSalesReportType clientSalesReportType : clientSalesReportTypes) {
 						setReportType(salesReportQuery, clientSalesReportType);

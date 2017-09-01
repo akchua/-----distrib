@@ -11,7 +11,6 @@ import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.database.dao.PurchaseOrderDAO;
 import com.chua.distributions.database.entity.PurchaseOrder;
 import com.chua.distributions.enums.Status;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -25,13 +24,13 @@ public class PurchaseOrderDAOImpl
 		implements PurchaseOrderDAO {
 
 	@Override
-	public ObjectList<PurchaseOrder> findAllWithPaging(int pageNumber, int resultsPerPage, Long companyId, Warehouse warehouse, boolean showPaid) {
-		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouse, showPaid, null);
+	public ObjectList<PurchaseOrder> findAllWithPaging(int pageNumber, int resultsPerPage, Long companyId, Long warehouseId, boolean showPaid) {
+		return findAllWithPagingAndOrder(pageNumber, resultsPerPage, companyId, warehouseId, showPaid, null);
 	}
 
 	@Override
 	public ObjectList<PurchaseOrder> findAllWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId,
-			Warehouse warehouse, boolean showPaid, Order[] orders) {
+			Long warehouseId, boolean showPaid, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		
@@ -39,8 +38,8 @@ public class PurchaseOrderDAOImpl
 			conjunction.add(Restrictions.eq("company.id", companyId));
 		}
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		if(!showPaid) {
@@ -52,7 +51,7 @@ public class PurchaseOrderDAOImpl
 
 	@Override
 	public ObjectList<PurchaseOrder> findAllPaidWithPagingAndOrder(int pageNumber, int resultsPerPage, Long companyId,
-			Warehouse warehouse, Order[] orders) {
+			Long warehouseId, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("status", Status.PAID));
@@ -61,15 +60,15 @@ public class PurchaseOrderDAOImpl
 			conjunction.add(Restrictions.eq("company.id", companyId));
 		}
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, conjunction);
 	}
 
 	@Override
-	public List<PurchaseOrder> findAllByCompanyWarehouseAndStatus(Long companyId, Warehouse warehouse, Status[] status) {
+	public List<PurchaseOrder> findAllByCompanyWarehouseAndStatus(Long companyId, Long warehouseId, Status[] status) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 
@@ -77,8 +76,8 @@ public class PurchaseOrderDAOImpl
 			conjunction.add(Restrictions.eq("company.id", companyId));
 		}
 		
-		if(warehouse != null) {
-			conjunction.add(Restrictions.eq("warehouse", warehouse));
+		if(warehouseId != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", warehouseId));
 		}
 		
 		if(status != null && status.length > 0) {
@@ -107,8 +106,8 @@ public class PurchaseOrderDAOImpl
 			conjunction.add(Restrictions.between("updatedOn", purchaseReportQuery.getFrom(), purchaseReportQuery.getTo()));
 		}
 		
-		if(purchaseReportQuery.getWarehouse() != null) {
-			conjunction.add(Restrictions.eq("warehouse", purchaseReportQuery.getWarehouse()));
+		if(purchaseReportQuery.getWarehouseId() != null) {
+			conjunction.add(Restrictions.eq("warehouse.id", purchaseReportQuery.getWarehouseId()));
 		}
 		
 		if(purchaseReportQuery.getCompanyId() != null) {

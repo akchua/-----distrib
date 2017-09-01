@@ -3,7 +3,6 @@ package com.chua.distributions.database.prototype;
 import java.util.List;
 
 import com.chua.distributions.database.entity.WarehouseItem;
-import com.chua.distributions.enums.Warehouse;
 
 /**
  * @author  Adrian Jasper K. Chua
@@ -14,7 +13,7 @@ public interface WarehouseItemPrototype extends Prototype<WarehouseItem, Long> {
 
 	List<WarehouseItem> findAllByProduct(Long productId);
 	
-	List<WarehouseItem> findAllByWarehouse(Warehouse warehouse);
+	List<WarehouseItem> findAllByWarehouse(Long warehouseId);
 	
-	WarehouseItem findByProductAndWarehouse(Long productId, Warehouse warehouse);
+	WarehouseItem findByProductAndWarehouse(Long productId, Long warehouseId);
 }

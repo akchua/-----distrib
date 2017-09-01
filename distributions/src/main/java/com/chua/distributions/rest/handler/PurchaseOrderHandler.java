@@ -1,12 +1,9 @@
 package com.chua.distributions.rest.handler;
 
-import java.util.List;
-
 import com.chua.distributions.beans.PurchaseOrderFormBean;
 import com.chua.distributions.beans.PurchaseReportQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.database.entity.PurchaseOrder;
-import com.chua.distributions.enums.Warehouse;
 import com.chua.distributions.objects.ObjectList;
 
 /**
@@ -26,9 +23,9 @@ public interface PurchaseOrderHandler {
 	 */
 	PurchaseOrder getTransferInstance(Long sourceId);
 	
-	ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse, Boolean showPaid);
+	ObjectList<PurchaseOrder> getPurchaseOrderObjectList(Integer pageNumber, Long companyId, Long warehouseId, Boolean showPaid);
 	
-	ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Warehouse warehouse);
+	ObjectList<PurchaseOrder> getPaidPurchaseOrderObjectList(Integer pageNumber, Long companyId, Long warehouseId);
 	
 	ObjectList<PurchaseOrder> getPurchaseOrderObjectListByPurchaseReportQuery(Integer pageNumber, PurchaseReportQueryBean purchaseReportQuery);
 	
@@ -45,6 +42,4 @@ public interface PurchaseOrderHandler {
 	ResultBean payPurchaseOrder(Long purchaseOrderId);
 	
 	ResultBean removePurchaseOrder(Long purchaseOrderId);
-	
-	List<Warehouse> getWarehouseList();
 }

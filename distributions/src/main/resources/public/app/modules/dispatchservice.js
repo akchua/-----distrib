@@ -88,12 +88,6 @@ define(['jquery'], function ($) {
     				dispatchItemId: dispatchItemId
     			}
     		});
-    	},
-    	
-    	getWarehouseList: function() {
-    		return $.ajax({
-    			url: '/services/dispatch/warehouse'
-    		});
     	}
 	};
 });
