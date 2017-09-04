@@ -1,15 +1,12 @@
 package com.chua.distributions.beans;
 
-import com.chua.distributions.deserializer.json.SalesReportQueryDeserializer;
 import com.chua.distributions.enums.ClientSalesReportType;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * @author  Adrian Jasper K. Chua
  * @version 1.0
  * @since   Dec 30, 2016
  */
-@JsonDeserialize(using = SalesReportQueryDeserializer.class)
 public class SalesReportQueryBean extends ReportQueryBean {
 
 	private Long warehouseId;

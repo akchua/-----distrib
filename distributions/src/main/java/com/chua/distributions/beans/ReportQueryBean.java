@@ -3,6 +3,9 @@ package com.chua.distributions.beans;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.chua.distributions.deserializer.json.DateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * @author	Adrian Jasper K. Chua
  * @version	1.0
@@ -10,8 +13,10 @@ import java.util.Date;
  */
 public class ReportQueryBean {
 
+	@JsonDeserialize(using = DateDeserializer.class)
 	private Date from;
 	
+	@JsonDeserialize(using = DateDeserializer.class)
 	private Date to;
 	
 	public Date getFrom() {

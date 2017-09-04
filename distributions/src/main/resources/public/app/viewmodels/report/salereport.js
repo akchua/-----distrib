@@ -36,7 +36,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     SalesReport.prototype.activate = function() {
     	var self = this;
     	
-    	warehouseService.getWarehouseList().done(function(warehouseList) {
+    	warehouseService.getWarehouseListByName().done(function(warehouseList) {
 			self.warehouseList(warehouseList);
 		});
     	

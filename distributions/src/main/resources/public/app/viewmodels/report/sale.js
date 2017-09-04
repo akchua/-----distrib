@@ -11,6 +11,8 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     		companyId: ko.observable(),
     		warehouseId: ko.observable(),
     		
+    		clientSalesReportType: ko.observable("STATUS_BASED"),
+    		
     		includePaid: ko.observable(true),
     		includeDelivered: ko.observable(true),
     		includeDispatched: ko.observable(false),
