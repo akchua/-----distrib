@@ -31,7 +31,9 @@ public class PerCategoryPriceListTemplate implements Template {
 	@Override
 	public String merge(VelocityEngine velocityEngine) {
 		for(int i = 0; i < productsInCategory.size(); i++) {
-			final ProductPriceTemplate productPriceTemplate = new ProductPriceTemplate(Long.valueOf(i + 1), productsInCategory.get(i));
+			final ProductPriceTemplate productPriceTemplate = new ProductPriceTemplate(Long.valueOf(i + 1), 
+																						productsInCategory.get(i),
+																						(i > 0) ? productsInCategory.get(i - 1) : null);
 			productPrices.add(productPriceTemplate.merge(velocityEngine));
 		}
 		

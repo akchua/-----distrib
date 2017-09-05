@@ -19,10 +19,13 @@ public class ProductPriceTemplate implements Template {
 	private Long numbering;
 	
 	private Product product;
+	
+	private Product previousProduct;
 
-	public ProductPriceTemplate(Long numbering, Product product) {
+	public ProductPriceTemplate(Long numbering, Product product, Product previousProduct) {
 		this.numbering = numbering;
 		this.product = product;
+		this.previousProduct = previousProduct;
 	}
 	
 	@Override
@@ -38,10 +41,33 @@ public class ProductPriceTemplate implements Template {
 	}
 	
 	public String getProductDisplayName() {
-		return String.format("%-55s", product.getDisplayName());
+		final String productDisplayName;
+		
+		if(previousProduct != null) {
+			String temp = "";
+			String[] productTokens = product.getDisplayName().split(" ");
+			String[] previousProductTokens = previousProduct.getDisplayName().split(" ");
+			
+			int i = 0;
+			while(i < productTokens.length && i < previousProductTokens.length &&
+					productTokens[i].equals(previousProductTokens[i])) {
+				for(int j = 0; j <= productTokens[i].length(); j++) temp += " ";
+				i++;
+			}
+			
+			for(int k = i; k < productTokens.length; k++) {
+				temp += productTokens[k] + " ";
+			}
+			
+			productDisplayName = String.format("%-55s", temp);
+		} else {
+			productDisplayName = String.format("%-55s", product.getDisplayName());
+		}
+		
+		return productDisplayName;
 	}
 	
 	public String getFormattedPackageSellingPrice() {
-		return String.format("%15s", product.getFormattedPackageNetSellingPrice());
+		return String.format("%10s", product.getFormattedPackageNetSellingPrice());
 	}
 }
