@@ -1,5 +1,6 @@
 ﻿requirejs.config({
-    paths: {
+	waitSeconds: 200,
+	paths: {
         'text': '../lib/require/text',
         'durandal':'../lib/durandal/js',
         'plugins' : '../lib/durandal/js/plugins',
