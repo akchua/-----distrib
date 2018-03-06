@@ -20,9 +20,9 @@
 				</div>
 				
 				<div class="control-group col-xs-6">
-					<label class="control-label" for="inputWarehouse">Included Warehouses:</label>
+					<label class="control-label" for="inputClient">Included Clients:</label>
 					<div class="controls">
-						<select data-bind="options: warehouseList, optionsValue: 'id', optionsText: function(warehouse) { return ko.unwrap(warehouse.name) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouseId" class="form-control" id="inputWarehouse"></select>
+						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputClient"></select>
 					</div>
 				</div>
 			</div>
@@ -30,17 +30,24 @@
 			<br>
 			
 			<div class="row">
-				<div class="control-group col-xs-6">
-					<label class="control-label" for="inputClient">Included Clients:</label>
+				<div class="control-group col-xs-4">
+					<label class="control-label" for="inputWarehouse">Included Warehouses:</label>
 					<div class="controls">
-						<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId" class="form-control" id="inputClient"></select>
+						<select data-bind="options: warehouseList, optionsValue: 'id', optionsText: function(warehouse) { return ko.unwrap(warehouse.name) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- All Warehouse --', value: salesReportQuery.warehouseId" class="form-control" id="inputWarehouse"></select>
 					</div>
 				</div>
 				
-				<div class="control-group col-xs-6">
+				<div class="control-group col-xs-4">
 					<label class="control-label" for="inputCompany">Included Companies:</label>
 					<div class="controls">
 						<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Companies --', value: salesReportQuery.companyId" class="form-control" id="inputCompany"></select>
+					</div>
+				</div>
+				
+				<div class="control-group col-xs-4">
+					<label class="control-label" for="inputArea">Included Areas:</label>
+					<div class="controls">
+						<select data-bind="options: areaList, optionsValue: 'name', optionsText: 'displayName', optionsCaption: '-- All Areas --', value: salesReportQuery.area" class="form-control" id="inputArea"></select>
 					</div>
 				</div>
 			</div>	

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
@@ -350,6 +351,52 @@ public class ProductHandlerImpl implements ProductHandler {
 			}
 		} else {
 			result = new ResultBean(Boolean.FALSE, Html.line(Html.text(Color.RED, "Failed") + " to load product image. Please refresh the page."));
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultBean massPriceChange(MassPriceChangeBean massPriceChangeBean) {
+		final ResultBean result;
+		
+		if(massPriceChangeBean.getPercentGrossIncrease() != 0 || massPriceChangeBean.getPercentSellingIncrease() != 0) {
+			final List<Product> products = productService.findAllByMassPriceChangeBean(massPriceChangeBean);
+			
+			if(!products.isEmpty()) {
+				String adjustedProducts = "";
+				String invalidProducts = "";
+				result = new ResultBean();
+				result.setSuccess(Boolean.TRUE);
+				
+				for(Product product : products) {
+					product.setGrossPrice(product.getGrossPrice() * (1 + (massPriceChangeBean.getPercentGrossIncrease() / 100)));
+					Float tempSelling = product.getSellingPrice() * (1 + (massPriceChangeBean.getPercentSellingIncrease() / 100));
+					if(tempSelling <= product.getNetPrice()) {
+						result.setSuccess(Boolean.FALSE);
+						if(invalidProducts.isEmpty()) invalidProducts += product.getDisplayName();
+						else invalidProducts += ", " + product.getDisplayName();
+					} else {
+						product.setSellingPrice(tempSelling);
+						product.setPercentProfit((product.getSellingPrice() - product.getNetPrice()) / product.getNetPrice() * 100);
+						if(adjustedProducts.isEmpty()) adjustedProducts += product.getDisplayName();
+						else adjustedProducts += ", " + product.getDisplayName();
+					}
+				}
+				
+				if(result.getSuccess()) {
+					productService.batchUpdate(products);
+					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " adjusted prices of the following products : ")
+									+ Html.line(adjustedProducts));
+				} else {
+					result.setMessage(Html.line(Html.text(Color.RED, "Invalid price change.") + " The following product/s will have a selling price lower than or equal to the net price : ")
+									+ Html.line(invalidProducts));
+				}
+			} else {
+				result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "No product meets the specification."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "No percentage inputted."));
 		}
 		
 		return result;

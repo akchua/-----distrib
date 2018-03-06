@@ -4,6 +4,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	this.warehouseList = ko.observable();
     	this.clientList = ko.observable();
     	this.companyList = ko.observable();
+    	this.areaList = ko.observable();
     	this.clientSalesReportTypes = ko.observable();
     	
     	this.showInclude = ko.observable(true);
@@ -17,6 +18,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		warehouseId: ko.observable(),
     		clientId: ko.observable(),
     		companyId: ko.observable(),
+    		area: ko.observable(),
     		
     		clientSalesReportType: ko.observable('STATUS_BASED'),  //HARDCODE FOR NOW
     		
@@ -50,6 +52,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
+    	});
+    	
+    	userService.getAreaList().done(function(areaList) {
+    		self.areaList(areaList);
     	});
     	
     	self.salesReportQuery.clientSalesReportType.subscribe(function(salesReportType) {

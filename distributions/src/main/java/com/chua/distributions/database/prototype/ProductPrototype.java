@@ -1,5 +1,8 @@
 package com.chua.distributions.database.prototype;
 
+import java.util.List;
+
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.database.entity.Product;
 
 /**
@@ -10,4 +13,6 @@ import com.chua.distributions.database.entity.Product;
 public interface ProductPrototype extends Prototype<Product, Long> {
 
 	Product findByDisplayName(String displayName);
+	
+	List<Product> findAllByMassPriceChangeBean(MassPriceChangeBean massPriceChangeBean);
 }

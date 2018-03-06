@@ -5,11 +5,13 @@ import java.util.List;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
@@ -142,12 +144,20 @@ public class ClientOrderDAOImpl
 	@Override
 	public ObjectList<ClientOrder> findBySalesReportQueryWithPagingAndOrder(int pageNumber, int resultsPerPage,
 			SalesReportQueryBean salesReportQuery, Order[] orders) {
-		return findAllByCriterion(pageNumber, resultsPerPage, null, null, null, orders, generateConjunction(salesReportQuery));
+		String[] associatedPaths = { "client" };
+		String[] aliasNames = { "cli" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterion(pageNumber, resultsPerPage, associatedPaths, aliasNames, joinTypes, orders, generateConjunction(salesReportQuery));
 	}
 	
 	@Override
 	public List<ClientOrder> findAllBySalesReportQuery(SalesReportQueryBean salesReportQuery) {
-		return findAllByCriterionList(null, null, null, new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
+		String[] associatedPaths = { "client" };
+		String[] aliasNames = { "cli" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
 	}
 	
 	private Junction generateConjunction(SalesReportQueryBean salesReportQuery) {
@@ -175,11 +185,20 @@ public class ClientOrderDAOImpl
 		}
 		
 		if(salesReportQuery.getClientId() != null) {
-			conjunction.add(Restrictions.eq("client.id", salesReportQuery.getClientId()));
+			conjunction.add(Restrictions.eq("cli.id", salesReportQuery.getClientId()));
 		}
 		
 		if(salesReportQuery.getCompanyId() != null) {
 			conjunction.add(Restrictions.eq("company.id", salesReportQuery.getCompanyId()));
+		}
+		
+		if(salesReportQuery.getArea() != null) {
+			final Junction disjunction = Restrictions.disjunction();
+			disjunction.add(Restrictions.eq("cli.businessArea", salesReportQuery.getArea()));
+			if(salesReportQuery.getArea().equals(Area.SUBIC)) {
+				disjunction.add(Restrictions.eq("cli.businessArea", Area.BATAAN));
+			}
+			conjunction.add(disjunction);
 		}
 		
 		if(salesReportQuery.getClientSalesReportType().equals(ClientSalesReportType.STATUS_BASED)) {

@@ -1,5 +1,6 @@
 package com.chua.distributions.beans;
 
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.ClientSalesReportType;
 
 /**
@@ -14,6 +15,8 @@ public class SalesReportQueryBean extends ReportQueryBean {
 	private Long clientId;
 	
 	private Long companyId;
+	
+	private Area area;
 	
 	private ClientSalesReportType clientSalesReportType;
 	
@@ -57,6 +60,14 @@ public class SalesReportQueryBean extends ReportQueryBean {
 
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
+	}
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
 	}
 
 	public ClientSalesReportType getClientSalesReportType() {

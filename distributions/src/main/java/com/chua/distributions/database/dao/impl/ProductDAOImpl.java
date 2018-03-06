@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.database.dao.ProductDAO;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.objects.ObjectList;
@@ -89,5 +90,33 @@ public class ProductDAOImpl
 		JoinType[] joinTypes = { JoinType.INNER_JOIN };
 		
 		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, orders, conjunction);
+	}
+
+	@Override
+	public List<Product> findAllByMassPriceChangeBean(MassPriceChangeBean massPriceChangeBean) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(massPriceChangeBean.getCompanyId() != null) {
+			conjunction.add(Restrictions.eq("company.id", massPriceChangeBean.getCompanyId()));
+		}
+		
+		if(StringUtils.isNotBlank(massPriceChangeBean.getIncludeString())) {
+			String[] temp = massPriceChangeBean.getIncludeString().replaceAll("^[,\\s]+", "").split("[,\\s]+");
+			final Junction disjunction = Restrictions.disjunction();
+			for(String includeWord : temp) {
+				disjunction.add(Restrictions.ilike("displayName", includeWord, MatchMode.ANYWHERE));
+			}
+			conjunction.add(disjunction);
+		}
+		
+		if(StringUtils.isNotBlank(massPriceChangeBean.getExcludeString())) {
+			String[] temp = massPriceChangeBean.getExcludeString().replaceAll("^[,\\s]+", "").split("[,\\s]+");
+			for(String excludeWord : temp) {
+				conjunction.add(Restrictions.not(Restrictions.ilike("displayName", excludeWord, MatchMode.ANYWHERE)));
+			}
+		}
+		
+		return findAllByCriterionList(null, null, null, null, conjunction);
 	}
 }

@@ -139,6 +139,16 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	massPriceChange: function(massPriceChangeData) {
+    		return $.ajax({
+    			url: '/services/product/masspricechange',
+    			method: 'POST',
+    			data: {
+    				massPriceChangeData: massPriceChangeData
+    			}
+    		});
+    	},
+    	
     	generatePriceList: function(companyId, sendEmail) {
     		return $.ajax({
     			url: '/services/product/generatepricelist',

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
@@ -52,6 +53,8 @@ public interface ProductHandler {
 	ResultBean removeProduct(Long productId);
 	
 	ResultBean removeProductImage(Long productImageId);
+	
+	ResultBean massPriceChange(MassPriceChangeBean massPriceChangeBean);
 	
 	/**
 	 * Method used to get the final base price of a single piece of the given product based on the price settings of the given user.

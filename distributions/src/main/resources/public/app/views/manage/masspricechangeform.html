@@ -1,0 +1,76 @@
+<div class="modal-content">
+  	<form>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" data-bind="click: cancel">&times;</button>
+			<h3 data-bind="text: title" align="center"></h3>
+		</div>
+	  
+		<div class="modal-body">
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Filter Products</h3>
+					</div>
+					
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="company">Include by Company</label>
+							<div class="controls">
+								<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: massPriceChangeModel.companyId" class="form-control select-lg autofocus" id="company"></select>
+								<p class="help-block">Select a company to include only its products.</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="includeString">Product name contains the word/s : </label>
+							<div class="controls">
+								<input data-bind="textInput: massPriceChangeModel.includeString" type="text" id="includeString" name="includeString" placeholder="" class="form-control input-lg">
+								<p class="help-block">Separate the words by comma or white spaces <span class="text-muted">(Optional)</span></p>
+							</div>
+						</div>
+					
+						<div class="control-group">
+							<label class="control-label" for="excludeString">Product name does not contain the word/s</label>
+							<div class="controls">
+								<input data-bind="textInput: massPriceChangeModel.excludeString" type="text" id="excludeString" name="excludeString" placeholder="" class="form-control input-lg">
+								<p class="help-block">Separate the words by comma or white spaces <span class="text-muted">(Optional)</span></p>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">Pricing Adjustment</h3>
+					</div>
+						
+					<div class="panel-body">
+						<div class="control-group">
+							<label class="control-label" for="percentGrossIncrease">Gross Price Percentage Increase</label>
+							<div class="controls">
+								<input data-bind="textInput: massPriceChangeModel.percentGrossIncrease" type="number" step="any" id="percentGrossIncrease" name="percentGrossIncrease" placeholder="" class="form-control input-lg">
+								<p class="help-block">Percentage of price increase of the gross price of the products. Negative value to decrease.</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="percentSellingIncrease">Selling Price Percentage Increase</label>
+							<div class="controls">
+								<input data-bind="textInput: massPriceChangeModel.percentSellingIncrease" type="number" step="any" id="percentSellingIncrease" name="percentSellingIncrease" placeholder="" class="form-control input-lg">
+								<p class="help-block">Percentage of price increase of the selling price of the products. Negative value to decrease.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+  
+		<div class="modal-footer">
+			<button class="btn btn-primary" type="submit" data-bind="click: apply">Apply</button>
+	        <button class="btn btn-warning" data-bind="click: cancel">Cancel</button>
+		</div>
+  	</form>
+</div>

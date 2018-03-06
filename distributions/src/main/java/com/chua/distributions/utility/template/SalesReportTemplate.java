@@ -14,6 +14,7 @@ import com.chua.distributions.database.entity.ClientOrder;
 import com.chua.distributions.database.entity.Company;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.entity.Warehouse;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.utility.format.CurrencyFormatter;
 import com.chua.distributions.utility.format.DateFormatter;
 
@@ -32,6 +33,8 @@ public class SalesReportTemplate implements Template {
 	
 	private Warehouse warehouse;
 	
+	private Area area;
+	
 	private List<ClientOrder> clientOrders;
 	
 	private List<String> summarizedClientOrders;
@@ -41,6 +44,7 @@ public class SalesReportTemplate implements Template {
 		this.client = client;
 		this.company = company;
 		this.warehouse = warehouse;
+		this.area = salesReportQuery.getArea();
 		this.clientOrders = clientOrders;
 		this.summarizedClientOrders = new ArrayList<String>();
 	}
@@ -93,6 +97,16 @@ public class SalesReportTemplate implements Template {
 			company = "ALL COMPANIES";
 		}
 		return company;
+	}
+	
+	public String getArea() {
+		final String area;
+		if(this.area != null) {
+			area = this.area.getDisplayName();
+		} else {
+			area = "ALL AREAS";
+		}
+		return area;
 	}
 	
 	public String getDate() {

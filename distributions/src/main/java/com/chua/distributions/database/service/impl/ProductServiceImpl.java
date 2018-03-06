@@ -6,6 +6,7 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.database.dao.ProductDAO;
 import com.chua.distributions.database.entity.Product;
 import com.chua.distributions.database.service.ProductService;
@@ -54,5 +55,10 @@ public class ProductServiceImpl
 	@Override
 	public Product findByDisplayName(String displayName) {
 		return dao.findByDisplayName(displayName);
+	}
+
+	@Override
+	public List<Product> findAllByMassPriceChangeBean(MassPriceChangeBean massPriceChangeBean) {
+		return dao.findAllByMassPriceChangeBean(massPriceChangeBean);
 	}
 }

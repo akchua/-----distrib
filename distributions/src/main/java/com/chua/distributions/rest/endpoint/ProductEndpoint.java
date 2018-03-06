@@ -21,6 +21,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.chua.distributions.beans.MassPriceChangeBean;
 import com.chua.distributions.beans.PartialProductBean;
 import com.chua.distributions.beans.PartialProductImageBean;
 import com.chua.distributions.beans.ProductFormBean;
@@ -161,6 +162,13 @@ public class ProductEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean removeProductImage(@FormParam("productImageId") Long productImageId) {
 		return productHandler.removeProductImage(productImageId);
+	}
+	
+	@POST
+	@Path("/masspricechange")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean massPriceChange(@FormParam("massPriceChangeData") String massPriceChangeData) throws IOException {
+		return productHandler.massPriceChange(new ObjectMapper().readValue(massPriceChangeData, MassPriceChangeBean.class));
 	}
 	
 	@POST

@@ -72,6 +72,7 @@ public class SalesReportHandlerImpl implements SalesReportHandler {
 			if(company != null) fileName += company.getShortName() + "_";
 			fileName += salesReportQuery.getClientSalesReportType().getDisplayName() + "_";
 			if(warehouse != null) fileName += warehouse.getName() + "_";
+			if(salesReportQuery.getArea() != null) fileName += salesReportQuery.getArea().getDisplayName() + "_";
 			
 			fileName += DateFormatter.shortFormat(salesReportQuery.getFrom()) + "_to_";
 			fileName += DateFormatter.shortFormat(salesReportQuery.getTo());
