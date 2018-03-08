@@ -72,8 +72,7 @@ public class SalesReportScheduler {
 	 * includes: a report containing delivered orders during the week
 	 * 			 a report containing paid orders during the week
 	 */
-	//@Scheduled(cron = "0 0 1 * * MON")
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0 0 1 * * MON")
 	public void weeklyReport() {
 		LOG.info("### Creating weekly sales report");
 		
