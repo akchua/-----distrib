@@ -2,8 +2,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/userservice', 'vi
 		function (router, app, ko, userService, UserForm, ClientSettings, ClientEdit, UserView) {
     var Client = function() {
     	this.clientList = ko.observable();
+    	this.areaList = ko.observable();
     	
     	this.searchKey = ko.observable();
+    	this.area = ko.observable();
     	
     	this.itemsPerPage = ko.observable(app.user.itemsPerPage);
 		this.totalItems = ko.observable();
@@ -25,13 +27,17 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/userservice', 'vi
 			}
 		});
 		
+		userService.getAreaList().done(function(areaList) {
+    		self.areaList(areaList);
+    	});
+		
 		self.refreshClientList();
     };
     
     Client.prototype.refreshClientList = function() {
     	var self = this;
     	
-    	userService.getClientList(self.currentPage(), self.searchKey()).done(function(data) {
+    	userService.getClientList(self.currentPage(), self.searchKey(), self.area()).done(function(data) {
     		self.clientList(data.list);
     		self.totalItems(data.total);
     	});

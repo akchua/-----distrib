@@ -116,7 +116,7 @@ public class StockAdjustHandlerImpl implements StockAdjustHandler {
 						&& stockAdjustService.delete(stockAdjust));
 				if(result.getSuccess()) {
 					result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " cancelled adjustment of " + stockAdjust.getFormattedQuantity() 
-								+ " packages of " + Html.text(Color.BLUE, product.getDisplayName()) + " at " + Html.text(Color.BLUE, stockAdjust.getWarehouse().getDisplayName()) + "."));
+								+ " packages of " + Html.text(Color.BLUE, product.getDisplayName()) + " at " + Html.text(Color.BLUE, stockAdjust.getWarehouse().getName()) + "."));
 				} else {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}

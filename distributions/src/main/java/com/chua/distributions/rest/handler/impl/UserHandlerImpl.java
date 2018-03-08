@@ -62,8 +62,8 @@ public class UserHandlerImpl implements UserHandler {
 	
 	@Override
 	@CheckAuthority(minimumAuthority = 5)
-	public ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey) {
-		return userService.findAllClientsWithPagingOrderByBusinessName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey);
+	public ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey, Area area) {
+		return userService.findAllClientsWithPagingOrderByBusinessName(pageNumber, UserContextHolder.getItemsPerPage(), searchKey, area);
 	}
 	
 	@Override

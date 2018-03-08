@@ -25,7 +25,7 @@ public interface UserHandler {
 	
 	ObjectList<User> getUserObjectList(Integer pageNumber, String searchKey);
 	
-	ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey);
+	ObjectList<User> getClientObjectList(Integer pageNumber, String searchKey, Area area);
 	
 	UserRetrieveBean retrieveUser(String username, String emailAddress);
 	

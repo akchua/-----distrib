@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.chua.distributions.database.dao.UserDAO;
 import com.chua.distributions.database.entity.User;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
 import com.chua.distributions.objects.ObjectList;
 
@@ -49,10 +50,14 @@ public class UserDAOImpl
 	
 	@Override
 	public ObjectList<User> findAllClientsWithPagingAndOrder(int pageNumber, int resultsPerPage, String searchKey,
-			Order[] orders) {
+			Area area, Order[] orders) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
 		conjunction.add(Restrictions.eq("userType", UserType.CLIENT));
+		
+		if(area != null) {
+			conjunction.add(Restrictions.eq("businessArea", area));
+		}
 		
 		if(StringUtils.isNotBlank(searchKey))
 		{

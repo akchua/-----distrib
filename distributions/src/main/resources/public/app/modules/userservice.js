@@ -19,12 +19,13 @@ define(['jquery'], function ($) {
 			});
 		},
 		
-		getClientList: function(currentPage, searchKey) {
+		getClientList: function(currentPage, searchKey, area) {
 			return $.ajax({
 				url: '/services/user/clientlist',
 				data: {
 					pageNumber: currentPage - 1,
-					searchKey: searchKey
+					searchKey: searchKey,
+					area: area
 				}
 			});
 		},

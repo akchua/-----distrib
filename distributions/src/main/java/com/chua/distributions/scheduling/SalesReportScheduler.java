@@ -1,6 +1,7 @@
 package com.chua.distributions.scheduling;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.chua.distributions.database.entity.Warehouse;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
 import com.chua.distributions.database.service.WarehouseService;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.rest.handler.SalesReportHandler;
 import com.chua.distributions.rest.handler.UserHandler;
@@ -70,7 +72,8 @@ public class SalesReportScheduler {
 	 * includes: a report containing delivered orders during the week
 	 * 			 a report containing paid orders during the week
 	 */
-	@Scheduled(cron = "0 0 1 * * MON")
+	//@Scheduled(cron = "0 0 1 * * MON")
+	@Scheduled(cron = "0 * * * * ?")
 	public void weeklyReport() {
 		LOG.info("### Creating weekly sales report");
 		
@@ -84,7 +87,7 @@ public class SalesReportScheduler {
 		reportsIncluded.add(ClientSalesReportType.DELIVERY);
 		reportsIncluded.add(ClientSalesReportType.PAYMENTS);
 		
-		generateSalesReport(lastWeek.getTime(), yesterday.getTime(), companyService.findAllList(), null, 
+		generateSalesReport(lastWeek.getTime(), yesterday.getTime(), Arrays.asList(Area.values()), companyService.findAllList(), null, 
 				warehouseService.findAllList(), reportsIncluded);
 		
 		LOG.info("### Weekly sales report complete...");
@@ -109,13 +112,14 @@ public class SalesReportScheduler {
 		List<ClientSalesReportType> reportsIncluded = new ArrayList<ClientSalesReportType>();
 		reportsIncluded.add(ClientSalesReportType.DELIVERY);
 		
-		generateSalesReport(firstDayOfLastMonth.getTime(), yesterday.getTime(), companyService.findAllList(), userService.findAllClients(), 
+		generateSalesReport(firstDayOfLastMonth.getTime(), yesterday.getTime(), Arrays.asList((Area) null), companyService.findAllList(), userService.findAllClients(), 
 				null, reportsIncluded);
 		
 		LOG.info("### Monthly sales report complete...");
 	}
 	
-	public void generateSalesReport(Date from, Date to, List<Company> companies, List<User> clients, 
+	public void generateSalesReport(Date from, Date to, 
+			List<Area> areas, List<Company> companies, List<User> clients, 
 			List<Warehouse> warehouses, List<ClientSalesReportType> clientSalesReportTypes) {
 		final SalesReportQueryBean salesReportQuery = new SalesReportQueryBean();
 		
@@ -132,43 +136,45 @@ public class SalesReportScheduler {
 		for(Company company : companies) {
 			salesReportQuery.setCompanyId((company != null) ? company.getId() : null);
 			
-			final List<String> filePaths = new ArrayList<String>();
+			final List<String> attachments = new ArrayList<String>();
 			
-			for(User client: clients) {
-				salesReportQuery.setClientId((client != null) ? client.getId() : null);
+			for(Area area : areas) {
+				salesReportQuery.setArea((area != null) ? area : null);
 				
-				for(Warehouse warehouse : warehouses) {
-					salesReportQuery.setWarehouseId((warehouse != null) ? warehouse.getId() : null);
+				final List<String> filePaths = new ArrayList<String>();
+				
+				for(User client : clients) {
+					salesReportQuery.setClientId((client != null) ? client.getId() : null);
 					
-					for(ClientSalesReportType clientSalesReportType : clientSalesReportTypes) {
-						setReportType(salesReportQuery, clientSalesReportType);
+					for(Warehouse warehouse : warehouses) {
+						salesReportQuery.setWarehouseId((warehouse != null) ? warehouse.getId() : null);
 						
-						String fileName= "";
-						if(client != null) fileName += client.getFormattedName() + "_";
-						if(warehouse != null) fileName += warehouse.getDisplayName() + "_";
-						fileName += clientSalesReportType.getDisplayName() + "_Report.pdf";
-						
-						final ResultBean result = salesReportHandler.generateReport(salesReportQuery, fileName);
-						if(result.getSuccess()) {
-							filePaths.add(fileConstants.getSalesHome() + (String) result.getExtras().get("fileName"));
-						} else {
-							LOG.error(fileName + " : " + result.getMessage());
+						for(ClientSalesReportType clientSalesReportType : clientSalesReportTypes) {
+							setReportType(salesReportQuery, clientSalesReportType);
+							
+							String fileName= "";
+							if(client != null) fileName += client.getFormattedName() + "_";
+							if(warehouse != null) fileName += warehouse.getName() + "_";
+							if(area != null) fileName += area.getDisplayName() + "_";
+							fileName += clientSalesReportType.getDisplayName() + "_Report.pdf";
+							
+							final ResultBean result = salesReportHandler.generateReport(salesReportQuery, fileName);
+							if(result.getSuccess()) {
+								filePaths.add(fileConstants.getSalesHome() + (String) result.getExtras().get("fileName"));
+							} else {
+								LOG.error(fileName + " : " + result.getMessage());
+							}
 						}
 					}
 				}
-			}
-			
-			final List<String> attachments;
-			
-			if(filePaths.size() > 3) {
-				attachments = new ArrayList<String>();
 				
-				final String zipFileName = fileConstants.getSalesHome() + company.getShortName() + "_Sales_Report" + ".zip";
-				FileZipUtil.zipFile(filePaths, zipFileName);
-				
-				attachments.add(zipFileName);
-			} else {
-				attachments = filePaths;
+				if(filePaths.size() > 3) {
+					final String zipFileName = fileConstants.getSalesHome() + company.getShortName() + "_Sales_Report" + ".zip";
+					FileZipUtil.zipFile(filePaths, zipFileName);
+					attachments.add(zipFileName);
+				} else {
+					attachments.addAll(filePaths);
+				}
 			}
 			
 			String message = "Report for " + company.getName() + "\n" +

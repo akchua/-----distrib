@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.chua.distributions.database.dao.UserDAO;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
 import com.chua.distributions.objects.ObjectList;
 
@@ -53,8 +54,8 @@ public class UserServiceImpl
 	}
 
 	@Override
-	public ObjectList<User> findAllClientsWithPagingOrderByBusinessName(int pageNumber, int resultsPerPage, String searchKey) {
-		return dao.findAllClientsWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, new Order[] { Order.asc("businessName") });
+	public ObjectList<User> findAllClientsWithPagingOrderByBusinessName(int pageNumber, int resultsPerPage, String searchKey, Area area) {
+		return dao.findAllClientsWithPagingAndOrder(pageNumber, resultsPerPage, searchKey, area, new Order[] { Order.asc("businessName") });
 	}
 	
 	@Override

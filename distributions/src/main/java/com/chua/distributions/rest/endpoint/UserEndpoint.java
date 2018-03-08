@@ -14,11 +14,11 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.ClientSettingsFormBean;
-import com.chua.distributions.beans.UserRetrieveBean;
 import com.chua.distributions.beans.PasswordFormBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SettingsFormBean;
 import com.chua.distributions.beans.UserFormBean;
+import com.chua.distributions.beans.UserRetrieveBean;
 import com.chua.distributions.database.entity.User;
 import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.UserType;
@@ -55,8 +55,10 @@ public class UserEndpoint {
 	@GET
 	@Path("/clientlist")
 	@Produces({ MediaType.APPLICATION_JSON })
-	public ObjectList<User> getClientObjectList(@QueryParam("pageNumber") Integer pageNumber, @QueryParam("searchKey") String searchKey) {
-		return userHandler.getClientObjectList(pageNumber, searchKey);
+	public ObjectList<User> getClientObjectList(@QueryParam("pageNumber") Integer pageNumber, 
+				@QueryParam("searchKey") String searchKey,
+				@QueryParam("area") Area area) {
+		return userHandler.getClientObjectList(pageNumber, searchKey, area);
 	}
 	
 	@GET
