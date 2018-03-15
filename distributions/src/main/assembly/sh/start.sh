@@ -1,1 +1,1 @@
-java -Dloader.path=/usr/local/primepad/config -jar -Xmx3072m ../bin/distributions-1.11.3.RELEASE.jar
+java -Dloader.path=/usr/local/primepad/config -jar -Xmx3072m ../bin/distributions-1.12.4.QUICKFIX.jar
