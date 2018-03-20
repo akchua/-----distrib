@@ -64,6 +64,16 @@
 	    { route: 'clientorderpage/:id', moduleId: 'viewmodels/clientorder/clientorderpage', title: 'Order', nav: false, hash: '#clientorderpage' }
 	];
 	
+	var aboutusroute = [
+		{ route: 'aboutus', moduleRootId: 'viewmodels/aboutus', title: 'About Us', nav: true, hash: '#aboutus',
+			childRoutes: [
+				{ route: 'ourcompany', moduleId: 'ourcompany', title: 'Our Company', nav: true, hash: 'ourcompany' },
+   	  		    { route: 'ourclients', moduleId: 'ourclients', title: 'Our Clients', nav: true, hash: 'ourclients' },
+   	  		    { route: 'contactus', moduleId: 'contactus', title: 'Contact Us', nav: true, hash: 'contactus' }
+			]
+		}
+	];
+	
 	var Shell = function() {
 		this.router = router;
 		
@@ -120,6 +130,8 @@
 	    			break;
     		}
 		}
+		
+		self.routes = self.routes.concat(aboutusroute);
     		
     	$.each(self.routes, function(index, route) {
             if (route.childRoutes === undefined)
