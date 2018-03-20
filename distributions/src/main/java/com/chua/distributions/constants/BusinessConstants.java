@@ -28,8 +28,8 @@ public class BusinessConstants {
 	public BusinessConstants(@Value("${business.name}") String businessName,
 							@Value("${business.shortName}") String businessShortName,
 							@Value("${business.chiefOfficer}") String businessChiefOfficer,
-							@Value("${business.officialEmail") String businessOfficialEmail,
-							@Value("${business.primaryContactNumber") String businessPrimaryContactNumber,
+							@Value("${business.officialEmail}") String businessOfficialEmail,
+							@Value("${business.primaryContactNumber}") String businessPrimaryContactNumber,
 							@Value("${business.defaultReportReceiver}") String defaultReportReceiver) {
 		this.businessName = businessName;
 		this.businessShortName = businessShortName;
