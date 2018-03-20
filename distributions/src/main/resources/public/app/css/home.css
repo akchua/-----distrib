@@ -109,3 +109,7 @@
 p.indent {
 	text-indent: 50px
 }
+
+.text-justify {
+  text-align: justify;
+}
