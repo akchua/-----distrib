@@ -244,13 +244,18 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@CheckAuthority(authority = "10")
 	public ResultBean addClientOrder(Long companyId) {
 		final ResultBean result;
-		final Company company = companyService.find(companyId);
+		
+		if(companyId != null) {
+			final Company company = companyService.find(companyId);
 
-		if (company != null) {
-			result = addClientOrder(company, UserContextHolder.getUser().getUserEntity());
+			if (company != null) {
+				result = addClientOrder(company, UserContextHolder.getUser().getUserEntity());
+			} else {
+				result = new ResultBean(Boolean.FALSE,
+						Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			}
 		} else {
-			result = new ResultBean(Boolean.FALSE,
-					Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE, Html.line("Please select a company."));
 		}
 
 		return result;
@@ -260,33 +265,38 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 	@CheckAuthority(minimumAuthority = 3)
 	public ResultBean addClientOrder(Long companyId, Long clientId) {
 		final ResultBean result;
-		final Company company = companyService.find(companyId);
+		
+		if(companyId != null) {
+			final Company company = companyService.find(companyId);
 
-		if (company != null) {
-			final User client = userService.find(clientId);
-			if (client != null) {
-				result = addClientOrder(company, client);
-				if (result.getSuccess()) {
+			if (company != null) {
+				final User client = userService.find(clientId);
+				if (client != null) {
+					result = addClientOrder(company, client);
+					if (result.getSuccess()) {
 
-					emailUtil.send(client.getEmailAddress(), 
-							null,
-							userHandler.getEmailOfAllAdminAndManagers(),
-							"Order Created",
-							UserContextHolder.getUser().getFullName() + " of " + businessConstants.getBusinessName()
-									+ " has just created an order on your behalf." + "\n\n"
-									+ "The ID of the created order is " + result.getExtras().get("clientOrderId")
-									+ ". You can verify the contents of the order by logging in at "
-									+ systemConstants.getServerDomain() + ". "
-									+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
-							null);
+						emailUtil.send(client.getEmailAddress(), 
+								null,
+								userHandler.getEmailOfAllAdminAndManagers(),
+								"Order Created",
+								UserContextHolder.getUser().getFullName() + " of " + businessConstants.getBusinessName()
+										+ " has just created an order on your behalf." + "\n\n"
+										+ "The ID of the created order is " + result.getExtras().get("clientOrderId")
+										+ ". You can verify the contents of the order by logging in at "
+										+ systemConstants.getServerDomain() + ". "
+										+ "If you did not request this order, please inform us as soon as possible via replying to this email.",
+								null);
+					}
+				} else {
+					result = new ResultBean(Boolean.FALSE,
+							Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
 				}
 			} else {
 				result = new ResultBean(Boolean.FALSE,
-						Html.line(Html.text(Color.RED, "Failed") + " to load client. Please refresh the page."));
+						Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE,
-					Html.line(Html.text(Color.RED, "Failed") + " to load company. Please refresh the page."));
+			result = new ResultBean(Boolean.FALSE, Html.line("Please select a company."));
 		}
 
 		return result;
