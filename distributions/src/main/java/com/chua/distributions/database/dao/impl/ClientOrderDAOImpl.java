@@ -176,9 +176,9 @@ public class ClientOrderDAOImpl
 			} else {
 				dateBasis = "deliveredOn";
 			}
+			
+			conjunction.add(Restrictions.between(dateBasis, clientRankQuery.getMonthFrom(), clientRankQuery.getMonthTo()));
 		}
-		
-		conjunction.add(Restrictions.between(dateBasis, clientRankQuery.getMonthFrom(), clientRankQuery.getMonthTo()));
 		
 		if(clientRankQuery.getArea() != null) {
 			conjunction.add(Restrictions.eq("cli.businessArea", clientRankQuery.getArea()));

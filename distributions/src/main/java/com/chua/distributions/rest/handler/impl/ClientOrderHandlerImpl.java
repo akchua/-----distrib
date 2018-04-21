@@ -652,7 +652,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 			}
 		} else {
-			result = new ResultBean(Boolean.FALSE, Html.line("Month from and month to are required fields."));
+			result = new ResultBean(Boolean.FALSE, Html.line(Color.RED, "Month from and month to are required fields."));
 		}
 		
 		return result;
