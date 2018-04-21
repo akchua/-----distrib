@@ -1,5 +1,5 @@
-define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/warehouseservice', 'modules/userservice', 'modules/companyservice', 'viewmodels/report/salereport', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
-		function (router, app, ko, clientOrderService, warehouseService, userService, companyService, SaleReport, TimestampView, SaleView, UserView) {
+define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/warehouseservice', 'modules/userservice', 'modules/companyservice', 'viewmodels/report/salereport', 'viewmodels/report/clientrankingquery', 'viewmodels/report/timestampview', 'viewmodels/clientorder/saleview', 'viewmodels/user/userview'],
+		function (router, app, ko, clientOrderService, warehouseService, userService, companyService, SaleReport, ClientRankingQuery, TimestampView, SaleView, UserView) {
     var Sale = function() {
     	this.clientOrderList = ko.observable();
     	this.clientList = ko.observable();
@@ -64,6 +64,10 @@ define(['plugins/router', 'durandal/app', 'knockout', 'modules/clientorderservic
     	var self = this;
     	
     	SaleReport.show()
+    };
+    
+    Sale.prototype.ranking = function() {
+    	ClientRankingQuery.show()
     };
     
     Sale.prototype.timestamp = function(clientOrderId) {

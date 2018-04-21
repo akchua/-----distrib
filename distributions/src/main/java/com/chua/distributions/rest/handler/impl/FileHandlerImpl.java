@@ -31,4 +31,9 @@ public class FileHandlerImpl implements FileHandler {
 	public File findPriceListByFileName(String fileName) {
 		return new File(fileConstants.getPriceListHome() + fileName);
 	}
+
+	@Override
+	public File findClientRankingByFileName(String fileName) {
+		return new File(fileConstants.getClientRankingHome() + fileName);
+	}
 }

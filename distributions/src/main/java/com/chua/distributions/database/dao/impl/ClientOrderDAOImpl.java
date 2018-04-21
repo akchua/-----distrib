@@ -8,10 +8,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
+import com.chua.distributions.beans.ClientRankQueryBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.dao.ClientOrderDAO;
 import com.chua.distributions.database.entity.ClientOrder;
-import com.chua.distributions.enums.Area;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Status;
 import com.chua.distributions.objects.ObjectList;
@@ -160,6 +160,37 @@ public class ClientOrderDAOImpl
 		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, new Order[] { Order.asc("status"), Order.desc("updatedOn") }, generateConjunction(salesReportQuery));
 	}
 	
+	@Override
+	public List<ClientOrder> findAllByClientRankQuery(ClientRankQueryBean clientRankQuery) {
+		final Junction conjunction = Restrictions.conjunction();
+		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
+		
+		if(clientRankQuery.getMonthFrom() != null && clientRankQuery.getMonthTo() != null) {
+			String dateBasis = "";
+			if(clientRankQuery.getClientRankType() != null) {
+				switch(clientRankQuery.getClientRankType()) {
+				case TOP_DELIVERED:
+					dateBasis = "deliveredOn";
+					break;
+				}
+			} else {
+				dateBasis = "deliveredOn";
+			}
+		}
+		
+		conjunction.add(Restrictions.between(dateBasis, clientRankQuery.getMonthFrom(), clientRankQuery.getMonthTo()));
+		
+		if(clientRankQuery.getArea() != null) {
+			conjunction.add(Restrictions.eq("cli.businessArea", clientRankQuery.getArea()));
+		}
+		
+		String[] associatedPaths = { "client" };
+		String[] aliasNames = { "cli" };
+		JoinType[] joinTypes = { JoinType.INNER_JOIN };
+		
+		return findAllByCriterionList(associatedPaths, aliasNames, joinTypes, new Order[] { Order.asc("status"), Order.desc("updatedOn") }, conjunction);
+	}
+	
 	private Junction generateConjunction(SalesReportQueryBean salesReportQuery) {
 		final Junction conjunction = Restrictions.conjunction();
 		conjunction.add(Restrictions.eq("isValid", Boolean.TRUE));
@@ -193,12 +224,7 @@ public class ClientOrderDAOImpl
 		}
 		
 		if(salesReportQuery.getArea() != null) {
-			final Junction disjunction = Restrictions.disjunction();
-			disjunction.add(Restrictions.eq("cli.businessArea", salesReportQuery.getArea()));
-			if(salesReportQuery.getArea().equals(Area.SUBIC)) {
-				disjunction.add(Restrictions.eq("cli.businessArea", Area.BATAAN));
-			}
-			conjunction.add(disjunction);
+			conjunction.add(Restrictions.eq("cli.businessArea", salesReportQuery.getArea()));
 		}
 		
 		if(salesReportQuery.getClientSalesReportType().equals(ClientSalesReportType.STATUS_BASED)) {

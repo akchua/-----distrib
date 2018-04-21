@@ -12,4 +12,6 @@ public interface FileHandler {
 	File findSalesReportByFileName(String fileName);
 	
 	File findPriceListByFileName(String fileName);
+	
+	File findClientRankingByFileName(String fileName);
 }

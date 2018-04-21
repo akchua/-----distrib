@@ -16,6 +16,8 @@ public class FileConstants {
 	
 	private final String priceListHome;
 	
+	private final String clientRankingHome;
+	
 	private final String salesHome;
 
 	private final String purchasesHome;
@@ -31,6 +33,7 @@ public class FileConstants {
 						@Value("${file.image.defaultFileName}") String imageDefaultFileName) {
 		this.fileHome = fileHome;
 		this.priceListHome = fileHome + "files/price_list/";
+		this.clientRankingHome = fileHome + "files/client_ranking/";
 		this.salesHome = fileHome + "files/sales_report/";
 		this.purchasesHome = fileHome + "files/purchase_order/";
 		this.dispatchHome = fileHome + "files/dispatch/";
@@ -44,6 +47,10 @@ public class FileConstants {
 
 	public String getPriceListHome() {
 		return priceListHome;
+	}
+
+	public String getClientRankingHome() {
+		return clientRankingHome;
 	}
 
 	public String getSalesHome() {

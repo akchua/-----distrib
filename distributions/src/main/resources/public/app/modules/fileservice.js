@@ -8,6 +8,11 @@ define(['jquery', 'fileDownload'], function ($, fd) {
     	downloadPriceListByFileName: function(fileName) {
 			fd.fileDownload('/services/file/pricelist/' + fileName)
 			return false;
+    	},
+    	
+    	downloadClientRankingByFileName: function(fileName) {
+    		fd.fileDownload('/services/file/clientrank/' + fileName)
+    		return false;
     	}
 	};
 });

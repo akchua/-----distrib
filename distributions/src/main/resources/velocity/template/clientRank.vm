@@ -1,0 +1,16 @@
+## Template for Client Ranking
+## Has a maximum of 58 Column per line
+                      CLIENT RANKING
+                      
+    Months Included : ${t.MonthFrom} - ${t.MonthTo}
+               Area : ${t.Area}
+          Ranked By : ${t.ClientRankType}
+               Date : ${t.Date}
+               
++---------------------------------------+----------------+
+|              Client Name              |     Amount     |
++---------------------------------------+----------------+
+#foreach( $clientStat in $t.SummarizedClientStats)
+$clientStat
+#end
++---------------------------------------+----------------+

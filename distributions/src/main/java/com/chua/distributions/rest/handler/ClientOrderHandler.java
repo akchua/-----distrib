@@ -3,9 +3,12 @@ package com.chua.distributions.rest.handler;
 import java.util.List;
 
 import com.chua.distributions.beans.PartialClientOrderBean;
+import com.chua.distributions.beans.ClientRankQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.ClientRankType;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.objects.ObjectList;
 
@@ -58,5 +61,11 @@ public interface ClientOrderHandler {
 	
 	ResultBean generateReport(SalesReportQueryBean salesReportQuery);
 	
+	ResultBean generateClientRanking(ClientRankQueryBean rankQueryBean);
+	
 	List<ClientSalesReportType> getClientSalesReportTypes();
+	
+	List<ClientRankType> getClientRankTypes();
+	
+	List<Area> getAreaList();
 }

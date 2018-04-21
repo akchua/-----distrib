@@ -1,8 +1,9 @@
 <br/>
 <div class="row">
-	<button data-bind="click: generateReport" type="button" class="btn btn-success col-md-3 col-xs-4"><i class="fa fa-line-chart"></i> Generate Report</button>
+	<button data-bind="click: generateReport" type="button" class="btn btn-success col-md-2 col-xs-6"><i class="fa fa-line-chart"></i> Generate Report</button>
+	<button data-bind="click: ranking" type="button" class="btn btn-warning col-md-2 col-xs-6"><i class="fa fa-trophy"></i> Ranking</button>
 	<form role="search" class="form-inline">
-		<div class="input-group pull-right col-md-7 col-sm-8 col-xs-8">
+		<div class="input-group pull-right col-md-7 col-xs-12">
 			<select data-bind="options: clientList, optionsValue: 'id', optionsText: 'businessName', optionsCaption: '-- All Clients --', value: salesReportQuery.clientId, event: { change: refreshClientOrderList }" class="form-control" id="inputClient"></select>
 			<span class="input-group-addon" style="width:0px; padding-left:0px; padding-right:0px; border:none;"></span>
 			<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Companies --', value: salesReportQuery.companyId, event: { change: refreshClientOrderList }" class="form-control" id="inputCompany"></select>

@@ -14,9 +14,12 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.chua.distributions.beans.PartialClientOrderBean;
+import com.chua.distributions.beans.ClientRankQueryBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
 import com.chua.distributions.database.entity.ClientOrder;
+import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.ClientRankType;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.objects.ObjectList;
 import com.chua.distributions.rest.handler.ClientOrderHandler;
@@ -183,10 +186,32 @@ public class ClientOrderEndpoint {
 		return clientOrderHandler.generateReport(salesReportQuery);
 	}
 	
+	@POST
+	@Path("/generateclientranking")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean generateClientRanking(@FormParam("clientRankQueryData") String clientRankQueryData) throws IOException {
+		final ClientRankQueryBean clientRankQuery = new ObjectMapper().readValue(clientRankQueryData, ClientRankQueryBean.class);
+		return clientOrderHandler.generateClientRanking(clientRankQuery);
+	}
+	
 	@GET
 	@Path("/clientreporttypes")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ClientSalesReportType> getClientSalesReportTypes() {
 		return clientOrderHandler.getClientSalesReportTypes();
+	}
+	
+	@GET
+	@Path("/clientranktypes")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<ClientRankType> getClientRankTypes() {
+		return clientOrderHandler.getClientRankTypes();
+	}
+	
+	@GET
+	@Path("/area")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<Area> getAreaList() {
+		return clientOrderHandler.getAreaList();
 	}
 }

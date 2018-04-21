@@ -25,6 +25,10 @@ public class DateFormatter {
 	
 	private static final DateFormat FILE_SAFE_DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy-HH-mm");
 	
+	private static final DateFormat MONTH_FORMAT = new SimpleDateFormat("MMMM yyyy");
+	
+	private static final DateFormat FILE_SAFE_MONTH_FORMAT = new SimpleDateFormat("MMMM_yyyy");
+	
 	private static final DateTimeFormatter SHORT_DATETIME_FORMAT = DateTimeFormat.forPattern("MM/dd/yyyy");
 	
 	private static final DateTimeFormatter LONG_DATETIME_FORMAT = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss");
@@ -34,6 +38,10 @@ public class DateFormatter {
 	private static final DateTimeFormatter FILE_SAFE_SHORT_DATETIME_FORMAT = DateTimeFormat.forPattern("MM-dd-yyyy");
 	
 	private static final DateTimeFormatter FILE_SAFE_DATETIME_FORMAT = DateTimeFormat.forPattern("MM-dd-yyyy-HH-mm");
+	
+	private static final DateTimeFormatter MONTH_DT_FORMAT = DateTimeFormat.forPattern("MMMM yyyy");
+	
+	private static final DateTimeFormatter FILE_SAFE_MONTH_DT_FORMAT = DateTimeFormat.forPattern("MMMM_yyyy");
 	
 	private DateFormatter() {
 		
@@ -77,5 +85,21 @@ public class DateFormatter {
 	
 	public static String fileSafeFormat(DateTime toFormat) {
 		return toFormat.toString(FILE_SAFE_DATETIME_FORMAT);
+	}
+	
+	public static String monthFormat(Date toFormat) {
+		return MONTH_FORMAT.format(toFormat);
+	}
+	
+	public static String monthFormat(DateTime toFormat) {
+		return toFormat.toString(MONTH_DT_FORMAT);
+	}
+	
+	public static String fileSafeMonthFormat(Date toFormat) {
+		return FILE_SAFE_MONTH_FORMAT.format(toFormat);
+	}
+	
+	public static String fileSafeMonthFormat(DateTime toFormat) {
+		return toFormat.toString(FILE_SAFE_MONTH_DT_FORMAT);
 	}
 }

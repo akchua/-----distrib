@@ -1,6 +1,7 @@
 package com.chua.distributions.rest.handler.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +11,15 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.NotAuthorizedException;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.chua.distributions.UserContextHolder;
 import com.chua.distributions.annotations.CheckAuthority;
+import com.chua.distributions.beans.ClientRankQueryBean;
+import com.chua.distributions.beans.ClientStatisticsBean;
 import com.chua.distributions.beans.PartialClientOrderBean;
 import com.chua.distributions.beans.ResultBean;
 import com.chua.distributions.beans.SalesReportQueryBean;
@@ -33,6 +37,8 @@ import com.chua.distributions.database.service.ClientOrderItemService;
 import com.chua.distributions.database.service.ClientOrderService;
 import com.chua.distributions.database.service.CompanyService;
 import com.chua.distributions.database.service.UserService;
+import com.chua.distributions.enums.Area;
+import com.chua.distributions.enums.ClientRankType;
 import com.chua.distributions.enums.ClientSalesReportType;
 import com.chua.distributions.enums.Color;
 import com.chua.distributions.enums.Status;
@@ -44,7 +50,10 @@ import com.chua.distributions.rest.handler.UserHandler;
 import com.chua.distributions.utility.DateUtil;
 import com.chua.distributions.utility.EmailUtil;
 import com.chua.distributions.utility.Html;
+import com.chua.distributions.utility.SimplePdfWriter;
 import com.chua.distributions.utility.format.CurrencyFormatter;
+import com.chua.distributions.utility.format.DateFormatter;
+import com.chua.distributions.utility.template.ClientRankTemplate;
 
 /**
  * @author Adrian Jasper K. Chua
@@ -78,6 +87,9 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 
 	@Autowired
 	private EmailUtil emailUtil;
+	
+	@Autowired
+	private VelocityEngine velocityEngine;
 	
 	@Autowired
 	private SystemConstants systemConstants;
@@ -566,10 +578,99 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 		}
 		return result;
 	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 5)
+	public ResultBean generateClientRanking(ClientRankQueryBean clientRankQuery) {
+		final ResultBean result;
+		
+		if(clientRankQuery.getMonthFrom() != null && clientRankQuery.getMonthTo() != null) {
+			// converting monthTo to inclusive end month
+			Calendar monthTo = Calendar.getInstance();
+			monthTo.setTime(clientRankQuery.getMonthTo());
+			monthTo.add(Calendar.MONTH, 1);
+			monthTo.add(Calendar.SECOND, -1);
+			clientRankQuery.setMonthTo(monthTo.getTime());
+			
+			final List<ClientOrder> clientOrders = clientOrderService.findAllByClientRankQuery(clientRankQuery);
+			
+			final Map<String, Float> clientPurchases = new HashMap<String, Float>();
+			
+			for(ClientOrder clientOrder : clientOrders) {
+				String clientName = clientOrder.getClient().getBusinessName();
+				Float clientPurchase = clientPurchases.get(clientName) == null ? 0.0f : clientPurchases.get(clientName);
+				clientPurchase += clientOrder.getNetTotal();
+				clientPurchases.put(clientName, clientPurchase);
+			}
+			
+			List<ClientStatisticsBean> clientStats = new ArrayList<ClientStatisticsBean>();
+			
+			for(Map.Entry<String, Float> entry : clientPurchases.entrySet()) {
+				final ClientStatisticsBean clientStat = new ClientStatisticsBean();
+				clientStat.setClientName(entry.getKey());
+				clientStat.setPurchaseAmount(entry.getValue());
+				clientStats.add(clientStat);
+			}
+			
+			clientStats.sort((cs1, cs2) -> Float.compare(cs2.getPurchaseAmount(), cs1.getPurchaseAmount()));
+			
+			String fileName = "";
+			if(clientRankQuery.getClientRankType() != null) {
+				fileName += clientRankQuery.getClientRankType().getName() + "_";
+			} else {
+				fileName += ClientRankType.TOP_DELIVERED.name() + "_";
+			}
+			fileName += DateFormatter.fileSafeMonthFormat(clientRankQuery.getMonthFrom()) + "_";
+			fileName += DateFormatter.fileSafeMonthFormat(clientRankQuery.getMonthTo());
+			fileName += ".pdf";
+			
+			String filePath = fileConstants.getClientRankingHome() + fileName;
+			
+			result = new ResultBean();
+			
+			result.setSuccess(
+						SimplePdfWriter.write(
+									new ClientRankTemplate(clientRankQuery, clientStats).merge(velocityEngine) , 
+									businessConstants.getBusinessShortName(),
+									filePath,
+									false)
+					);
+			
+			if(result.getSuccess()) {
+				final Map<String, Object> extras = new HashMap<String, Object>();
+				extras.put("fileName", fileName);
+				result.setMessage(Html.line(Html.text(Color.GREEN, "Successfully") + " created client rankings."));
+				result.setExtras(extras);
+				
+				if(clientRankQuery.getSendMail()) {
+					emailUtil.send(UserContextHolder.getUser().getEmailAddress(), 
+							"Client Ranking",
+							"Client Ranking for " + DateFormatter.monthFormat(clientRankQuery.getMonthFrom()) + " - " + DateFormatter.monthFormat(clientRankQuery.getMonthTo()) + ".",
+							new String[] { fileConstants.getClientRankingHome() + fileName });
+				}
+			} else {
+				result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
+			}
+		} else {
+			result = new ResultBean(Boolean.FALSE, Html.line("Month from and month to are required fields."));
+		}
+		
+		return result;
+	}
 
 	@Override
 	public List<ClientSalesReportType> getClientSalesReportTypes() {
 		return Stream.of(ClientSalesReportType.values()).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<ClientRankType> getClientRankTypes() {
+		return Stream.of(ClientRankType.values()).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Area> getAreaList() {
+		return Stream.of(Area.values()).collect(Collectors.toList());
 	}
 
 	/*

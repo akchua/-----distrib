@@ -187,9 +187,31 @@ define(['jquery'], function ($) {
     		});
     	},
     	
+    	generateClientRanking: function(clientRankQueryData) {
+    		return $.ajax({
+    			url: '/services/clientorder/generateclientranking',
+    			method: 'POST',
+    			data: {
+    				clientRankQueryData: clientRankQueryData
+    			}
+    		});
+    	},
+    	
     	getClientSalesReportType: function() {
     		return $.ajax({
     			url: '/services/clientorder/clientreporttypes'
+    		});
+    	},
+    	
+    	getClientRankTypeList: function() {
+    		return $.ajax({
+    			url: '/services/clientorder/clientranktypes'
+    		});
+    	},
+    	
+    	getAreaList: function() {
+    		return $.ajax({
+    			url: '/services/clientorder/area'
     		});
     	}
 	};
