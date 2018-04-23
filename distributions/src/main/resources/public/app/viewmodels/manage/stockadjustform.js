@@ -12,7 +12,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/stockadjustservic
     	
     	this.stockAdjustFormModel = {
     		productId: ko.observable(),
-    		warehouse: ko.observable(),
+    		warehouseId: ko.observable(),
     		description: ko.observable(),
     		pieceQuantity: ko.observable(),
     		packageQuantity: ko.observable()
@@ -36,7 +36,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/stockadjustservic
     StockAdjustForm.prototype.compositionComplete = function() {
     	var self = this;
     	
-    	self.stockAdjustFormModel.warehouse.subscribe(function(newWarehouse) {
+    	self.stockAdjustFormModel.warehouseId.subscribe(function(newWarehouse) {
     		productService.getProduct(self.product.id, newWarehouse).done(function(product) {
     			if(product) {
     				self.stockCount(product.formattedStockCountCurrent);

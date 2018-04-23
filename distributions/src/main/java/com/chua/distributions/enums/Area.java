@@ -12,9 +12,7 @@ public enum Area {
 
 	PAMPANGA("Pampanga", VatType.VAT),
 	
-	SUBIC("Subic", VatType.NON_VAT),
-	
-	BATAAN("Bataan", VatType.VAT);
+	SUBIC("Subic/Bataan", VatType.NON_VAT);
 	
 	private final String displayName;
 	

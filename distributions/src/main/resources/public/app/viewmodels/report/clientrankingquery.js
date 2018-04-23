@@ -1,8 +1,9 @@
-define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/fileservice'],
-			function (dialog, app, ko, clientOrderService, fileService) {
+define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservice', 'modules/companyservice', 'modules/fileservice'],
+			function (dialog, app, ko, clientOrderService, companyService, fileService) {
     var ClientRankingQuery = function() {
     	this.areaList = ko.observable();
     	this.clientRankTypeList = ko.observable();
+    	this.companyList = ko.observable();
     	
     	this.enableGenerateButton = ko.observable(true);
     	
@@ -11,6 +12,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     		monthTo: ko.observable(),
     		
     		area: ko.observable(),
+    		companyId: ko.observable(),
     		clientRankType: ko.observable(),
     		
     		sendMail: ko.observable(false),
@@ -23,6 +25,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderservic
     	
     	clientOrderService.getAreaList().done(function(areaList) {
     		self.areaList(areaList);
+    	});
+    	
+    	companyService.getCompanyListByName().done(function(companyList) {
+    		self.companyList(companyList);
     	});
     	
     	clientOrderService.getClientRankTypeList().done(function(clientRankTypeList) {

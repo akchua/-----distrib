@@ -184,6 +184,10 @@ public class ClientOrderDAOImpl
 			conjunction.add(Restrictions.eq("cli.businessArea", clientRankQuery.getArea()));
 		}
 		
+		if(clientRankQuery.getCompanyId() != null) {
+			conjunction.add(Restrictions.eq("company.id", clientRankQuery.getCompanyId()));
+		}
+		
 		String[] associatedPaths = { "client" };
 		String[] aliasNames = { "cli" };
 		JoinType[] joinTypes = { JoinType.INNER_JOIN };

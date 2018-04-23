@@ -24,9 +24,18 @@
 			
 			<div class="row">
 				<div class="control-group col-xs-12">
-					<label class="control-label" for="inputArea">Included Areas:</label>
+					<label class="control-label" for="inputArea">Included Area:</label>
 					<div class="controls">
 						<select data-bind="options: areaList, optionsValue: 'name', optionsText: 'displayName', optionsCaption: '-- All Areas --', value: clientRankQuery.area" class="form-control" id="inputArea"></select>
+						<p class="help-block">Filter by area</p>
+					</div>
+				</div>
+				
+				<div class="control-group col-xs-12">
+					<label class="control-label" for="company">Included Company</label>
+					<div class="controls">
+						<select data-bind="options: companyList, optionsValue: 'id', optionsText: 'name', optionsCaption: '-- All Company --', value: clientRankQuery.companyId" class="form-control select-lg" id="company"></select>
+						<p class="help-block">Filter by company</p>
 					</div>
 				</div>
 			</div>	

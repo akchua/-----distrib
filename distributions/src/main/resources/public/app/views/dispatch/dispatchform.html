@@ -16,7 +16,7 @@
 						<div class="control-group">
 							<label class="control-label" for="inputWarehouse">Warehouse</label>
 							<div class="controls">
-								<select data-bind="options: warehouseList, optionsValue: 'id', optionsText: function(warehouse) { return ko.unwrap(warehouse.name) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- Select Source Warehouse --', value: dispatchFormModel.warehouseId" class="form-control" id="inputWarehouse"></select>
+								<select data-bind="options: warehouseList, optionsValue: 'id', optionsText: function(warehouse) { return ko.unwrap(warehouse.displayName) + ' - ' + ko.unwrap(warehouse.address) }, optionsCaption: '-- Select Source Warehouse --', value: dispatchFormModel.warehouseId" class="form-control" id="inputWarehouse"></select>
 								<p class="help-block">Warehouse to dispatch from</p>
 							</div>
 						</div>

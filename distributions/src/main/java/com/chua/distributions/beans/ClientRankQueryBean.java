@@ -22,6 +22,8 @@ public class ClientRankQueryBean {
 	
 	private Area area;
 	
+	private Long companyId;
+	
 	private ClientRankType clientRankType;
 	
 	private Boolean sendMail;
@@ -50,6 +52,14 @@ public class ClientRankQueryBean {
 
 	public void setArea(Area area) {
 		this.area = area;
+	}
+
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 
 	public ClientRankType getClientRankType() {
