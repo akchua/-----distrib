@@ -4,7 +4,7 @@
 
     SUPPLIER : ${t.Supplier}
   DELIVER TO : ${t.BusinessName}
-     ADDRESS : ${t.Address}
+   WAREHOUSE : ${t.Warehouse}
         DATE : ${t.Date}
 
  Purchase Order #[[#]]#${t.OrderId}

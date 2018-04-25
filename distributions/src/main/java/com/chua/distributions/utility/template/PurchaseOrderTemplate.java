@@ -55,8 +55,8 @@ public class PurchaseOrderTemplate implements Template {
 		return businessConstants.getBusinessName();
 	}
 	
-	public String getAddress() {
-		return purchaseOrder.getWarehouse().getAddress();
+	public String getWarehouse() {
+		return purchaseOrder.getWarehouse().getName() + " - " + purchaseOrder.getWarehouse().getAddress();
 	}
 	
 	public String getDate() {
