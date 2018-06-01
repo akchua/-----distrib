@@ -152,7 +152,7 @@ public class SalesReportScheduler {
 							setReportType(salesReportQuery, clientSalesReportType);
 							
 							String fileName= "";
-							if(client != null) fileName += client.getFormattedName() + "_";
+							if(client != null) fileName += client.getBusinessName() + "_";
 							if(warehouse != null) fileName += warehouse.getName() + "_";
 							if(area != null) fileName += area.getDisplayName() + "_";
 							fileName += clientSalesReportType.getDisplayName() + "_Report.pdf";
