@@ -25,6 +25,10 @@
    	  	{ route: 'pricesettings', moduleId: 'viewmodels/manage/pricesettings', title: '', nav: false, hash: '#pricesettings' }
    	];
 	
+	var inventoryroute = [
+ 	    { route: 'inventory', moduleId: 'viewmodels/manage/inventory', title: 'Inventory', nav: true, hash: '#inventory' }
+ 	];
+	
 	var reportroute = [
 		{ route: 'report', moduleRootId: 'viewmodels/report', title: 'Reports', nav: true, hash: '#report',
 			childRoutes: [
@@ -122,6 +126,7 @@
 	    			break;
 	    		case 'SUPERVISOR':
 	    			self.routes = self.routes.concat(reportroute);
+	    			self.routes = self.routes.concat(inventoryroute);
 	    			self.routes = self.routes.concat(ourproductsroute);
 	    			break;
 	    		case 'CLIENT':
