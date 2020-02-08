@@ -71,9 +71,9 @@
 	var aboutusroute = [
 		{ route: 'aboutus', moduleRootId: 'viewmodels/aboutus', title: 'About Us', nav: true, hash: '#aboutus',
 			childRoutes: [
-				{ route: 'ourcompany', moduleId: 'ourcompany', title: 'Our Company', nav: true, hash: 'ourcompany' },
+				{ route: 'ourcompany', moduleId: 'ourcompany', title: 'Our Company', nav: true, hash: 'ourcompany' }/*,
    	  		    { route: 'ourclients', moduleId: 'ourclients', title: 'Our Clients', nav: true, hash: 'ourclients' },
-   	  		    { route: 'contactus', moduleId: 'contactus', title: 'Contact Us', nav: true, hash: 'contactus' }
+   	  		    { route: 'contactus', moduleId: 'contactus', title: 'Contact Us', nav: true, hash: 'contactus' }*/
 			]
 		}
 	];

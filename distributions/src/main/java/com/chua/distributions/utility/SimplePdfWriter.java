@@ -3,6 +3,9 @@ package com.chua.distributions.utility;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+
+import org.springframework.core.io.ClassPathResource;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -58,6 +61,20 @@ public class SimplePdfWriter {
                 font =  defaultFont;
             } catch (DocumentException de) {
                 throw new ExceptionConverter(de);
+            }
+        }
+        
+        @Override
+        public void onStartPage(PdfWriter writer, Document document) {
+        	String img = "src/main/resources/" + new ClassPathResource("public/app/img/dermBlissLogo.jpg").getPath();
+            Image image;
+            try {
+                image = Image.getInstance(img);
+                image.setAlignment(Image.ALIGN_CENTER);
+                image.scaleAbsolute(100f, 48f);
+                document.add(image);
+            } catch (IOException | DocumentException e) {
+                
             }
         }
  

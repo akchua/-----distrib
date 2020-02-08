@@ -1,6 +1,6 @@
 ## Template for Purchase Order
 ## Has a maximum of 96 columns per line
-                                       PURCHASE ORDER                                       
+                                         PURCHASE ORDER                                     
 
     SUPPLIER : ${t.Supplier}
   DELIVER TO : ${t.BusinessName}
@@ -18,5 +18,21 @@ $formattedOrderItem
 
                                                       Total Amount: ${t.GrossTotal}
 														
-        Prepared By : ${t.Creator}
-        Approved By : ${t.Approver}
+        Prepared By : 
+        
+        _________________
+        ${t.Creator}
+        
+        
+        Approved By : 
+        
+        _________________
+        Aimee P. Chua
+            VP-COO
+        
+        
+        Check Issued / Paid By :
+        
+        __________________________
+         Ferdinand A. Sanchez Jr.
+            VP-CFO / Treasurer
