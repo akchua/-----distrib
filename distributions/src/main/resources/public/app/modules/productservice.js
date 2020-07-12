@@ -53,6 +53,12 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		getPackagingListByName: function() {
+			return $.ajax({
+				url: '/services/product/packaginglist'
+			});
+		},
+		
 		getPartialProductList: function(currentPage, searchKey, companyId, categoryId, async) {
 			return $.ajax({
 				url: '/services/product/listpartial',

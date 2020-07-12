@@ -117,7 +117,7 @@
 	    		case 'MANAGER':
 	    			self.routes = self.routes.concat(manageroute);
 	    			self.routes = self.routes.concat(reportroute);
-	    			self.routes = self.routes.concat(paymentroute);
+	    			//self.routes = self.routes.concat(paymentroute);
 	    		case 'SECRETARY':
 	    			self.routes = self.routes.concat(purchaseorderroute);
 	    			self.routes = self.routes.concat(requestroute);

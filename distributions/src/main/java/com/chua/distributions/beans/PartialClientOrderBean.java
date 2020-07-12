@@ -22,6 +22,8 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	private String creatorName;
 	
+	private String dispatcherName;
+	
 	private Long clientId;
 	
 	private String clientName;
@@ -57,6 +59,8 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 		
 		setCreatorId(clientOrder.getCreator().getId());
 		setCreatorName(clientOrder.getCreator().getFormattedName());
+		
+		setDispatcherName(clientOrder.getDispatcher() != null ? clientOrder.getDispatcher().getFormattedName() : "");
 		
 		setClientId(clientOrder.getClient().getId());
 		setClientName(clientOrder.getClient().getFormattedName());
@@ -121,6 +125,14 @@ public class PartialClientOrderBean extends PartialEntityBean<ClientOrder> {
 
 	public void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
+	}
+
+	public String getDispatcherName() {
+		return dispatcherName;
+	}
+
+	public void setDispatcherName(String dispatcherName) {
+		this.dispatcherName = dispatcherName;
 	}
 
 	public Long getClientId() {

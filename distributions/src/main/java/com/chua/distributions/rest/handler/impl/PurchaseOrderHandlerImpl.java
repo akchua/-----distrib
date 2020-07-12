@@ -404,6 +404,11 @@ public class PurchaseOrderHandlerImpl implements PurchaseOrderHandler {
 		for(PurchaseOrderItem purchaseOrderItem : purchaseOrderItems) {
 			if(!warehouseItemHandler.addToWarehouse(purchaseOrderItem.getProductId(), purchaseOrder.getWarehouse().getId(), purchaseOrderItem.getQuantity()))
 				return false;
+			
+			if(purchaseOrderItem.getPackagingId() != null && !purchaseOrderItem.getPackagingId().equals(0l)) {
+				if(!warehouseItemHandler.addToWarehouse(purchaseOrderItem.getPackagingId(), 2l, -purchaseOrderItem.getQuantity()))
+					return false;
+			}
 		}
 		
 		return true;

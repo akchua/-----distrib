@@ -41,6 +41,8 @@ public class Product extends BaseObject {
 	
 	private String productCode;
 	
+	private Long packagingId;
+	
 	private String name;
 	
 	private String displayName;
@@ -104,6 +106,16 @@ public class Product extends BaseObject {
 
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+
+	@Basic
+	@Column(name = "packaging_id")
+	public Long getPackagingId() {
+		return packagingId;
+	}
+
+	public void setPackagingId(Long packagingId) {
+		this.packagingId = packagingId;
 	}
 
 	@Basic

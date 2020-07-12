@@ -41,6 +41,11 @@ public class ProductServiceImpl
 	public List<Product> findAllByCompanyOrderByCategory(Long companyId) {
 		return dao.findAllByCompanyWithOrder(companyId, new Order[] { Order.asc("categoryy.name"), Order.asc("name"), Order.desc("packaging"), Order.asc("grossPrice") });
 	}
+	
+	@Override
+	public List<Product> findAllByCategoryOrderByName(Long categoryId) {
+		return dao.findAllByCategoryWithOrder(categoryId, new Order[] { Order.asc("name") });
+	}
 
 	@Override
 	public boolean isExistsByDisplayName(String displayName) {

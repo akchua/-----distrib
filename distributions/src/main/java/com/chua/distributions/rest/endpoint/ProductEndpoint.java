@@ -94,6 +94,13 @@ public class ProductEndpoint {
 	}
 	
 	@GET
+	@Path("/packaginglist")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public List<Product> getPackagingListOrderByName() {
+		return productHandler.getPackagingListOrderByName();
+	}
+	
+	@GET
 	@Path("/imagelist")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public List<ProductImage> getProductImageList(@QueryParam("productId") Long productId) {

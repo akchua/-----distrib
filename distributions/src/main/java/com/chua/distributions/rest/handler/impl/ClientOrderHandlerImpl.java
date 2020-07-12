@@ -482,7 +482,7 @@ public class ClientOrderHandlerImpl implements ClientOrderHandler {
 						null,
 						userHandler.getEmailOfAllAdminAndManagers(), "Order Accepted",
 						"Thank you " + clientOrder.getClient().getFormattedName() + "("
-								+ clientOrder.getClient().getBusinessName() + ") for ordering at Prime Pad."
+								+ clientOrder.getClient().getBusinessName() + ") for ordering at Dermbliss Corporation."
 								+ "This email is to inform you that your order has just been accepted and will be delivered to you as soon as possible.",
 						null));
 		if (result.getSuccess()) {

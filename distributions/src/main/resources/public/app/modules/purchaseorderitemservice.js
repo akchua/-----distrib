@@ -87,6 +87,18 @@ define(['jquery'], function ($) {
 			});
 		},
 		
+		transferMultiplePackage: function(purchaseOrderItemId, destinationOrderId, multiplier) {
+			return $.ajax({
+				url: '/services/purchaseorderitem/transfermultiplepackage',
+				method: 'POST',
+				data: {
+					purchaseOrderItemId: purchaseOrderItemId,
+					destinationOrderId: destinationOrderId,
+					multiplier: multiplier
+				}
+			});
+		},
+		
 		transferAll: function(purchaseOrderItemId, destinationOrderId) {
 			return $.ajax({
 				url: '/services/purchaseorderitem/transferall',

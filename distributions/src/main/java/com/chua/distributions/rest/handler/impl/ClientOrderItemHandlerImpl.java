@@ -228,8 +228,8 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 		final ResultBean result;
 		
 		if(!quantity.equals(0)) {
-			if(quantity / clientOrderItem.getPackaging() < Integer.valueOf(1000) && quantity % clientOrderItem.getPackaging() < Integer.valueOf(1000)
-					&& quantity / clientOrderItem.getPackaging() > Integer.valueOf(-1000) && quantity % clientOrderItem.getPackaging() > Integer.valueOf(-1000) ) {
+			if(quantity / clientOrderItem.getPackaging() < Integer.valueOf(1000000) && quantity % clientOrderItem.getPackaging() < Integer.valueOf(1000000)
+					&& quantity / clientOrderItem.getPackaging() > Integer.valueOf(-1000000) && quantity % clientOrderItem.getPackaging() > Integer.valueOf(-1000000) ) {
 				clientOrderItem.setQuantity(quantity);
 				result = new ResultBean();
 				result.setSuccess(clientOrderItemService.update(clientOrderItem));
@@ -239,7 +239,7 @@ public class ClientOrderItemHandlerImpl implements ClientOrderItemHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line("Quantity " + Html.text(Color.RED, "cannot exceed ") + " the value of 999."));
+				result = new ResultBean(Boolean.FALSE, Html.line("Quantity " + Html.text(Color.RED, "cannot exceed ") + " the value of 999,999."));
 			}
 		} else {
 			result = removeItem(clientOrderItem);

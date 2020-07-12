@@ -23,5 +23,7 @@ public interface ProductDAO extends DAO<Product, Long>, ProductPrototype {
 	
 	List<Product> findAllByCompanyWithOrder(Long companyId, Order[] orders);
 	
+	List<Product> findAllByCategoryWithOrder(Long categoryId, Order[] orders);
+	
 	Product findByProductCode(String productCode);
 }

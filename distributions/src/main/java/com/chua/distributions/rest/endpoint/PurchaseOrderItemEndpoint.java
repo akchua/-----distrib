@@ -84,6 +84,15 @@ public class PurchaseOrderItemEndpoint {
 	}
 	
 	@POST
+	@Path("/transfermultiplepackage")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public ResultBean transferMultiplePackage(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, 
+				@FormParam("destinationOrderId") Long destinationOrderId,
+				@FormParam("multiplier") Integer multiplier) {
+		return purchaseOrderItemHandler.transferMultiplePackage(purchaseOrderItemId, destinationOrderId, multiplier);
+	}
+	
+	@POST
 	@Path("/transferall")
 	@Produces({ MediaType.APPLICATION_JSON })
 	public ResultBean transferAll(@FormParam("purchaseOrderItemId") Long purchaseOrderItemId, @FormParam("destinationOrderId") Long destinationOrderId) {

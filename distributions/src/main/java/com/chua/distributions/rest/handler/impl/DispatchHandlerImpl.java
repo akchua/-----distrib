@@ -206,7 +206,9 @@ public class DispatchHandlerImpl implements DispatchHandler {
 				for(DispatchItem dispatchItem : dispatchItems) {
 					final ClientOrder clientOrder = dispatchItem.getClientOrder();
 					flag = removeFromWareHouse(clientOrder);
-					clientOrder.setStatus(Status.RECEIVED);
+					clientOrder.setStatus(Status.PAID);
+					clientOrder.setPaidOn(new Date());
+					//clientOrder.setStatus(Status.RECEIVED);
 					clientOrder.setDispatcher(UserContextHolder.getUser().getUserEntity());
 					clientOrder.setDeliveredOn(new Date());
 					

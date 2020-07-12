@@ -30,6 +30,14 @@
 						</div>
 						
 						<div class="control-group">
+							<label class="control-label" for="category">Select Packaging</label>
+							<div class="controls">
+								<select data-bind="options: packagingList, optionsValue: 'id', optionsText: 'displayName', optionsCaption: '-- Select Packaging --', value: productFormModel.packagingId" class="form-control select-lg" id="packaging"></select>
+								<p class="help-block">Select the packaging to be linked to this product (Optional)</p>
+							</div>
+						</div>
+						
+						<div class="control-group">
 							<label class="control-label" for="productCode">Product Code</label>
 							<div class="controls">
 								<input data-bind="textInput: productFormModel.productCode" type="text" id="productCode" name="productCode" placeholder="" class="form-control input-lg">
@@ -54,7 +62,7 @@
 						</div>
 						
 						<div class="control-group">
-							<label class="control-label" for="packaging">Packaging</label>
+							<label class="control-label" for="packaging">Content per Case</label>
 							<div class="controls">
 								<input data-bind="textInput: productFormModel.packaging" type="number" step="any" id="packaging" name="packaging" placeholder="" class="form-control input-lg">
 								<p class="help-block">Number of 

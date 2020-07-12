@@ -40,7 +40,8 @@
 									<td>
 										<div class="btn-group pull-right">
 											<button data-bind="click: function() { $parent.sourceTransferPiece(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer Piece">1/<span data-bind="text: purchaseOrderItem.packaging"></span></button>
-											<button data-bind="click: function() { $parent.sourceTransferPackage(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.sourceTransferMultiplePackage(purchaseOrderItem.id, 1) }" type="button" class="btn btn-primary btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.sourceTransferMultiplePackage(purchaseOrderItem.id, 100) }" type="button" class="btn btn-primary btn-sm" title="Transfer 100 Package">100</button>
 											<button data-bind="click: function() { $parent.sourceTransferAll(purchaseOrderItem.id) }" type="button" class="btn btn-primary btn-sm" title="Transfer All"><span data-bind="text: purchaseOrderItem.formattedQuantity"></span></button>
 										</div>
 									</td>
@@ -80,7 +81,8 @@
 									<td>
 										<div class="btn-group pull-right">
 											<button data-bind="click: function() { $parent.destinationTransferPiece(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer Piece">1/<span data-bind="text: purchaseOrderItem.packaging"></span></button>
-											<button data-bind="click: function() { $parent.destinationTransferPackage(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.destinationTransferMultiplePackage(purchaseOrderItem.id, 1) }" type="button" class="btn btn-success btn-sm" title="Transfer Package">1</button>
+											<button data-bind="click: function() { $parent.destinationTransferMultiplePackage(purchaseOrderItem.id, 100) }" type="button" class="btn btn-success btn-sm" title="Transfer 100 Package">100</button>
 											<button data-bind="click: function() { $parent.destinationTransferAll(purchaseOrderItem.id) }" type="button" class="btn btn-success btn-sm" title="Transfer All"><span data-bind="text: purchaseOrderItem.formattedQuantity"></span></button>
 										</div>
 									</td>

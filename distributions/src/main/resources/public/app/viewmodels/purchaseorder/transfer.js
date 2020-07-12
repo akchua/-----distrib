@@ -100,10 +100,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	});
     };
 
-    Transfer.prototype.sourceTransferPackage = function(purchaseOrderItemId) {
+    Transfer.prototype.sourceTransferMultiplePackage = function(purchaseOrderItemId, quantity) {
     	var self = this;
     	
-    	purchaseOrderItemService.transferPackage(purchaseOrderItemId, self.destinationOrder.id()).done(function(result) {
+    	purchaseOrderItemService.transferMultiplePackage(purchaseOrderItemId, self.destinationOrder.id(), quantity).done(function(result) {
     		if(result.success) {
     			self.log(result.message);
     		} else {
@@ -142,10 +142,10 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/purchaseorderserv
     	});
     };
     
-    Transfer.prototype.destinationTransferPackage = function(purchaseOrderItemId) {
+    Transfer.prototype.destinationTransferMultiplePackage = function(purchaseOrderItemId, quantity) {
     	var self = this;
     	
-    	purchaseOrderItemService.transferPackage(purchaseOrderItemId, self.sourceOrder.id()).done(function(result) {
+    	purchaseOrderItemService.transferMultiplePackage(purchaseOrderItemId, self.sourceOrder.id(), quantity).done(function(result) {
     		if(result.success) {
     			self.log(result.message);
     		} else {

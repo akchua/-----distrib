@@ -38,6 +38,8 @@ public interface ProductHandler {
 	
 	List<Product> getProductListOrderByName();
 	
+	List<Product> getPackagingListOrderByName();
+	
 	List<ProductImage> getProductImageList(Long productId);
 	
 	List<PartialProductImageBean> getPartialProductImageList(Long productId);

@@ -195,8 +195,8 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 		final ResultBean result;
 		
 		if(!quantity.equals(0)) {
-			if(quantity / purchaseOrderItem.getPackaging() < Integer.valueOf(1000) && quantity % purchaseOrderItem.getPackaging() < Integer.valueOf(1000)
-					&& quantity / purchaseOrderItem.getPackaging() > Integer.valueOf(-1000) && quantity % purchaseOrderItem.getPackaging() > Integer.valueOf(-1000) ) {
+			if(quantity / purchaseOrderItem.getPackaging() < Integer.valueOf(1000000) && quantity % purchaseOrderItem.getPackaging() < Integer.valueOf(1000000)
+					&& quantity / purchaseOrderItem.getPackaging() > Integer.valueOf(-1000000) && quantity % purchaseOrderItem.getPackaging() > Integer.valueOf(-1000000) ) {
 				purchaseOrderItem.setQuantity(quantity);
 				result = new ResultBean();
 				result.setSuccess(purchaseOrderItemService.update(purchaseOrderItem));
@@ -206,7 +206,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 					result.setMessage(Html.line(Html.text(Color.RED, "Server Error.") + " Please try again later."));
 				}
 			} else {
-				result = new ResultBean(Boolean.FALSE, Html.line("Quantity " + Html.text(Color.RED, "cannot exceed ") + " the value of 999."));
+				result = new ResultBean(Boolean.FALSE, Html.line("Quantity " + Html.text(Color.RED, "cannot exceed ") + " the value of 999,999."));
 			}
 		} else {
 			result = removeItem(purchaseOrderItem);
@@ -235,13 +235,19 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	@Override
 	@CheckAuthority(minimumAuthority = 4)
 	public ResultBean transferPackage(Long purchaseOrderItemId, Long destinationOrderId) {
+		return transferMultiplePackage(purchaseOrderItemId, destinationOrderId, 1);
+	}
+	
+	@Override
+	@CheckAuthority(minimumAuthority = 4)
+	public ResultBean transferMultiplePackage(Long purchaseOrderItemId, Long destinationOrderId, Integer multiplier) {
 		final ResultBean result;
 		final PurchaseOrderItem purchaseOrderItem = purchaseOrderItemService.find(purchaseOrderItemId);
 		final PurchaseOrder destinationOrder = purchaseOrderService.find(destinationOrderId);
 		final ResultBean validateTransfer = validateTransfer(purchaseOrderItem, destinationOrder);
 		
 		if(validateTransfer.getSuccess()) {
-			result = transferItem(purchaseOrderItem, destinationOrder, purchaseOrderItem.getPackaging());
+			result = transferItem(purchaseOrderItem, destinationOrder, multiplier * purchaseOrderItem.getPackaging());
 		} else {
 			result = validateTransfer;
 		}
@@ -333,6 +339,7 @@ public class PurchaseOrderItemHandlerImpl implements PurchaseOrderItemHandler {
 	private void setPurchaseOrderItem(PurchaseOrderItem purchaseOrderItem, Product product) {
 		purchaseOrderItem.setProductId(product.getId());
 		purchaseOrderItem.setProductCode(product.getProductCode());
+		purchaseOrderItem.setPackagingId(product.getPackagingId());
 		purchaseOrderItem.setDisplayName(product.getDisplayName());
 		purchaseOrderItem.setPackaging(product.getPackaging());
 		purchaseOrderItem.setUnitPrice(product.getGrossPrice());

@@ -27,5 +27,7 @@ public interface PurchaseOrderItemHandler {
 	
 	ResultBean transferPackage(Long purchaseOrderItemId, Long destinationOrderId);
 	
+	ResultBean transferMultiplePackage(Long purchaseOrderItemId, Long destinationOrderId, Integer multiplier);
+	
 	ResultBean transferAll(Long purchaseOrderItemId, Long destinationOrderId);
 }

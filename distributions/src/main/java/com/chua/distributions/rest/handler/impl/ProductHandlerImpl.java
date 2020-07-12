@@ -166,6 +166,13 @@ public class ProductHandlerImpl implements ProductHandler {
 	}
 	
 	@Override
+	public List<Product> getPackagingListOrderByName() {
+		final Long packagingCategoryId = categoryService.findByName("Packaging").getId();
+		
+		return productService.findAllByCategoryOrderByName(packagingCategoryId);
+	}
+	
+	@Override
 	@CheckAuthority(minimumAuthority = 5)
 	public List<ProductImage> getProductImageList(Long productId) {
 		return productImageService.findAllByProductId(productId);
@@ -501,6 +508,7 @@ public class ProductHandlerImpl implements ProductHandler {
 		product.setCompany(companyService.find(productForm.getCompanyId()));
 		product.setCategory(categoryService.find(productForm.getCategoryId()));
 		product.setProductCode(productForm.getProductCode().trim());
+		product.setPackagingId(productForm.getPackagingId() != null ? productForm.getPackagingId() : 0l);
 		product.setName(productForm.getName().trim());
 		product.setSize(productForm.getSize().trim());
 		product.setPackaging(productForm.getPackaging());

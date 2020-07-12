@@ -6,6 +6,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	
     	this.companyList = ko.observable();
     	this.categoryList = ko.observable();
+    	this.packagingList = ko.observable();
     	
     	this.discountAmount = ko.observable();
     	this.profitAmount = ko.observable();
@@ -18,6 +19,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     		companyId: ko.observable(),
     		categoryId: ko.observable(),
     		productCode: ko.observable(),
+    		packagingId: ko.observable(),
     		name: ko.observable(),
     		size: ko.observable(),
     		packaging: ko.observable(),
@@ -65,6 +67,11 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/productservice', 
     	companyService.getCompanyListByName().done(function(companyList) {
     		self.companyList(companyList);
     		self.productFormModel.companyId(self.product.company.id);
+    	});
+    	
+    	productService.getPackagingListByName().done(function(packagingList) {
+    		self.packagingList(packagingList);
+    		self.productFormModel.packagingId(self.product.packagingId);
     	});
     };
     

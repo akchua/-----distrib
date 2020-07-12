@@ -1,5 +1,7 @@
 package com.chua.distributions.database.entity;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -28,6 +30,8 @@ public class PurchaseOrderItem extends OrderItem {
 	
 	@JsonSerialize(using = PurchaseOrderSerializer.class)
 	private PurchaseOrder purchaseOrder;
+	
+	private Long packagingId;
 
 	@ManyToOne(targetEntity = PurchaseOrder.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "purchase_order_id")
@@ -39,5 +43,15 @@ public class PurchaseOrderItem extends OrderItem {
 
 	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
+	}
+
+	@Basic
+	@Column(name = "packaging_id")
+	public Long getPackagingId() {
+		return packagingId;
+	}
+
+	public void setPackagingId(Long packagingId) {
+		this.packagingId = packagingId;
 	}
 }

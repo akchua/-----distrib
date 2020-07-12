@@ -11,6 +11,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
 			id: ko.observable(),
 			
 			creatorName: ko.observable(),
+			dispatcherName: ko.observable(),
 			clientBusinessName: ko.observable(),
 			companyName: ko.observable(),
 			formattedGrossTotal: ko.observable(),
@@ -33,6 +34,7 @@ define(['plugins/dialog', 'durandal/app', 'knockout', 'modules/clientorderitemse
     	
     	self.saleViewModel.id(self.partialClientOrder.id);
     	self.saleViewModel.creatorName(self.partialClientOrder.creatorName);
+    	self.saleViewModel.dispatcherName(self.partialClientOrder.dispatcherName);
 		self.saleViewModel.clientBusinessName(self.partialClientOrder.clientBusinessName);
 		self.saleViewModel.companyName(self.partialClientOrder.companyName);
 		self.saleViewModel.formattedGrossTotal(self.partialClientOrder.formattedGrossTotal);

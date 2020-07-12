@@ -13,6 +13,8 @@ public class ProductFormBean extends FormBean {
 	
 	private String productCode;
 	
+	private Long packagingId;
+	
 	private String name;
 	
 	private String size;
@@ -55,6 +57,14 @@ public class ProductFormBean extends FormBean {
 
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+	
+	public Long getPackagingId() {
+		return packagingId;
+	}
+
+	public void setPackagingId(Long packagingId) {
+		this.packagingId = packagingId;
 	}
 
 	public String getName() {

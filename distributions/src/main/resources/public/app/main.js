@@ -28,10 +28,10 @@
 define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'modules/securityservice', 'bootstrap', 'modules/kocustombindings'],
 		function (system, app, viewLocator, securityService) {
     //>>excludeStart("build", true);
-    system.debug(true);
+    system.debug(false);
     //>>excludeEnd("build");
 
-    app.title = 'Prime Pad';
+    app.title = 'Dermbliss';
 
     app.configurePlugins({
         router: true,
