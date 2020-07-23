@@ -40,7 +40,9 @@
 						<div class="btn-group pull-right">
 							<button data-bind="click: function() { $parent.history(product.id) } " type="button" class="btn btn-sm" title="History"><i class="fa fa-history"></i></button>
 							<button data-bind="click: function() { $parent.view(product.id) } " type="button" class="btn btn-info btn-sm" title="View"><i class="fa fa-eye"></i></button>
+							<!-- ko if: $parent.allowStockAdjust -->
 							<button data-bind="click: function() { $parent.adjust(product.id) } " type="button" class="btn btn-warning btn-sm" title="Adjust"><i class="fa fa-adjust"></i></button>
+							<!-- /ko -->
 						</div>
 					</td>
 				</tr>

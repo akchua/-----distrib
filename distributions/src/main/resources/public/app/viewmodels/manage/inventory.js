@@ -14,6 +14,8 @@ define(['durandal/app', 'knockout', 'modules/productservice', 'modules/companyse
 		this.totalItems = ko.observable();
 		this.currentPage = ko.observable(1);
 		this.currentPageSubscription = null;
+		
+		this.allowStockAdjust = ko.observable(app.user.userType.authority < 2);
     };
     
     Inventory.prototype.activate = function() {
